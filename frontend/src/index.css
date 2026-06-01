@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-[#020b14] text-slate-100 antialiased font-sansSelection selection:bg-sky-500/30 selection:text-sky-200;
+    @apply bg-[#020b14] text-slate-100 antialiased font-sans selection:bg-sky-500/30 selection:text-sky-200;
   }
 }
 
