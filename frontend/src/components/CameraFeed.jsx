@@ -80,7 +80,7 @@ export const CameraFeed = () => {
           ref={videoRef}
           playsInline
           muted
-          className="hidden"
+          className="absolute pointer-events-none opacity-0 w-0 h-0"
         />
 
         {/* HTML5 Canvas overlay (handles overlay drawing and stream mirroring) */}
