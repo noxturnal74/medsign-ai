@@ -1,0 +1,41 @@
+export const vocabulary = [
+  { id: 1, word: "sakit", category: "Keluhan", emergency: false },
+  { id: 2, word: "nyeri", category: "Keluhan", emergency: false },
+  { id: 3, word: "sesak", category: "Keluhan", emergency: true },
+  { id: 4, word: "batuk", category: "Keluhan", emergency: false },
+  { id: 5, word: "demam", category: "Keluhan", emergency: false },
+  { id: 6, word: "pusing", category: "Keluhan", emergency: false },
+  { id: 7, word: "mual", category: "Keluhan", emergency: false },
+  { id: 8, word: "muntah", category: "Keluhan", emergency: false },
+  { id: 9, word: "diare", category: "Keluhan", emergency: false },
+  { id: 10, word: "lemas", category: "Keluhan", emergency: false },
+
+  { id: 11, word: "kepala", category: "Lokasi Tubuh", emergency: false },
+  { id: 12, word: "dada", category: "Lokasi Tubuh", emergency: true },
+  { id: 13, word: "perut", category: "Lokasi Tubuh", emergency: false },
+  { id: 14, word: "tenggorokan", category: "Lokasi Tubuh", emergency: false },
+  { id: 15, word: "tangan", category: "Lokasi Tubuh", emergency: false },
+  { id: 16, word: "kaki", category: "Lokasi Tubuh", emergency: false },
+  { id: 17, word: "punggung", category: "Lokasi Tubuh", emergency: false },
+  { id: 18, word: "mata", category: "Lokasi Tubuh", emergency: false },
+  { id: 19, word: "telinga", category: "Lokasi Tubuh", emergency: false },
+  { id: 20, word: "leher", category: "Lokasi Tubuh", emergency: false },
+
+  { id: 21, word: "ya", category: "Respons", emergency: false },
+  { id: 22, word: "tidak", category: "Respons", emergency: false },
+  { id: 23, word: "sakit sekali", category: "Respons", emergency: true },
+  { id: 24, word: "lebih baik", category: "Respons", emergency: false },
+  { id: 25, word: "lebih buruk", category: "Respons", emergency: true },
+
+  { id: 26, word: "tolong", category: "Darurat", emergency: true },
+  { id: 27, word: "tidak bisa bernapas", category: "Darurat", emergency: true },
+  { id: 28, word: "nyeri dada", category: "Darurat", emergency: true },
+  { id: 29, word: "pingsan", category: "Darurat", emergency: true },
+  { id: 30, word: "bantuan segera", category: "Darurat", emergency: true },
+
+  { id: 31, word: "buka mulut", category: "Instruksi Dokter", emergency: false },
+  { id: 32, word: "tarik napas", category: "Instruksi Dokter", emergency: false },
+  { id: 33, word: "tahan napas", category: "Instruksi Dokter", emergency: false },
+  { id: 34, word: "duduk", category: "Instruksi Dokter", emergency: false },
+  { id: 35, word: "berdiri", category: "Instruksi Dokter", emergency: false }
+];

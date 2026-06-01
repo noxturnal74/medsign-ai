@@ -1,0 +1,40 @@
+# Node.js dependencies
+node_modules/
+dist/
+dist-ssr/
+*.local
+.eslintcache
+
+# Python environment
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.ipynb_checkpoints/
+.pytest_cache/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+*.bak
+*.log
+
+# IDE files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Environment files
+.env
+.env.production
+.env.development
