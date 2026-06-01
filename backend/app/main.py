@@ -1,8 +1,8 @@
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes import predict, session, vocabulary
+from app.services.slt_adapter import SLTAdapterService
 import json
-import random
 import time
 
 app = FastAPI(
@@ -20,6 +20,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Shared Adapter Service Singleton
+slt_service = SLTAdapterService()
+
 # Health Check Endpoint
 @app.get("/health")
 def health_check():
@@ -28,7 +31,7 @@ def health_check():
         "status": "healthy",
         "api_version": "1.0.0",
         "model_loaded": True,
-        "mode": "demo"
+        "mode": "production" if slt_service.available else "demo"
     }
 
 # Register APIRouters
@@ -36,20 +39,12 @@ app.include_router(predict.router, prefix="/api/v1", tags=["prediction"])
 app.include_router(session.router, prefix="/api/v1", tags=["session"])
 app.include_router(vocabulary.router, prefix="/api/v1", tags=["vocabulary"])
 
-# Vocabulary list for WebSocket mock
-PREDICTION_WORDS = [
-    "sakit", "nyeri", "sesak", "batuk", "demam", "pusing", "mual", "muntah", "diare", "lemas",
-    "kepala", "dada", "perut", "tenggorokan", "tangan", "kaki", "punggung", "mata", "telinga", "leher",
-    "ya", "tidak", "sakit sekali", "lebih baik", "lebih buruk",
-    "tolong", "tidak bisa bernapas", "nyeri dada", "pingsan", "bantuan segera"
-]
-
 # WebSocket Streaming Endpoint
 @app.websocket("/api/v1/stream")
 async def websocket_stream(websocket: WebSocket):
     """
     Endpoint WebSocket untuk menerima streaming koordinat landmark secara real-time
-    dan mengirim balik hasil prediksi kata setiap detik.
+    dan mengirim balik hasil prediksi kata setiap detik menggunakan SLTAdapterService.
     """
     await websocket.accept()
     print("WebSocket client connected to /api/v1/stream")
@@ -62,9 +57,6 @@ async def websocket_stream(websocket: WebSocket):
             
             frames = payload.get("frames", [])
             
-            # Start prediction timing
-            start_time = time.perf_counter()
-            
             # Basic validation
             if not frames or len(frames) != 30:
                 await websocket.send_text(json.dumps({
@@ -72,27 +64,20 @@ async def websocket_stream(websocket: WebSocket):
                 }))
                 continue
 
-            # Mock ML Model prediction selection
-            pred_word = random.choice(PREDICTION_WORDS)
-            confidence = round(random.uniform(0.75, 0.99), 2)
+            # Run prediction through SLTAdapterService
+            result = slt_service.predict_bisindo(frames)
             
-            alt_pool = [w for w in PREDICTION_WORDS if w != pred_word]
-            alt1 = random.choice(alt_pool)
-            alt2 = random.choice([w for w in alt_pool if w != alt1])
-
-            end_time = time.perf_counter()
-            processing_ms = int((end_time - start_time) * 1000) + 12
-            
+            # Apply confidence threshold (0.65 threshold constraint)
+            prediction_word = result["prediction"]
+            if result["confidence"] < 0.65:
+                prediction_word = None
+                
             response = {
-                "prediction": pred_word,
-                "confidence": confidence,
-                "top3": [
-                    {"word": pred_word, "confidence": confidence},
-                    {"word": alt1, "confidence": round(confidence * 0.78, 2)},
-                    {"word": alt2, "confidence": round(confidence * 0.52, 2)}
-                ],
-                "mode": "demo",
-                "processing_time_ms": processing_ms
+                "prediction": prediction_word,
+                "confidence": result["confidence"],
+                "top3": result["top3"],
+                "mode": result["mode"],
+                "processing_time_ms": result["processing_time_ms"]
             }
             
             # Send prediction back to client
