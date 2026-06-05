@@ -11,6 +11,10 @@ export const AppProvider = ({ children }) => {
   const [cameraActive, setCameraActive] = useState(false);
   const [isBackendConnected, setIsBackendConnected] = useState(false);
   const [serverState, setServerState] = useState('demo'); // 'demo' | 'connected' | 'disconnected'
+  
+  // State baru untuk abjad BISINDO Spelling Mode (A-Z)
+  const [spellingMode, setSpellingMode] = useState(false);
+  const [spelledText, setSpelledText] = useState("");
 
   // Web Speech API for TTS
   const speak = useCallback((text) => {
@@ -38,6 +42,32 @@ export const AppProvider = ({ children }) => {
 
   const clearSentence = useCallback(() => {
     setSentence([]);
+  }, []);
+
+  // Utility mutator untuk teks ejaan abjad (Mode Eja)
+  const appendLetter = useCallback((letter) => {
+    setSpelledText((prev) => {
+      if (prev.length >= 100) return prev;
+      return prev + letter;
+    });
+  }, []);
+
+  const addSpaceToSpelledText = useCallback(() => {
+    setSpelledText((prev) => {
+      if (prev.length === 0 || prev.endsWith(" ")) return prev;
+      return prev + " ";
+    });
+  }, []);
+
+  const backspaceSpelledText = useCallback(() => {
+    setSpelledText((prev) => {
+      if (prev.length === 0) return prev;
+      return prev.slice(0, -1);
+    });
+  }, []);
+
+  const clearSpelledText = useCallback(() => {
+    setSpelledText("");
   }, []);
 
   // Session Log functions
@@ -86,6 +116,15 @@ export const AppProvider = ({ children }) => {
         setServerState,
         speak,
         vocabulary,
+        // Ekspos state & mutator untuk Mode Eja
+        spellingMode,
+        setSpellingMode,
+        spelledText,
+        setSpelledText,
+        appendLetter,
+        addSpaceToSpelledText,
+        backspaceSpelledText,
+        clearSpelledText
       }}
     >
       {children}

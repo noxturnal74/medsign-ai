@@ -1,136 +1,191 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { AppContext } from '../context/AppContext';
 import { useWebcam } from '../hooks/useWebcam';
 import { useMediaPipe } from '../hooks/useMediaPipe';
 import { useWebSocket } from '../hooks/useWebSocket';
-import { Camera, CameraOff, Sparkles, RefreshCw, AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Camera, CameraOff, RefreshCw, Sparkles } from 'lucide-react';
+
+const getStreamingUrl = () => {
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim();
+
+  if (!apiBaseUrl) {
+    return null;
+  }
+
+  if (apiBaseUrl.startsWith('ws://') || apiBaseUrl.startsWith('wss://')) {
+    return `${apiBaseUrl.replace(/\/$/, '')}/api/v1/stream`;
+  }
+
+  try {
+    const url = new URL(apiBaseUrl);
+    url.protocol = url.protocol === 'https:' ? 'wss:' : 'ws:';
+    url.pathname = '/api/v1/stream';
+    url.search = '';
+    url.hash = '';
+    return url.toString();
+  } catch {
+    return null;
+  }
+};
 
 export const CameraFeed = () => {
-  const { 
-    cameraActive, 
-    setCameraActive, 
-    setLastDetected, 
-    appendWord, 
+  const {
+    cameraActive,
+    setCameraActive,
+    setLastDetected,
+    appendWord,
     addLogEntry,
     serverState,
-    setServerState
+    setServerState,
+    spellingMode,
+    setSpellingMode
   } = useContext(AppContext);
 
-  // Hook 1: Webcam
-  const { videoRef, isActive, startCamera, stopCamera, error: webcamError } = useWebcam();
+  const {
+    videoRef,
+    isActive,
+    startCamera,
+    stopCamera,
+    error: webcamError,
+    devices,
+    selectedDeviceId,
+    setSelectedDeviceId
+  } = useWebcam();
 
-  // Hook 2: MediaPipe Hand landmarks simulation/overlay
   const { canvasRef, isHandDetected, landmarks, fps } = useMediaPipe(isActive, videoRef);
 
-  // Hook 3: WebSocket connection
-  const handlePrediction = (result) => {
-    // When a valid gesture is translated
+  const handlePrediction = useCallback((result) => {
     if (result && result.prediction) {
       setLastDetected(result);
       appendWord(result.prediction);
-      
-      // Look up if emergency
-      const isEmergency = result.prediction.toLowerCase() === 'tolong' || 
-                          result.prediction.toLowerCase() === 'tidak bisa bernapas' ||
-                          result.prediction.toLowerCase() === 'nyeri dada' ||
-                          result.prediction.toLowerCase() === 'pingsan' ||
-                          result.prediction.toLowerCase() === 'bantuan segera' ||
-                          result.prediction.toLowerCase() === 'sakit sekali' ||
-                          result.prediction.toLowerCase() === 'lebih buruk' ||
-                          result.prediction.toLowerCase() === 'dada' ||
-                          result.prediction.toLowerCase() === 'sesak';
 
       addLogEntry({
         role: 'patient',
         text: result.prediction.toUpperCase(),
-        emoji: isEmergency ? '🆘' : '🤟',
         confidence: result.confidence
       });
     }
-  };
+  }, [setLastDetected, appendWord, addLogEntry]);
 
-  const wsUrl = 'ws://localhost:8000/api/v1/stream'; // FastAPI default
+  const wsUrl = getStreamingUrl();
   const { connectionState } = useWebSocket(wsUrl, handlePrediction, isHandDetected, landmarks);
 
-  // Update server state context
   useEffect(() => {
     setServerState(connectionState);
   }, [connectionState, setServerState]);
 
-  // Sync state between context and hook
   useEffect(() => {
-    if (cameraActive && !isActive) {
-      startCamera();
-    } else if (!cameraActive && isActive) {
+    if (cameraActive) {
+      startCamera(selectedDeviceId);
+    } else if (isActive) {
       stopCamera();
     }
-  }, [cameraActive, isActive, startCamera, stopCamera]);
+  }, [cameraActive, selectedDeviceId, startCamera, stopCamera, isActive]);
 
   const toggleCamera = () => {
     setCameraActive(prev => !prev);
   };
 
   return (
-    <div className="w-full flex flex-col gap-4">
-      {/* Video & Canvas Container */}
-      <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 shadow-2xl select-none">
-        
-        {/* HTML5 Video element (hidden, processed in canvas) */}
+    <div className="flex w-full flex-col gap-3">
+      <div className="flex flex-col justify-between gap-3 px-1 sm:flex-row sm:items-center">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="soft-chip rounded-full px-3 py-1.5 text-[10px] font-bold uppercase">
+            <Camera size={12} className="text-sky-600" />
+            Kamera Input Pasien
+          </span>
+          {isActive && (
+            <button
+              onClick={() => setSpellingMode(prev => !prev)}
+              className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[10px] font-extrabold transition-all ${
+                spellingMode
+                  ? 'border-violet-300/70 bg-violet-500/10 text-violet-700 shadow-sm shadow-violet-500/10'
+                  : 'border-white/70 bg-white/50 text-slate-600 hover:bg-white/75'
+              }`}
+            >
+              <Sparkles size={11} />
+              Mode Eja: {spellingMode ? 'Aktif A-Z' : 'Nonaktif'}
+            </button>
+          )}
+        </div>
+
+        {devices.length > 0 && (
+          <div className="flex items-center gap-1.5 self-end sm:self-auto">
+            <span className="text-[10px] font-bold text-slate-500">Sumber</span>
+            <div className="relative">
+              <select
+                value={selectedDeviceId}
+                onChange={(e) => setSelectedDeviceId(e.target.value)}
+                className="glass-input max-w-[190px] appearance-none truncate rounded-xl py-1.5 pl-3 pr-8 text-[11px] font-semibold"
+              >
+                {devices.map((device, idx) => (
+                  <option key={device.deviceId} value={device.deviceId} className="bg-white text-slate-900">
+                    {device.label || `Kamera ${idx + 1}`}
+                  </option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-sky-600">
+                <RefreshCw size={10} />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className={`glass-panel glass-dark relative aspect-video w-full overflow-hidden rounded-[28px] border transition-all duration-300 select-none ${
+        spellingMode ? 'border-violet-300/40 shadow-violet-500/10' : 'border-white/10'
+      }`}>
         <video
           ref={videoRef}
           playsInline
           muted
-          className="absolute pointer-events-none opacity-0 w-0 h-0"
+          className="pointer-events-none absolute h-0 w-0 opacity-0"
         />
 
-        {/* HTML5 Canvas overlay (handles overlay drawing and stream mirroring) */}
         <canvas
           ref={canvasRef}
           width={640}
           height={480}
-          className="w-full h-full object-cover scale-x-[-1]" // Mirror display
+          className="h-full w-full scale-x-[-1] object-cover"
         />
 
-        {/* Scanning grid animation */}
         {isActive && isHandDetected && (
-          <div className="absolute inset-0 pointer-events-none scanline opacity-30" />
+          <div className={`scanline pointer-events-none absolute inset-0 ${
+            spellingMode ? 'opacity-50' : 'opacity-35'
+          }`} />
         )}
 
-        {/* Floating Badges */}
-        <div className="absolute top-4 right-4 flex flex-col gap-2 z-10">
-          {/* Connection status */}
-          <div className={`px-3 py-1 rounded-lg text-[10px] font-bold font-mono tracking-wider flex items-center gap-1.5 border border-slate-700/80 shadow-md ${
+        <div className="absolute right-4 top-4 z-10 flex flex-col gap-2">
+          <div className={`flex items-center gap-1.5 rounded-xl border px-3 py-1 text-[10px] font-bold ${
             serverState === 'connected'
-              ? 'bg-emerald-950/80 text-emerald-400 border-emerald-500/30'
-              : 'bg-amber-950/80 text-amber-400 border-amber-500/30'
+              ? 'border-emerald-300/30 bg-emerald-950/70 text-emerald-200'
+              : 'border-amber-300/30 bg-amber-950/70 text-amber-200'
           }`}>
-            <span className={`w-1.5 h-1.5 rounded-full ${serverState === 'connected' ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400 animate-pulse'}`} />
-            {serverState === 'connected' ? 'ONLINE (ML BACKEND)' : 'LOCAL DEMO (MOCK)'}
+            <span className={`h-1.5 w-1.5 rounded-full ${serverState === 'connected' ? 'bg-emerald-300' : 'bg-amber-300'} animate-pulse`} />
+            {serverState === 'connected' ? 'Online ML Backend' : 'Local Demo'}
           </div>
 
-          {/* FPS Counter */}
           {isActive && (
-            <div className="bg-slate-900/80 text-sky-400 border border-slate-700/80 px-3 py-1 rounded-lg text-[10px] font-bold font-mono tracking-wider shadow-md text-right">
-              {fps} FPS · MEDIAPIPE
+            <div className="rounded-xl border border-white/10 bg-slate-950/70 px-3 py-1 text-right text-[10px] font-bold text-sky-200 backdrop-blur-xl">
+              {fps} FPS - MediaPipe
             </div>
           )}
         </div>
 
-        {/* Camera inactive overlay */}
         {!isActive && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-slate-950/90 px-8 text-center">
-            <div className="w-16 h-16 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-500 shadow-xl">
+            <div className="flex h-16 w-16 items-center justify-center rounded-3xl border border-white/10 bg-white/10 text-slate-400 shadow-xl">
               <CameraOff size={28} />
             </div>
             <div>
-              <h3 className="font-bold text-lg text-slate-200">Kamera Dinonaktifkan</h3>
-              <p className="text-sm text-slate-500 max-w-sm mt-1">
-                Aktifkan kamera Anda untuk memulai deteksi otomatis isyarat BISINDO secara real-time.
+              <h3 className="text-lg font-black text-white">Kamera Dinonaktifkan</h3>
+              <p className="mt-1 max-w-sm text-sm font-semibold leading-6 text-slate-400">
+                Aktifkan kamera untuk memulai deteksi otomatis isyarat BISINDO secara real-time.
               </p>
             </div>
             <button
               onClick={toggleCamera}
-              className="px-6 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-semibold text-sm transition-all flex items-center gap-2 glow-cyan hover:scale-[1.02] cursor-pointer"
+              className="glass-button glass-button-primary rounded-2xl px-6 py-2.5 text-sm font-bold"
             >
               <Camera size={16} />
               Mulai Kamera
@@ -138,21 +193,18 @@ export const CameraFeed = () => {
           </div>
         )}
 
-        {/* Webcam permission error overlay */}
         {webcamError && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-slate-950/95 px-8 text-center">
-            <div className="w-16 h-16 rounded-full bg-red-950/30 border border-red-500/30 flex items-center justify-center text-red-400 shadow-xl animate-bounce">
+            <div className="flex h-16 w-16 items-center justify-center rounded-3xl border border-red-300/30 bg-red-500/10 text-red-300 shadow-xl">
               <AlertTriangle size={28} />
             </div>
             <div>
-              <h3 className="font-bold text-lg text-red-400">Akses Kamera Ditolak</h3>
-              <p className="text-sm text-slate-400 max-w-md mt-2 leading-relaxed">
-                {webcamError}
-              </p>
+              <h3 className="text-lg font-black text-red-300">Akses Kamera Ditolak</h3>
+              <p className="mt-2 max-w-md text-sm font-semibold leading-6 text-slate-400">{webcamError}</p>
             </div>
             <button
               onClick={toggleCamera}
-              className="px-6 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 font-semibold text-sm hover:bg-slate-800 transition-all cursor-pointer"
+              className="glass-button rounded-2xl px-6 py-2.5 text-sm font-bold text-slate-700"
             >
               Tutup
             </button>
@@ -160,28 +212,27 @@ export const CameraFeed = () => {
         )}
       </div>
 
-      {/* Under-camera Controls */}
       {isActive && (
-        <div className="flex items-center justify-between gap-4 p-4 glass-panel rounded-2xl border border-slate-800">
+        <div className="glass-panel flex items-center justify-between gap-4 rounded-3xl p-4">
           <div className="flex items-center gap-2.5">
             <div className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
+              <span className="relative inline-flex h-3 w-3 rounded-full bg-emerald-500" />
             </div>
             <div>
-              <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider block">Status Kamera</span>
-              <span className="text-sm font-bold text-slate-100 flex items-center gap-1.5">
-                {isHandDetected ? 'Menganalisis Gerakan...' : 'Posisikan Tangan Anda Di Layar'}
+              <span className="block text-xs font-bold uppercase text-slate-500">Status Kamera</span>
+              <span className="flex items-center gap-1.5 text-sm font-black text-slate-950">
+                {isHandDetected ? 'Menganalisis gerakan...' : 'Posisikan tangan di layar'}
               </span>
             </div>
           </div>
 
           <button
             onClick={toggleCamera}
-            className="px-5 py-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 font-semibold text-xs transition-all cursor-pointer flex items-center gap-2"
+            className="inline-flex items-center gap-2 rounded-2xl border border-red-300/50 bg-red-500/10 px-5 py-2 text-xs font-bold text-red-600 transition-all hover:bg-red-500/20"
           >
             <CameraOff size={14} />
-            Hentikan Deteksi
+            Hentikan
           </button>
         </div>
       )}

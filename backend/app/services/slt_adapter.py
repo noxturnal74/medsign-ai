@@ -13,6 +13,7 @@ from app.ml.model import ModelLoader
 model_loader = ModelLoader()
 # Coba muat model TFLite jika filenya sudah siap
 model_loader.load("models/medsign_v1.tflite")
+model_loader.load_alphabet("models/bisindo_alphabet_v1.tflite")
 
 class SLTAdapterService:
     def __init__(self):
@@ -41,5 +42,26 @@ class SLTAdapterService:
         # Hitung waktu proses keseluruhan
         total_time = int((time.perf_counter() - start_time) * 1000)
         result["processing_time_ms"] = total_time
+        
+        return result
+
+    def predict_spelling(self, raw_frame: list) -> dict:
+        """
+        Melakukan prediksi abjad BISINDO statis A-Z menggunakan pemrosesan 1 frame landmark mentah.
+        """
+        start_time = time.perf_counter()
+        
+        # 1. Pra-pemrosesan: normalisasi frame tunggal
+        norm_frame = normalize_landmarks(raw_frame)
+        
+        # 2. Reshape ke format input model (1, 63)
+        input_data = norm_frame.reshape(1, 63)
+        
+        # 3. Inferensi Klasifikasi melalui ModelLoader
+        result = model_loader.predict_alphabet(input_data)
+        
+        # Hitung waktu proses keseluruhan
+        total_time = int((time.perf_counter() - start_time) * 1000)
+        result["processing_time_ms"] = max(1, total_time)
         
         return result

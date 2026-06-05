@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, useContext } from 'react';
 import { vocabulary } from '../data/vocabulary';
+import { AppContext } from '../context/AppContext';
 
 export const useWebSocket = (url, onPrediction, isHandDetected, landmarks) => {
   const [isConnected, setIsConnected] = useState(false);
@@ -10,6 +11,19 @@ export const useWebSocket = (url, onPrediction, isHandDetected, landmarks) => {
   const frameBufferRef = useRef([]);
   const reconnectTimeoutRef = useRef(null);
   const reconnectAttemptsRef = useRef(0);
+
+  // Akses context untuk Mode Eja
+  const { spellingMode, appendLetter } = useContext(AppContext);
+  const letterHistoryRef = useRef([]);
+  const lastTypedLetterRef = useRef(null);
+
+  // Reset typed letter lock saat tangan diangkat/dihilangkan dari kamera
+  useEffect(() => {
+    if (!isHandDetected) {
+      lastTypedLetterRef.current = null;
+      letterHistoryRef.current = [];
+    }
+  }, [isHandDetected]);
 
   // Fallback simulated prediction generator
   const runLocalDemoPrediction = useCallback(() => {
@@ -66,8 +80,34 @@ export const useWebSocket = (url, onPrediction, isHandDetected, landmarks) => {
         try {
           const data = JSON.parse(event.data);
           setLastPrediction(data);
-          if (onPrediction) {
-            onPrediction(data);
+          
+          // PILAH RESPON BERDASARKAN MODE AKTIF
+          if (data.mode === 'spelling') {
+            const letter = data.prediction;
+            if (!letter) {
+              letterHistoryRef.current = [];
+              return;
+            }
+            
+            // Masukkan ke history penyaringan temporal
+            letterHistoryRef.current.push(letter);
+            if (letterHistoryRef.current.length > 3) {
+              letterHistoryRef.current.shift();
+            }
+            
+            // Histeresis: Huruf harus konsisten terdeteksi 3 frame berturut-turut (~1.5 detik)
+            const allEqual = letterHistoryRef.current.length === 3 && 
+                             letterHistoryRef.current.every(val => val === letter);
+                             
+            if (allEqual && letter !== lastTypedLetterRef.current) {
+              appendLetter(letter);
+              lastTypedLetterRef.current = letter;
+            }
+          } else {
+            // Mode Kosakata Klinis MVP
+            if (onPrediction) {
+              onPrediction(data);
+            }
           }
         } catch (err) {
           console.error('Error parsing prediction message:', err);
@@ -98,7 +138,7 @@ export const useWebSocket = (url, onPrediction, isHandDetected, landmarks) => {
       setIsConnected(false);
       setConnectionState('demo');
     }
-  }, [url, onPrediction]);
+  }, [url, onPrediction, appendLetter]);
 
   // Handle reconnect cleanups
   useEffect(() => {
@@ -113,43 +153,94 @@ export const useWebSocket = (url, onPrediction, isHandDetected, landmarks) => {
     };
   }, [connect]);
 
-  // Accumulate frames and send them every 1 second
+  // 1. Akumulasi frames koordinat di latar belakang saat kamera aktif
   useEffect(() => {
     if (!isHandDetected || !landmarks) {
       frameBufferRef.current = [];
       return;
     }
 
-    // Add current frame to buffer
+    // Tambahkan frame koordinat flat (63 float) ke buffer
     const flatLandmarks = landmarks.flatMap(l => [l.x, l.y, l.z]);
     frameBufferRef.current.push(flatLandmarks);
 
-    // Maintain 30 frames
+    // Batasi sliding window maksimal 30 frame
     if (frameBufferRef.current.length > 30) {
       frameBufferRef.current.shift();
     }
+  }, [isHandDetected, landmarks]);
 
-    // Interval send logic (1 second)
+  // 2. Scheduler Pengiriman Prediksi (Dinamis: 500ms untuk Eja, 1000ms untuk Kata)
+  useEffect(() => {
     const interval = setInterval(() => {
-      if (frameBufferRef.current.length === 0) return;
-
-      // Pad sequence if less than 30 frames
-      let paddedFrames = [...frameBufferRef.current];
-      while (paddedFrames.length < 30) {
-        paddedFrames.unshift(new Array(63).fill(0.0));
+      // Jika tangan tidak terdeteksi di kamera, batalkan pengiriman
+      if (!isHandDetected) {
+        return;
       }
 
       if (isConnected && wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-        // Send to FastAPI WebSocket
-        wsRef.current.send(JSON.stringify({ frames: paddedFrames }));
+        try {
+          if (spellingMode) {
+            // MODE EJA: Kirim 1 frame koordinat landmarks teranyar
+            if (!landmarks || landmarks.length === 0) return;
+            const flatLandmarks = landmarks.flatMap(l => [l.x, l.y, l.z]);
+            
+            wsRef.current.send(JSON.stringify({
+              mode: 'spelling',
+              landmarks: flatLandmarks
+            }));
+          } else {
+            // MODE KOSAKATA KLINIS: Kirim 30-frame sequence
+            if (frameBufferRef.current.length === 0) return;
+            
+            let paddedFrames = [...frameBufferRef.current];
+            while (paddedFrames.length < 30) {
+              if (paddedFrames.length > 0) {
+                paddedFrames.unshift(paddedFrames[0]);
+              } else {
+                paddedFrames.unshift(new Array(63).fill(0.0));
+              }
+            }
+            
+            wsRef.current.send(JSON.stringify({
+              mode: 'clinical',
+              frames: paddedFrames
+            }));
+          }
+        } catch (err) {
+          console.error('Error sending coordinate stream over WebSocket:', err);
+        }
       } else {
-        // Fallback to local simulation prediction
-        runLocalDemoPrediction();
+        // Fallback Simulasi Lokal Demo Offline
+        if (spellingMode) {
+          const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+          const pick = letters[Math.floor(Math.random() * letters.length)];
+          const demoResult = {
+            prediction: pick,
+            confidence: 0.88,
+            top3: [{ word: pick, confidence: 0.88 }],
+            mode: 'demo_spelling'
+          };
+          setLastPrediction(demoResult);
+          
+          letterHistoryRef.current.push(pick);
+          if (letterHistoryRef.current.length > 3) letterHistoryRef.current.shift();
+          
+          const allEqual = letterHistoryRef.current.length === 3 && 
+                           letterHistoryRef.current.every(v => v === pick);
+                           
+          if (allEqual && pick !== lastTypedLetterRef.current) {
+            appendLetter(pick);
+            lastTypedLetterRef.current = pick;
+          }
+        } else {
+          runLocalDemoPrediction();
+        }
       }
-    }, 1200); // 1.2s to match natural hand movement pacing
+    }, spellingMode ? 500 : 1000); // 500ms untuk pengetikan abjad eja responsif, 1.0s untuk kata
 
     return () => clearInterval(interval);
-  }, [isHandDetected, landmarks, isConnected, runLocalDemoPrediction]);
+  }, [isHandDetected, isConnected, runLocalDemoPrediction, spellingMode, landmarks, appendLetter]);
 
   return {
     isConnected,

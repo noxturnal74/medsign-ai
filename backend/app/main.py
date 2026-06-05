@@ -55,30 +55,68 @@ async def websocket_stream(websocket: WebSocket):
             data = await websocket.receive_text()
             payload = json.loads(data)
             
-            frames = payload.get("frames", [])
+            mode = payload.get("mode", "clinical")
             
-            # Basic validation
-            if not frames or len(frames) != 30:
-                await websocket.send_text(json.dumps({
-                    "error": "Sequence frames harus berjumlah tepat 30 frame"
-                }))
-                continue
-
-            # Run prediction through SLTAdapterService
-            result = slt_service.predict_bisindo(frames)
-            
-            # Apply confidence threshold (0.65 threshold constraint)
-            prediction_word = result["prediction"]
-            if result["confidence"] < 0.65:
-                prediction_word = None
+            if mode == "spelling":
+                # Get the single frame landmarks
+                landmarks = payload.get("landmarks", [])
+                if not landmarks:
+                    # Fallback: take last frame from frames if sent
+                    frames = payload.get("frames", [])
+                    if frames and len(frames) > 0:
+                        landmarks = frames[-1]
                 
-            response = {
-                "prediction": prediction_word,
-                "confidence": result["confidence"],
-                "top3": result["top3"],
-                "mode": result["mode"],
-                "processing_time_ms": result["processing_time_ms"]
-            }
+                if not landmarks or len(landmarks) != 63:
+                    await websocket.send_text(json.dumps({
+                        "error": "Masukan landmarks untuk spelling mode harus berupa flat array berisi 63 koordinat"
+                    }))
+                    continue
+                
+                # Run static alphabet prediction
+                result = slt_service.predict_spelling(landmarks)
+                
+                # Log spelling prediction for debugging
+                print(f"[WS_STREAM] [SPELLING] Prediksi: '{result['prediction']}' | Confidence: {result['confidence']:.4f} | Mode: {result['mode']} | Waktu: {result['processing_time_ms']}ms")
+                
+                # Apply confidence threshold (0.70 threshold for static letters)
+                prediction_letter = result["prediction"]
+                if result["confidence"] < 0.70:
+                    prediction_letter = None
+                    
+                response = {
+                    "prediction": prediction_letter,
+                    "confidence": result["confidence"],
+                    "top3": result["top3"],
+                    "mode": "spelling",
+                    "processing_time_ms": result["processing_time_ms"]
+                }
+            else:
+                # Standard clinical mode
+                frames = payload.get("frames", [])
+                if not frames or len(frames) != 30:
+                    await websocket.send_text(json.dumps({
+                        "error": "Sequence frames harus berjumlah tepat 30 frame"
+                    }))
+                    continue
+                
+                # Run prediction through SLTAdapterService
+                result = slt_service.predict_bisindo(frames)
+                
+                # Log prediction to console for easy real-time debugging
+                print(f"[WS_STREAM] [CLINICAL] Prediksi: '{result['prediction']}' | Confidence: {result['confidence']:.4f} | Mode: {result['mode']} | Waktu: {result['processing_time_ms']}ms")
+                
+                # Apply confidence threshold (0.65 threshold constraint)
+                prediction_word = result["prediction"]
+                if result["confidence"] < 0.65:
+                    prediction_word = None
+                    
+                response = {
+                    "prediction": prediction_word,
+                    "confidence": result["confidence"],
+                    "top3": result["top3"],
+                    "mode": result["mode"],
+                    "processing_time_ms": result["processing_time_ms"]
+                }
             
             # Send prediction back to client
             await websocket.send_text(json.dumps(response))
@@ -95,4 +133,4 @@ async def websocket_stream(websocket: WebSocket):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)

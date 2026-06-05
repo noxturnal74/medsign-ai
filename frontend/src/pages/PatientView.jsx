@@ -5,10 +5,20 @@ import { TranslationDisplay } from '../components/TranslationDisplay';
 import { VocabularyGuide } from '../components/VocabularyGuide';
 import { SessionLog } from '../components/SessionLog';
 import { EmergencyAlert } from '../components/EmergencyAlert';
-import { ArrowLeft, Volume2, Delete, Trash2 } from 'lucide-react';
+import { ArrowLeft, Delete, Trash2, Volume2 } from 'lucide-react';
 
 export const PatientView = ({ setView }) => {
-  const { sentence, clearSentence, removeLastWord, speak } = useContext(AppContext);
+  const {
+    sentence,
+    clearSentence,
+    removeLastWord,
+    speak,
+    spellingMode,
+    spelledText,
+    addSpaceToSpelledText,
+    backspaceSpelledText,
+    clearSpelledText
+  } = useContext(AppContext);
 
   const handleSpeakSentence = () => {
     if (sentence.length === 0) return;
@@ -16,111 +26,165 @@ export const PatientView = ({ setView }) => {
   };
 
   return (
-    <div className="flex flex-col gap-6 w-full animate-slide-up">
-      
-      {/* Header View */}
-      <div className="flex items-center justify-between border-b border-slate-800/60 pb-4">
+    <div className="flex w-full flex-col gap-6 animate-slide-up">
+      <div className="glass-panel flex items-center justify-between rounded-3xl p-4">
         <button
           onClick={() => setView('home')}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 font-semibold text-xs transition-all cursor-pointer"
+          className="glass-button rounded-2xl px-4 py-2 text-xs font-bold"
         >
           <ArrowLeft size={14} />
           Kembali
         </button>
         <div className="text-right">
-          <span className="text-[10px] font-bold font-mono tracking-widest text-sky-400 uppercase">
-            Mode Konsultasi
-          </span>
-          <h2 className="text-lg font-bold text-slate-200">Layar Komunikasi Pasien</h2>
+          <span className="text-[10px] font-bold uppercase text-sky-700">Mode Konsultasi</span>
+          <h2 className="text-lg font-black text-slate-950">Layar Komunikasi Pasien</h2>
         </div>
       </div>
 
-      {/* Emergency Notification Banner */}
       <EmergencyAlert />
 
-      {/* Main 2-Column Responsive Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full">
-        
-        {/* LEFT COLUMN: Camera, Prediction Display, and Sentence Builder (lg:col-span-5 - fixed 340px equivalent) */}
-        <div className="lg:col-span-5 flex flex-col gap-6 w-full lg:max-w-[360px] mx-auto">
-          {/* Camera Feed card */}
+      <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-12">
+        <div className="flex w-full flex-col gap-6 lg:col-span-6">
           <CameraFeed />
-
-          {/* Translation Output card */}
           <TranslationDisplay />
 
-          {/* Sentence Builder Accumulator Card */}
-          <div className="glass-panel p-5 rounded-2xl border border-slate-800 flex flex-col gap-4">
-            <span className="text-[10px] font-bold font-mono tracking-widest text-slate-500 uppercase block">
-              Kalimat Pasien Saat Ini
-            </span>
-            
-            <div className="bg-slate-950 border border-slate-900 rounded-xl p-4 min-h-[70px] flex items-center justify-start flex-wrap gap-1.5 shadow-inner">
-              {sentence.length === 0 ? (
-                <span className="text-xs text-slate-600 font-mono tracking-wide">Belum ada kata terakumulasi. Lakukan isyarat atau klik kosakata medis...</span>
-              ) : (
-                sentence.map((word, idx) => (
-                  <span 
-                    key={idx} 
-                    className="px-2.5 py-1 rounded-lg bg-sky-500/10 text-sky-400 border border-sky-500/20 text-xs font-bold uppercase tracking-wide animate-slide-up shadow-sm"
-                  >
-                    {word}
-                  </span>
-                ))
-              )}
-            </div>
+          {spellingMode ? (
+            <div className="glass-panel flex flex-col gap-4 rounded-3xl border border-violet-200/70 p-5 animate-slide-up">
+              <span className="block text-[10px] font-bold uppercase text-violet-700">
+                Hasil Ejaan Huruf
+              </span>
 
-            {/* Sentence Buttons */}
-            <div className="grid grid-cols-3 gap-2">
-              <button
-                onClick={handleSpeakSentence}
-                disabled={sentence.length === 0}
-                className={`py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer border ${
-                  sentence.length > 0
-                    ? 'bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 border-sky-500/30'
-                    : 'bg-slate-900 text-slate-600 border-slate-850 cursor-not-allowed'
-                }`}
-              >
-                <Volume2 size={13} />
-                Ucapkan
-              </button>
-              <button
-                onClick={removeLastWord}
-                disabled={sentence.length === 0}
-                className={`py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer border ${
-                  sentence.length > 0
-                    ? 'bg-slate-900 hover:bg-slate-800 text-slate-300 border-slate-800'
-                    : 'bg-slate-900 text-slate-600 border-slate-850 cursor-not-allowed'
-                }`}
-              >
-                <Delete size={13} />
-                Hapus
-              </button>
-              <button
-                onClick={clearSentence}
-                disabled={sentence.length === 0}
-                className={`py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer border ${
-                  sentence.length > 0
-                    ? 'bg-red-500/10 hover:bg-red-500/20 text-red-400 border-red-500/20'
-                    : 'bg-slate-900 text-slate-600 border-slate-850 cursor-not-allowed'
-                }`}
-              >
-                <Trash2 size={13} />
-                Bersih
-              </button>
+              <div className="relative flex min-h-[70px] flex-wrap items-center justify-start gap-1 overflow-hidden rounded-2xl border border-white/10 bg-slate-950/90 p-4 shadow-inner">
+                <div className="flex items-center gap-0.5 font-mono text-sm font-bold uppercase text-slate-100">
+                  {spelledText.split('').map((char, index) => (
+                    <span key={index} className={char === ' ' ? 'w-2.5' : 'font-bold text-violet-300'}>
+                      {char}
+                    </span>
+                  ))}
+                  <span className="ml-0.5 h-4 w-1.5 animate-pulse bg-violet-300" />
+                </div>
+
+                {spelledText.length === 0 && (
+                  <span className="absolute left-4 text-xs font-semibold text-slate-500">
+                    Posisikan tangan untuk mengeja huruf demi huruf...
+                  </span>
+                )}
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                <button
+                  onClick={() => speak(spelledText)}
+                  disabled={spelledText.length === 0}
+                  className={`flex items-center justify-center gap-1.5 rounded-xl border py-2 text-xs font-bold transition-all ${
+                    spelledText.length > 0
+                      ? 'border-violet-300/50 bg-violet-500/10 text-violet-700 hover:bg-violet-500/20'
+                      : 'cursor-not-allowed border-white/50 bg-white/40 text-slate-400'
+                  }`}
+                >
+                  <Volume2 size={13} />
+                  Ucapkan
+                </button>
+                <button
+                  onClick={addSpaceToSpelledText}
+                  className="glass-button rounded-xl py-2 text-xs font-bold"
+                >
+                  Spasi
+                </button>
+                <button
+                  onClick={backspaceSpelledText}
+                  disabled={spelledText.length === 0}
+                  className={`flex items-center justify-center gap-1.5 rounded-xl border py-2 text-xs font-bold transition-all ${
+                    spelledText.length > 0
+                      ? 'border-white/70 bg-white/60 text-slate-700 hover:bg-white/80'
+                      : 'cursor-not-allowed border-white/50 bg-white/40 text-slate-400'
+                  }`}
+                >
+                  <Delete size={13} />
+                  Hapus
+                </button>
+                <button
+                  onClick={clearSpelledText}
+                  disabled={spelledText.length === 0}
+                  className={`flex items-center justify-center gap-1.5 rounded-xl border py-2 text-xs font-bold transition-all ${
+                    spelledText.length > 0
+                      ? 'border-red-300/50 bg-red-500/10 text-red-600 hover:bg-red-500/20'
+                      : 'cursor-not-allowed border-white/50 bg-white/40 text-slate-400'
+                  }`}
+                >
+                  <Trash2 size={13} />
+                  Bersih
+                </button>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="glass-panel flex flex-col gap-4 rounded-3xl p-5">
+              <span className="block text-[10px] font-bold uppercase text-slate-500">
+                Kalimat Pasien Saat Ini
+              </span>
+
+              <div className="flex min-h-[70px] flex-wrap items-center justify-start gap-1.5 rounded-2xl border border-white/10 bg-slate-950/90 p-4 shadow-inner">
+                {sentence.length === 0 ? (
+                  <span className="text-xs font-semibold text-slate-500">
+                    Belum ada kata terakumulasi. Lakukan isyarat atau klik kosakata medis...
+                  </span>
+                ) : (
+                  sentence.map((word, idx) => (
+                    <span
+                      key={idx}
+                      className="animate-slide-up rounded-lg border border-sky-300/30 bg-sky-400/20 px-2.5 py-1 text-xs font-bold uppercase text-sky-100 shadow-sm"
+                    >
+                      {word}
+                    </span>
+                  ))
+                )}
+              </div>
+
+              <div className="grid grid-cols-3 gap-2">
+                <button
+                  onClick={handleSpeakSentence}
+                  disabled={sentence.length === 0}
+                  className={`flex items-center justify-center gap-1.5 rounded-xl border py-2 text-xs font-bold transition-all ${
+                    sentence.length > 0
+                      ? 'border-sky-300/50 bg-sky-500/10 text-sky-700 hover:bg-sky-500/20'
+                      : 'cursor-not-allowed border-white/50 bg-white/40 text-slate-400'
+                  }`}
+                >
+                  <Volume2 size={13} />
+                  Ucapkan
+                </button>
+                <button
+                  onClick={removeLastWord}
+                  disabled={sentence.length === 0}
+                  className={`flex items-center justify-center gap-1.5 rounded-xl border py-2 text-xs font-bold transition-all ${
+                    sentence.length > 0
+                      ? 'border-white/70 bg-white/60 text-slate-700 hover:bg-white/80'
+                      : 'cursor-not-allowed border-white/50 bg-white/40 text-slate-400'
+                  }`}
+                >
+                  <Delete size={13} />
+                  Hapus
+                </button>
+                <button
+                  onClick={clearSentence}
+                  disabled={sentence.length === 0}
+                  className={`flex items-center justify-center gap-1.5 rounded-xl border py-2 text-xs font-bold transition-all ${
+                    sentence.length > 0
+                      ? 'border-red-300/50 bg-red-500/10 text-red-600 hover:bg-red-500/20'
+                      : 'cursor-not-allowed border-white/50 bg-white/40 text-slate-400'
+                  }`}
+                >
+                  <Trash2 size={13} />
+                  Bersih
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* RIGHT COLUMN: Vocabulary Guide & Session Log (lg:col-span-7) */}
-        <div className="lg:col-span-7 flex flex-col gap-6 w-full">
-          {/* Vocabulary Guide searchable grid */}
+        <div className="flex w-full flex-col gap-6 lg:col-span-6">
           <VocabularyGuide />
-
-          {/* Session Chat Timeline Log */}
           <SessionLog />
         </div>
-
       </div>
     </div>
   );

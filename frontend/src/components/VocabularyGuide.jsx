@@ -1,62 +1,52 @@
-import React, { useState, useContext, useMemo } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { AppContext } from '../context/AppContext';
-import { Search, Info, HelpCircle } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, ClipboardList, HeartPulse, MapPin, Search, Stethoscope } from 'lucide-react';
 
-const CATEGORY_ICONS = {
-  "Semua": "📋",
-  "Keluhan": "🤕",
-  "Lokasi Tubuh": "🫁",
-  "Respons": "✅",
-  "Darurat": "🆘",
-  "Instruksi Dokter": "🩺"
-};
-
-const WORD_EMOJIS = {
-  "sakit": "🤕", "nyeri": "⚡", "sesak": "🫁", "batuk": "😷", "demam": "🌡️",
-  "pusing": "🌀", "mual": "🤢", "muntah": "🤮", "diare": "🚽", "lemas": "😴",
-  "kepala": "🧠", "dada": "👤", "perut": "🤰", "tenggorokan": "👄", "tangan": "✋",
-  "kaki": "🦵", "punggung": "🔙", "mata": "👁️", "telinga": "👂", "leher": "🧣",
-  "ya": "✅", "tidak": "❌", "sakit sekali": "🥵", "lebih baik": "📈", "lebih buruk": "📉",
-  "tolong": "🆘", "tidak bisa bernapas": "😮‍💨", "nyeri dada": "💔", "pingsan": "😵", "bantuan segera": "🚨",
-  "buka mulut": "😮", "tarik napas": "🌬️", "tahan napas": "⏱️", "duduk": "🪑", "berdiri": "🚶"
+const CATEGORY_META = {
+  Semua: { icon: ClipboardList, tone: 'text-sky-600' },
+  Keluhan: { icon: HeartPulse, tone: 'text-rose-600' },
+  'Lokasi Tubuh': { icon: MapPin, tone: 'text-violet-600' },
+  Respons: { icon: CheckCircle2, tone: 'text-emerald-600' },
+  Darurat: { icon: AlertTriangle, tone: 'text-red-600' },
+  'Instruksi Dokter': { icon: Stethoscope, tone: 'text-cyan-700' }
 };
 
 const WORD_DESCRIPTIONS = {
-  "sakit": "Rasa nyeri/tidak nyaman",
-  "nyeri": "Rasa perih/panas tajam",
-  "sesak": "Napas terasa berat/pendek",
-  "batuk": "Mengeluarkan lendir/dahak",
-  "demam": "Suhu badan tinggi panas",
-  "pusing": "Kepala berputar/kleyengan",
-  "mual": "Perut kembung ingin muntah",
-  "muntah": "Mengeluarkan makanan dari lambung",
-  "diare": "BAB cair terus menerus",
-  "lemas": "Tidak bertenaga/kelelahan",
-  "kepala": "Bagian atas tubuh",
-  "dada": "Bagian paru-paru/jantung",
-  "perut": "Bagian organ pencernaan",
-  "tenggorokan": "Saluran leher dalam",
-  "tangan": "Bagian telapak/lengan",
-  "kaki": "Bagian paha/telapak bawah",
-  "punggung": "Bagian belakang tubuh",
-  "mata": "Indra penglihatan",
-  "telinga": "Indra pendengaran",
-  "leher": "Bagian penyangga kepala",
-  "ya": "Setuju/Konfirmasi",
-  "tidak": "Menolak/Bantah",
-  "sakit sekali": "Nyeri skala ekstrim",
-  "lebih baik": "Kondisi tubuh membaik",
-  "lebih buruk": "Kondisi memburuk",
-  "tolong": "Meminta pertolongan segera",
-  "tidak bisa bernapas": "Sesak napas darurat",
-  "nyeri dada": "Nyeri bagian jantung mendesak",
-  "pingsan": "Hampir/kehilangan kesadaran",
-  "bantuan segera": "Kondisi UGD mendesak",
-  "buka mulut": "Membuka rongga mulut",
-  "tarik napas": "Menghirup udara dalam",
-  "tahan napas": "Menahan aliran udara",
-  "duduk": "Silakan duduk",
-  "berdiri": "Silakan berdiri"
+  sakit: 'Rasa nyeri atau tidak nyaman',
+  nyeri: 'Rasa perih atau panas tajam',
+  sesak: 'Napas terasa berat atau pendek',
+  batuk: 'Mengeluarkan lendir atau dahak',
+  demam: 'Suhu badan tinggi panas',
+  pusing: 'Kepala berputar atau kleyengan',
+  mual: 'Perut kembung ingin muntah',
+  muntah: 'Mengeluarkan makanan dari lambung',
+  diare: 'BAB cair terus menerus',
+  lemas: 'Tidak bertenaga atau kelelahan',
+  kepala: 'Bagian atas tubuh',
+  dada: 'Bagian paru-paru atau jantung',
+  perut: 'Bagian organ pencernaan',
+  tenggorokan: 'Saluran leher dalam',
+  tangan: 'Bagian telapak atau lengan',
+  kaki: 'Bagian paha atau telapak bawah',
+  punggung: 'Bagian belakang tubuh',
+  mata: 'Indra penglihatan',
+  telinga: 'Indra pendengaran',
+  leher: 'Bagian penyangga kepala',
+  ya: 'Setuju atau konfirmasi',
+  tidak: 'Menolak atau bantah',
+  'sakit sekali': 'Nyeri skala ekstrim',
+  'lebih baik': 'Kondisi tubuh membaik',
+  'lebih buruk': 'Kondisi memburuk',
+  tolong: 'Meminta pertolongan segera',
+  'tidak bisa bernapas': 'Sesak napas darurat',
+  'nyeri dada': 'Nyeri bagian jantung mendesak',
+  pingsan: 'Hampir atau kehilangan kesadaran',
+  'bantuan segera': 'Kondisi UGD mendesak',
+  'buka mulut': 'Membuka rongga mulut',
+  'tarik napas': 'Menghirup udara dalam',
+  'tahan napas': 'Menahan aliran udara',
+  duduk: 'Silakan duduk',
+  berdiri: 'Silakan berdiri'
 };
 
 export const VocabularyGuide = () => {
@@ -64,13 +54,11 @@ export const VocabularyGuide = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('Semua');
 
-  // Extract unique categories
   const categories = useMemo(() => {
     const cats = new Set(vocabulary.map((w) => w.category));
     return ['Semua', ...Array.from(cats)];
   }, [vocabulary]);
 
-  // Filtered vocabulary list
   const filteredVocabulary = useMemo(() => {
     return vocabulary.filter((w) => {
       const matchesSearch = w.word.toLowerCase().includes(searchQuery.toLowerCase());
@@ -84,90 +72,95 @@ export const VocabularyGuide = () => {
     addLogEntry({
       role: 'patient',
       text: item.word.toUpperCase(),
-      emoji: WORD_EMOJIS[item.word] || '🤟',
-      confidence: 1.0 // Manual click has absolute confidence
+      confidence: 1.0
     });
   };
 
   return (
-    <div className="w-full flex flex-col gap-4 glass-panel p-5 rounded-2xl border border-slate-800">
-      
-      {/* Header & Search */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800/80 pb-4">
+    <div className="glass-panel flex w-full flex-col gap-4 rounded-3xl p-5">
+      <div className="flex flex-col justify-between gap-4 border-b border-white/60 pb-4 md:flex-row md:items-center">
         <div>
-          <span className="font-bold text-sm tracking-wide text-slate-200">Panduan & Jalan Pintas Kosakata Medis</span>
-          <p className="text-[10px] text-slate-500 font-mono tracking-wide mt-0.5">
-            Klik kosakata manual jika kamera terhalang atau gerakan tidak terdeteksi
+          <span className="text-sm font-black text-slate-950">Panduan & Pintasan Kosakata Medis</span>
+          <p className="mt-1 text-[11px] font-semibold text-slate-500">
+            Klik kosakata manual jika kamera terhalang atau gerakan tidak terdeteksi.
           </p>
         </div>
 
-        {/* Search Input */}
-        <div className="relative max-w-md w-full">
+        <div className="relative w-full max-w-md">
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Cari kata (contoh: sakit, sesak)..."
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-sky-500/50"
+            placeholder="Cari kata, misalnya sakit atau sesak"
+            className="glass-input w-full rounded-2xl py-2 pl-10 pr-4 text-xs font-semibold"
           />
-          <Search className="absolute left-3.5 top-2.5 text-slate-600" size={14} />
+          <Search className="absolute left-3.5 top-2.5 text-slate-500" size={14} />
         </div>
       </div>
 
-      {/* Category Tabs */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-2 scroll-tabs">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setActiveCategory(cat)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer border ${
-              activeCategory === cat
-                ? 'bg-sky-500/10 text-sky-400 border-sky-500/30 font-bold shadow-md shadow-sky-950/10'
-                : 'bg-slate-950/50 text-slate-400 border-slate-900 hover:text-slate-200'
-            }`}
-          >
-            <span className="mr-1">{CATEGORY_ICONS[cat] || '📋'}</span>
-            {cat}
-          </button>
-        ))}
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-2">
+        {categories.map((cat) => {
+          const meta = CATEGORY_META[cat] || CATEGORY_META.Semua;
+          const Icon = meta.icon;
+          const active = activeCategory === cat;
+
+          return (
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              className={`inline-flex shrink-0 items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-bold transition-all ${
+                active
+                  ? 'border-sky-300/60 bg-white text-sky-700 shadow-sm'
+                  : 'border-white/60 bg-white/40 text-slate-600 hover:bg-white/70'
+              }`}
+            >
+              <Icon size={13} className={active ? 'text-sky-600' : meta.tone} />
+              {cat}
+            </button>
+          );
+        })}
       </div>
 
-      {/* Word Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 max-h-[300px] overflow-y-auto pr-1">
+      <div className="grid max-h-[300px] grid-cols-2 gap-3 overflow-y-auto pr-1 sm:grid-cols-3 xl:grid-cols-4">
         {filteredVocabulary.length === 0 ? (
-          <div className="col-span-full py-8 text-center text-slate-600 text-xs font-mono">
+          <div className="col-span-full py-8 text-center text-xs font-semibold text-slate-500">
             Kosakata tidak ditemukan.
           </div>
         ) : (
-          filteredVocabulary.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => handleWordClick(item)}
-              title={WORD_DESCRIPTIONS[item.word] || item.word}
-              className={`group flex items-center gap-2 p-3 rounded-xl border bg-slate-950/40 hover:bg-slate-900 transition-all text-left overflow-hidden text-ellipsis whitespace-nowrap active:scale-[0.97] cursor-pointer hover:border-slate-700 ${
-                item.emergency 
-                  ? 'border-red-950 bg-red-950/5 hover:border-red-500/30' 
-                  : 'border-slate-900'
-              }`}
-            >
-              {/* Emoji */}
-              <span className="text-lg bg-slate-900/60 w-8 h-8 rounded-lg flex items-center justify-center border border-slate-800 group-hover:scale-105 transition-all">
-                {WORD_EMOJIS[item.word] || '🤟'}
-              </span>
+          filteredVocabulary.map((item) => {
+            const meta = CATEGORY_META[item.category] || CATEGORY_META.Semua;
+            const Icon = item.emergency ? AlertTriangle : meta.icon;
 
-              {/* Text */}
-              <div className="flex flex-col overflow-hidden">
-                <span className={`text-[11px] font-bold uppercase tracking-wide truncate ${
-                  item.emergency ? 'text-red-400 font-extrabold' : 'text-slate-200'
+            return (
+              <button
+                key={item.id}
+                onClick={() => handleWordClick(item)}
+                title={WORD_DESCRIPTIONS[item.word] || item.word}
+                className={`group flex items-center gap-2 overflow-hidden rounded-2xl border p-3 text-left transition-all active:scale-[0.98] ${
+                  item.emergency
+                    ? 'border-red-300/60 bg-red-500/10 hover:bg-red-500/20'
+                    : 'border-white/60 bg-white/40 hover:bg-white/70'
+                }`}
+              >
+                <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border bg-white/60 transition-transform group-hover:scale-105 ${
+                  item.emergency ? 'border-red-300/50 text-red-600' : `border-white/70 ${meta.tone}`
                 }`}>
-                  {item.word}
+                  <Icon size={16} />
                 </span>
-                <span className="text-[8px] font-mono text-slate-500 tracking-wider uppercase mt-0.5 truncate">
-                  {item.category}
-                </span>
-              </div>
-            </button>
-          ))
+
+                <div className="flex min-w-0 flex-col">
+                  <span className={`truncate text-[11px] font-black uppercase ${
+                    item.emergency ? 'text-red-700' : 'text-slate-800'
+                  }`}>
+                    {item.word}
+                  </span>
+                  <span className="mt-0.5 truncate text-[9px] font-semibold uppercase text-slate-500">
+                    {item.category}
+                  </span>
+                </div>
+              </button>
+            );
+          })
         )}
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AppProvider } from './context/AppContext';
 import { Layout } from './components/Layout';
 import { Home } from './pages/Home';
@@ -8,6 +8,10 @@ import { About } from './pages/About';
 
 function AppContent() {
   const [view, setView] = useState('home'); // 'home' | 'patient' | 'doctor' | 'about'
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+  }, [view]);
 
   return (
     <Layout currentView={view} setView={setView}>

@@ -23,12 +23,14 @@ def run_data_collection():
         print("Perintah: pip install opencv-python mediapipe")
         return
 
-    # 1. Definisikan folder penyimpanan data
-    DATA_PATH = os.path.join('..', 'data')
+    # 1. Definisikan folder penyimpanan data relatif terhadap file script ini.
+    #    Ini menjaga output tetap masuk ke backend/data meskipun command dijalankan dari backend/.
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    DATA_PATH = os.path.abspath(os.path.join(script_dir, '..', 'data'))
     if not os.path.exists(DATA_PATH):
         os.makedirs(DATA_PATH)
 
-    # 35 Kosakata prioritas klinis MVP
+    # 30 Kosakata prioritas klinis MVP
     VOCABULARY = [
         "sakit", "nyeri", "sesak", "batuk", "demam", "pusing", "mual", "muntah", "diare", "lemas",
         "kepala", "dada", "perut", "tenggorokan", "tangan", "kaki", "punggung", "mata", "telinga", "leher",

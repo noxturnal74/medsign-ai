@@ -1,18 +1,18 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { AppContext } from '../context/AppContext';
 import { MessageSquare, Send, Zap } from 'lucide-react';
 
 const DOCTOR_QUICKPHRASES = [
-  "Tolong duduk dengan tenang.",
+  'Tolong duduk dengan tenang.',
   "Buka mulut Anda, katakan 'aah'.",
-  "Tarik napas dalam-dalam.",
-  "Tahan napas Anda sebentar.",
-  "Di mana tepatnya bagian yang sakit?",
-  "Sudah berapa hari gejala ini dirasakan?",
-  "Apakah Anda memiliki alergi obat?",
-  "Saya akan memeriksa tekanan darah Anda.",
-  "Hasil pemeriksaan laboratorium sudah siap.",
-  "Anda harus beristirahat dan minum obat teratur."
+  'Tarik napas dalam-dalam.',
+  'Tahan napas Anda sebentar.',
+  'Di mana tepatnya bagian yang sakit?',
+  'Sudah berapa hari gejala ini dirasakan?',
+  'Apakah Anda memiliki alergi obat?',
+  'Saya akan memeriksa tekanan darah Anda.',
+  'Hasil pemeriksaan laboratorium sudah siap.',
+  'Anda harus beristirahat dan minum obat teratur.'
 ];
 
 export const DoctorPanel = () => {
@@ -23,7 +23,7 @@ export const DoctorPanel = () => {
     if (!doctorText.trim()) return;
     addLogEntry({
       role: 'doctor',
-      text: doctorText.trim(),
+      text: doctorText.trim()
     });
     setDoctorText('');
   };
@@ -38,20 +38,17 @@ export const DoctorPanel = () => {
   const handleQuickPhrase = (phrase) => {
     addLogEntry({
       role: 'doctor',
-      text: phrase,
+      text: phrase
     });
   };
 
   return (
-    <div className="w-full flex flex-col gap-5 glass-panel p-6 rounded-2xl border border-slate-800">
-      
-      {/* Header */}
-      <div className="flex items-center gap-2 border-b border-slate-800/80 pb-3">
-        <MessageSquare className="text-emerald-400" size={18} />
-        <span className="font-bold text-sm tracking-wide text-slate-200">Kirim Respon Medis Ke Pasien</span>
+    <div className="glass-panel flex w-full flex-col gap-5 rounded-3xl p-6">
+      <div className="flex items-center gap-2 border-b border-white/60 pb-3">
+        <MessageSquare className="text-emerald-600" size={18} />
+        <span className="text-sm font-black text-slate-950">Kirim Respon Medis Ke Pasien</span>
       </div>
 
-      {/* Textarea Input */}
       <div className="flex flex-col gap-2">
         <div className="relative">
           <textarea
@@ -61,9 +58,9 @@ export const DoctorPanel = () => {
             onChange={(e) => setDoctorText(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Ketik penjelasan, instruksi, atau obat di sini..."
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-sky-500/50 resize-none font-sans"
+            className="glass-input w-full resize-none rounded-2xl px-4 py-3 pr-16 text-sm font-semibold"
           />
-          <div className="absolute bottom-3 right-3 text-[10px] text-slate-600 font-mono tracking-wider">
+          <div className="absolute bottom-3 right-3 text-[10px] font-semibold text-slate-500">
             {doctorText.length}/200
           </div>
         </div>
@@ -71,10 +68,10 @@ export const DoctorPanel = () => {
         <button
           onClick={handleSend}
           disabled={!doctorText.trim()}
-          className={`w-full py-3 rounded-xl font-semibold text-sm transition-all cursor-pointer flex items-center justify-center gap-2 ${
+          className={`flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-sm font-bold transition-all ${
             doctorText.trim()
-              ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-950/20 hover:scale-[1.01]'
-              : 'bg-slate-900 text-slate-500 border border-slate-800/80 cursor-not-allowed'
+              ? 'glass-button glass-button-primary'
+              : 'cursor-not-allowed border border-white/60 bg-white/40 text-slate-400'
           }`}
         >
           <Send size={15} />
@@ -82,18 +79,17 @@ export const DoctorPanel = () => {
         </button>
       </div>
 
-      {/* Quick Phrases */}
       <div className="flex flex-col gap-3">
-        <div className="flex items-center gap-2 text-slate-400 text-xs font-bold uppercase tracking-wider">
-          <Zap size={14} className="text-amber-400 animate-pulse" />
-          Frasa Cepat Medis (Instruksi)
+        <div className="flex items-center gap-2 text-xs font-black uppercase text-slate-600">
+          <Zap size={14} className="text-amber-500" />
+          Frasa Cepat Medis
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
           {DOCTOR_QUICKPHRASES.map((phrase, idx) => (
             <button
               key={idx}
               onClick={() => handleQuickPhrase(phrase)}
-              className="bg-slate-950/40 hover:bg-slate-900 border border-slate-800/60 px-4 py-2.5 rounded-xl text-left text-xs font-semibold text-slate-300 transition-all hover:border-slate-700 cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap active:scale-[0.98]"
+              className="overflow-hidden text-ellipsis whitespace-nowrap rounded-2xl border border-white/60 bg-white/40 px-4 py-2.5 text-left text-xs font-bold text-slate-700 transition-all hover:bg-white/75 active:scale-[0.98]"
             >
               {phrase}
             </button>

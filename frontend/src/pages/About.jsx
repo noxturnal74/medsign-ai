@@ -1,150 +1,111 @@
 import React from 'react';
-import { ArrowLeft, BookOpen, Code, Terminal, FileText, CheckCircle } from 'lucide-react';
+import { ArrowLeft, BookOpen, CheckCircle, Code, FileText, ShieldCheck, Terminal } from 'lucide-react';
+
+const frontendItems = [
+  'React 18 + Vite 5 untuk SPA berlatensi rendah',
+  'TailwindCSS 3 dengan sistem visual glass',
+  'MediaPipe Hands JS untuk ekstraksi 21 landmark',
+  'Web Speech API native untuk text-to-speech id-ID'
+];
+
+const backendItems = [
+  'FastAPI Python 3.11 dengan WebSocket streaming',
+  'Model sequence LSTM untuk kosakata klinis',
+  'TensorFlow Lite interpreter untuk CPU inference',
+  'Struktur logging sesi dan audit konsultasi'
+];
+
+const docs = [
+  ['PRD.md.pdf', 'Product Requirements'],
+  ['SRS.md.pdf', 'Software Requirements'],
+  ['SDD.md.pdf', 'Software Design'],
+  ['UI_UX_FLOW.md.pdf', 'Wireframes & Flow'],
+  ['TASK_BREAKDOWN.md.pdf', 'Sprint Roadmap'],
+  ['PROJECT_CONTEXT_PROMPT.md.pdf', 'LLM Context']
+];
 
 export const About = ({ setView }) => {
   return (
-    <div className="flex flex-col gap-6 w-full max-w-4xl mx-auto animate-slide-up py-4">
-      
-      {/* Header */}
-      <div className="flex items-center justify-between border-b border-slate-800/60 pb-4">
+    <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 py-2 animate-slide-up">
+      <div className="glass-panel flex items-center justify-between rounded-3xl p-4">
         <button
           onClick={() => setView('home')}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 font-semibold text-xs transition-all cursor-pointer"
+          className="glass-button rounded-2xl px-4 py-2 text-xs font-bold"
         >
           <ArrowLeft size={14} />
           Kembali
         </button>
         <div className="text-right">
-          <span className="text-[10px] font-bold font-mono tracking-widest text-sky-400 uppercase">
-            Informasi Proyek
-          </span>
-          <h2 className="text-lg font-bold text-slate-200">Tentang MedSign AI</h2>
+          <span className="text-[10px] font-bold uppercase text-sky-700">Informasi Proyek</span>
+          <h2 className="text-lg font-black text-slate-950">Tentang MedSign AI</h2>
         </div>
       </div>
 
-      {/* Main Info Card */}
-      <div className="glass-panel p-8 rounded-3xl border border-slate-800 flex flex-col gap-6">
-        <div>
-          <h3 className="font-display font-bold text-2xl text-slate-100">Menembus Batas Sunyi dalam Layanan Medis</h3>
-          <p className="text-slate-400 text-sm leading-relaxed mt-3 font-semibold">
-            MedSign AI dikembangkan sebagai bagian dari proposal PKM-KC (Program Kreativitas Mahasiswa - Karsa Cipta) 2026 dan Skripsi Informatika Universitas Ma Chung. Platform ini menargetkan pemecahan kendala komunikasi medis bagi pasien tunarungu melalui otomatisasi terjemahan isyarat Bahasa Isyarat Indonesia (BISINDO) klinis.
-          </p>
-        </div>
-
-        {/* Tech Stack details */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-slate-900 pt-6">
-          <div className="flex flex-col gap-3">
-            <h4 className="font-bold text-sm text-sky-400 flex items-center gap-2">
-              <Code size={16} />
-              Arsitektur Frontend
-            </h4>
-            <ul className="flex flex-col gap-2 text-xs text-slate-400 font-semibold">
-              <li className="flex items-center gap-2">
-                <CheckCircle size={12} className="text-sky-500" />
-                React 18 + Vite 5 (SPA Berlatensi Rendah)
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle size={12} className="text-sky-500" />
-                TailwindCSS 3 (UI Kontras Tinggi & Inklusif)
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle size={12} className="text-sky-500" />
-                MediaPipe Hands JS (Ekstraksi 21 Landmark Tangan)
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle size={12} className="text-sky-500" />
-                Web Speech API Native (id-ID Text-to-Speech)
-              </li>
-            </ul>
+      <div className="glass-panel rounded-[32px] p-6 md:p-8">
+        <div className="grid gap-7 lg:grid-cols-[0.95fr_1.05fr]">
+          <div>
+            <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-500/10 text-sky-600">
+              <ShieldCheck size={24} />
+            </div>
+            <h3 className="text-3xl font-black leading-tight text-slate-950 md:text-4xl">
+              Menembus batas sunyi dalam layanan medis.
+            </h3>
+            <p className="mt-4 text-sm font-semibold leading-7 text-slate-600">
+              MedSign AI adalah purwarupa PKM-KC untuk membantu komunikasi antara pasien
+              tunarungu dan tenaga medis melalui penerjemahan isyarat BISINDO klinis,
+              tampilan teks besar, text-to-speech, dan log percakapan dua arah.
+            </p>
           </div>
 
-          <div className="flex flex-col gap-3">
-            <h4 className="font-bold text-sm text-emerald-400 flex items-center gap-2">
-              <Terminal size={16} />
-              Arsitektur Backend & ML
-            </h4>
-            <ul className="flex flex-col gap-2 text-xs text-slate-400 font-semibold">
-              <li className="flex items-center gap-2">
-                <CheckCircle size={12} className="text-emerald-500" />
-                FastAPI Python 3.11 (WebSocket Streaming Endpoint)
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle size={12} className="text-emerald-500" />
-                Model Sequence LSTM (Klasifikasi 40 Kosakata)
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle size={12} className="text-emerald-500" />
-                TensorFlow Lite Interpreter (CPU-only Inference)
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle size={12} className="text-emerald-500" />
-                PostgreSQL/Supabase (Logging Sesi & Audit)
-              </li>
-            </ul>
+          <div className="grid gap-4 md:grid-cols-2">
+            <TechList title="Frontend" icon={Code} tone="text-sky-600" items={frontendItems} />
+            <TechList title="Backend & ML" icon={Terminal} tone="text-emerald-600" items={backendItems} />
           </div>
         </div>
 
-        {/* Documentation PDF list */}
-        <div className="border-t border-slate-900 pt-6 flex flex-col gap-3">
-          <h4 className="font-bold text-sm text-slate-200 flex items-center gap-2">
-            <BookOpen size={16} className="text-amber-400" />
-            Dokumen Persyaratan Proyek (Tersimpan di `docs/`)
-          </h4>
-          <p className="text-xs text-slate-500 max-w-lg leading-relaxed">
-            Semua dokumen persyaratan, arsitektur, rencana kerja, dan alur visual telah disusun secara sistematis dan dapat diakses langsung pada folder lokal project Anda:
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-2">
-            <div className="bg-slate-950/65 border border-slate-900 p-3 rounded-xl flex items-start gap-2.5 shadow-sm">
-              <FileText size={16} className="text-sky-400 mt-0.5" />
-              <div>
-                <span className="text-[10px] font-bold text-slate-200 uppercase tracking-wide block">PRD.md.pdf</span>
-                <span className="text-[8px] font-mono text-slate-600">Product Requirements</span>
+        <div className="mt-8 border-t border-white/60 pt-7">
+          <div className="mb-4 flex items-center gap-2">
+            <BookOpen size={18} className="text-amber-600" />
+            <h4 className="text-sm font-black text-slate-950">Dokumen proyek di folder docs</h4>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {docs.map(([name, description]) => (
+              <div key={name} className="surface-panel rounded-2xl p-3">
+                <div className="flex items-start gap-2.5">
+                  <FileText size={16} className="mt-0.5 shrink-0 text-sky-600" />
+                  <div className="min-w-0">
+                    <span className="block truncate text-[11px] font-black uppercase text-slate-800">{name}</span>
+                    <span className="text-[10px] font-semibold text-slate-500">{description}</span>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="bg-slate-950/65 border border-slate-900 p-3 rounded-xl flex items-start gap-2.5 shadow-sm">
-              <FileText size={16} className="text-sky-400 mt-0.5" />
-              <div>
-                <span className="text-[10px] font-bold text-slate-200 uppercase tracking-wide block">SRS.md.pdf</span>
-                <span className="text-[8px] font-mono text-slate-600">Software Requirements</span>
-              </div>
-            </div>
-            <div className="bg-slate-950/65 border border-slate-900 p-3 rounded-xl flex items-start gap-2.5 shadow-sm">
-              <FileText size={16} className="text-sky-400 mt-0.5" />
-              <div>
-                <span className="text-[10px] font-bold text-slate-200 uppercase tracking-wide block">SDD.md.pdf</span>
-                <span className="text-[8px] font-mono text-slate-600">Software Design</span>
-              </div>
-            </div>
-            <div className="bg-slate-950/65 border border-slate-900 p-3 rounded-xl flex items-start gap-2.5 shadow-sm">
-              <FileText size={16} className="text-sky-400 mt-0.5" />
-              <div>
-                <span className="text-[10px] font-bold text-slate-200 uppercase tracking-wide block">UI_UX_FLOW.md.pdf</span>
-                <span className="text-[8px] font-mono text-slate-600">Wireframes & Flow</span>
-              </div>
-            </div>
-            <div className="bg-slate-950/65 border border-slate-900 p-3 rounded-xl flex items-start gap-2.5 shadow-sm">
-              <FileText size={16} className="text-sky-400 mt-0.5" />
-              <div>
-                <span className="text-[10px] font-bold text-slate-200 uppercase tracking-wide block">TASK_BREAKDOWN.md</span>
-                <span className="text-[8px] font-mono text-slate-600">Sprint Roadmap</span>
-              </div>
-            </div>
-            <div className="bg-slate-950/65 border border-slate-900 p-3 rounded-xl flex items-start gap-2.5 shadow-sm">
-              <FileText size={16} className="text-sky-400 mt-0.5" />
-              <div>
-                <span className="text-[10px] font-bold text-slate-200 uppercase tracking-wide block">CONTEXT_PROMPT.md</span>
-                <span className="text-[8px] font-mono text-slate-600">LLM Context File</span>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 
-        {/* Medical disclaimer */}
-        <div className="bg-amber-950/15 border border-amber-500/20 p-4 rounded-2xl text-xs text-slate-400 mt-4 select-none">
-          <span className="font-bold text-amber-500 uppercase tracking-wide block mb-1">Pernyataan Batasan (Disclaimer):</span>
-          MedSign AI dirancang sebagai alat bantu komunikasi dan penerjemahan isyarat BISINDO klinis pendukung antara pasien tunarungu dan dokter. Sistem ini bukan merupakan alat diagnosis klinis otomatis, pengganti penegakan diagnosis dokter, maupun pengganti penilaian medis profesional.
+        <div className="mt-8 rounded-3xl border border-amber-200/70 bg-amber-100/40 p-4 text-sm font-semibold leading-6 text-amber-950">
+          <span className="mb-1 block font-black uppercase text-amber-700">Pernyataan batasan</span>
+          MedSign AI adalah alat bantu komunikasi dan penerjemahan isyarat BISINDO klinis.
+          Sistem ini bukan alat diagnosis otomatis dan tidak menggantikan penilaian medis profesional.
         </div>
       </div>
     </div>
   );
 };
+
+const TechList = ({ title, icon: Icon, tone, items }) => (
+  <div className="surface-panel rounded-3xl p-5">
+    <h4 className={`mb-4 flex items-center gap-2 text-sm font-black ${tone}`}>
+      <Icon size={17} />
+      {title}
+    </h4>
+    <ul className="flex flex-col gap-3">
+      {items.map(item => (
+        <li key={item} className="flex gap-2 text-xs font-semibold leading-5 text-slate-600">
+          <CheckCircle size={14} className="mt-0.5 shrink-0 text-emerald-500" />
+          {item}
+        </li>
+      ))}
+    </ul>
+  </div>
+);

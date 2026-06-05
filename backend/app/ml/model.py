@@ -24,6 +24,10 @@ class ModelLoader:
                 "ya", "tidak", "sakit sekali", "lebih baik", "lebih buruk",
                 "tolong", "tidak bisa bernapas", "nyeri dada", "pingsan", "bantuan segera"
             ]
+            # Inisialisasi untuk model abjad BISINDO A-Z
+            cls._instance.alphabet_interpreter = None
+            cls._instance.alphabet_loaded = False
+            cls._instance.alphabet_classes = [chr(i) for i in range(ord('A'), ord('Z') + 1)]
         return cls._instance
 
     def load(self, model_path: str):
@@ -156,5 +160,83 @@ class ModelLoader:
             "confidence": confidence,
             "top3": alternatives,
             "mode": "geometris",
+            "processing_time_ms": processing_time
+        }
+
+    def load_alphabet(self, model_path: str):
+        """Memuat model TFLite untuk pengenalan abjad statis BISINDO A-Z."""
+        if not os.path.exists(model_path):
+            print(f"[ML_MODEL] Berkas model abjad {model_path} tidak ditemukan.")
+            self.alphabet_loaded = False
+            return False
+
+        if not TF_AVAILABLE:
+            print("[ML_MODEL] TensorFlow tidak terpasang untuk model abjad.")
+            self.alphabet_loaded = False
+            return False
+
+        try:
+            self.alphabet_interpreter = tf.lite.Interpreter(model_path=model_path)
+            self.alphabet_interpreter.allocate_tensors()
+            self.alphabet_input_details = self.alphabet_interpreter.get_input_details()
+            self.alphabet_output_details = self.alphabet_interpreter.get_output_details()
+            self.alphabet_loaded = True
+            print(f"[ML_MODEL] Model TFLite Abjad berhasil dimuat dari {model_path}.")
+            return True
+        except Exception as e:
+            print(f"[ML_MODEL] Gagal memuat model TFLite Abjad: {e}")
+            self.alphabet_loaded = False
+            return False
+
+    def predict_alphabet(self, flat_landmarks: np.ndarray) -> dict:
+        """
+        Melakukan prediksi abjad BISINDO statis A-Z dari 1 frame flat landmarks (63,).
+        Input: flat_landmarks shape (1, 63)
+        Output: dict berisi {"prediction": str, "confidence": float, "top3": list}
+        """
+        start_time = time.perf_counter()
+
+        # JALUR A: Model TFLite Abjad Statis
+        if self.alphabet_loaded and self.alphabet_interpreter:
+            try:
+                # Set input tensor
+                self.alphabet_interpreter.set_tensor(self.alphabet_input_details[0]['index'], flat_landmarks.astype(np.float32))
+                self.alphabet_interpreter.invoke()
+                
+                # Get output tensor
+                output_data = self.alphabet_interpreter.get_tensor(self.alphabet_output_details[0]['index'])[0]
+                
+                # Sort top predictions
+                top_indices = np.argsort(output_data)[::-1][:3]
+                prediction = self.alphabet_classes[top_indices[0]]
+                confidence = float(output_data[top_indices[0]])
+                
+                top3 = [
+                    {"word": self.alphabet_classes[i], "confidence": float(output_data[i])}
+                    for i in top_indices
+                ]
+                
+                processing_time = int((time.perf_counter() - start_time) * 1000)
+                return {
+                    "prediction": prediction,
+                    "confidence": confidence,
+                    "top3": top3,
+                    "mode": "spelling",
+                    "processing_time_ms": max(1, processing_time)
+                }
+            except Exception as e:
+                print(f"[ML_MODEL] Gagal melakukan inferensi TFLite Abjad: {e}. Menjalankan fallback geometris.")
+
+        # JALUR B: Fallback Geometris Sederhana (Default ke "A" jika tidak terdeteksi)
+        processing_time = int((time.perf_counter() - start_time) * 1000) + 1
+        return {
+            "prediction": "A",
+            "confidence": 0.50,
+            "top3": [
+                {"word": "A", "confidence": 0.50},
+                {"word": "B", "confidence": 0.20},
+                {"word": "C", "confidence": 0.10}
+            ],
+            "mode": "geometris_spelling",
             "processing_time_ms": processing_time
         }

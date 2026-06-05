@@ -4,6 +4,7 @@ dist/
 dist-ssr/
 *.local
 .eslintcache
+frontend/dist/
 
 # Python environment
 __pycache__/
@@ -38,3 +39,11 @@ Thumbs.db
 .env
 .env.production
 .env.development
+
+# Local ML artifacts and datasets
+backend/data/
+backend/models/
+backend/training/visualization/
+
+# Local Vercel metadata
+.vercel/
