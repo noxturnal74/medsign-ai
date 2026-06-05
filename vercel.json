@@ -31,5 +31,12 @@
         }
       ]
     }
-  ]
+  ],
+  "experimentalServices": {
+    "frontend": {
+      "root": "frontend",
+      "routePrefix": "/",
+      "framework": "vite"
+    }
+  }
 }
