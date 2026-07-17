@@ -320,7 +320,7 @@ def run_synthetic_generation():
     
     for idx, word in enumerate(VOCABULARY):
         print(f"[{idx+1}/{len(VOCABULARY)}] Mensintesis data untuk kata: '{word.upper()}'...", end="")
-        word_dir = os.path.join(DATA_PATH, word)
+        word_dir = os.path.join(DATA_PATH, "landmarks", word, "synthetic")
         if not os.path.exists(word_dir):
             os.makedirs(word_dir)
             

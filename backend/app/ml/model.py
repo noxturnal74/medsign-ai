@@ -1,14 +1,21 @@
 # -*- coding: utf-8 -*-
-import os
-import json
-import numpy as np
+from __future__ import annotations
+
 import time
+from pathlib import Path
+
+import numpy as np
+
+from app.ml.labels import BACKEND_DIR, get_model_contract, load_labels
+from app.ml.preprocess import FEATURE_COUNT, FRAME_COUNT
 
 try:
     import tensorflow as tf
+
     TF_AVAILABLE = True
 except ImportError:
     TF_AVAILABLE = False
+
 
 class ModelLoader:
     _instance = None
@@ -18,225 +25,201 @@ class ModelLoader:
             cls._instance = super(ModelLoader, cls).__new__(cls)
             cls._instance.interpreter = None
             cls._instance.loaded = False
-            cls._instance.classes = [
-                "sakit", "nyeri", "sesak", "batuk", "demam", "pusing", "mual", "muntah", "diare", "lemas",
-                "kepala", "dada", "perut", "tenggorokan", "tangan", "kaki", "punggung", "mata", "telinga", "leher",
-                "ya", "tidak", "sakit sekali", "lebih baik", "lebih buruk",
-                "tolong", "tidak bisa bernapas", "nyeri dada", "pingsan", "bantuan segera"
-            ]
-            # Inisialisasi untuk model abjad BISINDO A-Z
+            cls._instance.model_path = None
+            cls._instance.contract = get_model_contract()
+            cls._instance.classes = load_labels()
+            cls._instance.model_classes = list(cls._instance.classes)
+            cls._instance.threshold = float(cls._instance.contract["threshold"])
+
             cls._instance.alphabet_interpreter = None
             cls._instance.alphabet_loaded = False
-            cls._instance.alphabet_classes = [chr(i) for i in range(ord('A'), ord('Z') + 1)]
+            cls._instance.alphabet_classes = [chr(i) for i in range(ord("A"), ord("Z") + 1)]
         return cls._instance
 
-    def load(self, model_path: str):
-        """Loads the TFLite model or prepares the mathematical gesture classifier."""
-        if not os.path.exists(model_path):
-            print(f"[ML_MODEL] Berkas model {model_path} tidak ditemukan. Menggunakan Klasifikasi Geometris Determinastis.")
+    def refresh_labels(self) -> None:
+        self.contract = get_model_contract()
+        self.classes = load_labels()
+        self.threshold = float(self.contract["threshold"])
+
+    def _resolve_model_path(self, model_path: str | Path) -> Path:
+        path = Path(model_path)
+        return path if path.is_absolute() else BACKEND_DIR / path
+
+    def status(self) -> dict:
+        return {
+            "mode": "production" if self.loaded else "model_unavailable",
+            "model_loaded": self.loaded,
+            "label_count": len(self.classes),
+            "threshold": self.threshold,
+            "frame_count": FRAME_COUNT,
+            "feature_count": FEATURE_COUNT,
+            "input_shape": [FRAME_COUNT, FEATURE_COUNT],
+            "output_class": len(self.model_classes) if self.loaded else len(self.classes),
+            "model_path": str(self.model_path) if self.model_path else None,
+        }
+
+    def load(self, model_path: str | Path) -> bool:
+        self.refresh_labels()
+        path = self._resolve_model_path(model_path)
+        self.model_path = path
+
+        if not path.exists():
+            print(f"[ML_MODEL] Model clinical belum ditemukan: {path}")
             self.loaded = False
             return False
-
         if not TF_AVAILABLE:
-            print("[ML_MODEL] TensorFlow tidak terpasang. Menggunakan Klasifikasi Geometris.")
+            print("[ML_MODEL] TensorFlow tidak tersedia. Model clinical tidak dimuat.")
             self.loaded = False
             return False
 
         try:
-            # Load TFLite model interpreter
-            self.interpreter = tf.lite.Interpreter(model_path=model_path)
+            self.interpreter = tf.lite.Interpreter(model_path=str(path))
             self.interpreter.allocate_tensors()
             self.input_details = self.interpreter.get_input_details()
             self.output_details = self.interpreter.get_output_details()
-            self.loaded = True
-            print(f"[ML_MODEL] Model TFLite berhasil dimuat dari {model_path}.")
+
+            output_shape = self.output_details[0].get("shape", [])
+            if len(output_shape) >= 2:
+                model_output_size = int(output_shape[-1])
+                
+                # Check for a sidecar labels file first
+                import json
+                sidecar_labels_path = path.parent / f"{path.stem}_labels.json"
+                
+                if sidecar_labels_path.exists():
+                    try:
+                        with sidecar_labels_path.open("r", encoding="utf-8") as f:
+                            self.model_classes = json.load(f)
+                        print(f"[ML_MODEL] Berhasil memuat {len(self.model_classes)} kelas model dari sidecar: {sidecar_labels_path}")
+                    except Exception as e:
+                        print(f"[ML_MODEL] Gagal membaca sidecar labels: {e}")
+                        self.model_classes = self.classes
+                elif model_output_size == 12:
+                    self.model_classes = ["sakit", "nyeri", "sesak", "batuk", "demam", "pusing", "mual", "muntah", "ya", "tidak", "tolong", "selesai"]
+                elif model_output_size == 30:
+                    self.model_classes = [
+                        "sakit", "nyeri", "sesak", "batuk", "demam", "pusing", "mual", "muntah", "diare", "lemas",
+                        "kepala", "dada", "perut", "tenggorokan", "tangan", "kaki", "punggung", "mata", "telinga", "leher",
+                        "ya", "tidak", "sakit sekali", "lebih baik", "lebih buruk", "tolong", "tidak bisa bernapas", "nyeri dada", "pingsan", "bantuan segera"
+                    ]
+                else:
+                    if model_output_size != len(self.classes):
+                        print(f"[ML\_MODEL] Warning: Jumlah output model ({model_output_size}) tidak sesuai jumlah labels.json ({len(self.classes)}). Menggunakan {model_output_size} label pertama.")
+                        self.model_classes = self.classes[:model_output_size]
+                    else:
+                        self.model_classes = self.classes
+            else:
+                self.model_classes = self.classes
+                self.loaded = True
+            print(f"[ML_MODEL] Model clinical TFLite berhasil dimuat: {path}")
             return True
-        except Exception as e:
-            print(f"[ML_MODEL] Gagal memuat model TFLite: {e}. Menggunakan Klasifikasi Geometris.")
+        except Exception as exc:
+            print(f"[ML_MODEL] Gagal memuat model clinical TFLite: {exc}")
             self.loaded = False
+            self.interpreter = None
             return False
 
     def predict(self, frames_seq: np.ndarray) -> dict:
-        """
-        Melakukan prediksi klasifikasi isyarat BISINDO klinis.
-        Input: frames_seq dengan shape (1, 30, 63)
-        Output: dict berisi {"prediction": str, "confidence": float, "top3": list}
-        """
         start_time = time.perf_counter()
+        if not self.loaded or self.interpreter is None:
+            return {
+                "prediction": None,
+                "label": None,
+                "confidence": 0.0,
+                "top3": [],
+                "status": "not_detected",
+                "detected": False,
+                "mode": "model_unavailable",
+                "processing_time_ms": int((time.perf_counter() - start_time) * 1000),
+            }
 
-        # JALUR A: Inferensi TFLite Model Produksi
-        if self.loaded and self.interpreter:
-            try:
-                # Set input tensor
-                self.interpreter.set_tensor(self.input_details[0]['index'], frames_seq.astype(np.float32))
-                self.interpreter.invoke()
-                
-                # Get output tensor
-                output_data = self.interpreter.get_tensor(self.output_details[0]['index'])[0]
-                
-                # Sort top predictions
-                top_indices = np.argsort(output_data)[::-1][:3]
-                prediction = self.classes[top_indices[0]]
-                confidence = float(output_data[top_indices[0]])
-                
-                top3 = [
-                    {"word": self.classes[i], "confidence": float(output_data[i])}
-                    for i in top_indices
-                ]
-                
-                processing_time = int((time.perf_counter() - start_time) * 1000)
-                return {
-                    "prediction": prediction,
-                    "confidence": confidence,
-                    "top3": top3,
-                    "mode": "production",
-                    "processing_time_ms": processing_time
-                }
-            except Exception as e:
-                print(f"[ML_MODEL] Gagal melakukan inferensi TFLite: {e}. Menjalankan fallback geometris.")
+        arr = np.asarray(frames_seq, dtype=np.float32)
+        if arr.shape != (1, FRAME_COUNT, FEATURE_COUNT):
+            raise ValueError(f"Input model harus shape (1, {FRAME_COUNT}, {FEATURE_COUNT}), diterima {arr.shape}")
 
-        # JALUR B: Klasifikasi Geometris Determinastis Real-Time
-        # Mengekstrak koordinat jari-jemari pada frame terakhir untuk mendeteksi gestur tangan secara riil!
-        last_frame = frames_seq[0, -1] # Shape: (63,)
-        pts = last_frame.reshape(21, 3)
-        
-        # Ekstrak jarak euklidian antar persendian kunci tangan
-        # Titik penting: 4 (thumb tip), 8 (index tip), 12 (middle tip), 16 (ring tip), 20 (pinky tip), 0 (wrist)
-        thumb_tip = pts[4]
-        index_tip = pts[8]
-        middle_tip = pts[12]
-        wrist = pts[0]
-        
-        # Hitung seberapa tegak/lurus jari-jari
-        index_height = np.linalg.norm(index_tip - wrist)
-        middle_height = np.linalg.norm(middle_tip - wrist)
-        thumb_index_dist = np.linalg.norm(index_tip - thumb_tip)
-        
-        # Logika Klasifikasi Geometris (Real-Time Hand Geometry Mapping)
-        if index_height > 1.2 and middle_height > 1.2:
-            # Jari telunjuk & tengah terangkat tegak (membentuk isyarat angka '2' atau 'V')
-            # Kami petakan ke kata medis prioritas: "sakit" atau "nyeri"
-            prediction = "sakit"
-            confidence = 0.91
-            alternatives = [
-                {"word": "sakit", "confidence": 0.91},
-                {"word": "nyeri", "confidence": 0.78},
-                {"word": "sakit sekali", "confidence": 0.52}
-            ]
-        elif thumb_index_dist < 0.2:
-            # Ujung ibu jari menyentuh ujung jari telunjuk (membentuk isyarat 'OK' atau pinch)
-            # Kami petakan ke kata respon medis: "ya" atau "tidak"
-            prediction = "ya"
-            confidence = 0.87
-            alternatives = [
-                {"word": "ya", "confidence": 0.87},
-                {"word": "tidak", "confidence": 0.69},
-                {"word": "lebih baik", "confidence": 0.44}
-            ]
-        elif index_height < 0.6 and middle_height < 0.6:
-            # Seluruh jari mengepal / tertutup
-            # Kami petakan ke kata keluhan darurat: "sesak" atau "tolong"
-            prediction = "sesak"
-            confidence = 0.89
-            alternatives = [
-                {"word": "sesak", "confidence": 0.89},
-                {"word": "tolong", "confidence": 0.73},
-                {"word": "tidak bisa bernapas", "confidence": 0.51}
-            ]
-        else:
-            # Keadaan tangan terbuka biasa
-            prediction = "tolong"
-            confidence = 0.78
-            alternatives = [
-                {"word": "tolong", "confidence": 0.78},
-                {"word": "bantuan segera", "confidence": 0.64},
-                {"word": "pingsan", "confidence": 0.42}
-            ]
+        self.interpreter.set_tensor(self.input_details[0]["index"], arr)
+        self.interpreter.invoke()
+        output_data = self.interpreter.get_tensor(self.output_details[0]["index"])[0]
 
-        processing_time = int((time.perf_counter() - start_time) * 1000) + 5 # Overhead
-        
+        top_indices = np.argsort(output_data)[::-1][:3]
+        raw_label = self.model_classes[int(top_indices[0])]
+        confidence = float(output_data[int(top_indices[0])])
+        detected = confidence >= self.threshold
+        top3 = [
+            {"word": self.model_classes[int(index)], "confidence": float(output_data[int(index)])}
+            for index in top_indices
+        ]
+
         return {
-            "prediction": prediction,
+            "prediction": raw_label if detected else None,
+            "label": raw_label if detected else None,
+            "raw_prediction": raw_label,
             "confidence": confidence,
-            "top3": alternatives,
-            "mode": "geometris",
-            "processing_time_ms": processing_time
+            "top3": top3,
+            "status": "detected" if detected else "not_detected",
+            "detected": detected,
+            "mode": "production",
+            "processing_time_ms": int((time.perf_counter() - start_time) * 1000),
         }
 
-    def load_alphabet(self, model_path: str):
-        """Memuat model TFLite untuk pengenalan abjad statis BISINDO A-Z."""
-        if not os.path.exists(model_path):
-            print(f"[ML_MODEL] Berkas model abjad {model_path} tidak ditemukan.")
+    def load_alphabet(self, model_path: str | Path) -> bool:
+        path = self._resolve_model_path(model_path)
+        if not path.exists():
+            print(f"[ML_MODEL] Model abjad tidak ditemukan: {path}")
             self.alphabet_loaded = False
             return False
-
         if not TF_AVAILABLE:
-            print("[ML_MODEL] TensorFlow tidak terpasang untuk model abjad.")
+            print("[ML_MODEL] TensorFlow tidak tersedia. Model abjad tidak dimuat.")
             self.alphabet_loaded = False
             return False
 
         try:
-            self.alphabet_interpreter = tf.lite.Interpreter(model_path=model_path)
+            self.alphabet_interpreter = tf.lite.Interpreter(model_path=str(path))
             self.alphabet_interpreter.allocate_tensors()
             self.alphabet_input_details = self.alphabet_interpreter.get_input_details()
             self.alphabet_output_details = self.alphabet_interpreter.get_output_details()
             self.alphabet_loaded = True
-            print(f"[ML_MODEL] Model TFLite Abjad berhasil dimuat dari {model_path}.")
+            print(f"[ML_MODEL] Model abjad TFLite berhasil dimuat: {path}")
             return True
-        except Exception as e:
-            print(f"[ML_MODEL] Gagal memuat model TFLite Abjad: {e}")
+        except Exception as exc:
+            print(f"[ML_MODEL] Gagal memuat model abjad TFLite: {exc}")
             self.alphabet_loaded = False
             return False
 
     def predict_alphabet(self, flat_landmarks: np.ndarray) -> dict:
-        """
-        Melakukan prediksi abjad BISINDO statis A-Z dari 1 frame flat landmarks (63,).
-        Input: flat_landmarks shape (1, 63)
-        Output: dict berisi {"prediction": str, "confidence": float, "top3": list}
-        """
         start_time = time.perf_counter()
+        if not self.alphabet_loaded or self.alphabet_interpreter is None:
+            return {
+                "prediction": None,
+                "label": None,
+                "confidence": 0.0,
+                "top3": [],
+                "status": "not_detected",
+                "detected": False,
+                "mode": "spelling_unavailable",
+                "processing_time_ms": int((time.perf_counter() - start_time) * 1000),
+            }
 
-        # JALUR A: Model TFLite Abjad Statis
-        if self.alphabet_loaded and self.alphabet_interpreter:
-            try:
-                # Set input tensor
-                self.alphabet_interpreter.set_tensor(self.alphabet_input_details[0]['index'], flat_landmarks.astype(np.float32))
-                self.alphabet_interpreter.invoke()
-                
-                # Get output tensor
-                output_data = self.alphabet_interpreter.get_tensor(self.alphabet_output_details[0]['index'])[0]
-                
-                # Sort top predictions
-                top_indices = np.argsort(output_data)[::-1][:3]
-                prediction = self.alphabet_classes[top_indices[0]]
-                confidence = float(output_data[top_indices[0]])
-                
-                top3 = [
-                    {"word": self.alphabet_classes[i], "confidence": float(output_data[i])}
-                    for i in top_indices
-                ]
-                
-                processing_time = int((time.perf_counter() - start_time) * 1000)
-                return {
-                    "prediction": prediction,
-                    "confidence": confidence,
-                    "top3": top3,
-                    "mode": "spelling",
-                    "processing_time_ms": max(1, processing_time)
-                }
-            except Exception as e:
-                print(f"[ML_MODEL] Gagal melakukan inferensi TFLite Abjad: {e}. Menjalankan fallback geometris.")
+        self.alphabet_interpreter.set_tensor(self.alphabet_input_details[0]["index"], flat_landmarks.astype(np.float32))
+        self.alphabet_interpreter.invoke()
+        output_data = self.alphabet_interpreter.get_tensor(self.alphabet_output_details[0]["index"])[0]
+        top_indices = np.argsort(output_data)[::-1][:3]
+        confidence = float(output_data[int(top_indices[0])])
+        raw_label = self.alphabet_classes[int(top_indices[0])]
+        detected = confidence >= 0.70
+        top3 = [
+            {"word": self.alphabet_classes[int(index)], "confidence": float(output_data[int(index)])}
+            for index in top_indices
+        ]
 
-        # JALUR B: Fallback Geometris Sederhana (Default ke "A" jika tidak terdeteksi)
-        processing_time = int((time.perf_counter() - start_time) * 1000) + 1
         return {
-            "prediction": "A",
-            "confidence": 0.50,
-            "top3": [
-                {"word": "A", "confidence": 0.50},
-                {"word": "B", "confidence": 0.20},
-                {"word": "C", "confidence": 0.10}
-            ],
-            "mode": "geometris_spelling",
-            "processing_time_ms": processing_time
+            "prediction": raw_label if detected else None,
+            "label": raw_label if detected else None,
+            "raw_prediction": raw_label,
+            "confidence": confidence,
+            "top3": top3,
+            "status": "detected" if detected else "not_detected",
+            "detected": detected,
+            "mode": "spelling",
+            "processing_time_ms": max(1, int((time.perf_counter() - start_time) * 1000)),
         }

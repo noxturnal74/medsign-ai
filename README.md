@@ -94,7 +94,35 @@ medsign-ai/
 *   Python 3.10 atau 3.11+
 *   Koneksi Internet (untuk memuat pustaka MediaPipe)
 
-### 5.1 Menjalankan Frontend
+### 5.0 Cara Cepat: Jalankan Frontend + Backend Bersamaan (1 Terminal)
+Proyek ini sudah dilengkapi `package.json` di folder root yang memakai tool `concurrently` untuk menjalankan kedua server sekaligus dalam satu jendela terminal, dengan log masing-masing diberi label warna `[BACKEND]` dan `[FRONTEND]`.
+
+1. **Setup sekali saja** (hanya perlu dilakukan sekali di awal, atau setiap kali `requirements.txt`/`package.json` berubah):
+   ```bash
+   # Dari folder root medsign-ai/
+   npm install
+
+   # Buat virtual environment Python & pasang dependensi backend
+   npm run setup:backend
+
+   # Pasang dependensi frontend
+   npm run install:frontend
+   ```
+2. **Jalankan keduanya bersamaan:**
+   ```bash
+   npm run dev
+   ```
+3. Tunggu hingga muncul log berikut, lalu buka browser ke `http://localhost:3000` (atau port lain jika 3000 sedang dipakai, akan terlihat di log `[FRONTEND]`):
+   ```
+   [BACKEND] INFO:     Uvicorn running on http://0.0.0.0:8000
+   [FRONTEND]   VITE  ready in ... ms
+   [FRONTEND]   ➜  Local:   http://localhost:3000/
+   ```
+4. Untuk menghentikan kedua server, tekan `Ctrl+C` sekali saja di terminal tersebut — `concurrently` akan menghentikan kedua proses child sekaligus.
+
+> 💡 Jika Anda ingin menjalankan frontend dan backend secara terpisah (misalnya untuk debugging), ikuti panduan manual di bagian **5.1** dan **5.2** di bawah ini.
+
+### 5.1 Menjalankan Frontend (Manual/Terpisah)
 1. Masuk ke folder frontend:
    ```bash
    cd frontend
@@ -109,7 +137,7 @@ medsign-ai/
    ```
 4. Buka alamat `http://localhost:3000` di peramban (browser) Google Chrome/Microsoft Edge Anda.
 
-### 5.2 Menjalankan Backend
+### 5.2 Menjalankan Backend (Manual/Terpisah)
 1. Masuk ke folder backend:
    ```bash
    cd backend
@@ -124,11 +152,13 @@ medsign-ai/
    
    pip install -r requirements.txt
    ```
-3. Jalankan server FastAPI uvicorn:
+3. Jalankan server FastAPI uvicorn (WAJIB dijalankan sebagai modul dengan flag `-m`, bukan `python app/main.py`, karena skrip menggunakan import package `app.*` yang hanya bisa di-resolve lewat mode modul):
    ```bash
-   python app/main.py
+   python -m app.main
    ```
-4. Server backend akan berjalan secara lokal di `http://localhost:8000`. Dokumentasi Swagger API dapat diakses langsung pada `http://localhost:8000/docs`.
+4. Tunggu sekitar 10-15 detik sampai muncul log `Uvicorn running on http://0.0.0.0:8000` (proses awal memuat model TensorFlow Lite dan aktif dalam mode reload). Server backend akan berjalan secara lokal di `http://localhost:8000`. Dokumentasi Swagger API dapat diakses langsung pada `http://localhost:8000/docs`, dan status kesehatan model dapat dicek pada `http://localhost:8000/health`.
+
+   > ⚠️ **Catatan:** Menjalankan `python app/main.py` secara langsung akan menghasilkan error `ModuleNotFoundError: No module named 'app'`, karena Python tidak dapat menemukan package `app` pada `sys.path` saat file dieksekusi langsung sebagai skrip.
 
 ---
 

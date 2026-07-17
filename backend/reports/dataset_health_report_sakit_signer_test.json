@@ -1,0 +1,73 @@
+{
+  "generated_at": "2026-06-11T05:30:25",
+  "contract": {
+    "version": "medsign-clinical-mvp-v1",
+    "frame_count": 30,
+    "feature_count": 63,
+    "threshold": 0.5,
+    "labels": [
+      "sakit",
+      "nyeri",
+      "sesak",
+      "batuk",
+      "demam",
+      "pusing",
+      "mual",
+      "muntah",
+      "ya",
+      "tidak",
+      "tolong",
+      "selesai"
+    ]
+  },
+  "filters": {
+    "label": "sakit",
+    "signer_id": "signer_test",
+    "max_empty_frame_ratio": 0.1
+  },
+  "total_valid_samples": 0,
+  "total_invalid_samples": 0,
+  "counts": {
+    "sakit": 0,
+    "nyeri": 0,
+    "sesak": 0,
+    "batuk": 0,
+    "demam": 0,
+    "pusing": 0,
+    "mual": 0,
+    "muntah": 0,
+    "ya": 0,
+    "tidak": 0,
+    "tolong": 0,
+    "selesai": 0
+  },
+  "signer_counts": {
+    "sakit": {},
+    "nyeri": {},
+    "sesak": {},
+    "batuk": {},
+    "demam": {},
+    "pusing": {},
+    "mual": {},
+    "muntah": {},
+    "ya": {},
+    "tidak": {},
+    "tolong": {},
+    "selesai": {}
+  },
+  "missing_ratio_avg": {
+    "sakit": null,
+    "nyeri": null,
+    "sesak": null,
+    "batuk": null,
+    "demam": null,
+    "pusing": null,
+    "mual": null,
+    "muntah": null,
+    "ya": null,
+    "tidak": null,
+    "tolong": null,
+    "selesai": null
+  },
+  "invalid": []
+}

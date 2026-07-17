@@ -6,14 +6,14 @@ import { useWebSocket } from '../hooks/useWebSocket';
 import { AlertTriangle, Camera, CameraOff, RefreshCw, Sparkles } from 'lucide-react';
 
 const getStreamingUrl = () => {
-  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim();
+  const apiBaseUrl = localStorage.getItem('medsign_api_url')?.trim() || import.meta.env.VITE_API_BASE_URL?.trim();
 
   if (!apiBaseUrl) {
     return null;
   }
 
   if (apiBaseUrl.startsWith('ws://') || apiBaseUrl.startsWith('wss://')) {
-    return `${apiBaseUrl.replace(/\/$/, '')}/api/v1/stream`;
+    return `${(apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl)}/api/v1/stream`;
   }
 
   try {
@@ -43,6 +43,7 @@ export const CameraFeed = () => {
 
   const {
     videoRef,
+    videoElement,
     isActive,
     startCamera,
     stopCamera,
@@ -52,7 +53,7 @@ export const CameraFeed = () => {
     setSelectedDeviceId
   } = useWebcam();
 
-  const { canvasRef, isHandDetected, landmarks, fps } = useMediaPipe(isActive, videoRef);
+  const { canvasRef, isHandDetected, landmarks, fps } = useMediaPipe(isActive, videoElement);
 
   const handlePrediction = useCallback((result) => {
     if (result && result.prediction) {
@@ -85,6 +86,13 @@ export const CameraFeed = () => {
   const toggleCamera = () => {
     setCameraActive(prev => !prev);
   };
+
+  // Reset cameraActive to false when component unmounts to prevent stale state on navigation
+  useEffect(() => {
+    return () => {
+      setCameraActive(false);
+    };
+  }, [setCameraActive]);
 
   return (
     <div className="flex w-full flex-col gap-3">

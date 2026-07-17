@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { AppContext } from '../context/AppContext';
-import { ExternalLink, Home, Info, Stethoscope, User, Volume2, VolumeX } from 'lucide-react';
+import { ExternalLink, Home, Info, Stethoscope, User, Volume2, VolumeX, Database } from 'lucide-react';
 
 const MARKETING_SITE_URL =
   import.meta.env.VITE_MARKETING_SITE_URL ||
@@ -10,6 +10,7 @@ const navItems = [
   { id: 'home', label: 'Home', icon: Home },
   { id: 'patient', label: 'Pasien', icon: User },
   { id: 'doctor', label: 'Dokter', icon: Stethoscope },
+  { id: 'data-collection', label: 'Dataset', icon: Database },
   { id: 'about', label: 'Tentang', icon: Info }
 ];
 

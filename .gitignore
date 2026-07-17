@@ -41,8 +41,22 @@ Thumbs.db
 .env.development
 
 # Local ML artifacts and datasets
-backend/data/
-backend/models/
+backend/data/*
+!backend/data/raw_videos/
+backend/data/raw_videos/*
+!backend/data/raw_videos/.gitkeep
+!backend/data/landmarks/
+backend/data/landmarks/*
+!backend/data/landmarks/.gitkeep
+!backend/data/invalid_samples/
+backend/data/invalid_samples/*
+!backend/data/invalid_samples/.gitkeep
+!backend/data/metadata/
+!backend/data/metadata/.gitkeep
+!backend/data/metadata/labels.json
+!backend/data/metadata/README_DATASET.md
+backend/models/*
+!backend/models/.gitkeep
 backend/training/visualization/
 
 # Local Vercel metadata

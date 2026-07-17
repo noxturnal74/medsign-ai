@@ -5,6 +5,39 @@ export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
   const [ttsEnabled, setTtsEnabled] = useState(true);
+  const [vocabList, setVocabList] = useState(vocabulary);
+
+  const refreshVocabulary = useCallback(async () => {
+    try {
+      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const response = await fetch(`${(apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl)}/api/v1/vocabulary`);
+      if (response.ok) {
+        const data = await response.json();
+        if (data && data.words) {
+          // Merge static and backend vocabularies
+          const merged = [...vocabulary];
+          data.words.forEach(w => {
+            if (!merged.some(m => m.word === w.word)) {
+              // Map category back to user-friendly name if needed
+              merged.push({
+                id: w.id,
+                word: w.word,
+                category: w.category,
+                emergency: w.emergency
+              });
+            }
+          });
+          setVocabList(merged);
+        }
+      }
+    } catch (err) {
+      console.error("Gagal refresh vocabulary:", err);
+    }
+  }, []);
+
+  useEffect(() => {
+    refreshVocabulary();
+  }, [refreshVocabulary]);
   const [sessionLog, setSessionLog] = useState([]);
   const [sentence, setSentence] = useState([]);
   const [lastDetected, setLastDetected] = useState(null);
@@ -115,7 +148,8 @@ export const AppProvider = ({ children }) => {
         serverState,
         setServerState,
         speak,
-        vocabulary,
+        vocabulary: vocabList,
+        refreshVocabulary,
         // Ekspos state & mutator untuk Mode Eja
         spellingMode,
         setSpellingMode,

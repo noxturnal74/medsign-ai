@@ -1,19 +1,29 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 
-export const useMediaPipe = (isActive, videoRef) => {
-  const canvasRef = useRef(null);
+export const useMediaPipe = (isActive, videoElement) => {
+  const [canvasElement, setCanvasElement] = useState(null);
+  const canvasRef = useCallback((node) => {
+    setCanvasElement(node);
+  }, []);
   const [isHandDetected, setIsHandDetected] = useState(false);
   const [landmarks, setLandmarks] = useState(null);
   const [fps, setFps] = useState(0);
+  const [lux, setLux] = useState(0);
+  
   const animationFrameId = useRef(null);
   const lastTimeRef = useRef(0);
-  
   const handDataRef = useRef(null);
   const lastHandTimeRef = useRef(0);
+  
+  // Performance optimization refs
+  const lastProcessedTimeRef = useRef(0);
+  const fpsFrameCountRef = useRef(0);
+  const lastFpsUpdateRef = useRef(0);
+  const lastLuxUpdateRef = useRef(0);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvasElement) return;
+    const canvas = canvasElement;
     const ctx = canvas.getContext('2d');
     
     // Clear canvas when inactive
@@ -25,7 +35,16 @@ export const useMediaPipe = (isActive, videoRef) => {
       return;
     }
 
-    // 1. Initialize MediaPipe Hands dynamically with polling to handle loading race conditions
+    // Create an offscreen canvas for scaling down MediaPipe input & Lux calculation
+    const offscreenCanvas = document.createElement('canvas');
+    offscreenCanvas.width = 320;
+    offscreenCanvas.height = 240;
+    const offscreenCtx = offscreenCanvas.getContext('2d');
+
+    // 1. Initialize MediaPipe Hands dari file lokal di /mediapipe/ (public/)
+    //    Package @mediapipe/hands adalah UMD/CommonJS, bukan ES module sejati,
+    //    sehingga import { Hands } gagal dan crash seluruh React app.
+    //    Solusi: load via <script> di index.html → window.Hands tersedia secara global.
     let hands = null;
     let isCleanedUp = false;
 
@@ -33,19 +52,20 @@ export const useMediaPipe = (isActive, videoRef) => {
       if (isCleanedUp) return;
 
       if (!window.Hands) {
-        // Retry in 150ms if scripts are still loading
+        // Retry setiap 150ms sampai script selesai dimuat
         setTimeout(initializeMediaPipe, 150);
         return;
       }
 
       try {
         hands = new window.Hands({
-          locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+          // Arahkan ke file WASM/model lokal di public/mediapipe/
+          locateFile: (file) => `/mediapipe/${file}`
         });
 
         hands.setOptions({
           maxNumHands: 2,
-          modelComplexity: 1,
+          modelComplexity: 0, // Lite model: much faster and less CPU/GPU intensive
           minDetectionConfidence: 0.5,
           minTrackingConfidence: 0.5
         });
@@ -53,11 +73,52 @@ export const useMediaPipe = (isActive, videoRef) => {
         hands.onResults((results) => {
           if (isCleanedUp) return;
           if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
-            handDataRef.current = results.multiHandLandmarks;
+            let filteredLandmarks = [...results.multiHandLandmarks];
+            let filteredHandedness = results.multiHandedness ? [...results.multiHandedness] : [];
+
+            // Filter out duplicate/overlapping hand detections (same physical hand detected twice)
+            if (filteredLandmarks.length === 2) {
+              const h1_wrist = filteredLandmarks[0][0];
+              const h2_wrist = filteredLandmarks[1][0];
+              const h1_mcp = filteredLandmarks[0][9];
+              const h2_mcp = filteredLandmarks[1][9];
+              
+              if (h1_wrist && h2_wrist && h1_mcp && h2_mcp) {
+                const distWrist = Math.sqrt(
+                  Math.pow(h1_wrist.x - h2_wrist.x, 2) +
+                  Math.pow(h1_wrist.y - h2_wrist.y, 2)
+                );
+                const distMcp = Math.sqrt(
+                  Math.pow(h1_mcp.x - h2_mcp.x, 2) +
+                  Math.pow(h1_mcp.y - h2_mcp.y, 2)
+                );
+                
+                // If both wrists and middle finger MCPs are extremely close (less than 8% screen size),
+                // it is highly likely a single hand detected twice.
+                if (distWrist < 0.08 && distMcp < 0.08) {
+                  const score1 = filteredHandedness[0]?.score || 0;
+                  const score2 = filteredHandedness[1]?.score || 0;
+                  
+                  // Keep only the detection with the higher confidence score
+                  if (score2 > score1) {
+                    filteredLandmarks = [filteredLandmarks[1]];
+                    filteredHandedness = [filteredHandedness[1]];
+                  } else {
+                    filteredLandmarks = [filteredLandmarks[0]];
+                    filteredHandedness = [filteredHandedness[0]];
+                  }
+                }
+              }
+            }
+
+            handDataRef.current = {
+              landmarks: filteredLandmarks,
+              handedness: filteredHandedness
+            };
             lastHandTimeRef.current = Date.now();
             
             // Pass normalized landmarks to parent for predictions (take first hand as primary)
-            setLandmarks(results.multiHandLandmarks[0]);
+            setLandmarks(filteredLandmarks[0]);
             setIsHandDetected(true);
           } else {
             // If no hand is returned
@@ -75,27 +136,53 @@ export const useMediaPipe = (isActive, videoRef) => {
 
     // 2. High-speed drawing loop (60 FPS)
     const drawLoop = async (timestamp) => {
-      // Calculate FPS
-      if (lastTimeRef.current === 0) {
-        lastTimeRef.current = timestamp;
-      }
-      const delta = timestamp - lastTimeRef.current;
-      if (delta > 0) {
-        const currentFps = Math.round(1000 / delta);
-        setFps(currentFps);
-      }
-      lastTimeRef.current = timestamp;
-
       const width = canvas.width;
       const height = canvas.height;
       ctx.clearRect(0, 0, width, height);
 
-      if (videoRef.current && videoRef.current.readyState === videoRef.current.HAVE_ENOUGH_DATA) {
+      // Render camera feed
+      if (videoElement && videoElement.readyState === videoElement.HAVE_ENOUGH_DATA) {
         // A. Draw video frame
         ctx.save();
         ctx.globalAlpha = 0.95;
-        ctx.drawImage(videoRef.current, 0, 0, width, height);
+        ctx.drawImage(videoElement, 0, 0, width, height);
         ctx.restore();
+
+        // Populate offscreen canvas for MediaPipe and Lux analysis
+        offscreenCtx.drawImage(videoElement, 0, 0, offscreenCanvas.width, offscreenCanvas.height);
+
+        const now = Date.now();
+
+        // Calculate and throttle FPS state update to once every 1000ms
+        fpsFrameCountRef.current++;
+        if (now - lastFpsUpdateRef.current >= 1000) {
+          const elapsed = now - lastFpsUpdateRef.current;
+          const currentFps = Math.round((fpsFrameCountRef.current * 1000) / elapsed);
+          setFps(currentFps);
+          fpsFrameCountRef.current = 0;
+          lastFpsUpdateRef.current = now;
+        }
+
+        // Calculate and throttle Lux state update to once every 1000ms
+        // Read a tiny 20x20 pixel area from the center of offscreen canvas to prevent GPU pipeline stall
+        if (now - lastLuxUpdateRef.current >= 1000) {
+          lastLuxUpdateRef.current = now;
+          try {
+            const imgData = offscreenCtx.getImageData(150, 110, 20, 20);
+            const data = imgData.data;
+            let colorSum = 0;
+            for (let i = 0; i < data.length; i += 4) {
+              const r = data[i];
+              const g = data[i + 1];
+              const b = data[i + 2];
+              colorSum += (r * 0.299 + g * 0.587 + b * 0.114);
+            }
+            const avgBrightness = Math.round(colorSum / (data.length / 4));
+            setLux(Math.round(avgBrightness * 1.8)); // Map to realistic Lux values
+          } catch (e) {
+            // Ignored
+          }
+        }
 
         // Scanline overlay
         ctx.fillStyle = 'rgba(14, 165, 233, 0.02)';
@@ -104,20 +191,25 @@ export const useMediaPipe = (isActive, videoRef) => {
         }
 
         // B. Send frame to MediaPipe Hands if it is not busy
-        // To avoid overloading, we can send frames sequentially
-        if (hands && !hands.busy) {
+        // To avoid overloading, we scale down the frame and throttle sending to max ~30 FPS (every 33ms)
+        if (hands && !hands.busy && (now - lastProcessedTimeRef.current >= 33)) {
           hands.busy = true;
-          hands.send({ image: videoRef.current }).finally(() => {
+          lastProcessedTimeRef.current = now;
+          hands.send({ image: offscreenCanvas }).finally(() => {
             hands.busy = false;
           });
         }
 
         // C. Check if we have hand data and it is fresh (within 300ms)
-        const isFresh = Date.now() - lastHandTimeRef.current < 300;
-        if (handDataRef.current && handDataRef.current.length > 0 && isFresh) {
-          const allHands = handDataRef.current;
+        const isFresh = now - lastHandTimeRef.current < 300;
+        if (handDataRef.current && handDataRef.current.landmarks && isFresh) {
+          const allHands = handDataRef.current.landmarks;
+          const handedness = handDataRef.current.handedness;
 
           allHands.forEach((lms, handIdx) => {
+            const handLabel = handedness && handedness[handIdx] ? handedness[handIdx].label : 'Unknown';
+            const handText = handLabel === 'Left' ? 'Kanan' : (handLabel === 'Right' ? 'Kiri' : 'Kiri');
+
             // Draw connections for each hand
             // First hand is emerald green (#10b981), second hand is vibrant purple (#a855f7)
             ctx.strokeStyle = handIdx === 0 ? '#10b981' : '#a855f7';
@@ -150,6 +242,13 @@ export const useMediaPipe = (isActive, videoRef) => {
                 : (handIdx === 0 ? '#38bdf8' : '#e9d5ff'); // Blue-cyan for hand 1, light purple for hand 2
               ctx.fill();
             });
+
+            // Draw left/right text tag
+            if (lms[9]) {
+              ctx.fillStyle = '#ffffff';
+              ctx.font = 'bold 11px sans-serif';
+              ctx.fillText(handText, lms[9].x * width - 15, lms[9].y * height - 12);
+            }
           });
 
           // Draw scanning target rectangle
@@ -170,7 +269,7 @@ export const useMediaPipe = (isActive, videoRef) => {
 
           ctx.fillStyle = '#34d399';
           ctx.font = 'bold 9px sans-serif';
-          ctx.fillText(`● ${allHands.length} TANGAN TERDETEKSI ✓`, 26, 32);
+          ctx.fillText('● ' + allHands.length + ' TANGAN TERDETEKSI ✓', 26, 32);
         } else {
           // If no hand detected
           // Draw 'MENUNGGU TANGAN...' Badge
@@ -213,12 +312,13 @@ export const useMediaPipe = (isActive, videoRef) => {
         console.warn('Error closing hands instance:', e);
       }
     };
-  }, [isActive, videoRef]);
+  }, [isActive, videoElement, canvasElement]);
 
   return {
     canvasRef,
     isHandDetected,
     landmarks,
-    fps
+    fps,
+    lux
   };
 };

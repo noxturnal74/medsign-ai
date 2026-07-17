@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel, Field
 from typing import List, Dict, Any, Optional
 from app.services.slt_adapter import SLTAdapterService
+from app.ml.labels import get_model_contract
 
 router = APIRouter()
 
@@ -21,8 +22,12 @@ class TopAlternative(BaseModel):
 
 class PredictionResult(BaseModel):
     prediction: Optional[str]
+    label: Optional[str]
+    raw_prediction: Optional[str] = None
     confidence: float
     top3: List[TopAlternative]
+    status: str
+    detected: bool
     mode: str
     processing_time_ms: int
 
@@ -54,18 +59,23 @@ def predict_gesture(request: PredictRequest, service: SLTAdapterService = Depend
     # 4. Inferensi melalui SLTAdapterService
     result = service.predict_bisindo(raw_frames)
     
-    # 5. Threshold Keyakinan (SRS: Jika confidence < 0.65 -> return null / tidak tampil)
-    prediction_word = result["prediction"]
-    if result["confidence"] < 0.65:
-        prediction_word = None
-
     return PredictionResult(
-        prediction=prediction_word,
+        prediction=result.get("prediction"),
+        label=result.get("label"),
+        raw_prediction=result.get("raw_prediction"),
         confidence=result["confidence"],
         top3=[
             TopAlternative(word=alt["word"], confidence=alt["confidence"])
             for alt in result["top3"]
         ],
+        status=result.get("status", "not_detected"),
+        detected=bool(result.get("detected", False)),
         mode=result["mode"],
         processing_time_ms=result["processing_time_ms"]
     )
+
+
+@router.get("/model-contract")
+def get_clinical_model_contract():
+    """Mengembalikan kontrak model clinical yang dibaca dari labels.json."""
+    return get_model_contract()

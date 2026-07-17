@@ -1,0 +1,7 @@
+              precision    recall  f1-score   support
+
+       sakit       1.00      1.00      1.00         4
+
+    accuracy                           1.00         4
+   macro avg       1.00      1.00      1.00         4
+weighted avg       1.00      1.00      1.00         4
