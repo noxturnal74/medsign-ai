@@ -80,6 +80,16 @@ export const CameraFeed = () => {
     setServerState(connectionState);
   }, [connectionState, setServerState]);
 
+  // Reset last detected state (clear preview) if hand is not detected for more than 1.5 seconds
+  useEffect(() => {
+    if (!isHandDetected) {
+      const timeout = setTimeout(() => {
+        setLastDetected(null);
+      }, 1500);
+      return () => clearTimeout(timeout);
+    }
+  }, [isHandDetected, setLastDetected]);
+
   useEffect(() => {
     if (cameraActive) {
       startCamera(selectedDeviceId);
