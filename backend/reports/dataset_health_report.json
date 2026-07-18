@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-15T18:34:11",
+  "generated_at": "2026-07-18T10:59:51",
   "contract": {
     "version": "medsign-clinical-full-v1",
     "frame_count": 30,
@@ -206,10 +206,10 @@
     "signer_id": null,
     "max_empty_frame_ratio": 0.1
   },
-  "total_valid_samples": 320,
-  "total_invalid_samples": 0,
+  "total_valid_samples": 1498,
+  "total_invalid_samples": 270,
   "counts": {
-    "sakit": 20,
+    "sakit": 65,
     "dokter": 30,
     "obat": 30,
     "periksa": 25,
@@ -223,36 +223,36 @@
     "malam": 30,
     "makan": 15,
     "minum": 15,
-    "batuk": 15,
-    "sesak": 15,
+    "batuk": 60,
+    "sesak": 60,
     "napas": 15,
-    "dada": 0,
-    "dahak": 0,
-    "pilek": 0,
+    "dada": 83,
+    "dahak": 20,
+    "pilek": 20,
     "flu": 0,
-    "tenggorokan": 0,
+    "tenggorokan": 65,
     "paru-paru": 0,
     "asma": 0,
-    "pusing": 0,
-    "kepala": 0,
+    "pusing": 45,
+    "kepala": 45,
     "tensi": 0,
     "darah": 0,
     "tinggi": 0,
     "berat tengkuk": 0,
-    "leher": 0,
+    "leher": 45,
     "jantung": 0,
     "normal": 0,
     "gula": 0,
     "manis": 0,
-    "lemas": 0,
+    "lemas": 45,
     "haus": 0,
     "kencing": 0,
     "luka": 0,
     "kering": 0,
     "kesemutan": 0,
-    "kaki": 0,
+    "kaki": 45,
     "lapar": 0,
-    "nyeri": 0,
+    "nyeri": 45,
     "otot": 0,
     "sendi": 0,
     "tulang": 0,
@@ -261,7 +261,7 @@
     "pegal": 0,
     "linu": 0,
     "pinggang": 0,
-    "punggung": 0,
+    "punggung": 45,
     "gerak": 0,
     "benjolan": 0,
     "tumor": 0,
@@ -271,9 +271,9 @@
     "tumbuh": 0,
     "susah": 0,
     "tidur": 0,
-    "mual": 0,
-    "muntah": 0,
-    "demam": 0,
+    "mual": 45,
+    "muntah": 45,
+    "demam": 45,
     "panas": 0,
     "dingin": 0,
     "bahaya": 0,
@@ -288,9 +288,9 @@
     "sejak kapan": 0,
     "bagian mana": 0,
     "seberapa sering": 0,
-    "ya": 0,
-    "tidak": 0,
-    "tolong": 0,
+    "ya": 45,
+    "tidak": 45,
+    "tolong": 45,
     "terima kasih": 0,
     "mengerti": 0,
     "tidak mengerti": 0,
@@ -308,20 +308,20 @@
     "laboratorium": 0,
     "rontgen": 0,
     "rawat inap": 0,
-    "mata": 0,
+    "mata": 45,
     "hidung": 0,
     "mulut": 0,
-    "telinga": 0,
+    "telinga": 45,
     "gigi": 0,
-    "perut": 0,
-    "tangan": 0,
+    "perut": 45,
+    "tangan": 45,
     "jari": 0,
     "lutut": 0,
     "bahu": 0,
     "gatal": 0,
-    "diare": 0,
+    "diare": 45,
     "pendarahan": 0,
-    "pingsan": 0,
+    "pingsan": 45,
     "kejang": 0,
     "meriang": 0,
     "kaku": 0,
@@ -406,7 +406,8 @@
   "signer_counts": {
     "sakit": {
       "glenn": 15,
-      "loren": 5
+      "loren": 5,
+      "synthetic": 45
     },
     "dokter": {
       "glenn": 15,
@@ -453,41 +454,67 @@
       "loren": 15
     },
     "batuk": {
-      "loren": 15
+      "loren": 15,
+      "synthetic": 45
     },
     "sesak": {
-      "loren": 15
+      "loren": 15,
+      "synthetic": 45
     },
     "napas": {
       "loren": 15
     },
-    "dada": {},
-    "dahak": {},
-    "pilek": {},
+    "dada": {
+      "albert_cheng": 23,
+      "albert_william": 10,
+      "glenn": 5,
+      "synthetic": 45
+    },
+    "dahak": {
+      "albert_william": 20
+    },
+    "pilek": {
+      "albert_cheng": 20
+    },
     "flu": {},
-    "tenggorokan": {},
+    "tenggorokan": {
+      "albert_cheng": 20,
+      "synthetic": 45
+    },
     "paru-paru": {},
     "asma": {},
-    "pusing": {},
-    "kepala": {},
+    "pusing": {
+      "synthetic": 45
+    },
+    "kepala": {
+      "synthetic": 45
+    },
     "tensi": {},
     "darah": {},
     "tinggi": {},
     "berat tengkuk": {},
-    "leher": {},
+    "leher": {
+      "synthetic": 45
+    },
     "jantung": {},
     "normal": {},
     "gula": {},
     "manis": {},
-    "lemas": {},
+    "lemas": {
+      "synthetic": 45
+    },
     "haus": {},
     "kencing": {},
     "luka": {},
     "kering": {},
     "kesemutan": {},
-    "kaki": {},
+    "kaki": {
+      "synthetic": 45
+    },
     "lapar": {},
-    "nyeri": {},
+    "nyeri": {
+      "synthetic": 45
+    },
     "otot": {},
     "sendi": {},
     "tulang": {},
@@ -496,7 +523,9 @@
     "pegal": {},
     "linu": {},
     "pinggang": {},
-    "punggung": {},
+    "punggung": {
+      "synthetic": 45
+    },
     "gerak": {},
     "benjolan": {},
     "tumor": {},
@@ -506,9 +535,15 @@
     "tumbuh": {},
     "susah": {},
     "tidur": {},
-    "mual": {},
-    "muntah": {},
-    "demam": {},
+    "mual": {
+      "synthetic": 45
+    },
+    "muntah": {
+      "synthetic": 45
+    },
+    "demam": {
+      "synthetic": 45
+    },
     "panas": {},
     "dingin": {},
     "bahaya": {},
@@ -523,9 +558,15 @@
     "sejak kapan": {},
     "bagian mana": {},
     "seberapa sering": {},
-    "ya": {},
-    "tidak": {},
-    "tolong": {},
+    "ya": {
+      "synthetic": 45
+    },
+    "tidak": {
+      "synthetic": 45
+    },
+    "tolong": {
+      "synthetic": 45
+    },
     "terima kasih": {},
     "mengerti": {},
     "tidak mengerti": {},
@@ -543,20 +584,32 @@
     "laboratorium": {},
     "rontgen": {},
     "rawat inap": {},
-    "mata": {},
+    "mata": {
+      "synthetic": 45
+    },
     "hidung": {},
     "mulut": {},
-    "telinga": {},
+    "telinga": {
+      "synthetic": 45
+    },
     "gigi": {},
-    "perut": {},
-    "tangan": {},
+    "perut": {
+      "synthetic": 45
+    },
+    "tangan": {
+      "synthetic": 45
+    },
     "jari": {},
     "lutut": {},
     "bahu": {},
     "gatal": {},
-    "diare": {},
+    "diare": {
+      "synthetic": 45
+    },
     "pendarahan": {},
-    "pingsan": {},
+    "pingsan": {
+      "synthetic": 45
+    },
     "kejang": {},
     "meriang": {},
     "kaku": {},
@@ -656,33 +709,33 @@
     "batuk": 0.0,
     "sesak": 0.0,
     "napas": 0.0,
-    "dada": null,
-    "dahak": null,
-    "pilek": null,
+    "dada": 0.0,
+    "dahak": 0.0,
+    "pilek": 0.0,
     "flu": null,
-    "tenggorokan": null,
+    "tenggorokan": 0.0,
     "paru-paru": null,
     "asma": null,
-    "pusing": null,
-    "kepala": null,
+    "pusing": 0.0,
+    "kepala": 0.0,
     "tensi": null,
     "darah": null,
     "tinggi": null,
     "berat tengkuk": null,
-    "leher": null,
+    "leher": 0.0,
     "jantung": null,
     "normal": null,
     "gula": null,
     "manis": null,
-    "lemas": null,
+    "lemas": 0.0,
     "haus": null,
     "kencing": null,
     "luka": null,
     "kering": null,
     "kesemutan": null,
-    "kaki": null,
+    "kaki": 0.0,
     "lapar": null,
-    "nyeri": null,
+    "nyeri": 0.0,
     "otot": null,
     "sendi": null,
     "tulang": null,
@@ -691,7 +744,7 @@
     "pegal": null,
     "linu": null,
     "pinggang": null,
-    "punggung": null,
+    "punggung": 0.0,
     "gerak": null,
     "benjolan": null,
     "tumor": null,
@@ -701,9 +754,9 @@
     "tumbuh": null,
     "susah": null,
     "tidur": null,
-    "mual": null,
-    "muntah": null,
-    "demam": null,
+    "mual": 0.0,
+    "muntah": 0.0,
+    "demam": 0.0,
     "panas": null,
     "dingin": null,
     "bahaya": null,
@@ -718,9 +771,9 @@
     "sejak kapan": null,
     "bagian mana": null,
     "seberapa sering": null,
-    "ya": null,
-    "tidak": null,
-    "tolong": null,
+    "ya": 0.0,
+    "tidak": 0.0,
+    "tolong": 0.0,
     "terima kasih": null,
     "mengerti": null,
     "tidak mengerti": null,
@@ -738,20 +791,20 @@
     "laboratorium": null,
     "rontgen": null,
     "rawat inap": null,
-    "mata": null,
+    "mata": 0.0,
     "hidung": null,
     "mulut": null,
-    "telinga": null,
+    "telinga": 0.0,
     "gigi": null,
-    "perut": null,
-    "tangan": null,
+    "perut": 0.0,
+    "tangan": 0.0,
     "jari": null,
     "lutut": null,
     "bahu": null,
     "gatal": null,
-    "diare": null,
+    "diare": 0.0,
     "pendarahan": null,
-    "pingsan": null,
+    "pingsan": 0.0,
     "kejang": null,
     "meriang": null,
     "kaku": null,
@@ -833,5 +886,1086 @@
     "selesai": null,
     "halo_test": null
   },
-  "invalid": []
+  "invalid": [
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\0.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\1.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\10.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\11.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\12.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\13.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\14.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\15.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\16.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\17.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\18.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\19.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\2.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\20.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\21.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\22.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\23.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\24.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\25.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\26.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\27.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\28.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\29.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\3.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\30.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\31.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\32.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\33.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\34.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\35.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\36.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\37.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\38.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\39.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\4.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\40.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\41.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\42.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\43.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\44.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\5.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\6.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\7.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\8.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\bantuan segera\\synthetic\\9.npy",
+      "reason": "label 'bantuan segera' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\0.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\1.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\10.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\11.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\12.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\13.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\14.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\15.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\16.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\17.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\18.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\19.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\2.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\20.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\21.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\22.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\23.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\24.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\25.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\26.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\27.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\28.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\29.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\3.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\30.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\31.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\32.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\33.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\34.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\35.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\36.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\37.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\38.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\39.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\4.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\40.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\41.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\42.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\43.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\44.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\5.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\6.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\7.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\8.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih baik\\synthetic\\9.npy",
+      "reason": "label 'lebih baik' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\0.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\1.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\10.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\11.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\12.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\13.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\14.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\15.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\16.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\17.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\18.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\19.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\2.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\20.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\21.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\22.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\23.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\24.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\25.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\26.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\27.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\28.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\29.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\3.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\30.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\31.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\32.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\33.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\34.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\35.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\36.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\37.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\38.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\39.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\4.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\40.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\41.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\42.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\43.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\44.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\5.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\6.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\7.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\8.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\lebih buruk\\synthetic\\9.npy",
+      "reason": "label 'lebih buruk' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\0.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\1.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\10.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\11.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\12.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\13.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\14.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\15.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\16.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\17.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\18.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\19.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\2.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\20.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\21.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\22.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\23.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\24.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\25.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\26.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\27.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\28.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\29.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\3.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\30.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\31.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\32.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\33.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\34.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\35.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\36.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\37.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\38.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\39.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\4.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\40.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\41.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\42.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\43.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\44.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\5.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\6.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\7.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\8.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\nyeri dada\\synthetic\\9.npy",
+      "reason": "label 'nyeri dada' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\0.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\1.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\10.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\11.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\12.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\13.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\14.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\15.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\16.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\17.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\18.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\19.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\2.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\20.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\21.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\22.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\23.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\24.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\25.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\26.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\27.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\28.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\29.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\3.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\30.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\31.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\32.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\33.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\34.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\35.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\36.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\37.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\38.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\39.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\4.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\40.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\41.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\42.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\43.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\44.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\5.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\6.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\7.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\8.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit sekali\\synthetic\\9.npy",
+      "reason": "label 'sakit sekali' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\0.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\1.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\10.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\11.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\12.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\13.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\14.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\15.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\16.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\17.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\18.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\19.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\2.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\20.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\21.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\22.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\23.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\24.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\25.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\26.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\27.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\28.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\29.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\3.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\30.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\31.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\32.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\33.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\34.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\35.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\36.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\37.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\38.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\39.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\4.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\40.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\41.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\42.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\43.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\44.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\5.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\6.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\7.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\8.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\tidak bisa bernapas\\synthetic\\9.npy",
+      "reason": "label 'tidak bisa bernapas' tidak ada di labels.json"
+    }
+  ]
 }

@@ -863,12 +863,7 @@ export const vocabulary = [
     "category": "Pemeriksaan Medis",
     "emergency": false
   },
-  {
-    "id": 145,
-    "word": "darah",
-    "category": "Pemeriksaan Medis",
-    "emergency": false
-  },
+
   {
     "id": 146,
     "word": "urine",

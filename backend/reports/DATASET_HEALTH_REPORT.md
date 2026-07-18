@@ -1,6 +1,6 @@
 # DATASET_HEALTH_REPORT
 
-Generated at: 2026-07-15T18:34:11
+Generated at: 2026-07-18T10:59:51
 
 ## Contract
 
@@ -14,14 +14,14 @@ Generated at: 2026-07-15T18:34:11
 - Filter label: `all`
 - Filter signer: `all`
 - Max empty frame ratio: `10.00%`
-- Valid samples: **320**
-- Invalid samples: **0**
+- Valid samples: **1498**
+- Invalid samples: **270**
 
 ## Samples Per Label
 
 | Label | Samples | Signers | Avg empty frame ratio | Status |
 |---|---:|---:|---:|---|
-| `sakit` | 20 | 2 | 0.00% | low_sample |
+| `sakit` | 65 | 3 | 0.00% | ok |
 | `dokter` | 30 | 2 | 0.00% | ok |
 | `obat` | 30 | 3 | 0.00% | ok |
 | `periksa` | 25 | 2 | 0.00% | low_sample |
@@ -35,36 +35,36 @@ Generated at: 2026-07-15T18:34:11
 | `malam` | 30 | 2 | 0.00% | ok |
 | `makan` | 15 | 1 | 0.00% | low_sample |
 | `minum` | 15 | 1 | 0.00% | low_sample |
-| `batuk` | 15 | 1 | 0.00% | low_sample |
-| `sesak` | 15 | 1 | 0.00% | low_sample |
+| `batuk` | 60 | 2 | 0.00% | ok |
+| `sesak` | 60 | 2 | 0.00% | ok |
 | `napas` | 15 | 1 | 0.00% | low_sample |
-| `dada` | 0 | 0 | - | missing |
-| `dahak` | 0 | 0 | - | missing |
-| `pilek` | 0 | 0 | - | missing |
+| `dada` | 83 | 4 | 0.00% | ok |
+| `dahak` | 20 | 1 | 0.00% | low_sample |
+| `pilek` | 20 | 1 | 0.00% | low_sample |
 | `flu` | 0 | 0 | - | missing |
-| `tenggorokan` | 0 | 0 | - | missing |
+| `tenggorokan` | 65 | 2 | 0.00% | ok |
 | `paru-paru` | 0 | 0 | - | missing |
 | `asma` | 0 | 0 | - | missing |
-| `pusing` | 0 | 0 | - | missing |
-| `kepala` | 0 | 0 | - | missing |
+| `pusing` | 45 | 1 | 0.00% | ok |
+| `kepala` | 45 | 1 | 0.00% | ok |
 | `tensi` | 0 | 0 | - | missing |
 | `darah` | 0 | 0 | - | missing |
 | `tinggi` | 0 | 0 | - | missing |
 | `berat tengkuk` | 0 | 0 | - | missing |
-| `leher` | 0 | 0 | - | missing |
+| `leher` | 45 | 1 | 0.00% | ok |
 | `jantung` | 0 | 0 | - | missing |
 | `normal` | 0 | 0 | - | missing |
 | `gula` | 0 | 0 | - | missing |
 | `manis` | 0 | 0 | - | missing |
-| `lemas` | 0 | 0 | - | missing |
+| `lemas` | 45 | 1 | 0.00% | ok |
 | `haus` | 0 | 0 | - | missing |
 | `kencing` | 0 | 0 | - | missing |
 | `luka` | 0 | 0 | - | missing |
 | `kering` | 0 | 0 | - | missing |
 | `kesemutan` | 0 | 0 | - | missing |
-| `kaki` | 0 | 0 | - | missing |
+| `kaki` | 45 | 1 | 0.00% | ok |
 | `lapar` | 0 | 0 | - | missing |
-| `nyeri` | 0 | 0 | - | missing |
+| `nyeri` | 45 | 1 | 0.00% | ok |
 | `otot` | 0 | 0 | - | missing |
 | `sendi` | 0 | 0 | - | missing |
 | `tulang` | 0 | 0 | - | missing |
@@ -73,7 +73,7 @@ Generated at: 2026-07-15T18:34:11
 | `pegal` | 0 | 0 | - | missing |
 | `linu` | 0 | 0 | - | missing |
 | `pinggang` | 0 | 0 | - | missing |
-| `punggung` | 0 | 0 | - | missing |
+| `punggung` | 45 | 1 | 0.00% | ok |
 | `gerak` | 0 | 0 | - | missing |
 | `benjolan` | 0 | 0 | - | missing |
 | `tumor` | 0 | 0 | - | missing |
@@ -83,9 +83,9 @@ Generated at: 2026-07-15T18:34:11
 | `tumbuh` | 0 | 0 | - | missing |
 | `susah` | 0 | 0 | - | missing |
 | `tidur` | 0 | 0 | - | missing |
-| `mual` | 0 | 0 | - | missing |
-| `muntah` | 0 | 0 | - | missing |
-| `demam` | 0 | 0 | - | missing |
+| `mual` | 45 | 1 | 0.00% | ok |
+| `muntah` | 45 | 1 | 0.00% | ok |
+| `demam` | 45 | 1 | 0.00% | ok |
 | `panas` | 0 | 0 | - | missing |
 | `dingin` | 0 | 0 | - | missing |
 | `bahaya` | 0 | 0 | - | missing |
@@ -100,9 +100,9 @@ Generated at: 2026-07-15T18:34:11
 | `sejak kapan` | 0 | 0 | - | missing |
 | `bagian mana` | 0 | 0 | - | missing |
 | `seberapa sering` | 0 | 0 | - | missing |
-| `ya` | 0 | 0 | - | missing |
-| `tidak` | 0 | 0 | - | missing |
-| `tolong` | 0 | 0 | - | missing |
+| `ya` | 45 | 1 | 0.00% | ok |
+| `tidak` | 45 | 1 | 0.00% | ok |
+| `tolong` | 45 | 1 | 0.00% | ok |
 | `terima kasih` | 0 | 0 | - | missing |
 | `mengerti` | 0 | 0 | - | missing |
 | `tidak mengerti` | 0 | 0 | - | missing |
@@ -120,20 +120,20 @@ Generated at: 2026-07-15T18:34:11
 | `laboratorium` | 0 | 0 | - | missing |
 | `rontgen` | 0 | 0 | - | missing |
 | `rawat inap` | 0 | 0 | - | missing |
-| `mata` | 0 | 0 | - | missing |
+| `mata` | 45 | 1 | 0.00% | ok |
 | `hidung` | 0 | 0 | - | missing |
 | `mulut` | 0 | 0 | - | missing |
-| `telinga` | 0 | 0 | - | missing |
+| `telinga` | 45 | 1 | 0.00% | ok |
 | `gigi` | 0 | 0 | - | missing |
-| `perut` | 0 | 0 | - | missing |
-| `tangan` | 0 | 0 | - | missing |
+| `perut` | 45 | 1 | 0.00% | ok |
+| `tangan` | 45 | 1 | 0.00% | ok |
 | `jari` | 0 | 0 | - | missing |
 | `lutut` | 0 | 0 | - | missing |
 | `bahu` | 0 | 0 | - | missing |
 | `gatal` | 0 | 0 | - | missing |
-| `diare` | 0 | 0 | - | missing |
+| `diare` | 45 | 1 | 0.00% | ok |
 | `pendarahan` | 0 | 0 | - | missing |
-| `pingsan` | 0 | 0 | - | missing |
+| `pingsan` | 45 | 1 | 0.00% | ok |
 | `kejang` | 0 | 0 | - | missing |
 | `meriang` | 0 | 0 | - | missing |
 | `kaku` | 0 | 0 | - | missing |
@@ -220,6 +220,7 @@ Generated at: 2026-07-15T18:34:11
 ### sakit
 - `glenn`: 15
 - `loren`: 5
+- `synthetic`: 45
 
 ### dokter
 - `glenn`: 15
@@ -267,27 +268,33 @@ Generated at: 2026-07-15T18:34:11
 
 ### batuk
 - `loren`: 15
+- `synthetic`: 45
 
 ### sesak
 - `loren`: 15
+- `synthetic`: 45
 
 ### napas
 - `loren`: 15
 
 ### dada
-- Belum ada data.
+- `albert_cheng`: 23
+- `albert_william`: 10
+- `glenn`: 5
+- `synthetic`: 45
 
 ### dahak
-- Belum ada data.
+- `albert_william`: 20
 
 ### pilek
-- Belum ada data.
+- `albert_cheng`: 20
 
 ### flu
 - Belum ada data.
 
 ### tenggorokan
-- Belum ada data.
+- `albert_cheng`: 20
+- `synthetic`: 45
 
 ### paru-paru
 - Belum ada data.
@@ -296,10 +303,10 @@ Generated at: 2026-07-15T18:34:11
 - Belum ada data.
 
 ### pusing
-- Belum ada data.
+- `synthetic`: 45
 
 ### kepala
-- Belum ada data.
+- `synthetic`: 45
 
 ### tensi
 - Belum ada data.
@@ -314,7 +321,7 @@ Generated at: 2026-07-15T18:34:11
 - Belum ada data.
 
 ### leher
-- Belum ada data.
+- `synthetic`: 45
 
 ### jantung
 - Belum ada data.
@@ -329,7 +336,7 @@ Generated at: 2026-07-15T18:34:11
 - Belum ada data.
 
 ### lemas
-- Belum ada data.
+- `synthetic`: 45
 
 ### haus
 - Belum ada data.
@@ -347,13 +354,13 @@ Generated at: 2026-07-15T18:34:11
 - Belum ada data.
 
 ### kaki
-- Belum ada data.
+- `synthetic`: 45
 
 ### lapar
 - Belum ada data.
 
 ### nyeri
-- Belum ada data.
+- `synthetic`: 45
 
 ### otot
 - Belum ada data.
@@ -380,7 +387,7 @@ Generated at: 2026-07-15T18:34:11
 - Belum ada data.
 
 ### punggung
-- Belum ada data.
+- `synthetic`: 45
 
 ### gerak
 - Belum ada data.
@@ -410,13 +417,13 @@ Generated at: 2026-07-15T18:34:11
 - Belum ada data.
 
 ### mual
-- Belum ada data.
+- `synthetic`: 45
 
 ### muntah
-- Belum ada data.
+- `synthetic`: 45
 
 ### demam
-- Belum ada data.
+- `synthetic`: 45
 
 ### panas
 - Belum ada data.
@@ -461,13 +468,13 @@ Generated at: 2026-07-15T18:34:11
 - Belum ada data.
 
 ### ya
-- Belum ada data.
+- `synthetic`: 45
 
 ### tidak
-- Belum ada data.
+- `synthetic`: 45
 
 ### tolong
-- Belum ada data.
+- `synthetic`: 45
 
 ### terima kasih
 - Belum ada data.
@@ -521,7 +528,7 @@ Generated at: 2026-07-15T18:34:11
 - Belum ada data.
 
 ### mata
-- Belum ada data.
+- `synthetic`: 45
 
 ### hidung
 - Belum ada data.
@@ -530,16 +537,16 @@ Generated at: 2026-07-15T18:34:11
 - Belum ada data.
 
 ### telinga
-- Belum ada data.
+- `synthetic`: 45
 
 ### gigi
 - Belum ada data.
 
 ### perut
-- Belum ada data.
+- `synthetic`: 45
 
 ### tangan
-- Belum ada data.
+- `synthetic`: 45
 
 ### jari
 - Belum ada data.
@@ -554,13 +561,13 @@ Generated at: 2026-07-15T18:34:11
 - Belum ada data.
 
 ### diare
-- Belum ada data.
+- `synthetic`: 45
 
 ### pendarahan
 - Belum ada data.
 
 ### pingsan
-- Belum ada data.
+- `synthetic`: 45
 
 ### kejang
 - Belum ada data.
@@ -804,4 +811,205 @@ Generated at: 2026-07-15T18:34:11
 
 ## Invalid Samples
 
-Tidak ada invalid sample.
+| File | Reason | Quarantine |
+|---|---|---|
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\0.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\1.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\10.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\11.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\12.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\13.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\14.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\15.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\16.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\17.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\18.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\19.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\2.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\20.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\21.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\22.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\23.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\24.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\25.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\26.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\27.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\28.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\29.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\3.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\30.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\31.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\32.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\33.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\34.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\35.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\36.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\37.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\38.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\39.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\4.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\40.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\41.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\42.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\43.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\44.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\5.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\6.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\7.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\8.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\bantuan segera\synthetic\9.npy` | label 'bantuan segera' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\0.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\1.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\10.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\11.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\12.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\13.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\14.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\15.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\16.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\17.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\18.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\19.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\2.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\20.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\21.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\22.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\23.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\24.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\25.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\26.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\27.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\28.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\29.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\3.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\30.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\31.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\32.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\33.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\34.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\35.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\36.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\37.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\38.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\39.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\4.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\40.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\41.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\42.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\43.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\44.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\5.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\6.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\7.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\8.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih baik\synthetic\9.npy` | label 'lebih baik' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\0.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\1.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\10.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\11.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\12.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\13.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\14.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\15.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\16.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\17.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\18.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\19.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\2.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\20.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\21.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\22.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\23.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\24.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\25.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\26.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\27.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\28.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\29.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\3.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\30.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\31.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\32.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\33.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\34.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\35.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\36.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\37.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\38.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\39.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\4.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\40.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\41.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\42.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\43.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\44.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\5.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\6.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\7.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\8.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\lebih buruk\synthetic\9.npy` | label 'lebih buruk' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\0.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\1.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\10.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\11.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\12.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\13.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\14.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\15.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\16.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\17.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\18.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\19.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\2.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\20.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\21.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\22.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\23.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\24.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\25.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\26.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\27.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\28.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\29.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\3.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\30.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\31.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\32.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\33.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\34.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\35.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\36.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\37.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\38.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\39.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\4.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\40.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\41.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\42.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\43.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\44.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\5.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\6.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\7.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\8.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\nyeri dada\synthetic\9.npy` | label 'nyeri dada' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\sakit sekali\synthetic\0.npy` | label 'sakit sekali' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\sakit sekali\synthetic\1.npy` | label 'sakit sekali' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\sakit sekali\synthetic\10.npy` | label 'sakit sekali' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\sakit sekali\synthetic\11.npy` | label 'sakit sekali' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\sakit sekali\synthetic\12.npy` | label 'sakit sekali' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\sakit sekali\synthetic\13.npy` | label 'sakit sekali' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\sakit sekali\synthetic\14.npy` | label 'sakit sekali' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\sakit sekali\synthetic\15.npy` | label 'sakit sekali' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\sakit sekali\synthetic\16.npy` | label 'sakit sekali' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\sakit sekali\synthetic\17.npy` | label 'sakit sekali' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\sakit sekali\synthetic\18.npy` | label 'sakit sekali' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\sakit sekali\synthetic\19.npy` | label 'sakit sekali' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\sakit sekali\synthetic\2.npy` | label 'sakit sekali' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\sakit sekali\synthetic\20.npy` | label 'sakit sekali' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\sakit sekali\synthetic\21.npy` | label 'sakit sekali' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\sakit sekali\synthetic\22.npy` | label 'sakit sekali' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\sakit sekali\synthetic\23.npy` | label 'sakit sekali' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\sakit sekali\synthetic\24.npy` | label 'sakit sekali' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\sakit sekali\synthetic\25.npy` | label 'sakit sekali' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\sakit sekali\synthetic\26.npy` | label 'sakit sekali' tidak ada di labels.json | `-` |

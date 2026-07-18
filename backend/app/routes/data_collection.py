@@ -105,6 +105,55 @@ def get_dataset_signers():
     return sorted(list(signers))
 
 
+class DeleteSampleRequest(BaseModel):
+    label: str
+    signer: str
+    filename: str
+
+@router.get("/dataset/samples/{label}")
+def get_dataset_samples(label: str):
+    backend_dir = Path(__file__).resolve().parents[2]
+    landmarks_dir = backend_dir / "data" / "landmarks" / label
+    
+    samples = []
+    if landmarks_dir.exists():
+        from datetime import datetime
+        for signer_dir in landmarks_dir.iterdir():
+            if signer_dir.is_dir():
+                signer_id = signer_dir.name
+                for f in signer_dir.glob("*.npy"):
+                    try:
+                        stat = f.stat()
+                        mtime = datetime.fromtimestamp(stat.st_mtime).strftime("%d/%m/%Y %H:%M")
+                        samples.append({
+                            "filename": f.name,
+                            "signer": signer_id,
+                            "size_kb": round(stat.st_size / 1024, 2),
+                            "created_at": mtime
+                        })
+                    except Exception:
+                        pass
+    samples.sort(key=lambda x: x["created_at"], reverse=True)
+    return samples
+
+@router.post("/dataset/samples/delete")
+def delete_dataset_sample(request: DeleteSampleRequest):
+    backend_dir = Path(__file__).resolve().parents[2]
+    file_path = backend_dir / "data" / "landmarks" / request.label / request.signer / request.filename
+    if file_path.exists() and file_path.is_file():
+        try:
+            file_path.unlink()
+            parent = file_path.parent
+            if parent.exists() and not list(parent.iterdir()):
+                parent.rmdir()
+                grandparent = parent.parent
+                if grandparent.exists() and not list(grandparent.iterdir()):
+                    grandparent.rmdir()
+            return {"status": "success", "message": f"File {request.filename} berhasil dihapus"}
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Gagal menghapus file: {str(e)}")
+    raise HTTPException(status_code=404, detail="File tidak ditemukan")
+
 @router.get("/dataset/balance")
 def get_dataset_balance():
     backend_dir = Path(__file__).resolve().parents[2]
@@ -123,11 +172,20 @@ def get_dataset_balance():
 
         signer_counts = {}
         total_samples = 0
+        latest_time = 0.0
         for signer in signers_list:
             signer_dir = landmarks_dir / label / signer
             count = 0
             if signer_dir.exists():
-                count = len(list(signer_dir.glob("*.npy")))
+                npy_files = list(signer_dir.glob("*.npy"))
+                count = len(npy_files)
+                for f in npy_files:
+                    try:
+                        mtime = f.stat().st_mtime
+                        if mtime > latest_time:
+                            latest_time = mtime
+                    except Exception:
+                        pass
             signer_counts[signer] = count
             total_samples += count
 
@@ -139,21 +197,23 @@ def get_dataset_balance():
         else:
             status = "Belum"
 
+        from datetime import datetime
+        last_updated = datetime.fromtimestamp(latest_time).strftime("%d/%m/%Y %H:%M") if latest_time > 0 else "-"
+
         balance_data.append({
             "label": label,
             "display": label_display,
             "category": category,
             "counts": signer_counts,
             "total": total_samples,
-            "status": status
+            "status": status,
+            "last_updated": last_updated
         })
 
     return {
         "signers": signers_list,
         "balance": balance_data
     }
-
-
 class TrainRequest(BaseModel):
     labels: List[str] = Field(default=[], description="Subset kata yang dilatih")
     epochs: int = Field(default=120, description="Jumlah epochs")

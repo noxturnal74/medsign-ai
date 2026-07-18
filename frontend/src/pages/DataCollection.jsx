@@ -1600,6 +1600,64 @@ export const DataCollection = ({ setView }) => {
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
     const [fetchError, setFetchError] = useState(null);
+    
+    const [activeModalLabel, setActiveModalLabel] = useState(null);
+    const [activeModalDisplay, setActiveModalDisplay] = useState("");
+    const [samples, setSamples] = useState([]);
+    const [loadingSamples, setLoadingSamples] = useState(false);
+    const [modalError, setModalError] = useState(null);
+
+    const fetchSamples = async (label) => {
+      try {
+        setLoadingSamples(true);
+        setModalError(null);
+        const apiBaseUrl = apiUrl;
+        const response = await fetch(
+          `${apiBaseUrl.endsWith("/") ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/samples/${label}`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setSamples(data);
+        } else {
+          setModalError(`Gagal mengambil sampel (HTTP ${response.status})`);
+        }
+      } catch (err) {
+        console.error(err);
+        setModalError("Gagal menghubungi server backend.");
+      } finally {
+        setLoadingSamples(false);
+      }
+    };
+
+    const handleDeleteSample = async (sample) => {
+      if (!window.confirm(`Apakah Anda yakin ingin menghapus file ${sample.filename}?`)) {
+        return;
+      }
+      try {
+        const apiBaseUrl = apiUrl;
+        const response = await fetch(
+          `${apiBaseUrl.endsWith("/") ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/samples/delete`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              label: activeModalLabel,
+              signer: sample.signer,
+              filename: sample.filename
+            })
+          }
+        );
+        if (response.ok) {
+          setSamples(prev => prev.filter(s => s.filename !== sample.filename));
+          fetchBalance();
+        } else {
+          alert("Gagal menghapus file.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Terjadi kesalahan koneksi.");
+      }
+    };
 
     const fetchBalance = async () => {
       try {
@@ -1818,6 +1876,8 @@ export const DataCollection = ({ setView }) => {
                   ))}
                   <th className="py-3 px-4">Total</th>
                   <th className="py-3 px-4">Status</th>
+                  <th className="py-3 px-4">Dibuat/Diupdate</th>
+                  <th className="py-3 px-4 text-right">Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -1856,12 +1916,125 @@ export const DataCollection = ({ setView }) => {
                         {b.status}
                       </span>
                     </td>
+                    <td className="py-3 px-4 font-bold text-slate-500">
+                      {b.last_updated || "-"}
+                    </td>
+                    <td className="py-3 px-4 text-right whitespace-nowrap">
+                      <button
+                        onClick={() => {
+                          setSelectedWords([b.label]);
+                          handleTabChange("record");
+                        }}
+                        className="inline-flex items-center gap-1 rounded-xl bg-sky-500/10 px-2.5 py-1.5 text-[9px] font-black text-sky-700 hover:bg-sky-500/20 active:scale-[0.98] transition-all mr-1.5 shadow-sm uppercase"
+                      >
+                        Retake
+                      </button>
+                      <button
+                        onClick={() => {
+                          setActiveModalLabel(b.label);
+                          setActiveModalDisplay(b.display);
+                          fetchSamples(b.label);
+                        }}
+                        className="inline-flex items-center gap-1 rounded-xl bg-slate-500/10 px-2.5 py-1.5 text-[9px] font-black text-slate-700 hover:bg-slate-500/20 active:scale-[0.98] transition-all shadow-sm uppercase"
+                      >
+                        Check Dataset
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
         </div>
+        
+        {/* MODAL CHECK DATASET */}
+        {activeModalLabel && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+            <div className="bg-white rounded-3xl shadow-xl w-full max-w-2xl overflow-hidden border border-slate-100 flex flex-col max-h-[80vh] text-slate-800">
+              <div className="p-5 border-b border-slate-100 flex items-center justify-between">
+                <div>
+                  <h3 className="text-sm font-black text-slate-900 uppercase tracking-wide">
+                    Daftar File Sampel: {activeModalDisplay}
+                  </h3>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                    Slug: {activeModalLabel}
+                  </p>
+                </div>
+                <button
+                  onClick={() => {
+                    setActiveModalLabel(null);
+                    setSamples([]);
+                  }}
+                  className="rounded-xl p-2 text-slate-400 hover:bg-slate-50 hover:text-slate-900 transition-all"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+              
+              <div className="p-5 overflow-y-auto flex-1">
+                {loadingSamples ? (
+                  <div className="flex justify-center items-center py-12">
+                    <RefreshCw className="animate-spin text-sky-600 mr-2" size={18} />
+                    <span className="text-xs font-semibold text-slate-500">Memuat sampel...</span>
+                  </div>
+                ) : modalError ? (
+                  <div className="bg-rose-50 border border-rose-200 text-rose-700 p-4 rounded-2xl text-xs font-medium">
+                    {modalError}
+                  </div>
+                ) : samples.length === 0 ? (
+                  <div className="text-center py-12 text-xs font-semibold text-slate-400">
+                    Belum ada data rekaman untuk kata ini.
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto border border-slate-100 rounded-xl">
+                    <table className="w-full text-left text-xs border-collapse">
+                      <thead>
+                        <tr className="border-b border-slate-100 bg-slate-50 text-slate-500 font-bold uppercase text-[9px]">
+                          <th className="py-2.5 px-3">Signer</th>
+                          <th className="py-2.5 px-3">Nama File</th>
+                          <th className="py-2.5 px-3">Ukuran</th>
+                          <th className="py-2.5 px-3">Tanggal</th>
+                          <th className="py-2.5 px-3 text-right">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {samples.map((s) => (
+                          <tr key={s.filename} className="border-b border-slate-50 hover:bg-slate-50/50">
+                            <td className="py-2 px-3 font-extrabold capitalize">{s.signer.replace("_", " ")}</td>
+                            <td className="py-2 px-3 font-mono text-[10px] text-slate-500 truncate max-w-[180px]">{s.filename}</td>
+                            <td className="py-2 px-3 font-bold text-slate-400">{s.size_kb} KB</td>
+                            <td className="py-2 px-3 text-slate-400">{s.created_at}</td>
+                            <td className="py-2 px-3 text-right">
+                              <button
+                                onClick={() => handleDeleteSample(s)}
+                                className="inline-flex items-center justify-center p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg transition-all"
+                                title="Hapus sampel"
+                              >
+                                <Trash size={13} />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+
+              <div className="p-5 border-t border-slate-100 bg-slate-50/50 flex justify-end">
+                <button
+                  onClick={() => {
+                    setActiveModalLabel(null);
+                    setSamples([]);
+                  }}
+                  className="rounded-xl bg-white border border-slate-200 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50 hover:text-slate-800 transition-all shadow-sm"
+                >
+                  Tutup
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   };

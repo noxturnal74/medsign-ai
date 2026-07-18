@@ -251,7 +251,7 @@ def main() -> int:
     # Filter labels to only those that have at least min_samples_per_label samples
     active_labels = [
         label for label in labels
-        if int(dataset_report["counts"].get(label, 0)) >= args.min_samples_per_label]
+        if int(dataset_report["counts"].get(label, 0)) >= args.min_samples_per_label
     ]
     if not active_labels:
         raise RuntimeError(
@@ -309,10 +309,7 @@ def main() -> int:
     tflite_model = converter.convert()
     tflite_path.write_bytes(tflite_model)
 
-    # Save sidecar labels file
-    labels_json_path = args.models_dir / f"{args.model_name}_labels.json"
-    labels_json_path.write_text(json.dumps(labels, indent=2, ensure_ascci=False), encoding="utf-8")
-    print(f"Saved sidecar labels: {labels_json_path}")
+
 
     # Save sidecar labels file
     labels_json_path = args.models_dir / f"{args.model_name}_labels.json"
