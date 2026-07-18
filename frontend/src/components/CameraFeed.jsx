@@ -56,15 +56,20 @@ export const CameraFeed = () => {
   const { canvasRef, isHandDetected, landmarks, fps } = useMediaPipe(isActive, videoElement);
 
   const handlePrediction = useCallback((result) => {
-    if (result && result.prediction) {
+    if (result) {
+      // Selalu perbarui real-time preview (bisa pakai raw_prediction jika prediction null)
       setLastDetected(result);
-      appendWord(result.prediction);
 
-      addLogEntry({
-        role: 'patient',
-        text: result.prediction.toUpperCase(),
-        confidence: result.confidence
-      });
+      // Hanya masukkan ke kalimat terjemahan jika melewati threshold (confirmed)
+      if (result.prediction) {
+        appendWord(result.prediction);
+
+        addLogEntry({
+          role: 'patient',
+          text: result.prediction.toUpperCase(),
+          confidence: result.confidence
+        });
+      }
     }
   }, [setLastDetected, appendWord, addLogEntry]);
 

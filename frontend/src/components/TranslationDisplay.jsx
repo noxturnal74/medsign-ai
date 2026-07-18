@@ -43,8 +43,10 @@ export const TranslationDisplay = () => {
     );
   }
 
-  const { prediction, confidence = 0, top3, mode, processing_time_ms } = lastDetected;
-  const isEmergency = emergencyWords.has(prediction.toLowerCase());
+  const { prediction, raw_prediction, confidence = 0, top3, mode, processing_time_ms } = lastDetected;
+  const activeWord = prediction || raw_prediction || (top3 && top3[0]?.word) || '';
+  const isEmergency = activeWord ? emergencyWords.has(activeWord.toLowerCase()) : false;
+  const isConfirmed = !!prediction;
 
   let colorClass = 'text-red-600';
   let barColor = 'bg-red-500';
@@ -62,13 +64,13 @@ export const TranslationDisplay = () => {
 
   return (
     <div className={`glass-panel flex flex-col gap-4 rounded-3xl p-6 transition-all ${
-      isEmergency ? 'border-red-300/60 bg-red-50/60 pulse-glow-red' : ''
+      isConfirmed && isEmergency ? 'border-red-300/60 bg-red-50/60 pulse-glow-red' : ''
     }`}>
       <div className="flex items-center justify-between gap-3">
         <span className="text-[10px] font-bold uppercase text-slate-500">
           Hasil Terjemahan Real-Time
         </span>
-        {isEmergency && (
+        {isConfirmed && isEmergency && (
           <span className="inline-flex items-center gap-1 rounded-full border border-red-300/60 bg-red-500/10 px-2.5 py-1 text-[10px] font-black uppercase text-red-600">
             <AlertTriangle size={10} />
             Darurat
@@ -78,10 +80,15 @@ export const TranslationDisplay = () => {
 
       <div className="flex flex-col items-center justify-center py-2 text-center">
         <span className={`select-all text-4xl font-black leading-tight sm:text-5xl ${
-          isEmergency ? 'text-red-600' : 'text-sky-700'
+          !isConfirmed ? 'text-slate-400' : isEmergency ? 'text-red-600' : 'text-sky-700'
         }`}>
-          {prediction.toUpperCase()}
+          {activeWord.toUpperCase()}
         </span>
+        {!isConfirmed && activeWord && (
+          <span className="mt-1.5 inline-block text-[9px] font-black uppercase text-amber-600 bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 rounded-lg">
+            Di Bawah Ambang Batas (Belum Terkonfirmasi)
+          </span>
+        )}
         <span className="mt-2 text-[10px] font-semibold uppercase text-slate-500">
           {mode === 'demo' ? 'Mode Demo' : 'Deep Learning Inference'} - {processing_time_ms}ms
         </span>
