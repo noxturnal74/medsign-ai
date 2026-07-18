@@ -4,7 +4,7 @@ import { CameraFeed } from '../components/CameraFeed';
 import { TranslationDisplay } from '../components/TranslationDisplay';
 import { VocabularyGuide } from '../components/VocabularyGuide';
 import { SessionLog } from '../components/SessionLog';
-import { EmergencyAlert } from '../components/EmergencyAlert';
+
 import { ArrowLeft, Delete, Trash2, Volume2 } from 'lucide-react';
 
 export const PatientView = ({ setView }) => {
@@ -41,7 +41,7 @@ export const PatientView = ({ setView }) => {
         </div>
       </div>
 
-      <EmergencyAlert />
+
 
       <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-12">
         <div className="flex w-full flex-col gap-6 lg:col-span-6">
