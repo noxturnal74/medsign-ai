@@ -253,41 +253,134 @@ def get_dataset_balance():
         "balance": balance_data
     }
 class TrainRequest(BaseModel):
+    model_type: str = Field(default="clinical", description="Tipe model: 'clinical' atau 'alphabet'")
     labels: List[str] = Field(default=[], description="Subset kata yang dilatih")
     epochs: int = Field(default=120, description="Jumlah epochs")
     architecture: str = Field(default="gru", description="Architecture gru atau lstm")
     test_size: float = Field(default=0.2, description="Rasio test split (0.1 - 0.5)")
 
+class FinalizeModelRequest(BaseModel):
+    model_type: str = Field(..., description="Tipe model: 'clinical' atau 'alphabet'")
+    action: str = Field(..., description="Aksi: 'replace' atau 'save_new'")
+
+
+@router.post("/dataset/train/finalize")
+def finalize_model(request: FinalizeModelRequest):
+    backend_dir = Path(__file__).resolve().parents[2]
+    models_dir = backend_dir / "models"
+    
+    from datetime import datetime
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    
+    if request.model_type == "alphabet":
+        temp_tflite = models_dir / "bisindo_alphabet_v1_temp.tflite"
+        temp_h5 = models_dir / "bisindo_alphabet_v1_temp.h5"
+        
+        if not temp_tflite.exists():
+            raise HTTPException(status_code=400, detail="Temporary alphabet model tidak ditemukan. Lakukan training terlebih dahulu.")
+            
+        if request.action == "replace":
+            dest_tflite = models_dir / "bisindo_alphabet_v1.tflite"
+            dest_h5 = models_dir / "bisindo_alphabet.h5"
+            
+            import shutil
+            if temp_tflite.exists():
+                shutil.copy2(temp_tflite, dest_tflite)
+            if temp_h5.exists():
+                shutil.copy2(temp_h5, dest_h5)
+                
+            return {"status": "success", "message": "Model abjad aktif berhasil digantikan dengan model baru."}
+            
+        elif request.action == "save_new":
+            dest_tflite = models_dir / f"bisindo_alphabet_v1_{timestamp}.tflite"
+            dest_h5 = models_dir / f"bisindo_alphabet_{timestamp}.h5"
+            
+            import shutil
+            if temp_tflite.exists():
+                shutil.copy2(temp_tflite, dest_tflite)
+            if temp_h5.exists():
+                shutil.copy2(temp_h5, dest_h5)
+                
+            return {
+                "status": "success", 
+                "message": f"Model abjad baru berhasil disimpan dengan nama bisindo_alphabet_v1_{timestamp}.tflite"
+            }
+            
+    else: # clinical model
+        temp_tflite = models_dir / "medsign_mvp_v1_temp.tflite"
+        temp_h5 = models_dir / "medsign_mvp_v1_temp.h5"
+        temp_json = models_dir / "medsign_mvp_v1_temp_labels.json"
+        
+        if not temp_tflite.exists():
+            raise HTTPException(status_code=400, detail="Temporary clinical model tidak ditemukan. Lakukan training terlebih dahulu.")
+            
+        if request.action == "replace":
+            dest_tflite = models_dir / "medsign_mvp_v1.tflite"
+            dest_h5 = models_dir / "medsign_mvp_v1.h5"
+            dest_json = models_dir / "medsign_mvp_v1_labels.json"
+            
+            import shutil
+            if temp_tflite.exists():
+                shutil.copy2(temp_tflite, dest_tflite)
+            if temp_h5.exists():
+                shutil.copy2(temp_h5, dest_h5)
+            if temp_json.exists():
+                shutil.copy2(temp_json, dest_json)
+                
+            return {"status": "success", "message": "Model klinis aktif berhasil digantikan dengan model baru."}
+            
+        elif request.action == "save_new":
+            dest_tflite = models_dir / f"medsign_mvp_v1_{timestamp}.tflite"
+            dest_h5 = models_dir / f"medsign_mvp_v1_{timestamp}.h5"
+            dest_json = models_dir / f"medsign_mvp_v1_{timestamp}_labels.json"
+            
+            import shutil
+            if temp_tflite.exists():
+                shutil.copy2(temp_tflite, dest_tflite)
+            if temp_h5.exists():
+                shutil.copy2(temp_h5, dest_h5)
+            if temp_json.exists():
+                shutil.copy2(temp_json, dest_json)
+                
+            return {
+                "status": "success", 
+                "message": f"Model klinis baru berhasil disimpan dengan nama medsign_mvp_v1_{timestamp}.tflite"
+            }
+            
+    raise HTTPException(status_code=400, detail="Aksi atau tipe model tidak valid.")
 
 @router.post("/dataset/train")
 def train_dataset(request: TrainRequest):
     async def log_generator():
         backend_dir = Path(__file__).resolve().parents[2]
-        training_script = backend_dir / "training" / "train_clinical_model.py"
-
         import sys
         import threading
         import queue
 
-        # PENTING: sys.executable di dalam uvicorn worker menunjuk ke Python uv
-        # (sistem), bukan venv Python — karena venv\Scripts\python.exe adalah
-        # shim yang diredirect oleh uv ke Python instalasi globalnya.
-        # Akibatnya training subprocess dijalankan tanpa TensorFlow tersedia.
-        # Solusi: pakai path eksplisit ke venv\Scripts\python.exe.
         venv_python = backend_dir / "venv" / "Scripts" / "python.exe"
         python_exe = str(venv_python) if venv_python.exists() else sys.executable
 
-        cmd = [
-            python_exe,
-            str(training_script),
-            "--epochs", str(request.epochs),
-            "--architecture", request.architecture,
-            "--test-size", str(request.test_size),
-            "--min-samples-per-label", "1"
-        ]
-
-        if request.labels:
-            cmd.extend(["--labels", ",".join(request.labels)])
+        if request.model_type == "alphabet":
+            training_script = backend_dir / "training" / "train_alphabet_model.py"
+            cmd = [
+                python_exe,
+                str(training_script),
+                "--epochs", str(request.epochs),
+                "--model-name", "bisindo_alphabet_v1_temp"
+            ]
+        else:
+            training_script = backend_dir / "training" / "train_clinical_model.py"
+            cmd = [
+                python_exe,
+                str(training_script),
+                "--epochs", str(request.epochs),
+                "--architecture", request.architecture,
+                "--test-size", str(request.test_size),
+                "--min-samples-per-label", "1",
+                "--model-name", "medsign_mvp_v1_temp"
+            ]
+            if request.labels:
+                cmd.extend(["--labels", ",".join(request.labels)])
 
         print("Running training:", " ".join(cmd))
 

@@ -34,7 +34,7 @@ class ModelLoader:
 
             cls._instance.alphabet_interpreter = None
             cls._instance.alphabet_loaded = False
-            cls._instance.alphabet_classes = [chr(i) for i in range(ord("A"), ord("Z") + 1)]
+            cls._instance.alphabet_classes = [chr(i) for i in range(ord("A"), ord("Z") + 1)] + [str(i) for i in range(1, 10)]
         return cls._instance
 
     def refresh_labels(self) -> None:

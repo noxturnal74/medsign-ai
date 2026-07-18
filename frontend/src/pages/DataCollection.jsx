@@ -1312,7 +1312,7 @@ export const DataCollection = ({ setView }) => {
               )}
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 overflow-y-auto pr-1 flex-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 overflow-y-auto pr-1 flex-1 content-start">
               {filteredWords.map((item) => {
                 const active = selectedWords.includes(item.word);
                 return (
@@ -2128,6 +2128,7 @@ export const DataCollection = ({ setView }) => {
   };
   const renderTrainingModel = () => {
     const { vocabulary } = useContext(AppContext);
+    const [modelType, setModelType] = useState("clinical"); // 'clinical' | 'alphabet'
     const [architecture, setArchitecture] = useState("gru");
     const [epochs, setEpochs] = useState(120);
     const [selectedWords, setSelectedWords] = useState([]);
@@ -2135,7 +2136,41 @@ export const DataCollection = ({ setView }) => {
     const [logs, setLogs] = useState("");
     const [progress, setProgress] = useState(0);
     const [status, setStatus] = useState(""); // 'idle' | 'running' | 'success' | 'failed'
+    const [finalizeStatus, setFinalizeStatus] = useState(""); // 'idle' | 'success' | 'error'
+    const [finalizeMsg, setFinalizeMsg] = useState("");
     const logContainerRef = useRef(null);
+
+    const handleFinalize = async (action) => {
+      try {
+        const apiBaseUrl = apiUrl;
+        const response = await fetch(
+          `${apiBaseUrl.endsWith("/") ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/train/finalize`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              model_type: modelType,
+              action
+            })
+          }
+        );
+        const data = await response.json();
+        if (response.ok) {
+          setFinalizeStatus("success");
+          setFinalizeMsg(data.message);
+          alert(data.message);
+        } else {
+          setFinalizeStatus("error");
+          setFinalizeMsg(data.detail || "Gagal memproses model.");
+          alert(data.detail || "Gagal memproses model.");
+        }
+      } catch (err) {
+        console.error(err);
+        setFinalizeStatus("error");
+        setFinalizeMsg("Terjadi kesalahan koneksi saat memproses model.");
+        alert("Terjadi kesalahan koneksi.");
+      }
+    };
 
     // Search & filter kategori untuk daftar kata (agar tidak perlu pilih satu-satu)
     const [trainingSearch, setTrainingSearch] = useState("");
@@ -2156,7 +2191,12 @@ export const DataCollection = ({ setView }) => {
           v.word.toLowerCase().includes(trainingSearch.toLowerCase()),
         );
       }
-      return list;
+      const seen = new Set();
+      return list.filter((v) => {
+        if (seen.has(v.word)) return false;
+        seen.add(v.word);
+        return true;
+      });
     }, [vocabulary, trainingCategory, trainingSearch]);
 
     useEffect(() => {
@@ -2174,12 +2214,15 @@ export const DataCollection = ({ setView }) => {
 
       try {
         const apiBaseUrl = apiUrl;
+        setFinalizeStatus("");
+        setFinalizeMsg("");
         const response = await fetch(
           `${apiBaseUrl.endsWith("/") ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/train`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
+              model_type: modelType,
               labels: selectedWords,
               epochs,
               architecture,
@@ -2257,18 +2300,42 @@ export const DataCollection = ({ setView }) => {
 
           <div className="flex flex-col gap-1.5">
             <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-              Model Architecture
+              Tipe Model yang Dilatih
             </label>
             <select
-              value={architecture}
-              onChange={(e) => setArchitecture(e.target.value)}
+              value={modelType}
+              onChange={(e) => {
+                setModelType(e.target.value);
+                if (e.target.value === "alphabet") {
+                  setEpochs(85);
+                } else {
+                  setEpochs(120);
+                }
+              }}
               disabled={isTraining}
-              className="glass-input rounded-xl px-3 py-2 text-xs font-semibold appearance-none bg-white/40 cursor-pointer"
+              className="glass-input rounded-xl px-3 py-2 text-xs font-black appearance-none bg-white/40 cursor-pointer border border-sky-300/40 text-sky-900 shadow-sm"
             >
-              <option value="gru">GRU (Recommended - Faster & Light)</option>
-              <option value="lstm">LSTM (Standard Recurrent Model)</option>
+              <option value="clinical">Model Kosakata Klinis (LSTM/GRU Dinamis)</option>
+              <option value="alphabet">Model Ejaan Abjad A-Z & Angka 1-9 (MLP Statis)</option>
             </select>
           </div>
+
+          {modelType === "clinical" && (
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                Model Architecture
+              </label>
+              <select
+                value={architecture}
+                onChange={(e) => setArchitecture(e.target.value)}
+                disabled={isTraining}
+                className="glass-input rounded-xl px-3 py-2 text-xs font-semibold appearance-none bg-white/40 cursor-pointer"
+              >
+                <option value="gru">GRU (Recommended - Faster & Light)</option>
+                <option value="lstm">LSTM (Standard Recurrent Model)</option>
+              </select>
+            </div>
+          )}
 
           <div className="flex flex-col gap-1.5">
             <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
@@ -2278,35 +2345,38 @@ export const DataCollection = ({ setView }) => {
               type="number"
               min="1"
               value={epochs}
-              onChange={(e) => setEpochs(parseInt(e.target.value) || 120)}
+              onChange={(e) => setEpochs(parseInt(e.target.value) || (modelType === "alphabet" ? 85 : 120))}
               disabled={isTraining}
               className="glass-input rounded-xl px-3 py-2 text-xs font-black shadow-inner"
             />
           </div>
 
-          <div className="flex flex-col gap-1.5">
-            <div className="flex justify-between text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-              <span>Split Rasio Data Uji (Test Size)</span>
-              <span className="text-sky-700 font-black">{testSize}%</span>
+          {modelType === "clinical" && (
+            <div className="flex flex-col gap-1.5">
+              <div className="flex justify-between text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                <span>Split Rasio Data Uji (Test Size)</span>
+                <span className="text-sky-700 font-black">{testSize}%</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <input
+                  type="range"
+                  min="10"
+                  max="50"
+                  step="5"
+                  value={testSize}
+                  onChange={(e) => setTestSize(parseInt(e.target.value))}
+                  disabled={isTraining}
+                  className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-sky-600"
+                />
+                <span className="text-[10px] font-bold text-slate-500 w-16 text-right shrink-0">
+                  {100 - testSize}% Train
+                </span>
+              </div>
             </div>
-            <div className="flex items-center gap-3">
-              <input
-                type="range"
-                min="10"
-                max="50"
-                step="5"
-                value={testSize}
-                onChange={(e) => setTestSize(parseInt(e.target.value))}
-                disabled={isTraining}
-                className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-sky-600"
-              />
-              <span className="text-[10px] font-bold text-slate-500 w-16 text-right shrink-0">
-                {100 - testSize}% Train
-              </span>
-            </div>
-          </div>
+          )}
 
-          <div className="flex flex-col gap-1.5 flex-1 min-h-0">
+          {modelType === "clinical" && (
+            <div className="flex flex-col gap-1.5 flex-1 min-h-0">
             <div className="flex items-center justify-between">
               <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
                 Kata yang Dilatih ({selectedWords.length} terpilih, Kosong =
@@ -2426,7 +2496,7 @@ export const DataCollection = ({ setView }) => {
                 </div>
               )}
             </div>
-          </div>
+          )}
 
           <button
             onClick={handleStartTraining}
@@ -2462,6 +2532,38 @@ export const DataCollection = ({ setView }) => {
               </span>
             )}
           </div>
+
+          {status === "success" && (
+            <div className="p-4 bg-emerald-50 border border-emerald-200/50 rounded-2xl flex flex-col gap-3 animate-slide-up shadow-inner select-none">
+              <div>
+                <span className="block text-xs font-black text-emerald-950 uppercase tracking-wide">
+                  Model Baru Berhasil Dilatih!
+                </span>
+                <p className="text-[10px] font-semibold text-emerald-700 leading-relaxed mt-0.5">
+                  Model Anda saat ini disimpan sementara di server. Pilih aksi di bawah untuk memprosesnya:
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => handleFinalize("replace")}
+                  className="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-4 py-2 text-[10px] font-black text-white hover:bg-emerald-700 active:scale-[0.98] transition-all shadow-sm uppercase"
+                >
+                  Aktifkan (Ganti Model Lama)
+                </button>
+                <button
+                  onClick={() => handleFinalize("save_new")}
+                  className="inline-flex items-center justify-center rounded-xl bg-white border border-slate-200 px-4 py-2 text-[10px] font-black text-slate-700 hover:bg-slate-50 active:scale-[0.98] transition-all shadow-sm uppercase"
+                >
+                  Simpan Baru dengan Timestamp
+                </button>
+              </div>
+              {finalizeMsg && (
+                <div className={`text-[10px] font-bold mt-1 ${finalizeStatus === 'success' ? 'text-emerald-700' : 'text-rose-600'}`}>
+                  {finalizeStatus === 'success' ? '✓ ' : '✗ '}{finalizeMsg}
+                </div>
+              )}
+            </div>
+          )}
 
           {progress > 0 && (
             <div className="flex flex-col gap-1">

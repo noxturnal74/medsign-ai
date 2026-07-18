@@ -66,7 +66,7 @@ export const PatientView = ({ setView }) => {
 
                 {spelledText.length === 0 && (
                   <span className="absolute left-4 text-xs font-semibold text-slate-500">
-                    Posisikan tangan untuk mengeja huruf demi huruf...
+                    Posisikan tangan untuk mengeja abjad A-Z atau angka 1-9...
                   </span>
                 )}
               </div>

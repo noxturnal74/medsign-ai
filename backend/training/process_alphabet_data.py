@@ -33,8 +33,8 @@ def process_alphabet_dataset():
         print(f"ERROR: Folder dataset '{ALPHABET_DIR}' tidak ditemukan!")
         return
 
-    # Definisikan kelas abjad A-Z
-    classes = [chr(i) for i in range(ord('A'), ord('Z') + 1)]
+    # Definisikan kelas abjad A-Z & Angka 1-9
+    classes = [chr(i) for i in range(ord('A'), ord('Z') + 1)] + [str(i) for i in range(1, 10)]
     label_map = {c: i for i, c in enumerate(classes)}
 
     X_data = []

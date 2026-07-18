@@ -25,7 +25,7 @@ const MARKETING_SITE_URL =
   'https://albert-william-saputra-portfolio.vercel.app/#projects';
 
 const metricTiles = [
-  { label: 'Model A-Z', value: '89.42%', note: 'uji lokal alphabet', tone: 'from-sky-300/80 to-cyan-200/70' },
+  { label: 'Abjad A-Z & Angka 1-9', value: '89.42%', note: 'uji lokal alphabet', tone: 'from-sky-300/80 to-cyan-200/70' },
   { label: 'Model klinis', value: '40 kata', note: 'kosakata BISINDO medis', tone: 'from-emerald-300/80 to-teal-200/70' },
   { label: 'Runtime', value: 'TFLite', note: 'siap CPU inference', tone: 'from-violet-300/75 to-sky-200/70' },
   { label: 'Dataset', value: '1,869', note: 'sample lokal proyek', tone: 'from-rose-300/75 to-orange-200/70' }
@@ -387,7 +387,7 @@ export const Home = ({ setView }) => {
 
             <div className="grid gap-3">
               {[
-                'Mode pasien menampilkan kamera, hasil translasi, spelling, kosakata, dan log.',
+                'Mode pasien menampilkan kamera, hasil translasi, spelling abjad A-Z & angka 1-9, kosakata, dan log.',
                 'Mode dokter menyediakan panel respon cepat, TTS, dan timeline konsultasi.',
                 'Alert darurat tetap aktif untuk sinyal seperti nyeri dada atau bantuan segera.'
               ].map(item => (

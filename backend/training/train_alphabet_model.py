@@ -11,6 +11,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import numpy as np
 from sklearn.model_selection import train_test_split
+import argparse
 
 try:
     import tensorflow as tf
@@ -23,7 +24,13 @@ except ImportError:
     TF_AVAILABLE = False
     print("WARNING: TensorFlow/Keras harus terpasang untuk melatih model abjad.")
 
-def train_alphabet_model():
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Train static alphabet model.")
+    parser.add_argument("--epochs", type=int, default=80)
+    parser.add_argument("--model-name", default="bisindo_alphabet_v1")
+    return parser.parse_args()
+
+def train_alphabet_model(epochs=80, model_name="bisindo_alphabet_v1"):
     if not TF_AVAILABLE:
         print("ERROR: Harap instal tensorflow terlebih dahulu!")
         return
@@ -55,8 +62,8 @@ def train_alphabet_model():
     X = data['X'] # Shape: (samples, 63)
     y = data['y'] # Shape: (samples,)
 
-    # Daftar Kelas Abjad A-Z
-    classes = [chr(i) for i in range(ord('A'), ord('Z') + 1)]
+    # Daftar Kelas Abjad A-Z & Angka 1-9
+    classes = [chr(i) for i in range(ord('A'), ord('Z') + 1)] + [str(i) for i in range(1, 10)]
     n_classes = len(classes)
     
     print(f"Jumlah sampel koordinat berhasil dimuat: {X.shape[0]}")
@@ -99,7 +106,7 @@ def train_alphabet_model():
     if not os.path.exists(models_dir):
         os.makedirs(models_dir)
 
-    best_h5_path = os.path.join(models_dir, 'bisindo_alphabet.h5')
+    best_h5_path = os.path.join(models_dir, f"{model_name}.h5")
     
     callbacks = [
         EarlyStopping(monitor='val_accuracy', patience=12, restore_best_weights=True),
@@ -112,7 +119,7 @@ def train_alphabet_model():
     history = model.fit(
         X_train, y_train,
         validation_data=(X_test, y_test),
-        epochs=80,
+        epochs=epochs,
         batch_size=16,
         callbacks=callbacks
     )
@@ -144,12 +151,13 @@ def train_alphabet_model():
     
     tflite_model = converter.convert()
     
-    tflite_path = os.path.join(models_dir, 'bisindo_alphabet_v1.tflite')
+    tflite_path = os.path.join(models_dir, f"{model_name}.tflite")
     with open(tflite_path, 'wb') as f:
         f.write(tflite_model)
         
     print(f"Model TFLite Abjad berhasil diekspor ke {tflite_path}")
     print(f"Ukuran Model TFLite Abjad: {len(tflite_model) / 1024:.1f} KB (Sangat Ringan & Efisien)")
 
-if __name__ == "__main__":
-    train_alphabet_model()
+if __name__ == '__main__':
+    args = parse_args()
+    train_alphabet_model(epochs=args.epochs, model_name=args.model_name)

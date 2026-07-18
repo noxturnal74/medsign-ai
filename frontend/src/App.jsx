@@ -6,6 +6,7 @@ import { PatientView } from './pages/PatientView';
 import { DoctorView } from './pages/DoctorView';
 import { About } from './pages/About';
 import { DataCollection } from './pages/DataCollection';
+import { UserManual } from './pages/UserManual';
 
 function AppContent() {
   const getInitialView = () => {
@@ -48,6 +49,7 @@ function AppContent() {
       {view === 'doctor' && <DoctorView setView={handleSetView} />}
       {view === 'about' && <About setView={handleSetView} />}
       {view === 'data-collection' && <DataCollection setView={handleSetView} />}
+      {view === 'manual' && <UserManual setView={handleSetView} />}
     </Layout>
   );
 }
