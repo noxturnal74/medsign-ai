@@ -191,11 +191,11 @@ export const useMediaPipe = (isActive, videoElement) => {
         }
 
         // B. Send frame to MediaPipe Hands if it is not busy
-        // To avoid overloading, we scale down the frame and throttle sending to max ~30 FPS (every 33ms)
+        // Send the native videoElement directly to allow browser GPU hardware acceleration (avoids canvas stall)
         if (hands && !hands.busy && (now - lastProcessedTimeRef.current >= 33)) {
           hands.busy = true;
           lastProcessedTimeRef.current = now;
-          hands.send({ image: offscreenCanvas }).finally(() => {
+          hands.send({ image: videoElement }).finally(() => {
             hands.busy = false;
           });
         }
