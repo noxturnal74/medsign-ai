@@ -2496,6 +2496,7 @@ export const DataCollection = ({ setView }) => {
                 </div>
               )}
             </div>
+          </div>
           )}
 
           <button
