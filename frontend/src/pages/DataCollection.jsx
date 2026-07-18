@@ -1606,11 +1606,13 @@ export const DataCollection = ({ setView }) => {
     const [samples, setSamples] = useState([]);
     const [loadingSamples, setLoadingSamples] = useState(false);
     const [modalError, setModalError] = useState(null);
+    const [selectedSamples, setSelectedSamples] = useState([]);
 
     const fetchSamples = async (label) => {
       try {
         setLoadingSamples(true);
         setModalError(null);
+        setSelectedSamples([]);
         const apiBaseUrl = apiUrl;
         const response = await fetch(
           `${apiBaseUrl.endsWith("/") ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/samples/${label}`
@@ -1649,9 +1651,49 @@ export const DataCollection = ({ setView }) => {
         );
         if (response.ok) {
           setSamples(prev => prev.filter(s => s.filename !== sample.filename));
+          setSelectedSamples(prev => prev.filter(name => name !== sample.filename));
           fetchBalance();
         } else {
           alert("Gagal menghapus file.");
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Terjadi kesalahan koneksi.");
+      }
+    };
+
+    const handleBulkDelete = async () => {
+      if (selectedSamples.length === 0) return;
+      if (!window.confirm(`Apakah Anda yakin ingin menghapus ${selectedSamples.length} file terpilih?`)) {
+        return;
+      }
+      try {
+        const apiBaseUrl = apiUrl;
+        const response = await fetch(
+          `${apiBaseUrl.endsWith("/") ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/samples/delete-bulk`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              label: activeModalLabel,
+              samples: selectedSamples.map(filename => {
+                const sample = samples.find(s => s.filename === filename);
+                return {
+                  signer: sample ? sample.signer : "",
+                  filename: filename
+                };
+              })
+            })
+          }
+        );
+        if (response.ok) {
+          const resData = await response.json();
+          setSamples(prev => prev.filter(s => !selectedSamples.includes(s.filename)));
+          setSelectedSamples([]);
+          fetchBalance();
+          alert(resData.message || "File terpilih berhasil dihapus");
+        } else {
+          alert("Gagal menghapus beberapa file.");
         }
       } catch (err) {
         console.error(err);
@@ -1964,6 +2006,7 @@ export const DataCollection = ({ setView }) => {
                   onClick={() => {
                     setActiveModalLabel(null);
                     setSamples([]);
+                    setSelectedSamples([]);
                   }}
                   className="rounded-xl p-2 text-slate-400 hover:bg-slate-50 hover:text-slate-900 transition-all"
                 >
@@ -1986,37 +2029,81 @@ export const DataCollection = ({ setView }) => {
                     Belum ada data rekaman untuk kata ini.
                   </div>
                 ) : (
-                  <div className="overflow-x-auto border border-slate-100 rounded-xl">
-                    <table className="w-full text-left text-xs border-collapse">
-                      <thead>
-                        <tr className="border-b border-slate-100 bg-slate-50 text-slate-500 font-bold uppercase text-[9px]">
-                          <th className="py-2.5 px-3">Signer</th>
-                          <th className="py-2.5 px-3">Nama File</th>
-                          <th className="py-2.5 px-3">Ukuran</th>
-                          <th className="py-2.5 px-3">Tanggal</th>
-                          <th className="py-2.5 px-3 text-right">Aksi</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {samples.map((s) => (
-                          <tr key={s.filename} className="border-b border-slate-50 hover:bg-slate-50/50">
-                            <td className="py-2 px-3 font-extrabold capitalize">{s.signer.replace("_", " ")}</td>
-                            <td className="py-2 px-3 font-mono text-[10px] text-slate-500 truncate max-w-[180px]">{s.filename}</td>
-                            <td className="py-2 px-3 font-bold text-slate-400">{s.size_kb} KB</td>
-                            <td className="py-2 px-3 text-slate-400">{s.created_at}</td>
-                            <td className="py-2 px-3 text-right">
-                              <button
-                                onClick={() => handleDeleteSample(s)}
-                                className="inline-flex items-center justify-center p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg transition-all"
-                                title="Hapus sampel"
-                              >
-                                <Trash size={13} />
-                              </button>
-                            </td>
+                  <div className="flex flex-col">
+                    {selectedSamples.length > 0 && (
+                      <div className="mb-3 p-3 bg-rose-50 border border-rose-200/50 rounded-2xl flex items-center justify-between animate-slide-up">
+                        <span className="text-[11px] font-bold text-rose-800">
+                          Terpilih: {selectedSamples.length} file sampel
+                        </span>
+                        <button
+                          onClick={handleBulkDelete}
+                          className="inline-flex items-center gap-1.5 rounded-xl bg-red-600 px-3.5 py-1.5 text-[10px] font-black text-white hover:bg-red-700 active:scale-[0.98] transition-all shadow-sm uppercase"
+                        >
+                          <Trash size={12} />
+                          Hapus Terpilih
+                        </button>
+                      </div>
+                    )}
+                    <div className="overflow-x-auto border border-slate-100 rounded-xl">
+                      <table className="w-full text-left text-xs border-collapse">
+                        <thead>
+                          <tr className="border-b border-slate-100 bg-slate-50 text-slate-500 font-bold uppercase text-[9px]">
+                            <th className="py-2.5 px-3 w-8">
+                              <input
+                                type="checkbox"
+                                checked={samples.length > 0 && selectedSamples.length === samples.length}
+                                onChange={(e) => {
+                                  if (e.target.checked) {
+                                    setSelectedSamples(samples.map(s => s.filename));
+                                  } else {
+                                    setSelectedSamples([]);
+                                  }
+                                }}
+                                className="rounded border-slate-300 text-sky-600 focus:ring-sky-500 h-3.5 w-3.5 cursor-pointer"
+                              />
+                            </th>
+                            <th className="py-2.5 px-3">Signer</th>
+                            <th className="py-2.5 px-3">Nama File</th>
+                            <th className="py-2.5 px-3">Ukuran</th>
+                            <th className="py-2.5 px-3">Tanggal</th>
+                            <th className="py-2.5 px-3 text-right">Aksi</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody>
+                          {samples.map((s) => (
+                            <tr key={s.filename} className="border-b border-slate-50 hover:bg-slate-50/50">
+                              <td className="py-2 px-3 w-8">
+                                <input
+                                  type="checkbox"
+                                  checked={selectedSamples.includes(s.filename)}
+                                  onChange={(e) => {
+                                    if (e.target.checked) {
+                                      setSelectedSamples([...selectedSamples, s.filename]);
+                                    } else {
+                                      setSelectedSamples(selectedSamples.filter(name => name !== s.filename));
+                                    }
+                                  }}
+                                  className="rounded border-slate-300 text-sky-600 focus:ring-sky-500 h-3.5 w-3.5 cursor-pointer"
+                                />
+                              </td>
+                              <td className="py-2 px-3 font-extrabold capitalize">{s.signer.replace("_", " ")}</td>
+                              <td className="py-2 px-3 font-mono text-[10px] text-slate-500 truncate max-w-[180px]">{s.filename}</td>
+                              <td className="py-2 px-3 font-bold text-slate-400">{s.size_kb} KB</td>
+                              <td className="py-2 px-3 text-slate-400">{s.created_at}</td>
+                              <td className="py-2 px-3 text-right">
+                                <button
+                                  onClick={() => handleDeleteSample(s)}
+                                  className="inline-flex items-center justify-center p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg transition-all"
+                                  title="Hapus sampel"
+                                >
+                                  <Trash size={13} />
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 )}
               </div>
@@ -2026,6 +2113,7 @@ export const DataCollection = ({ setView }) => {
                   onClick={() => {
                     setActiveModalLabel(null);
                     setSamples([]);
+                    setSelectedSamples([]);
                   }}
                   className="rounded-xl bg-white border border-slate-200 px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50 hover:text-slate-800 transition-all shadow-sm"
                 >

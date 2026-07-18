@@ -154,6 +154,44 @@ def delete_dataset_sample(request: DeleteSampleRequest):
             raise HTTPException(status_code=500, detail=f"Gagal menghapus file: {str(e)}")
     raise HTTPException(status_code=404, detail="File tidak ditemukan")
 
+
+class BulkDeleteSampleItem(BaseModel):
+    signer: str
+    filename: str
+
+class BulkDeleteSamplesRequest(BaseModel):
+    label: str
+    samples: List[BulkDeleteSampleItem]
+
+@router.post("/dataset/samples/delete-bulk")
+def delete_dataset_samples_bulk(request: BulkDeleteSamplesRequest):
+    backend_dir = Path(__file__).resolve().parents[2]
+    deleted_count = 0
+    errors = []
+    
+    for item in request.samples:
+        file_path = backend_dir / "data" / "landmarks" / request.label / item.signer / item.filename
+        if file_path.exists() and file_path.is_file():
+            try:
+                file_path.unlink()
+                deleted_count += 1
+                
+                parent = file_path.parent
+                if parent.exists() and not list(parent.iterdir()):
+                    parent.rmdir()
+                    grandparent = parent.parent
+                    if grandparent.exists() and not list(grandparent.iterdir()):
+                        grandparent.rmdir()
+            except Exception as e:
+                errors.append(f"Gagal menghapus {item.filename}: {str(e)}")
+                
+    return {
+        "status": "success" if not errors else "partial",
+        "message": f"Berhasil menghapus {deleted_count} file.",
+        "errors": errors
+    }
+
+
 @router.get("/dataset/balance")
 def get_dataset_balance():
     backend_dir = Path(__file__).resolve().parents[2]
