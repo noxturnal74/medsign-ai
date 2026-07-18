@@ -10,6 +10,7 @@
     voiceActive: "Suara aktif",
     voiceInactive: "Suara mati",
     landing: "Landing Page",
+    motion: "Animasi 3D",
     
     // Translation Preview
     realtimeResult: "Hasil Terjemahan Real-Time",
@@ -107,6 +108,7 @@
     voiceActive: "Voice On",
     voiceInactive: "Voice Off",
     landing: "Landing Page",
+    motion: "3D Motion",
     
     // Translation Preview
     realtimeResult: "Real-Time Translation",

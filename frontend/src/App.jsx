@@ -7,6 +7,7 @@ import { DoctorView } from './pages/DoctorView';
 import { About } from './pages/About';
 import { DataCollection } from './pages/DataCollection';
 import { UserManual } from './pages/UserManual';
+import { MotionVisualizer } from './pages/MotionVisualizer';
 
 function AppContent() {
   const getInitialView = () => {
@@ -50,6 +51,7 @@ function AppContent() {
       {view === 'about' && <About setView={handleSetView} />}
       {view === 'data-collection' && <DataCollection setView={handleSetView} />}
       {view === 'manual' && <UserManual setView={handleSetView} />}
+      {view === 'motion' && <MotionVisualizer setView={handleSetView} />}
     </Layout>
   );
 }
