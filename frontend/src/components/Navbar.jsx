@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { AppContext } from '../context/AppContext';
-import { ExternalLink, Home, Info, Stethoscope, User, Volume2, VolumeX, Database, BookOpen } from 'lucide-react';
+import { ExternalLink, Home, Info, Stethoscope, User, Volume2, VolumeX, Database, BookOpen, ChevronDown } from 'lucide-react';
 
 const MARKETING_SITE_URL =
   import.meta.env.VITE_MARKETING_SITE_URL ||
@@ -16,7 +16,7 @@ const navItems = [
 ];
 
 export const Navbar = ({ currentView, setView }) => {
-  const { ttsEnabled, setTtsEnabled } = useContext(AppContext);
+  const { ttsEnabled, setTtsEnabled, language, setLanguage, t } = useContext(AppContext);
 
   return (
     <nav className="sticky top-0 z-50 px-3 pt-3 md:px-6">
@@ -54,7 +54,7 @@ export const Navbar = ({ currentView, setView }) => {
                   }`}
                 >
                   <Icon size={15} />
-                  <span className="hidden md:inline">{item.label}</span>
+                  <span className="hidden md:inline">{t(item.id)}</span>
                 </button>
               );
             })}
@@ -65,11 +65,25 @@ export const Navbar = ({ currentView, setView }) => {
             className={`glass-button rounded-2xl px-3 py-2 text-xs font-bold ${
               ttsEnabled ? 'text-emerald-700' : 'text-rose-700'
             }`}
-            title={ttsEnabled ? 'Matikan Suara (TTS)' : 'Aktifkan Suara (TTS)'}
+            title={ttsEnabled ? t('voiceInactive') : t('voiceActive')}
           >
             {ttsEnabled ? <Volume2 size={17} /> : <VolumeX size={17} />}
-            <span className="hidden lg:inline">{ttsEnabled ? 'Suara aktif' : 'Suara mati'}</span>
+            <span className="hidden lg:inline">{ttsEnabled ? t('voiceActive') : t('voiceInactive')}</span>
           </button>
+
+          <div className="relative shrink-0 select-none">
+            <select
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+              className="glass-button rounded-2xl px-3 py-2 text-xs font-bold appearance-none pr-8 cursor-pointer text-slate-700 bg-white/40 border-white/70 shadow-sm"
+            >
+              <option value="id" className="bg-white text-slate-800">🇮🇩 ID</option>
+              <option value="en" className="bg-white text-slate-800">🇬🇧 EN</option>
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-500">
+              <ChevronDown size={10} />
+            </div>
+          </div>
 
           <a
             href={MARKETING_SITE_URL}
@@ -77,7 +91,7 @@ export const Navbar = ({ currentView, setView }) => {
             title="Buka landing page MedSign"
           >
             <ExternalLink size={16} />
-            <span className="hidden xl:inline">Landing</span>
+            <span className="hidden xl:inline">{t('landing')}</span>
           </a>
         </div>
       </div>

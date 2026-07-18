@@ -17,7 +17,8 @@ export const PatientView = ({ setView }) => {
     spelledText,
     addSpaceToSpelledText,
     backspaceSpelledText,
-    clearSpelledText
+    clearSpelledText,
+    t
   } = useContext(AppContext);
 
   const handleSpeakSentence = () => {
@@ -36,8 +37,8 @@ export const PatientView = ({ setView }) => {
           Kembali
         </button>
         <div className="text-right">
-          <span className="text-[10px] font-bold uppercase text-sky-700">Mode Konsultasi</span>
-          <h2 className="text-lg font-black text-slate-950">Layar Komunikasi Pasien</h2>
+          <span className="text-[10px] font-bold uppercase text-sky-700">{t('consultationMode')}</span>
+          <h2 className="text-lg font-black text-slate-950">{t('patientScreen')}</h2>
         </div>
       </div>
 
@@ -51,7 +52,7 @@ export const PatientView = ({ setView }) => {
           {spellingMode ? (
             <div className="glass-panel flex flex-col gap-4 rounded-3xl border border-violet-200/70 p-5 animate-slide-up">
               <span className="block text-[10px] font-bold uppercase text-violet-700">
-                Hasil Ejaan Huruf
+                {t('spellingTextResult')}
               </span>
 
               <div className="relative flex min-h-[70px] flex-wrap items-center justify-start gap-1 overflow-hidden rounded-2xl border border-white/10 bg-slate-950/90 p-4 shadow-inner">
@@ -66,7 +67,7 @@ export const PatientView = ({ setView }) => {
 
                 {spelledText.length === 0 && (
                   <span className="absolute left-4 text-xs font-semibold text-slate-500">
-                    Posisikan tangan untuk mengeja abjad A-Z atau angka 1-9...
+                    {t('spellingPlaceholder')}
                   </span>
                 )}
               </div>
@@ -82,13 +83,13 @@ export const PatientView = ({ setView }) => {
                   }`}
                 >
                   <Volume2 size={13} />
-                  Ucapkan
+                  {t('speak')}
                 </button>
                 <button
                   onClick={addSpaceToSpelledText}
                   className="glass-button rounded-xl py-2 text-xs font-bold"
                 >
-                  Spasi
+                  {t('space')}
                 </button>
                 <button
                   onClick={backspaceSpelledText}
@@ -100,7 +101,7 @@ export const PatientView = ({ setView }) => {
                   }`}
                 >
                   <Delete size={13} />
-                  Hapus
+                  {t('delete')}
                 </button>
                 <button
                   onClick={clearSpelledText}
@@ -112,20 +113,20 @@ export const PatientView = ({ setView }) => {
                   }`}
                 >
                   <Trash2 size={13} />
-                  Bersih
+                  {t('clear')}
                 </button>
               </div>
             </div>
           ) : (
             <div className="glass-panel flex flex-col gap-4 rounded-3xl p-5">
               <span className="block text-[10px] font-bold uppercase text-slate-500">
-                Kalimat Pasien Saat Ini
+                {t('currentSentence')}
               </span>
 
               <div className="flex min-h-[70px] flex-wrap items-center justify-start gap-1.5 rounded-2xl border border-white/10 bg-slate-950/90 p-4 shadow-inner">
                 {sentence.length === 0 ? (
                   <span className="text-xs font-semibold text-slate-500">
-                    Belum ada kata terakumulasi. Lakukan isyarat atau klik kosakata medis...
+                    {t('noWordsAccumulated')}
                   </span>
                 ) : (
                   sentence.map((word, idx) => (
@@ -133,7 +134,7 @@ export const PatientView = ({ setView }) => {
                       key={idx}
                       className="animate-slide-up rounded-lg border border-sky-300/30 bg-sky-400/20 px-2.5 py-1 text-xs font-bold uppercase text-sky-100 shadow-sm"
                     >
-                      {word}
+                      {t(word)}
                     </span>
                   ))
                 )}
@@ -150,7 +151,7 @@ export const PatientView = ({ setView }) => {
                   }`}
                 >
                   <Volume2 size={13} />
-                  Ucapkan
+                  {t('speak')}
                 </button>
                 <button
                   onClick={removeLastWord}
@@ -162,7 +163,7 @@ export const PatientView = ({ setView }) => {
                   }`}
                 >
                   <Delete size={13} />
-                  Hapus
+                  {t('delete')}
                 </button>
                 <button
                   onClick={clearSentence}
@@ -174,7 +175,7 @@ export const PatientView = ({ setView }) => {
                   }`}
                 >
                   <Trash2 size={13} />
-                  Bersih
+                  {t('clear')}
                 </button>
               </div>
             </div>

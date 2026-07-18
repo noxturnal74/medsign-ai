@@ -1,11 +1,27 @@
 import React, { createContext, useState, useEffect, useCallback } from 'react';
 import { vocabulary } from '../data/vocabulary';
+import { translations } from '../data/translations';
 
 export const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
   const [ttsEnabled, setTtsEnabled] = useState(true);
   const [vocabList, setVocabList] = useState(vocabulary);
+  const [language, setLanguageState] = useState(() => {
+    return localStorage.getItem('medsign_lang') || 'id';
+  });
+
+  const setLanguage = (lang) => {
+    setLanguageState(lang);
+    localStorage.setItem('medsign_lang', lang);
+  };
+
+  const t = useCallback((key) => {
+    if (!key) return "";
+    const cleanKey = key.toLowerCase().trim();
+    const dict = translations[language] || translations.id;
+    return dict[cleanKey] || key;
+  }, [language]);
 
   const refreshVocabulary = useCallback(async () => {
     try {
@@ -158,7 +174,10 @@ export const AppProvider = ({ children }) => {
         appendLetter,
         addSpaceToSpelledText,
         backspaceSpelledText,
-        clearSpelledText
+        clearSpelledText,
+        language,
+        setLanguage,
+        t
       }}
     >
       {children}
