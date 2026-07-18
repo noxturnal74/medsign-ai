@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { AppContext } from '../context/AppContext';
 import { ArrowLeft, BookOpen, CheckCircle, Code, FileText, ShieldCheck, Terminal } from 'lucide-react';
 
 const frontendItems = [
@@ -25,6 +26,7 @@ const docs = [
 ];
 
 export const About = ({ setView }) => {
+  const { t } = useContext(AppContext);
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 py-2 animate-slide-up">
       <div className="glass-panel flex items-center justify-between rounded-3xl p-4">
@@ -36,8 +38,8 @@ export const About = ({ setView }) => {
           Kembali
         </button>
         <div className="text-right">
-          <span className="text-[10px] font-bold uppercase text-sky-700">Informasi Proyek</span>
-          <h2 className="text-lg font-black text-slate-950">Tentang MedSign AI</h2>
+          <span className="text-[10px] font-bold uppercase text-sky-700">{t('about')}</span>
+          <h2 className="text-lg font-black text-slate-950">{t('aboutProject')}</h2>
         </div>
       </div>
 
@@ -48,12 +50,10 @@ export const About = ({ setView }) => {
               <ShieldCheck size={24} />
             </div>
             <h3 className="text-3xl font-black leading-tight text-slate-950 md:text-4xl">
-              Menembus batas sunyi dalam layanan medis.
+              {t('aboutDesc')}
             </h3>
             <p className="mt-4 text-sm font-semibold leading-7 text-slate-600">
-              MedSign AI adalah purwarupa PKM-KC untuk membantu komunikasi antara pasien
-              tunarungu dan tenaga medis melalui penerjemahan isyarat BISINDO klinis,
-              tampilan teks besar, text-to-speech, dan log percakapan dua arah.
+              {t('aboutShort')}
             </p>
           </div>
 
@@ -66,7 +66,7 @@ export const About = ({ setView }) => {
         <div className="mt-8 border-t border-white/60 pt-7">
           <div className="mb-4 flex items-center gap-2">
             <BookOpen size={18} className="text-amber-600" />
-            <h4 className="text-sm font-black text-slate-950">Dokumen proyek di folder docs</h4>
+            <h4 className="text-sm font-black text-slate-950">{t('projectDocs')}</h4>
           </div>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {docs.map(([name, description]) => (
@@ -84,9 +84,8 @@ export const About = ({ setView }) => {
         </div>
 
         <div className="mt-8 rounded-3xl border border-amber-200/70 bg-amber-100/40 p-4 text-sm font-semibold leading-6 text-amber-950">
-          <span className="mb-1 block font-black uppercase text-amber-700">Pernyataan batasan</span>
-          MedSign AI adalah alat bantu komunikasi dan penerjemahan isyarat BISINDO klinis.
-          Sistem ini bukan alat diagnosis otomatis dan tidak menggantikan penilaian medis profesional.
+          <span className="mb-1 block font-black uppercase text-amber-700">{t('limitStatement')}</span>
+          {t('limitStatementDesc')}
         </div>
       </div>
     </div>

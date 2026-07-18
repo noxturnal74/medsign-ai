@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useContext } from 'react';
+import { AppContext } from '../context/AppContext';
 import {
   Activity,
   ArrowRight,
@@ -71,6 +72,7 @@ const institutionLogos = [
 ];
 
 export const Home = ({ setView }) => {
+  const { t, language } = useContext(AppContext);
   const scopeRef = useRef(null);
 
   useEffect(() => {
@@ -121,11 +123,10 @@ export const Home = ({ setView }) => {
                 className="mb-5 h-14 w-auto max-w-[250px] object-contain md:h-16 md:max-w-[320px]"
               />
               <h1 className="text-4xl font-black leading-tight text-slate-950 md:text-5xl xl:text-6xl">
-                Komunikasi medis yang lebih jernih untuk Teman Tuli.
+                {t('heroTitle')}
               </h1>
               <p className="mt-4 max-w-2xl text-base font-semibold leading-7 text-slate-600">
-                Interface ini membaca isyarat BISINDO klinis melalui kamera, menampilkan hasil
-                terjemahan secara real-time, lalu membantu dokter dan pasien menjaga alur konsultasi.
+                {t('heroDesc')}
               </p>
             </div>
 
@@ -404,14 +405,14 @@ export const Home = ({ setView }) => {
                 className="glass-button glass-button-primary rounded-2xl px-5 py-3 text-sm font-bold"
               >
                 <Gauge size={18} />
-                Coba konsultasi
+                {t('tryConsultation')}
               </button>
               <button
                 onClick={() => setView('about')}
                 className="glass-button rounded-2xl px-5 py-3 text-sm font-bold"
               >
                 <FileText size={18} />
-                Lihat detail proyek
+                {t('viewProjectDetails')}
               </button>
             </div>
           </div>

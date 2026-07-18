@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { AppContext } from '../context/AppContext';
-import { ExternalLink, Home, Info, Stethoscope, User, Volume2, VolumeX, Database, BookOpen, ChevronDown, Video } from 'lucide-react';
+import { ExternalLink, Home, Info, Stethoscope, User, Volume2, VolumeX, Database, BookOpen, ChevronDown, Video, Menu as MenuIcon, X } from 'lucide-react';
 
 const MARKETING_SITE_URL =
   import.meta.env.VITE_MARKETING_SITE_URL ||
@@ -18,6 +18,7 @@ const navItems = [
 
 export const Navbar = ({ currentView, setView }) => {
   const { ttsEnabled, setTtsEnabled, language, setLanguage, t } = useContext(AppContext);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <nav className="sticky top-0 z-50 px-3 pt-3 md:px-6">
@@ -39,8 +40,17 @@ export const Navbar = ({ currentView, setView }) => {
           </span>
         </button>
 
-        <div className="flex min-w-0 flex-1 items-center justify-end gap-2">
-          <div className="flex min-w-0 items-center gap-1 overflow-x-auto rounded-2xl bg-white/40 p-1 backdrop-blur-xl">
+        {/* Hamburger Menu for Mobile */}
+        <button
+          className="md:hidden p-2.5 rounded-xl border border-white/60 bg-white/45 text-slate-700 hover:bg-white hover:text-slate-950 transition-all shadow-sm active:scale-[0.97]"
+          onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label="Toggle menu"
+        >
+          {mobileOpen ? <X size={18} /> : <MenuIcon size={18} />}
+        </button>
+
+        <div className="hidden md:flex min-w-0 flex-1 items-center justify-end gap-2">
+          <div className="flex min-w-0 items-center gap-1 rounded-2xl bg-white/40 p-1 backdrop-blur-xl">
             {navItems.map(item => {
               const Icon = item.icon;
               const active = currentView === item.id;
@@ -96,6 +106,59 @@ export const Navbar = ({ currentView, setView }) => {
           </a>
         </div>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      {mobileOpen && (
+        <div className="md:hidden absolute top-[72px] left-3 right-3 z-50 rounded-3xl border border-white/60 bg-white/95 p-4 flex flex-col gap-2 shadow-xl animate-slide-up backdrop-blur-xl text-slate-800">
+          {navItems.map(item => {
+            const Icon = item.icon;
+            const active = currentView === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => {
+                  setView(item.id);
+                  setMobileOpen(false);
+                }}
+                className={`flex items-center gap-3 rounded-xl px-4 py-3 text-xs font-bold transition-all ${
+                  active
+                    ? 'bg-sky-500/10 text-sky-700 shadow-sm border border-sky-300/30'
+                    : 'text-slate-600 hover:bg-white/60 hover:text-slate-950'
+                }`}
+              >
+                <Icon size={15} />
+                <span>{t(item.id)}</span>
+              </button>
+            );
+          })}
+          
+          <hr className="border-slate-100 my-1" />
+
+          {/* Voice active & Language switch on mobile */}
+          <div className="flex items-center justify-between gap-3 px-3 py-1.5">
+            <span className="text-[10px] font-bold uppercase text-slate-400">Settings</span>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setTtsEnabled(!ttsEnabled)}
+                className={`flex h-9 w-9 items-center justify-center rounded-xl border border-white/60 bg-white/40 text-xs font-bold ${
+                  ttsEnabled ? 'text-emerald-700' : 'text-rose-700'
+                }`}
+                title={ttsEnabled ? t('voiceInactive') : t('voiceActive')}
+              >
+                {ttsEnabled ? <Volume2 size={15} /> : <VolumeX size={15} />}
+              </button>
+              <select
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+                className="appearance-none pr-8 pl-3 py-1.5 text-xs font-bold rounded-xl bg-white/40 border border-white/70 text-slate-700 cursor-pointer shadow-sm"
+              >
+                <option value="id">🇮🇩 ID</option>
+                <option value="en">🇬🇧 EN</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   );
 };

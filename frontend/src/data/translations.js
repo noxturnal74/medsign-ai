@@ -93,9 +93,34 @@
     spellingPlaceholder: "Posisikan tangan untuk mengeja abjad A-Z atau angka 1-9...",
     space: "Spasi",
     
-    // Landing
+    // Landing & Home
     heroTitle: "Komunikasi medis yang lebih jernih untuk Teman Tuli.",
-    heroDesc: "Interface ini membaca isyarat BISINDO klinis melalui kamera, menampilkan hasil terjemahan secara real-time, lalu membantu dokter dan pasien menjaga alur konsultasi."
+    heroDesc: "Interface ini membaca isyarat BISINDO klinis melalui kamera, menampilkan hasil terjemahan secara real-time, lalu membantu dokter dan pasien menjaga alur konsultasi.",
+    tryConsultation: "Coba Konsultasi",
+    viewProjectDetails: "Lihat Detail Proyek",
+    aboutProject: "Tentang MedSign AI",
+    aboutDesc: "Menembus batas sunyi dalam layanan medis.",
+    aboutShort: "MedSign AI adalah purwarupa PKM-KC untuk membantu komunikasi antara pasien tunarungu dan tenaga medis melalui penerjemahan isyarat BISINDO klinis, tampilan teks besar, text-to-speech, dan log percakapan dua arah.",
+    projectDocs: "Dokumen proyek di folder docs",
+    limitStatement: "Pernyataan batasan",
+    limitStatementDesc: "MedSign AI adalah alat bantu komunikasi dan penerjemahan isyarat BISINDO klinis. Sistem ini bukan alat diagnosis otomatis dan tidak menggantikan penilaian medis profesional.",
+    
+    // Dataset & Training
+    modelConfigTitle: "Konfigurasi Model Training",
+    modelTypeSelect: "Tipe Model yang Dilatih",
+    clinicalModelOption: "Model Kosakata Klinis (LSTM/GRU Dinamis)",
+    alphabetModelOption: "Model Ejaan Abjad A-Z & Angka 1-9 (MLP Statis)",
+    epochsLabel: "Jumlah Epochs",
+    testSizeLabel: "Split Rasio Data Uji (Test Size)",
+    trainedWordsLabel: "Kata yang Dilatih",
+    noWordsFound: "Kosakata tidak ditemukan.",
+    startTrainingBtn: "Mulai Training Model",
+    trainingRunning: "Training Sedang Berjalan...",
+    terminalLogsTitle: "Log Terminal Output",
+    trainingMetricsSuccess: "Model Baru Berhasil Dilatih!",
+    trainingMetricsDesc: "Model Anda saat ini disimpan sementara di server. Pilih aksi di bawah untuk memprosesnya:",
+    btnActivateModel: "Aktifkan (Ganti Model Lama)",
+    btnSaveTimestamp: "Simpan Baru dengan Timestamp"
   },
   en: {
     // Navbar
@@ -191,8 +216,33 @@
     spellingPlaceholder: "Position hand to spell A-Z alphabets or 1-9 numbers...",
     space: "Space",
     
-    // Landing
+    // Landing & Home
     heroTitle: "Clearer medical communication for Deaf Patients.",
-    heroDesc: "This interface reads BISINDO clinical signs through the camera, showing translation results in real-time to help doctors and patients maintain consultation flow."
+    heroDesc: "This interface reads BISINDO clinical signs through the camera, showing translation results in real-time to help doctors and patients maintain consultation flow.",
+    tryConsultation: "Try Consultation",
+    viewProjectDetails: "View Project Details",
+    aboutProject: "About MedSign AI",
+    aboutDesc: "Breaking the silence in medical services.",
+    aboutShort: "MedSign AI is a PKM-KC prototype designed to assist communication between deaf patients and medical staff through real-time BISINDO clinical sign translation, large text display, text-to-speech, and two-way session logs.",
+    projectDocs: "Project documents in docs folder",
+    limitStatement: "Limitation Statement",
+    limitStatementDesc: "MedSign AI is a communication and translation aid for clinical BISINDO sign language. This system is not an automated diagnostic tool and does not replace professional medical judgment.",
+    
+    // Dataset & Training
+    modelConfigTitle: "Training Model Configuration",
+    modelTypeSelect: "Model Type to Train",
+    clinicalModelOption: "Clinical Vocabulary Model (Dynamic LSTM/GRU)",
+    alphabetModelOption: "Alphabet Spelling Model A-Z & Numbers 1-9 (Static MLP)",
+    epochsLabel: "Number of Epochs",
+    testSizeLabel: "Test Split Ratio (Test Size)",
+    trainedWordsLabel: "Words to Train",
+    noWordsFound: "Vocabulary not found.",
+    startTrainingBtn: "Start Model Training",
+    trainingRunning: "Training in Progress...",
+    terminalLogsTitle: "Terminal Log Output",
+    trainingMetricsSuccess: "New Model Trained Successfully!",
+    trainingMetricsDesc: "Your new model is temporarily saved on the server. Select an action below to process it:",
+    btnActivateModel: "Activate (Replace Old Model)",
+    btnSaveTimestamp: "Save New with Timestamp"
   }
 };
