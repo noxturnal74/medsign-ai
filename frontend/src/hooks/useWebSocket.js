@@ -180,11 +180,19 @@ export const useWebSocket = (url, onPrediction, isHandDetected, landmarks) => {
     }
   }, [isHandDetected, landmarks]);
 
+  const isHandDetectedRef = useRef(isHandDetected);
+  const landmarksRef = useRef(landmarks);
+
+  useEffect(() => {
+    isHandDetectedRef.current = isHandDetected;
+    landmarksRef.current = landmarks;
+  }, [isHandDetected, landmarks]);
+
   // 2. Scheduler Pengiriman Prediksi (Dinamis: 500ms untuk Eja, 1000ms untuk Kata)
   useEffect(() => {
     const interval = setInterval(() => {
       // Jika tangan tidak terdeteksi di kamera, batalkan pengiriman
-      if (!isHandDetected) {
+      if (!isHandDetectedRef.current) {
         return;
       }
 
@@ -192,8 +200,8 @@ export const useWebSocket = (url, onPrediction, isHandDetected, landmarks) => {
         try {
           if (spellingMode) {
             // MODE EJA: Kirim 1 frame koordinat landmarks teranyar
-            if (!landmarks || landmarks.length === 0) return;
-            const flatLandmarks = landmarks.flatMap(l => [l.x, l.y, l.z]);
+            if (!landmarksRef.current || landmarksRef.current.length === 0) return;
+            const flatLandmarks = landmarksRef.current.flatMap(l => [l.x, l.y, l.z]);
             
             wsRef.current.send(JSON.stringify({
               mode: 'spelling',
@@ -250,7 +258,7 @@ export const useWebSocket = (url, onPrediction, isHandDetected, landmarks) => {
     }, spellingMode ? 500 : 1000); // 500ms untuk pengetikan abjad eja responsif, 1.0s untuk kata
 
     return () => clearInterval(interval);
-  }, [isHandDetected, isConnected, runLocalDemoPrediction, spellingMode, landmarks, appendLetter]);
+  }, [isConnected, runLocalDemoPrediction, spellingMode, appendLetter]);
 
   return {
     isConnected,
