@@ -1830,7 +1830,7 @@ export const DataCollection = ({ setView }) => {
           </div>
         )}
         <div className="grid gap-4 sm:grid-cols-3">
-          <div className="glass-panel rounded-3xl p-5 border-l-4 border-emerald-500 shadow-md">
+          <div className="glass-panel perspective-card rounded-3xl p-5 border-l-4 border-emerald-500 shadow-md">
             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
               Status Cukup (Siap)
             </span>
@@ -1841,7 +1841,7 @@ export const DataCollection = ({ setView }) => {
               Sampel memadai untuk training
             </span>
           </div>
-          <div className="glass-panel rounded-3xl p-5 border-l-4 border-amber-500 shadow-md">
+          <div className="glass-panel perspective-card rounded-3xl p-5 border-l-4 border-amber-500 shadow-md">
             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
               Status Kurang
             </span>
@@ -1852,7 +1852,7 @@ export const DataCollection = ({ setView }) => {
               Butuh tambahan take responden
             </span>
           </div>
-          <div className="glass-panel rounded-3xl p-5 border-l-4 border-rose-500 shadow-md">
+          <div className="glass-panel perspective-card rounded-3xl p-5 border-l-4 border-rose-500 shadow-md">
             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
               Belum Ada Sampel
             </span>

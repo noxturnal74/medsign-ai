@@ -160,7 +160,7 @@ export const Home = ({ setView }) => {
                 return (
                   <div
                     key={item.title}
-                    className="surface-panel glass-hover rounded-2xl p-4"
+                    className="surface-panel perspective-card rounded-2xl p-4"
                     data-reveal
                     style={{ transitionDelay: `${index * 80}ms` }}
                   >
@@ -261,7 +261,7 @@ export const Home = ({ setView }) => {
           {metricTiles.map((tile, index) => (
             <div
               key={tile.label}
-              className="glass-panel glass-hover rounded-3xl p-5"
+              className="glass-panel perspective-card rounded-3xl p-5"
               data-reveal
               style={{ transitionDelay: `${index * 70}ms` }}
             >
@@ -295,7 +295,7 @@ export const Home = ({ setView }) => {
               return (
                 <article
                   key={item.label}
-                  className="glass-panel glass-hover rounded-3xl p-5"
+                  className="glass-panel perspective-card rounded-3xl p-5"
                   data-reveal
                   style={{ transitionDelay: `${index * 80}ms` }}
                 >

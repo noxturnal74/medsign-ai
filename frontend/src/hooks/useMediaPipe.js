@@ -225,22 +225,41 @@ export const useMediaPipe = (isActive, videoElement) => {
             
             connections.forEach(([a, b]) => {
               if (lms[a] && lms[b]) {
+                const avgZ = (lms[a].z + lms[b].z) / 2;
+                const lineScale = Math.max(0.4, Math.min(2.0, 1.0 - (avgZ * 6.0)));
+                
                 ctx.beginPath();
                 ctx.moveTo(lms[a].x * width, lms[a].y * height);
                 ctx.lineTo(lms[b].x * width, lms[b].y * height);
+                
+                ctx.strokeStyle = handIdx === 0 ? '#10b981' : '#a855f7';
+                ctx.lineWidth = 3.5 * lineScale;
                 ctx.stroke();
               }
             });
 
-            // Draw joint points
+            // Draw joint points (3D spheres with depth scaling)
             lms.forEach((p, idx) => {
-              const r = idx === 0 ? 6 : 4.5;
+              const baseR = idx === 0 ? 6.5 : 4.5;
+              const depthScale = Math.max(0.4, Math.min(2.0, 1.0 - (p.z * 6.0)));
+              const r = baseR * depthScale;
+              
               ctx.beginPath();
               ctx.arc(p.x * width, p.y * height, r, 0, Math.PI * 2);
+              
+              const alpha = Math.max(0.4, Math.min(1.0, 1.0 - (p.z * 4.0)));
               ctx.fillStyle = idx === 0 
-                ? (handIdx === 0 ? '#0ea5e9' : '#c084fc')
-                : (handIdx === 0 ? '#38bdf8' : '#e9d5ff'); // Blue-cyan for hand 1, light purple for hand 2
+                ? (handIdx === 0 ? `rgba(14, 165, 233, ${alpha})` : `rgba(192, 132, 252, ${alpha})`)
+                : (handIdx === 0 ? `rgba(56, 189, 248, ${alpha})` : `rgba(233, 213, 255, ${alpha})`);
               ctx.fill();
+              
+              // 3D Sphere Highlight Reflection
+              if (r > 3) {
+                ctx.beginPath();
+                ctx.arc(p.x * width - r * 0.25, p.y * height - r * 0.25, r * 0.2, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                ctx.fill();
+              }
             });
 
             // Draw left/right text tag
