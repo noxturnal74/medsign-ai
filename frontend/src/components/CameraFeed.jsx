@@ -41,6 +41,8 @@ export const CameraFeed = () => {
     setSpellingMode
   } = useContext(AppContext);
 
+  const lastAppendedWordRef = React.useRef(null);
+
   const {
     videoRef,
     videoElement,
@@ -62,13 +64,17 @@ export const CameraFeed = () => {
 
       // Hanya masukkan ke kalimat terjemahan jika melewati threshold (confirmed)
       if (result.prediction) {
-        appendWord(result.prediction);
+        const word = result.prediction;
+        if (word !== lastAppendedWordRef.current) {
+          appendWord(word);
+          lastAppendedWordRef.current = word;
 
-        addLogEntry({
-          role: 'patient',
-          text: result.prediction.toUpperCase(),
-          confidence: result.confidence
-        });
+          addLogEntry({
+            role: 'patient',
+            text: word.toUpperCase(),
+            confidence: result.confidence
+          });
+        }
       }
     }
   }, [setLastDetected, appendWord, addLogEntry]);
@@ -83,6 +89,8 @@ export const CameraFeed = () => {
   // Reset last detected state (clear preview) if hand is not detected for more than 1.5 seconds
   useEffect(() => {
     if (!isHandDetected) {
+      lastAppendedWordRef.current = null; // Clear duplicate guard immediately when hand drops
+      
       const timeout = setTimeout(() => {
         setLastDetected(null);
       }, 1500);
