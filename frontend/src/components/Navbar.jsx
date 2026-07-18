@@ -90,6 +90,10 @@ export const Navbar = ({ currentView, setView }) => {
             >
               <option value="id" className="bg-white text-slate-800">🇮🇩 ID</option>
               <option value="en" className="bg-white text-slate-800">🇬🇧 EN</option>
+              <option value="ms" className="bg-white text-slate-800">🇲🇾 MS</option>
+              <option value="th" className="bg-white text-slate-800">🇹🇭 TH</option>
+              <option value="vi" className="bg-white text-slate-800">🇻🇳 VI</option>
+              <option value="tl" className="bg-white text-slate-800">🇵🇭 TL</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-500">
               <ChevronDown size={10} />
@@ -150,10 +154,14 @@ export const Navbar = ({ currentView, setView }) => {
               <select
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
-                className="appearance-none pr-8 pl-3 py-1.5 text-xs font-bold rounded-xl bg-white/40 border border-white/70 text-slate-700 cursor-pointer shadow-sm"
+                className="appearance-none pr-8 pl-3 py-1.5 text-xs font-bold rounded-xl bg-white/40 border border-white/70 text-slate-700 cursor-pointer shadow-sm w-[110px]"
               >
                 <option value="id">🇮🇩 ID</option>
                 <option value="en">🇬🇧 EN</option>
+                <option value="ms">🇲🇾 MS</option>
+                <option value="th">🇹🇭 TH</option>
+                <option value="vi">🇻🇳 VI</option>
+                <option value="tl">🇵🇭 TL</option>
               </select>
             </div>
           </div>
