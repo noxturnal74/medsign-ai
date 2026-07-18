@@ -1,6 +1,6 @@
 # DATASET_HEALTH_REPORT
 
-Generated at: 2026-07-18T11:11:36
+Generated at: 2026-07-18T14:07:26
 
 ## Contract
 
@@ -14,7 +14,7 @@ Generated at: 2026-07-18T11:11:36
 - Filter label: `all`
 - Filter signer: `all`
 - Max empty frame ratio: `10.00%`
-- Valid samples: **1498**
+- Valid samples: **1648**
 - Invalid samples: **270**
 
 ## Samples Per Label
@@ -43,11 +43,11 @@ Generated at: 2026-07-18T11:11:36
 | `pilek` | 20 | 1 | 0.00% | low_sample |
 | `flu` | 0 | 0 | - | missing |
 | `tenggorokan` | 65 | 2 | 0.00% | ok |
-| `paru-paru` | 0 | 0 | - | missing |
-| `asma` | 0 | 0 | - | missing |
-| `pusing` | 45 | 1 | 0.00% | ok |
-| `kepala` | 45 | 1 | 0.00% | ok |
-| `tensi` | 0 | 0 | - | missing |
+| `paru-paru` | 30 | 2 | 0.00% | ok |
+| `asma` | 30 | 2 | 0.00% | ok |
+| `pusing` | 75 | 2 | 0.00% | ok |
+| `kepala` | 75 | 2 | 0.00% | ok |
+| `tensi` | 30 | 1 | 0.00% | ok |
 | `darah` | 0 | 0 | - | missing |
 | `tinggi` | 0 | 0 | - | missing |
 | `berat tengkuk` | 0 | 0 | - | missing |
@@ -297,19 +297,23 @@ Generated at: 2026-07-18T11:11:36
 - `synthetic`: 45
 
 ### paru-paru
-- Belum ada data.
+- `albert_cheng`: 10
+- `albert_william`: 20
 
 ### asma
-- Belum ada data.
+- `albert_cheng`: 10
+- `albert_william`: 20
 
 ### pusing
+- `albert_cheng`: 30
 - `synthetic`: 45
 
 ### kepala
+- `albert_cheng`: 30
 - `synthetic`: 45
 
 ### tensi
-- Belum ada data.
+- `albert_cheng`: 30
 
 ### darah
 - Belum ada data.

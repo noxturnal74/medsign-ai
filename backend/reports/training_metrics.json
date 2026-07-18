@@ -1,19 +1,19 @@
 {
-  "generated_at": "2026-07-18T11:12:26",
+  "generated_at": "2026-07-18T14:08:55",
   "model_name": "medsign_mvp_v1",
   "architecture": "gru",
   "labels_version": "medsign-clinical-full-v1",
   "frame_count": 30,
   "feature_count": 63,
-  "num_classes": 2,
-  "num_samples": 103,
+  "num_classes": 9,
+  "num_samples": 428,
   "split_strategy": "stratified_by_label",
-  "train_samples": 65,
-  "val_samples": 17,
-  "test_samples": 21,
-  "test_loss": 0.12046206742525101,
-  "test_accuracy": 1.0,
+  "train_samples": 273,
+  "val_samples": 69,
+  "test_samples": 86,
+  "test_loss": 0.2565460801124573,
+  "test_accuracy": 0.8604651093482971,
   "h5_model": "D:\\PKM\\medsign-ai\\backend\\models\\medsign_mvp_v1.h5",
   "tflite_model": "D:\\PKM\\medsign-ai\\backend\\models\\medsign_mvp_v1.tflite",
-  "tflite_size_kb": 154.34
+  "tflite_size_kb": 156.12
 }

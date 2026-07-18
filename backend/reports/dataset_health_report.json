@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-18T11:11:36",
+  "generated_at": "2026-07-18T14:07:26",
   "contract": {
     "version": "medsign-clinical-full-v1",
     "frame_count": 30,
@@ -206,7 +206,7 @@
     "signer_id": null,
     "max_empty_frame_ratio": 0.1
   },
-  "total_valid_samples": 1498,
+  "total_valid_samples": 1648,
   "total_invalid_samples": 270,
   "counts": {
     "sakit": 65,
@@ -231,11 +231,11 @@
     "pilek": 20,
     "flu": 0,
     "tenggorokan": 65,
-    "paru-paru": 0,
-    "asma": 0,
-    "pusing": 45,
-    "kepala": 45,
-    "tensi": 0,
+    "paru-paru": 30,
+    "asma": 30,
+    "pusing": 75,
+    "kepala": 75,
+    "tensi": 30,
     "darah": 0,
     "tinggi": 0,
     "berat tengkuk": 0,
@@ -481,15 +481,25 @@
       "albert_cheng": 20,
       "synthetic": 45
     },
-    "paru-paru": {},
-    "asma": {},
+    "paru-paru": {
+      "albert_cheng": 10,
+      "albert_william": 20
+    },
+    "asma": {
+      "albert_cheng": 10,
+      "albert_william": 20
+    },
     "pusing": {
+      "albert_cheng": 30,
       "synthetic": 45
     },
     "kepala": {
+      "albert_cheng": 30,
       "synthetic": 45
     },
-    "tensi": {},
+    "tensi": {
+      "albert_cheng": 30
+    },
     "darah": {},
     "tinggi": {},
     "berat tengkuk": {},
@@ -714,11 +724,11 @@
     "pilek": 0.0,
     "flu": null,
     "tenggorokan": 0.0,
-    "paru-paru": null,
-    "asma": null,
+    "paru-paru": 0.0,
+    "asma": 0.0,
     "pusing": 0.0,
     "kepala": 0.0,
-    "tensi": null,
+    "tensi": 0.0,
     "darah": null,
     "tinggi": null,
     "berat tengkuk": null,
