@@ -26,6 +26,7 @@ class ModelLoader:
             cls._instance.interpreter = None
             cls._instance.loaded = False
             cls._instance.model_path = None
+            cls._instance.model_mtime = None
             cls._instance.contract = get_model_contract()
             cls._instance.classes = load_labels()
             cls._instance.model_classes = list(cls._instance.classes)
@@ -110,7 +111,13 @@ class ModelLoader:
                         self.model_classes = self.classes
             else:
                 self.model_classes = self.classes
-                self.loaded = True
+            
+            try:
+                self.model_mtime = path.stat().st_mtime
+            except Exception:
+                self.model_mtime = None
+
+            self.loaded = True
             print(f"[ML_MODEL] Model clinical TFLite berhasil dimuat: {path}")
             return True
         except Exception as exc:

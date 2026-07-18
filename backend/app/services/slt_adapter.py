@@ -16,10 +16,28 @@ model_loader.load_alphabet("models/bisindo_alphabet_v1.tflite")
 
 class SLTAdapterService:
     def __init__(self):
+        self.check_and_reload()
         self.contract = get_model_contract()
         self.available = model_loader.loaded
         self.threshold = float(self.contract["threshold"])
         print(f"[SLT_ADAPTER] Mode clinical: {'PRODUCTION' if self.available else 'MODEL_UNAVAILABLE'}")
+
+    def check_and_reload(self):
+        from pathlib import Path
+        model_path = Path("models/medsign_mvp_v1.tflite")
+        resolved_path = model_loader._resolve_model_path(model_path)
+        if not resolved_path.exists():
+            model_path = Path("models/medsign_v1.tflite")
+            resolved_path = model_loader._resolve_model_path(model_path)
+
+        if resolved_path.exists():
+            try:
+                mtime = resolved_path.stat().st_mtime
+                if model_loader.model_mtime != mtime:
+                    print(f"[SLT_ADAPTER] Mendeteksi perubahan model disk. Memuat ulang model: {resolved_path}")
+                    model_loader.load(model_path)
+            except Exception as e:
+                print(f"[SLT_ADAPTER] Gagal mengecek/memuat ulang model: {e}")
 
     def status(self) -> dict:
         status = model_loader.status()
