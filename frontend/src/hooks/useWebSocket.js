@@ -153,12 +153,22 @@ export const useWebSocket = (url, onPrediction, isHandDetected, landmarks) => {
     };
   }, [connect]);
 
+  // Keep track of how many consecutive frames the hand has been missing
+  const missingHandCounterRef = useRef(0);
+
   // 1. Akumulasi frames koordinat di latar belakang saat kamera aktif
   useEffect(() => {
     if (!isHandDetected || !landmarks) {
-      frameBufferRef.current = [];
+      missingHandCounterRef.current += 1;
+      // Only clear the buffer if the hand is missing for more than 15 consecutive frames (~500ms)
+      if (missingHandCounterRef.current > 15) {
+        frameBufferRef.current = [];
+      }
       return;
     }
+
+    // Hand is detected, reset counter
+    missingHandCounterRef.current = 0;
 
     // Tambahkan frame koordinat flat (63 float) ke buffer
     const flatLandmarks = landmarks.flatMap(l => [l.x, l.y, l.z]);
