@@ -236,7 +236,7 @@ export const VocabularyGuide = () => {
                 key={item.id}
                 onClick={() => handleWordClick(item)}
                 title={WORD_DESCRIPTIONS[item.word] || item.word}
-                className={`group flex items-center gap-2 overflow-hidden rounded-2xl border p-3 text-left transition-all active:scale-[0.98] ${
+                className={`group flex items-center gap-2.5 overflow-hidden rounded-2xl border px-3 py-2 h-[52px] text-left transition-all active:scale-[0.98] ${
                   item.emergency
                     ? 'border-red-300/60 bg-red-500/10 hover:bg-red-500/20'
                     : 'border-white/60 bg-white/40 hover:bg-white/70'
@@ -248,13 +248,13 @@ export const VocabularyGuide = () => {
                   <Icon size={16} />
                 </span>
 
-                <div className="flex min-w-0 flex-col">
-                  <span className={`truncate text-[11px] font-black uppercase ${
+                <div className="flex min-w-0 flex-col justify-center">
+                  <span className={`truncate text-[11px] font-black uppercase leading-tight ${
                     item.emergency ? 'text-red-700' : 'text-slate-800'
                   }`}>
                     {item.word}
                   </span>
-                  <span className="mt-0.5 truncate text-[9px] font-semibold uppercase text-slate-500">
+                  <span className="mt-0.5 truncate text-[9px] font-semibold uppercase text-slate-500 leading-tight">
                     {item.category}
                   </span>
                 </div>
