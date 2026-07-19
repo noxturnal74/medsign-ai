@@ -42,14 +42,14 @@ export const Navbar = ({ currentView, setView }) => {
 
         {/* Hamburger Menu for Mobile */}
         <button
-          className="lg:hidden p-2.5 rounded-xl border border-white/60 bg-white/45 text-slate-700 hover:bg-white hover:text-slate-950 transition-all shadow-sm active:scale-[0.97]"
+          className="xl:hidden p-2.5 rounded-xl border border-white/60 bg-white/45 text-slate-700 hover:bg-white hover:text-slate-950 transition-all shadow-sm active:scale-[0.97]"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
         >
           {mobileOpen ? <X size={18} /> : <MenuIcon size={18} />}
         </button>
 
-        <div className="hidden lg:flex min-w-0 flex-1 items-center justify-end gap-2">
+        <div className="hidden xl:flex min-w-0 flex-1 items-center justify-end gap-2">
           <div className="flex min-w-0 items-center gap-1 rounded-2xl bg-white/40 p-1 backdrop-blur-xl">
             {navItems.map(item => {
               const Icon = item.icon;
@@ -58,7 +58,7 @@ export const Navbar = ({ currentView, setView }) => {
                 <button
                   key={item.id}
                   onClick={() => setView(item.id)}
-                  className={`inline-flex shrink-0 items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold transition-all md:px-4 ${
+                  className={`inline-flex shrink-0 items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-bold transition-all lg:px-3 ${
                     active
                       ? 'bg-white text-sky-700 shadow-sm shadow-sky-900/10'
                       : 'text-slate-600 hover:bg-white/60 hover:text-slate-950'
@@ -113,7 +113,7 @@ export const Navbar = ({ currentView, setView }) => {
 
       {/* Mobile Menu Overlay */}
       {mobileOpen && (
-        <div className="lg:hidden absolute top-[72px] left-3 right-3 z-50 rounded-3xl border border-white/60 bg-white/95 p-4 flex flex-col gap-2 shadow-xl animate-slide-up backdrop-blur-xl text-slate-800">
+        <div className="xl:hidden absolute top-[72px] left-3 right-3 z-50 rounded-3xl border border-white/60 bg-white/95 p-4 flex flex-col gap-2 shadow-xl animate-slide-up backdrop-blur-xl text-slate-800">
           {navItems.map(item => {
             const Icon = item.icon;
             const active = currentView === item.id;

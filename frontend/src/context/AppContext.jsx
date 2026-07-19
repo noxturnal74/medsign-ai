@@ -18,9 +18,16 @@ export const AppProvider = ({ children }) => {
 
   const t = useCallback((key) => {
     if (!key) return "";
-    const cleanKey = key.toLowerCase().trim();
     const dict = translations[language] || translations.id;
-    return dict[cleanKey] || key;
+    if (dict[key]) return dict[key];
+    const cleanKey = key.toLowerCase().trim();
+    if (dict[cleanKey]) return dict[cleanKey];
+    for (const k in dict) {
+      if (k.toLowerCase() === cleanKey) {
+        return dict[k];
+      }
+    }
+    return key;
   }, [language]);
 
   const refreshVocabulary = useCallback(async () => {
