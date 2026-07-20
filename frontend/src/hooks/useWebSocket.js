@@ -84,6 +84,9 @@ export const useWebSocket = (url, onPrediction, isHandDetected, landmarks) => {
           // PILAH RESPON BERDASARKAN MODE AKTIF
           if (data.mode === 'spelling') {
             const letter = data.prediction;
+            if (onPrediction) {
+              onPrediction(data);
+            }
             if (!letter) {
               letterHistoryRef.current = [];
               return;
@@ -240,6 +243,9 @@ export const useWebSocket = (url, onPrediction, isHandDetected, landmarks) => {
             mode: 'demo_spelling'
           };
           setLastPrediction(demoResult);
+          if (onPrediction) {
+            onPrediction(demoResult);
+          }
           
           letterHistoryRef.current.push(pick);
           if (letterHistoryRef.current.length > 3) letterHistoryRef.current.shift();

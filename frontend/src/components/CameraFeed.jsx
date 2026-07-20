@@ -62,8 +62,8 @@ export const CameraFeed = () => {
       // Selalu perbarui real-time preview (bisa pakai raw_prediction jika prediction null)
       setLastDetected(result);
 
-      // Hanya masukkan ke kalimat terjemahan jika melewati threshold (confirmed)
-      if (result.prediction) {
+      // Hanya masukkan ke kalimat terjemahan jika melewati threshold (confirmed) dan bukan spelling mode
+      if (result.prediction && result.mode !== "spelling" && result.mode !== "demo_spelling") {
         const word = result.prediction;
         if (word !== lastAppendedWordRef.current) {
           appendWord(word);
