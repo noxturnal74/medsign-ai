@@ -1,6 +1,6 @@
 # DATASET_HEALTH_REPORT
 
-Generated at: 2026-07-20T15:51:43
+Generated at: 2026-07-20T17:09:48
 
 ## Contract
 
@@ -14,7 +14,7 @@ Generated at: 2026-07-20T15:51:43
 - Filter label: `all`
 - Filter signer: `all`
 - Max empty frame ratio: `10.00%`
-- Valid samples: **1713**
+- Valid samples: **1838**
 - Invalid samples: **270**
 
 ## Samples Per Label
@@ -48,8 +48,8 @@ Generated at: 2026-07-20T15:51:43
 | `pusing` | 75 | 2 | 0.00% | ok |
 | `kepala` | 75 | 2 | 0.00% | ok |
 | `tensi` | 30 | 1 | 0.00% | ok |
-| `darah` | 0 | 0 | - | missing |
-| `tinggi` | 0 | 0 | - | missing |
+| `darah` | 75 | 1 | 0.00% | ok |
+| `tinggi` | 50 | 1 | 0.00% | ok |
 | `berat tengkuk` | 0 | 0 | - | missing |
 | `leher` | 45 | 1 | 0.00% | ok |
 | `jantung` | 0 | 0 | - | missing |
@@ -317,10 +317,10 @@ Generated at: 2026-07-20T15:51:43
 - `albert_cheng`: 30
 
 ### darah
-- Belum ada data.
+- `albert_cheng`: 75
 
 ### tinggi
-- Belum ada data.
+- `albert_william`: 50
 
 ### berat tengkuk
 - Belum ada data.

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-20T15:51:43",
+  "generated_at": "2026-07-20T17:09:48",
   "contract": {
     "version": "medsign-clinical-full-v1",
     "frame_count": 30,
@@ -206,7 +206,7 @@
     "signer_id": null,
     "max_empty_frame_ratio": 0.1
   },
-  "total_valid_samples": 1713,
+  "total_valid_samples": 1838,
   "total_invalid_samples": 270,
   "counts": {
     "sakit": 65,
@@ -236,8 +236,8 @@
     "pusing": 75,
     "kepala": 75,
     "tensi": 30,
-    "darah": 0,
-    "tinggi": 0,
+    "darah": 75,
+    "tinggi": 50,
     "berat tengkuk": 0,
     "leher": 45,
     "jantung": 0,
@@ -501,8 +501,12 @@
     "tensi": {
       "albert_cheng": 30
     },
-    "darah": {},
-    "tinggi": {},
+    "darah": {
+      "albert_cheng": 75
+    },
+    "tinggi": {
+      "albert_william": 50
+    },
     "berat tengkuk": {},
     "leher": {
       "synthetic": 45
@@ -730,8 +734,8 @@
     "pusing": 0.0,
     "kepala": 0.0,
     "tensi": 0.0,
-    "darah": null,
-    "tinggi": null,
+    "darah": 0.0,
+    "tinggi": 0.0,
     "berat tengkuk": null,
     "leher": 0.0,
     "jantung": null,
