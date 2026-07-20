@@ -33,7 +33,7 @@ class SLTAdapterService:
         if resolved_path.exists():
             try:
                 mtime = resolved_path.stat().st_mtime
-                if model_loader.model_mtime != mtime:
+                if not model_loader.loaded or model_loader.interpreter is None or model_loader.model_mtime != mtime:
                     print(f"[SLT_ADAPTER] Mendeteksi perubahan model disk. Memuat ulang model: {resolved_path}")
                     model_loader.load(model_path)
             except Exception as e:
@@ -62,7 +62,7 @@ class SLTAdapterService:
         if resolved_path.exists():
             try:
                 mtime = resolved_path.stat().st_mtime
-                if model_loader.alphabet_mtime != mtime:
+                if not model_loader.alphabet_loaded or model_loader.alphabet_interpreter is None or model_loader.alphabet_mtime != mtime:
                     print(f"[SLT_ADAPTER] Mendeteksi perubahan model abjad disk. Memuat ulang: {resolved_path}")
                     model_loader.load_alphabet(model_path)
             except Exception as e:
