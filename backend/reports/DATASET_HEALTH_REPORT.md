@@ -1,6 +1,6 @@
 # DATASET_HEALTH_REPORT
 
-Generated at: 2026-07-18T14:07:26
+Generated at: 2026-07-20T15:51:43
 
 ## Contract
 
@@ -14,7 +14,7 @@ Generated at: 2026-07-18T14:07:26
 - Filter label: `all`
 - Filter signer: `all`
 - Max empty frame ratio: `10.00%`
-- Valid samples: **1648**
+- Valid samples: **1713**
 - Invalid samples: **270**
 
 ## Samples Per Label
@@ -39,10 +39,10 @@ Generated at: 2026-07-18T14:07:26
 | `sesak` | 60 | 2 | 0.00% | ok |
 | `napas` | 15 | 1 | 0.00% | low_sample |
 | `dada` | 83 | 4 | 0.00% | ok |
-| `dahak` | 20 | 1 | 0.00% | low_sample |
+| `dahak` | 65 | 2 | 0.00% | ok |
 | `pilek` | 20 | 1 | 0.00% | low_sample |
 | `flu` | 0 | 0 | - | missing |
-| `tenggorokan` | 65 | 2 | 0.00% | ok |
+| `tenggorokan` | 85 | 2 | 0.00% | ok |
 | `paru-paru` | 30 | 2 | 0.00% | ok |
 | `asma` | 30 | 2 | 0.00% | ok |
 | `pusing` | 75 | 2 | 0.00% | ok |
@@ -284,6 +284,7 @@ Generated at: 2026-07-18T14:07:26
 - `synthetic`: 45
 
 ### dahak
+- `albert_cheng`: 45
 - `albert_william`: 20
 
 ### pilek
@@ -293,7 +294,7 @@ Generated at: 2026-07-18T14:07:26
 - Belum ada data.
 
 ### tenggorokan
-- `albert_cheng`: 20
+- `albert_cheng`: 40
 - `synthetic`: 45
 
 ### paru-paru

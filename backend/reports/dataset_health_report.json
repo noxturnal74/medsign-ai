@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-18T14:07:26",
+  "generated_at": "2026-07-20T15:51:43",
   "contract": {
     "version": "medsign-clinical-full-v1",
     "frame_count": 30,
@@ -206,7 +206,7 @@
     "signer_id": null,
     "max_empty_frame_ratio": 0.1
   },
-  "total_valid_samples": 1648,
+  "total_valid_samples": 1713,
   "total_invalid_samples": 270,
   "counts": {
     "sakit": 65,
@@ -227,10 +227,10 @@
     "sesak": 60,
     "napas": 15,
     "dada": 83,
-    "dahak": 20,
+    "dahak": 65,
     "pilek": 20,
     "flu": 0,
-    "tenggorokan": 65,
+    "tenggorokan": 85,
     "paru-paru": 30,
     "asma": 30,
     "pusing": 75,
@@ -471,6 +471,7 @@
       "synthetic": 45
     },
     "dahak": {
+      "albert_cheng": 45,
       "albert_william": 20
     },
     "pilek": {
@@ -478,7 +479,7 @@
     },
     "flu": {},
     "tenggorokan": {
-      "albert_cheng": 20,
+      "albert_cheng": 40,
       "synthetic": 45
     },
     "paru-paru": {
