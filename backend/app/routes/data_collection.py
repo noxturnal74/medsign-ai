@@ -283,6 +283,16 @@ def finalize_model(request: FinalizeModelRequest):
             dest_tflite = models_dir / "bisindo_alphabet_v1.tflite"
             dest_h5 = models_dir / "bisindo_alphabet.h5"
             
+            # Release file lock before copying on Windows
+            from app.ml.model import ModelLoader
+            loader = ModelLoader()
+            loader.alphabet_interpreter = None
+            loader.alphabet_loaded = False
+            import gc
+            gc.collect()
+            import time
+            time.sleep(0.1)
+            
             import shutil
             if temp_tflite.exists():
                 shutil.copy2(temp_tflite, dest_tflite)
@@ -318,6 +328,16 @@ def finalize_model(request: FinalizeModelRequest):
             dest_tflite = models_dir / "medsign_mvp_v1.tflite"
             dest_h5 = models_dir / "medsign_mvp_v1.h5"
             dest_json = models_dir / "medsign_mvp_v1_labels.json"
+            
+            # Release file lock before copying on Windows
+            from app.ml.model import ModelLoader
+            loader = ModelLoader()
+            loader.interpreter = None
+            loader.loaded = False
+            import gc
+            gc.collect()
+            import time
+            time.sleep(0.1)
             
             import shutil
             if temp_tflite.exists():

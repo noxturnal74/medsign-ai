@@ -27,6 +27,7 @@ class ModelLoader:
             cls._instance.loaded = False
             cls._instance.model_path = None
             cls._instance.model_mtime = None
+            cls._instance.alphabet_mtime = None
             cls._instance.contract = get_model_contract()
             cls._instance.classes = load_labels()
             cls._instance.model_classes = list(cls._instance.classes)
@@ -186,6 +187,10 @@ class ModelLoader:
             self.alphabet_input_details = self.alphabet_interpreter.get_input_details()
             self.alphabet_output_details = self.alphabet_interpreter.get_output_details()
             self.alphabet_loaded = True
+            try:
+                self.alphabet_mtime = path.stat().st_mtime
+            except Exception:
+                self.alphabet_mtime = None
             print(f"[ML_MODEL] Model abjad TFLite berhasil dimuat: {path}")
             return True
         except Exception as exc:

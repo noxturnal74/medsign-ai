@@ -46,6 +46,7 @@ class SLTAdapterService:
         return status
 
     def predict_bisindo(self, raw_frames: list) -> dict:
+        self.check_and_reload()
         start_time = time.perf_counter()
         processed_frames = [normalize_landmarks(frame) for frame in raw_frames]
         input_seq = pad_sequence(processed_frames, target_len=FRAME_COUNT)
@@ -54,6 +55,19 @@ class SLTAdapterService:
         return result
 
     def predict_spelling(self, raw_frame: list) -> dict:
+        # Check alphabet model reload
+        from pathlib import Path
+        model_path = Path("models/bisindo_alphabet_v1.tflite")
+        resolved_path = model_loader._resolve_model_path(model_path)
+        if resolved_path.exists():
+            try:
+                mtime = resolved_path.stat().st_mtime
+                if model_loader.alphabet_mtime != mtime:
+                    print(f"[SLT_ADAPTER] Mendeteksi perubahan model abjad disk. Memuat ulang: {resolved_path}")
+                    model_loader.load_alphabet(model_path)
+            except Exception as e:
+                print(f"[SLT_ADAPTER] Gagal memuat ulang model abjad: {e}")
+
         start_time = time.perf_counter()
         norm_frame = normalize_landmarks(raw_frame)
         result = model_loader.predict_alphabet(norm_frame.reshape(1, 63))
