@@ -192,13 +192,68 @@ def delete_dataset_samples_bulk(request: BulkDeleteSamplesRequest):
     }
 
 
+@router.get("/dataset/health-report")
+def get_dataset_health_report():
+    backend_dir = Path(__file__).resolve().parents[2]
+    report_path = backend_dir / "reports" / "DATASET_HEALTH_REPORT.md"
+    if report_path.exists():
+        try:
+            return {
+                "status": "success",
+                "exists": True,
+                "markdown": report_path.read_text(encoding="utf-8")
+            }
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
+    return {
+        "status": "success",
+        "exists": False,
+        "markdown": "# Laporan tidak ditemukan\nLakukan validasi atau training terlebih dahulu."
+    }
+
+@router.get("/dataset/motion/{label}")
+def get_dataset_motion(label: str):
+    backend_dir = Path(__file__).resolve().parents[2]
+    landmarks_dir = backend_dir / "data" / "landmarks" / label
+    if landmarks_dir.exists():
+        npy_files = list(landmarks_dir.glob("**/*.npy"))
+        if npy_files:
+            try:
+                arr = np.load(str(npy_files[0]))
+                if arr.shape == (30, 63):
+                    return {
+                        "status": "success",
+                        "has_data": True,
+                        "frames": arr.tolist()
+                    }
+            except Exception as e:
+                print(f"Error loading landmarks: {e}")
+    return {
+        "status": "success",
+        "has_data": False,
+        "frames": []
+    }
+
 @router.get("/dataset/balance")
-def get_dataset_balance():
+def get_dataset_balance(model_type: str = "clinical"):
     backend_dir = Path(__file__).resolve().parents[2]
     landmarks_dir = backend_dir / "data" / "landmarks"
 
-    from app.ml.labels import load_label_items
-    label_items = load_label_items()
+    if model_type == "alphabet":
+        alphabet_classes = [chr(i) for i in range(ord('A'), ord('Z') + 1)] + [str(i) for i in range(1, 10)]
+        label_items = [
+            {
+                "id": idx,
+                "slug": char,
+                "display": char,
+                "category": "Abjad" if char.isalpha() else "Angka",
+                "emergency": False
+            }
+            for idx, char in enumerate(alphabet_classes)
+        ]
+    else:
+        from app.ml.labels import load_label_items
+        label_items = load_label_items()
 
     signers_list = get_dataset_signers()
 
@@ -286,18 +341,22 @@ def finalize_model(request: FinalizeModelRequest):
             # Release file lock before copying on Windows
             from app.ml.model import ModelLoader
             loader = ModelLoader()
-            loader.alphabet_interpreter = None
-            loader.alphabet_loaded = False
-            import gc
-            gc.collect()
-            import time
-            time.sleep(0.1)
-            
-            import shutil
-            if temp_tflite.exists():
-                shutil.copy2(temp_tflite, dest_tflite)
-            if temp_h5.exists():
-                shutil.copy2(temp_h5, dest_h5)
+            with loader.lock:
+                loader.alphabet_interpreter = None
+                loader.alphabet_loaded = False
+                import gc
+                gc.collect()
+                import time
+                time.sleep(0.1)
+                
+                import shutil
+                if temp_tflite.exists():
+                    shutil.copy2(temp_tflite, dest_tflite)
+                if temp_h5.exists():
+                    shutil.copy2(temp_h5, dest_h5)
+                
+                # Load the new alphabet model immediately
+                loader.load_alphabet(dest_tflite)
                 
             return {"status": "success", "message": "Model abjad aktif berhasil digantikan dengan model baru."}
             
@@ -332,20 +391,24 @@ def finalize_model(request: FinalizeModelRequest):
             # Release file lock before copying on Windows
             from app.ml.model import ModelLoader
             loader = ModelLoader()
-            loader.interpreter = None
-            loader.loaded = False
-            import gc
-            gc.collect()
-            import time
-            time.sleep(0.1)
-            
-            import shutil
-            if temp_tflite.exists():
-                shutil.copy2(temp_tflite, dest_tflite)
-            if temp_h5.exists():
-                shutil.copy2(temp_h5, dest_h5)
-            if temp_json.exists():
-                shutil.copy2(temp_json, dest_json)
+            with loader.lock:
+                loader.interpreter = None
+                loader.loaded = False
+                import gc
+                gc.collect()
+                import time
+                time.sleep(0.1)
+                
+                import shutil
+                if temp_tflite.exists():
+                    shutil.copy2(temp_tflite, dest_tflite)
+                if temp_h5.exists():
+                    shutil.copy2(temp_h5, dest_h5)
+                if temp_json.exists():
+                    shutil.copy2(temp_json, dest_json)
+                
+                # Load the new clinical model immediately
+                loader.load(dest_tflite)
                 
             return {"status": "success", "message": "Model klinis aktif berhasil digantikan dengan model baru."}
             

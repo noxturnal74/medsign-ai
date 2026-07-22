@@ -234,7 +234,7 @@ export const useWebSocket = (url, onPrediction, isHandDetected, landmarks) => {
       } else {
         // Fallback Simulasi Lokal Demo Offline
         if (spellingMode) {
-          const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+          const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
           const pick = letters[Math.floor(Math.random() * letters.length)];
           const demoResult = {
             prediction: pick,

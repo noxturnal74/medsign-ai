@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { AppContext } from '../context/AppContext';
-import { MessageSquare, Zap } from 'lucide-react';
+import { MessageSquare, Zap, Send } from 'lucide-react';
 
 const DOCTOR_QUICKPHRASES = [
   'Tolong duduk dengan tenang.',
@@ -17,6 +17,7 @@ const DOCTOR_QUICKPHRASES = [
 
 export const DoctorPanel = () => {
   const { addLogEntry } = useContext(AppContext);
+  const [customMsg, setCustomMsg] = useState("");
 
   const handleQuickPhrase = (phrase) => {
     addLogEntry({
@@ -25,12 +26,46 @@ export const DoctorPanel = () => {
     });
   };
 
+  const handleSendCustom = (e) => {
+    e.preventDefault();
+    const cleanMsg = customMsg.trim();
+    if (!cleanMsg) return;
+    addLogEntry({
+      role: 'doctor',
+      text: cleanMsg
+    });
+    setCustomMsg("");
+  };
+
   return (
     <div className="glass-panel flex w-full flex-col gap-5 rounded-3xl p-6">
       <div className="flex items-center gap-2 border-b border-white/60 pb-3">
         <MessageSquare className="text-emerald-600" size={18} />
-        <span className="text-sm font-black text-slate-950">Respon Cepat ke Pasien</span>
+        <span className="text-sm font-black text-slate-950">Respon & Chat Dokter</span>
       </div>
+
+      {/* Custom Chat & TTS Input */}
+      <form onSubmit={handleSendCustom} className="flex flex-col gap-2 border-b border-slate-100 pb-4">
+        <label className="text-[10px] font-black text-slate-500 uppercase tracking-wider block">
+          Kirim Pesan / Diagnosis Kustom (Menghasilkan Suara TTS)
+        </label>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={customMsg}
+            onChange={(e) => setCustomMsg(e.target.value)}
+            placeholder="Ketik pesan konsultasi dokter disini..."
+            className="glass-input flex-1 rounded-xl px-3 py-2 text-xs font-semibold border border-slate-200 bg-white"
+          />
+          <button
+            type="submit"
+            className="glass-button glass-button-primary rounded-xl px-4 py-2 text-xs font-bold flex items-center gap-1.5"
+          >
+            <Send size={12} />
+            Kirim
+          </button>
+        </div>
+      </form>
 
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-2 text-xs font-black uppercase text-slate-600">

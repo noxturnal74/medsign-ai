@@ -117,8 +117,16 @@ export const useMediaPipe = (isActive, videoElement) => {
             };
             lastHandTimeRef.current = Date.now();
             
-            // Pass normalized landmarks to parent for predictions (take first hand as primary)
-            setLandmarks(filteredLandmarks[0]);
+            // Pass normalized landmarks to parent for predictions
+            let primaryHand = filteredLandmarks[0];
+            if (filteredLandmarks.length === 2 && filteredHandedness.length === 2) {
+              // Prioritize Right Hand to avoid index-swapping coordinate jitter when 2 hands are tracked
+              const rightHandIdx = filteredHandedness.findIndex(h => h.label === 'Right' || h.label === 'right');
+              if (rightHandIdx !== -1) {
+                primaryHand = filteredLandmarks[rightHandIdx];
+              }
+            }
+            setLandmarks(primaryHand);
             setIsHandDetected(true);
           } else {
             // If no hand is returned

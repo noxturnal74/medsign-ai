@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-20T17:09:48",
+  "generated_at": "2026-07-21T19:38:46",
   "contract": {
     "version": "medsign-clinical-full-v1",
     "frame_count": 30,
@@ -206,7 +206,7 @@
     "signer_id": null,
     "max_empty_frame_ratio": 0.1
   },
-  "total_valid_samples": 1838,
+  "total_valid_samples": 2882,
   "total_invalid_samples": 270,
   "counts": {
     "sakit": 65,
@@ -240,28 +240,28 @@
     "tinggi": 50,
     "berat tengkuk": 0,
     "leher": 45,
-    "jantung": 0,
-    "normal": 0,
-    "gula": 0,
-    "manis": 0,
-    "lemas": 45,
+    "jantung": 50,
+    "normal": 50,
+    "gula": 50,
+    "manis": 50,
+    "lemas": 94,
     "haus": 0,
-    "kencing": 0,
-    "luka": 0,
+    "kencing": 50,
+    "luka": 50,
     "kering": 0,
-    "kesemutan": 0,
-    "kaki": 45,
-    "lapar": 0,
-    "nyeri": 45,
-    "otot": 0,
-    "sendi": 0,
-    "tulang": 0,
-    "patah": 0,
-    "bengkak": 0,
-    "pegal": 0,
+    "kesemutan": 50,
+    "kaki": 93,
+    "lapar": 50,
+    "nyeri": 94,
+    "otot": 49,
+    "sendi": 50,
+    "tulang": 50,
+    "patah": 49,
+    "bengkak": 49,
+    "pegal": 49,
     "linu": 0,
-    "pinggang": 0,
-    "punggung": 45,
+    "pinggang": 53,
+    "punggung": 94,
     "gerak": 0,
     "benjolan": 0,
     "tumor": 0,
@@ -295,7 +295,7 @@
     "mengerti": 0,
     "tidak mengerti": 0,
     "darurat": 0,
-    "cepat": 0,
+    "cepat": 50,
     "keluarga": 0,
     "pulang": 0,
     "rumah sakit": 0,
@@ -366,7 +366,7 @@
     "buruk": 0,
     "ringan": 0,
     "sedang": 0,
-    "berat": 0,
+    "berat": 50,
     "stabil": 0,
     "tidak stabil": 0,
     "sadar": 0,
@@ -511,34 +511,68 @@
     "leher": {
       "synthetic": 45
     },
-    "jantung": {},
-    "normal": {},
-    "gula": {},
-    "manis": {},
+    "jantung": {
+      "glenn": 50
+    },
+    "normal": {
+      "albert_william": 50
+    },
+    "gula": {
+      "albert_cheng": 50
+    },
+    "manis": {
+      "albert_cheng": 50
+    },
     "lemas": {
+      "albert_cheng": 49,
       "synthetic": 45
     },
     "haus": {},
-    "kencing": {},
-    "luka": {},
+    "kencing": {
+      "albert_cheng": 50
+    },
+    "luka": {
+      "albert_cheng": 50
+    },
     "kering": {},
-    "kesemutan": {},
+    "kesemutan": {
+      "albert_cheng": 50
+    },
     "kaki": {
+      "albert_cheng": 48,
       "synthetic": 45
     },
-    "lapar": {},
+    "lapar": {
+      "albert_cheng": 50
+    },
     "nyeri": {
+      "albert_cheng": 49,
       "synthetic": 45
     },
-    "otot": {},
-    "sendi": {},
-    "tulang": {},
-    "patah": {},
-    "bengkak": {},
-    "pegal": {},
+    "otot": {
+      "albert_cheng": 49
+    },
+    "sendi": {
+      "albert_cheng": 50
+    },
+    "tulang": {
+      "albert_cheng": 50
+    },
+    "patah": {
+      "albert_cheng": 49
+    },
+    "bengkak": {
+      "albert_cheng": 49
+    },
+    "pegal": {
+      "albert_cheng": 49
+    },
     "linu": {},
-    "pinggang": {},
+    "pinggang": {
+      "albert_cheng": 53
+    },
     "punggung": {
+      "albert_cheng": 49,
       "synthetic": 45
     },
     "gerak": {},
@@ -586,7 +620,9 @@
     "mengerti": {},
     "tidak mengerti": {},
     "darurat": {},
-    "cepat": {},
+    "cepat": {
+      "albert_cheng": 50
+    },
     "keluarga": {},
     "pulang": {},
     "rumah sakit": {},
@@ -669,7 +705,9 @@
     "buruk": {},
     "ringan": {},
     "sedang": {},
-    "berat": {},
+    "berat": {
+      "albert_cheng": 50
+    },
     "stabil": {},
     "tidak stabil": {},
     "sadar": {},
@@ -738,27 +776,27 @@
     "tinggi": 0.0,
     "berat tengkuk": null,
     "leher": 0.0,
-    "jantung": null,
-    "normal": null,
-    "gula": null,
-    "manis": null,
+    "jantung": 0.0,
+    "normal": 0.0,
+    "gula": 0.0,
+    "manis": 0.0,
     "lemas": 0.0,
     "haus": null,
-    "kencing": null,
-    "luka": null,
+    "kencing": 0.0,
+    "luka": 0.0,
     "kering": null,
-    "kesemutan": null,
+    "kesemutan": 0.0,
     "kaki": 0.0,
-    "lapar": null,
+    "lapar": 0.0,
     "nyeri": 0.0,
-    "otot": null,
-    "sendi": null,
-    "tulang": null,
-    "patah": null,
-    "bengkak": null,
-    "pegal": null,
+    "otot": 0.0,
+    "sendi": 0.0,
+    "tulang": 0.0,
+    "patah": 0.0,
+    "bengkak": 0.0,
+    "pegal": 0.0,
     "linu": null,
-    "pinggang": null,
+    "pinggang": 0.0,
     "punggung": 0.0,
     "gerak": null,
     "benjolan": null,
@@ -793,7 +831,7 @@
     "mengerti": null,
     "tidak mengerti": null,
     "darurat": null,
-    "cepat": null,
+    "cepat": 0.0,
     "keluarga": null,
     "pulang": null,
     "rumah sakit": null,
@@ -864,7 +902,7 @@
     "buruk": null,
     "ringan": null,
     "sedang": null,
-    "berat": null,
+    "berat": 0.0,
     "stabil": null,
     "tidak stabil": null,
     "sadar": null,

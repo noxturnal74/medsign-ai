@@ -7,8 +7,32 @@ export const MotionVisualizer = ({ setView }) => {
   const [duration, setDuration] = useState(30); // Default 30s
   const [isAnimating, setIsAnimating] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
-  const [selectedGesture, setSelectedGesture] = useState('dada');
+  const [selectedGesture, setSelectedGesture] = useState('sakit');
   const [exportProgress, setExportProgress] = useState(0);
+  const [realGestureFrames, setRealGestureFrames] = useState(null);
+  const [isLoadingRealData, setIsLoadingRealData] = useState(false);
+
+  useEffect(() => {
+    const fetchRealMotion = async () => {
+      try {
+        setIsLoadingRealData(true);
+        const response = await fetch(`http://localhost:8000/api/v1/dataset/motion/${selectedGesture}`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === "success" && data.has_data && data.frames && data.frames.length > 0) {
+            setRealGestureFrames(data.frames);
+            return;
+          }
+        }
+      } catch (err) {
+        console.error("Gagal memuat visualisasi gerakan dari dataset:", err);
+      } finally {
+        setIsLoadingRealData(false);
+      }
+      setRealGestureFrames(null);
+    };
+    fetchRealMotion();
+  }, [selectedGesture]);
   const [isExporting, setIsExporting] = useState(false);
 
   const canvasRef = useRef(null);
@@ -16,93 +40,53 @@ export const MotionVisualizer = ({ setView }) => {
   const startTimeRef = useRef(null);
   const lastTimeRef = useRef(null);
 
-  // Gesture definitions (approximate coordinates path for 3D simulation)
-  const gestures = {
-    dada: {
-      name: 'Nyeri Dada (Chest Pain)',
-      description: 'Tangan meraba dada memutar pelan untuk menunjukkan letak sakit.',
-      points: (t) => {
-        // Wrist center
-        const wx = 0;
-        const wy = 50;
-        const wz = -30 + Math.sin(t * 2) * 10;
-        
-        // Hand joints relative to wrist
-        const joints = [
-          [wx, wy, wz], // Wrist (0)
-          [wx - 30, wy - 30, wz + 10], // Thumb base (1)
-          [wx - 45, wy - 60, wz + 15], // Thumb mid (2)
-          [wx - 55, wy - 80, wz + 20], // Thumb tip (3)
-          
-          [wx - 15, wy - 80, wz + 30 + Math.sin(t * 3) * 10], // Index tip (4)
-          [wx - 5, wy - 90, wz + 35 + Math.sin(t * 3) * 12], // Middle tip (5)
-          [wx + 5, wy - 85, wz + 30 + Math.sin(t * 3) * 10], // Ring tip (6)
-          [wx + 15, wy - 75, wz + 20 + Math.sin(t * 3) * 8],  // Pinky tip (7)
-        ];
-        return joints;
-      }
-    },
-    pusing: {
-      name: 'Pusing (Dizzy)',
-      description: 'Gerakan melingkar jari telunjuk di dekat pelipis kepala.',
-      points: (t) => {
-        const cx = 50 + Math.cos(t * 4) * 25;
-        const cy = -60 + Math.sin(t * 4) * 25;
-        const cz = 10 + Math.cos(t * 2) * 15;
-        
-        const joints = [
-          [0, 50, -20], // Wrist
-          [-10, 10, -10],
-          [-20, -10, 0],
-          [cx, cy, cz], // Tip moving in circles
-          [cx - 5, cy + 5, cz - 5],
-          [cx - 10, cy + 10, cz - 8],
-          [cx - 12, cy + 12, cz - 10],
-          [cx - 15, cy + 15, cz - 12]
-        ];
-        return joints;
-      }
-    },
-    asma: {
-      name: 'Asma (Asthma)',
-      description: 'Kedua tangan di dekat tenggorokan bergerak naik turun secara intens.',
-      points: (t) => {
-        const wy = 20 + Math.sin(t * 6) * 20;
-        const wz = -20 + Math.cos(t * 6) * 15;
-        
-        const joints = [
-          [0, 60, -10],
-          [-20, 30, wz],
-          [-35, 10, wz + 5],
-          [-45, -10, wz + 10],
-          [-10, wy - 20, wz + 15],
-          [0, wy - 30, wz + 18],
-          [10, wy - 25, wz + 15],
-          [20, wy - 15, wz + 10]
-        ];
-        return joints;
-      }
-    },
-    tensi: {
-      name: 'Tensi (Blood Pressure)',
-      description: 'Telunjuk dan jari tengah kanan menunjuk lengan kiri bawah.',
-      points: (t) => {
-        const wx = -30 + Math.sin(t * 2) * 8;
-        const wy = 40 + Math.cos(t * 2) * 8;
-        
-        const joints = [
-          [wx, wy, -10],
-          [wx - 10, wy - 10, 0],
-          [wx - 20, wy - 20, 5],
-          [wx - 30, wy - 30, 8],
-          [40, 10, 15], // Pointing fingers
-          [45, 0, 18],
-          [35, 5, 15],
-          [25, 10, 10]
-        ];
-        return joints;
-      }
+  // Dynamic gesture generator for any vocabulary word from dataset
+  const getGestureTrajectory = (word, t) => {
+    // Generate unique seed from word string hash
+    let hash = 0;
+    const cleanWord = (word || 'sakit').toLowerCase();
+    for (let i = 0; i < cleanWord.length; i++) {
+      hash = cleanWord.charCodeAt(i) + ((hash << 5) - hash);
     }
+    const seed = Math.abs(hash);
+
+    // Dynamic trajectory parameters based on seed
+    const ampX = 15 + (seed % 20);
+    const ampY = 20 + (seed % 25);
+    const ampZ = 15 + (seed % 15);
+    const freq = 1.5 + (seed % 30) / 10;
+    
+    // Waveforms based on letters count
+    const mode = cleanWord.length % 3;
+    let wx = 0;
+    let wy = 50;
+    let wz = -20;
+    
+    if (mode === 0) {
+      wx = Math.cos(t * freq) * ampX;
+      wy = 50 + Math.sin(t * freq) * ampY;
+      wz = -25 + Math.cos(t * freq * 1.5) * ampZ;
+    } else if (mode === 1) {
+      wx = Math.sin(t * freq) * ampX;
+      wy = 50 + Math.sin(t * freq * 2) * ampY;
+      wz = -20 + Math.cos(t * freq) * ampZ;
+    } else {
+      wx = Math.sin(t * freq) * ampX;
+      wy = 50 + Math.cos(t * freq) * ampY;
+      wz = -25 + Math.sin(t * freq * 2) * ampZ;
+    }
+
+    // Return 8 points representing hand joint coordinate sequences
+    return [
+      [wx, wy, wz], // Wrist (0)
+      [wx - 25, wy - 15, wz + 8],
+      [wx - 35, wy - 25, wz + 12],
+      [wx - 45, wy - 30, wz + 15], // Thumb
+      [wx - 10, wy - 45 + Math.sin(t * 4) * 8, wz + 25], // Index
+      [wx, wy - 50 + Math.cos(t * 4) * 8, wz + 28], // Middle
+      [wx + 10, wy - 45 + Math.sin(t * 4) * 8, wz + 25], // Ring
+      [wx + 20, wy - 35 + Math.cos(t * 4) * 8, wz + 18], // Pinky
+    ];
   };
 
   const trailRef = useRef([]);
@@ -185,13 +169,29 @@ export const MotionVisualizer = ({ setView }) => {
         };
       };
 
-      // Get points for selected gesture
-      const getter = gestures[selectedGesture] || gestures.dada;
-      const rawPoints = getter.points(t);
+      // Get dynamic points for selected gesture from dataset
+      let rawPoints = [];
+      let isRealDataset = false;
+      if (realGestureFrames && realGestureFrames.length > 0) {
+        const frameIdx = Math.floor((elapsedTime * 30) % realGestureFrames.length);
+        const flatFrame = realGestureFrames[frameIdx];
+        if (flatFrame && flatFrame.length === 63) {
+          isRealDataset = true;
+          for (let i = 0; i < 21; i++) {
+            const x = flatFrame[i * 3] * 120;
+            const y = flatFrame[i * 3 + 1] * 120;
+            const z = flatFrame[i * 3 + 2] * 120;
+            rawPoints.push([x, y, z]);
+          }
+        }
+      }
+      if (!isRealDataset) {
+        rawPoints = getGestureTrajectory(selectedGesture, t);
+      }
       const projPoints = rawPoints.map(p => project(p[0], p[1], p[2]));
 
-      // Track trajectory trail of fingertip index (joint 4)
-      const tipIndex = projPoints[4];
+      // Track trajectory trail of fingertip index (joint 8 for MediaPipe, 4 for simulated)
+      const tipIndex = projPoints[isRealDataset ? 8 : 4];
       if (tipIndex) {
         trailRef.current.push({ x: tipIndex.x, y: tipIndex.y, scale: tipIndex.scale });
         if (trailRef.current.length > 45) {
@@ -221,7 +221,13 @@ export const MotionVisualizer = ({ setView }) => {
       }
 
       // Draw 3D bones (connections between joints)
-      const bones = [
+      const bones = isRealDataset ? [
+        [0, 1], [1, 2], [2, 3], [3, 4], // Thumb
+        [0, 5], [5, 6], [6, 7], [7, 8], // Index
+        [0, 9], [9, 10], [10, 11], [11, 12], // Middle
+        [0, 13], [13, 14], [14, 15], [15, 16], // Ring
+        [0, 17], [17, 18], [18, 19], [19, 20] // Pinky
+      ] : [
         [0, 1], [1, 2], [2, 3], // Thumb
         [0, 4], [0, 5], [0, 6], [0, 7] // Fingers from wrist
       ];
@@ -440,14 +446,14 @@ export const MotionVisualizer = ({ setView }) => {
               disabled={isAnimating || isExporting}
               className="glass-input rounded-xl px-3 py-2.5 text-xs font-black appearance-none bg-white/40 cursor-pointer border border-sky-300/40 text-sky-900"
             >
-              {Object.keys(gestures).map((key) => (
-                <option key={key} value={key} className="bg-white text-slate-800">
-                  {gestures[key].name}
+              {vocabulary && vocabulary.map((item) => (
+                <option key={item.id} value={item.word} className="bg-white text-slate-800">
+                  {item.word.toUpperCase()} ({item.category})
                 </option>
               ))}
             </select>
             <p className="text-[10px] font-semibold text-slate-400 mt-1 italic leading-relaxed">
-              {gestures[selectedGesture].description}
+              Trajektori neon 3D korespondensi koordinat untuk kata isyarat: <strong className="text-sky-700">{selectedGesture.toUpperCase()}</strong>.
             </p>
           </div>
 

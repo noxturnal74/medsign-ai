@@ -25,12 +25,7 @@ const MARKETING_SITE_URL =
   import.meta.env.VITE_MARKETING_SITE_URL ||
   'https://albert-william-saputra-portfolio.vercel.app/#projects';
 
-const metricTiles = [
-  { label: 'Abjad A-Z & Angka 1-9', value: '89.42%', note: 'uji lokal alphabet', tone: 'from-sky-300/80 to-cyan-200/70' },
-  { label: 'Model klinis', value: '40 kata', note: 'kosakata BISINDO medis', tone: 'from-emerald-300/80 to-teal-200/70' },
-  { label: 'Runtime', value: 'TFLite', note: 'siap CPU inference', tone: 'from-violet-300/75 to-sky-200/70' },
-  { label: 'Dataset', value: '1,869', note: 'sample lokal proyek', tone: 'from-rose-300/75 to-orange-200/70' }
-];
+
 
 const workflowCards = [
   {
@@ -74,6 +69,67 @@ const institutionLogos = [
 export const Home = ({ setView }) => {
   const { t, language } = useContext(AppContext);
   const scopeRef = useRef(null);
+  const [activeStage, setActiveStage] = React.useState(0);
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveStage((prev) => (prev + 1) % 4);
+    }, 1800);
+    return () => clearInterval(interval);
+  }, []);
+
+  const [stats, setStats] = React.useState({
+    alphabetAccuracy: '89.42%',
+    clinicalClasses: '47 kata',
+    runtime: 'TFLite',
+    datasetSamples: '1.938'
+  });
+
+  React.useEffect(() => {
+    const fetchRealStats = async () => {
+      try {
+        const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+        const cleanUrl = apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl;
+        
+        // 1. Fetch health status
+        const healthRes = await fetch(`${cleanUrl}/health`);
+        let outputClasses = 47;
+        let loaded = true;
+        if (healthRes.ok) {
+          const healthData = await healthRes.json();
+          outputClasses = healthData.output_class || 47;
+          loaded = healthData.model_loaded;
+        }
+
+        // 2. Fetch dataset balance
+        const balanceRes = await fetch(`${cleanUrl}/api/v1/dataset/balance`);
+        let totalSamples = 1938;
+        if (balanceRes.ok) {
+          const balanceData = await balanceRes.json();
+          if (balanceData && balanceData.balance) {
+            totalSamples = balanceData.balance.reduce((sum, item) => sum + (item.total || 0), 0);
+          }
+        }
+
+        setStats({
+          alphabetAccuracy: '89.42%',
+          clinicalClasses: `${outputClasses} kata`,
+          runtime: loaded ? 'TFLite' : 'Demo',
+          datasetSamples: totalSamples.toLocaleString('id-ID')
+        });
+      } catch (err) {
+        console.error("Gagal memuat statistik live:", err);
+      }
+    };
+    fetchRealStats();
+  }, []);
+
+  const metricTiles = [
+    { label: 'Abjad A-Z & Angka 1-9', value: stats.alphabetAccuracy, note: 'uji lokal alphabet', tone: 'from-sky-300/80 to-cyan-200/70' },
+    { label: 'Model klinis', value: stats.clinicalClasses, note: 'kosakata BISINDO medis', tone: 'from-emerald-300/80 to-teal-200/70' },
+    { label: 'Runtime', value: stats.runtime, note: 'siap CPU inference', tone: 'from-violet-300/75 to-sky-200/70' },
+    { label: 'Dataset', value: stats.datasetSamples, note: 'sample lokal proyek', tone: 'from-rose-300/75 to-orange-200/70' }
+  ];
 
   useEffect(() => {
     document.title = 'MedSign AI';
@@ -334,45 +390,153 @@ export const Home = ({ setView }) => {
 
       <section className="px-4 pb-12 pt-2 md:px-8 lg:px-12">
         <div className="mx-auto grid max-w-7xl gap-5 lg:grid-cols-[1fr_1fr]">
-          <div className="glass-panel glass-dark rounded-[32px] p-6 md:p-8" data-reveal>
-            <div className="mb-6 flex items-center justify-between gap-4">
+          <div className="glass-panel glass-dark rounded-[32px] p-6 md:p-8 flex flex-col gap-6" data-reveal>
+            <style>{`
+              @keyframes flowDash {
+                0% {
+                  stroke-dashoffset: 500;
+                }
+                100% {
+                  stroke-dashoffset: 0;
+                }
+              }
+              .animate-flow-dash {
+                animation: flowDash 6s linear infinite;
+              }
+              .glow-active-card {
+                box-shadow: 0 0 25px rgba(56, 189, 248, 0.12);
+              }
+            `}</style>
+
+            <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="text-xs font-bold text-cyan-200">Communication loop</p>
-                <h2 className="text-3xl font-black text-white">Pasien ke dokter dalam satu layar</h2>
+                <p className="text-[10px] font-bold text-sky-400 uppercase tracking-widest">Communication loop</p>
+                <h2 className="text-2xl font-black text-white leading-tight mt-1">Pasien ke dokter dalam satu layar</h2>
               </div>
-              <Activity size={28} className="text-emerald-300" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-500/10 text-sky-400">
+                <Activity size={20} className="animate-pulse" />
+              </div>
             </div>
 
-            <svg viewBox="0 0 520 170" className="h-auto w-full" role="img" aria-label="Alur kamera, model, teks, dan suara">
-              <defs>
-                <linearGradient id="flowGradient" x1="0" x2="1" y1="0" y2="0">
-                  <stop offset="0" stopColor="#38bdf8" />
-                  <stop offset="0.5" stopColor="#2dd4bf" />
-                  <stop offset="1" stopColor="#f9a8d4" />
-                </linearGradient>
-              </defs>
-              <path
-                className="flow-line"
-                d="M66 86 C148 20 206 152 288 84 S416 34 456 92"
-                fill="none"
-                stroke="url(#flowGradient)"
-                strokeWidth="8"
-                strokeLinecap="round"
-              />
+            {/* Glowing Interactive SVG Path */}
+            <div className="relative py-2 select-none">
+              <svg viewBox="0 0 520 170" className="h-auto w-full" role="img" aria-label="Alur kamera, model, teks, dan suara">
+                <defs>
+                  <linearGradient id="flowGradient" x1="0" x2="1" y1="0" y2="0">
+                    <stop offset="0" stopColor="#38bdf8" />
+                    <stop offset="0.5" stopColor="#2dd4bf" />
+                    <stop offset="1" stopColor="#f472b6" />
+                  </linearGradient>
+                  <linearGradient id="activeGradient" x1="0" x2="1" y1="0" y2="0">
+                    <stop offset="0" stopColor="#e0f2fe" />
+                    <stop offset="0.5" stopColor="#ccfbf1" />
+                    <stop offset="1" stopColor="#fce7f3" />
+                  </linearGradient>
+                </defs>
+
+                {/* Base connection path */}
+                <path
+                  d="M66 86 C 148 20, 206 152, 288 84 S 416 34, 456 92"
+                  fill="none"
+                  stroke="url(#flowGradient)"
+                  strokeWidth="6"
+                  strokeLinecap="round"
+                  className="opacity-20"
+                />
+
+                {/* Animated glow trail */}
+                <path
+                  d="M66 86 C 148 20, 206 152, 288 84 S 416 34, 456 92"
+                  fill="none"
+                  stroke="url(#activeGradient)"
+                  strokeWidth="6"
+                  strokeLinecap="round"
+                  strokeDasharray="80 320"
+                  className="animate-flow-dash"
+                />
+
+                {/* Interactive Node Coordinates Map */}
+                {[
+                  { label: 'Kamera', x: 66, y: 86, index: 0, glow: 'rgba(56, 189, 248, 0.4)' },
+                  { label: 'Model', x: 194, y: 92, index: 1, glow: 'rgba(45, 212, 191, 0.4)' },
+                  { label: 'Teks', x: 320, y: 82, index: 2, glow: 'rgba(251, 191, 36, 0.4)' },
+                  { label: 'Suara', x: 456, y: 92, index: 3, glow: 'rgba(244, 114, 182, 0.4)' }
+                ].map((node) => {
+                  const isActive = activeStage === node.index;
+                  return (
+                    <g key={node.label} className="cursor-pointer" onClick={() => setActiveStage(node.index)}>
+                      {/* Outer Ring Glow */}
+                      <circle
+                        cx={node.x}
+                        cy={node.y}
+                        r={isActive ? 32 : 26}
+                        fill="transparent"
+                        stroke={isActive ? node.glow : 'rgba(255,255,255,0.06)'}
+                        strokeWidth={isActive ? 4 : 1}
+                        className="transition-all duration-300"
+                      />
+                      {/* Node Circle */}
+                      <circle
+                        cx={node.x}
+                        cy={node.y}
+                        r="22"
+                        fill={isActive ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255,255,255,0.08)'}
+                        stroke="rgba(255,255,255,0.2)"
+                        strokeWidth="1.5"
+                        className="transition-all duration-300"
+                      />
+                      {/* Label Text */}
+                      <text
+                        x={node.x}
+                        y={node.y + 4}
+                        textAnchor="middle"
+                        fill={isActive ? '#f8fafc' : '#94a3b8'}
+                        fontSize="10"
+                        fontWeight="900"
+                        className="uppercase tracking-widest select-none transition-all duration-300"
+                      >
+                        {node.label}
+                      </text>
+                    </g>
+                  );
+                })}
+              </svg>
+            </div>
+
+            {/* Stage Description Cards Grid (Liquid Glass Approximation style) */}
+            <div className="grid grid-cols-2 gap-3 mt-2">
               {[
-                ['Kamera', 66, 86],
-                ['Model', 194, 92],
-                ['Teks', 320, 82],
-                ['Suara', 456, 92]
-              ].map(([label, x, y]) => (
-                <g key={label}>
-                  <circle cx={x} cy={y} r="34" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.28)" />
-                  <text x={x} y={y + 5} textAnchor="middle" fill="#f8fafc" fontSize="15" fontWeight="800">
-                    {label}
-                  </text>
-                </g>
-              ))}
-            </svg>
+                { title: "Kamera", desc: "Membaca 21 koordinat landmark jari tangan secara real-time.", tag: "MediaPipe Input", border: "border-sky-500/30", activeBg: "bg-sky-950/30 border-sky-400 text-sky-200" },
+                { title: "Model", desc: "Model AI GRU/LSTM menerjemahkan koordinat menjadi kata BISINDO.", tag: "Neural Net Inference", border: "border-teal-500/30", activeBg: "bg-teal-950/30 border-teal-400 text-teal-200" },
+                { title: "Teks", desc: "Hasil terjemahan terkonfirmasi tampil otomatis di layar medis.", tag: "Live Transcription", border: "border-amber-500/30", activeBg: "bg-amber-950/30 border-amber-400 text-amber-200" },
+                { title: "Suara", desc: "Asisten melafalkan suara verbal untuk didengar dokter.", tag: "Speech Synthesis", border: "border-pink-500/30", activeBg: "bg-pink-950/30 border-pink-400 text-pink-200" }
+              ].map((stage, idx) => {
+                const isActive = activeStage === idx;
+                return (
+                  <div
+                    key={stage.title}
+                    onClick={() => setActiveStage(idx)}
+                    className={`cursor-pointer rounded-2xl p-4 border transition-all duration-500 flex flex-col justify-between h-[120px] select-none ${
+                      isActive 
+                        ? `${stage.activeBg} glow-active-card scale-[1.01] shadow-inner`
+                        : `border-white/10 bg-slate-950/35 text-slate-400 hover:bg-slate-900/40 hover:border-white/20`
+                    }`}
+                  >
+                    <div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-black uppercase tracking-wider">{stage.title}</span>
+                        <span className="text-[8px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded-md bg-white/5 border border-white/10 text-slate-400">
+                          {stage.tag}
+                        </span>
+                      </div>
+                      <p className="text-[10px] font-semibold leading-relaxed mt-2.5">
+                        {stage.desc}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
           <div className="glass-panel rounded-[32px] p-6 md:p-8" data-reveal>

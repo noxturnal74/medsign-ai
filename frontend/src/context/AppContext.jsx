@@ -71,18 +71,158 @@ export const AppProvider = ({ children }) => {
   // State baru untuk abjad BISINDO Spelling Mode (A-Z)
   const [spellingMode, setSpellingMode] = useState(false);
   const [spelledText, setSpelledText] = useState("");
+  
+  // TTS Voice & Progress States
+  const [speakingText, setSpeakingText] = useState("");
+  const [speakingProgress, setSpeakingProgress] = useState(0);
+  const [isTtsPaused, setIsTtsPaused] = useState(false);
 
-  // Web Speech API for TTS
+  const pauseTts = useCallback(() => {
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      window.speechSynthesis.pause();
+      setIsTtsPaused(true);
+    }
+  }, []);
+
+  const resumeTts = useCallback(() => {
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      window.speechSynthesis.resume();
+      setIsTtsPaused(false);
+    }
+  }, []);
+
+  const stopTts = useCallback(() => {
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+      setIsTtsPaused(false);
+      setSpeakingText("");
+      setSpeakingProgress(0);
+    }
+  }, []);
+  const [availableVoices, setAvailableVoices] = useState([]);
+  const [selectedVoiceName, setSelectedVoiceNameState] = useState(() => {
+    return localStorage.getItem('medsign_selected_voice') || '';
+  });
+
+  const setSelectedVoiceName = (voiceName) => {
+    setSelectedVoiceNameState(voiceName);
+    localStorage.setItem('medsign_selected_voice', voiceName);
+  };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      const loadVoices = () => {
+        const voices = window.speechSynthesis.getVoices();
+        // Filter voices for Indonesian, English, or any available
+        setAvailableVoices(voices);
+      };
+      loadVoices();
+      if (window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+      }
+    }
+  }, []);
+
+  // AI Recommendation automatic sentence builder
+  const getSentenceSuggestions = useCallback((words) => {
+    if (!words || words.length === 0) return [];
+    const lowerWords = words.map(w => w.toLowerCase());
+    const suggestions = [];
+
+    if (lowerWords.includes('sakit') && lowerWords.includes('dada')) {
+      suggestions.push("Saya mengalami nyeri dada.");
+      suggestions.push("Dada saya sakit sekali.");
+    }
+    if (lowerWords.includes('sesak') || lowerWords.includes('napas')) {
+      suggestions.push("Saya merasa sesak napas.");
+      suggestions.push("Napas saya terasa berat.");
+    }
+    if (lowerWords.includes('pusing') || lowerWords.includes('kepala')) {
+      suggestions.push("Kepala saya terasa sangat pusing.");
+      suggestions.push("Saya pusing dan lemas.");
+    }
+    if (lowerWords.includes('mual') || lowerWords.includes('muntah')) {
+      suggestions.push("Perut saya mual dan ingin muntah.");
+    }
+    if (lowerWords.includes('demam') || lowerWords.includes('tinggi')) {
+      suggestions.push("Badan saya demam tinggi.");
+    }
+    if (lowerWords.includes('tensi') || lowerWords.includes('tinggi')) {
+      suggestions.push("Tekanan darah saya tinggi.");
+    }
+    if (lowerWords.includes('tolong') || lowerWords.includes('bantuan segera')) {
+      suggestions.push("Tolong, saya butuh bantuan medis segera!");
+    }
+
+    // Dynamic fallback matching any words
+    if (suggestions.length === 0) {
+      const joined = words.join(" dan ");
+      suggestions.push(`Saya merasakan ${joined}.`);
+      suggestions.push(`Keluhan saya adalah ${words.join(', ')}.`);
+    }
+
+    return Array.from(new Set(suggestions)).slice(0, 3);
+  }, []);
+
+  // Web Speech API for TTS with progress tracking and custom voice selection
   const speak = useCallback((text) => {
     if (!ttsEnabled || !window.speechSynthesis) return;
-    window.speechSynthesis.cancel(); // Cancel any current utterances
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'id-ID';
-    utterance.rate = 0.95;
+    window.speechSynthesis.cancel(); 
     
-    // Fallback if Indonesian voice is not preloaded/supported
+    setSpeakingText(text);
+    setSpeakingProgress(0);
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    
+    // Set custom voice if selected
+    if (selectedVoiceName && availableVoices.length > 0) {
+      const voice = availableVoices.find(v => v.name === selectedVoiceName);
+      if (voice) {
+        utterance.voice = voice;
+      }
+    } else {
+      utterance.lang = 'id-ID';
+    }
+    
+    utterance.rate = 0.95;
+
+    // Simulate progress in case browser doesn't trigger onboundary events properly
+    const durationEst = Math.max(1000, text.length * 75); // 75ms per character, min 1s
+    let elapsed = 0;
+    setIsTtsPaused(false);
+    
+    const progressInterval = setInterval(() => {
+      if (window.speechSynthesis.paused) return; // Pause the simulation too
+      elapsed += 40;
+      const pct = Math.min(100, (elapsed / durationEst) * 100);
+      setSpeakingProgress(pct);
+      if (pct >= 100) {
+        clearInterval(progressInterval);
+      }
+    }, 40);
+
+    utterance.onstart = () => {
+      setSpeakingProgress(0);
+    };
+
+    utterance.onend = () => {
+      clearInterval(progressInterval);
+      setSpeakingProgress(100);
+      setTimeout(() => {
+        setSpeakingText("");
+        setSpeakingProgress(0);
+        setIsTtsPaused(false);
+      }, 350);
+    };
+
+    utterance.onerror = () => {
+      clearInterval(progressInterval);
+      setSpeakingText("");
+      setSpeakingProgress(0);
+    };
+
     window.speechSynthesis.speak(utterance);
-  }, [ttsEnabled]);
+  }, [ttsEnabled, selectedVoiceName, availableVoices]);
 
   // Sentence functions
   const appendWord = useCallback((word) => {
@@ -139,7 +279,6 @@ export const AppProvider = ({ children }) => {
     if (entry.role === 'doctor') {
       speak(entry.text);
     } else if (entry.role === 'patient') {
-      // Find item in vocab to get correct pronunciation if word has space
       speak(entry.text);
     }
   }, [speak]);
@@ -184,7 +323,18 @@ export const AppProvider = ({ children }) => {
         clearSpelledText,
         language,
         setLanguage,
-        t
+        t,
+        // TTS & AI Suggestions
+        speakingText,
+        speakingProgress,
+        availableVoices,
+        selectedVoiceName,
+        setSelectedVoiceName,
+        getSentenceSuggestions,
+        isTtsPaused,
+        pauseTts,
+        resumeTts,
+        stopTts
       }}
     >
       {children}

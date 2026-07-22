@@ -89,9 +89,8 @@ export const CameraFeed = () => {
   // Reset last detected state (clear preview) if hand is not detected for more than 1.5 seconds
   useEffect(() => {
     if (!isHandDetected) {
-      lastAppendedWordRef.current = null; // Clear duplicate guard immediately when hand drops
-      
       const timeout = setTimeout(() => {
+        lastAppendedWordRef.current = null; // Clear duplicate guard after 1.5 seconds
         setLastDetected(null);
       }, 1500);
       return () => clearTimeout(timeout);

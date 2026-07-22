@@ -37,6 +37,16 @@ import {
   User,
 } from "lucide-react";
 
+const ALPHABET_LIST = [
+  ...Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i)),
+  ...Array.from({ length: 9 }, (_, i) => String(1 + i))
+].map((char, index) => ({
+  id: index + 1,
+  word: char,
+  category: char >= '0' && char <= '9' ? "Angka" : "Abjad",
+  emergency: false
+}));
+
 export const DataCollection = ({ setView }) => {
   const { vocabulary, refreshVocabulary } = useContext(AppContext);
   const [activeTab, setActiveTab] = useState(() => {
@@ -87,6 +97,71 @@ export const DataCollection = ({ setView }) => {
       "http://localhost:8000",
   );
   const [connectionTestResult, setConnectionTestResult] = useState(null);
+
+  const [balanceData, setBalanceData] = useState(null);
+  const [balanceLoading, setBalanceLoading] = useState(false);
+  const [balanceError, setBalanceError] = useState(null);
+  const [balanceModelType, setBalanceModelType] = useState("clinical");
+  const [showHealthModal, setShowHealthModal] = useState(false);
+  const [healthMarkdown, setHealthMarkdown] = useState("");
+  const [loadingHealth, setLoadingHealth] = useState(false);
+  const [recordModelType, setRecordModelType] = useState("clinical");
+
+  const handleOpenHealthReport = async () => {
+    try {
+      setLoadingHealth(true);
+      const apiBaseUrl = apiUrl;
+      const response = await fetch(
+        `${apiBaseUrl.endsWith("/") ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/health-report`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        if (data.exists) {
+          setHealthMarkdown(data.markdown);
+        } else {
+          setHealthMarkdown("# Laporan Kesehatan belum dibuat.\nSelesaikan latihan (training) model minimal 1 kali untuk menghasilkan laporan.");
+        }
+      } else {
+        setHealthMarkdown("# Gagal menghubungkan ke backend\nPastikan server backend aktif.");
+      }
+    } catch (err) {
+      console.error(err);
+      setHealthMarkdown("# Gagal memuat file\nError koneksi jaringan.");
+    } finally {
+      setLoadingHealth(false);
+      setShowHealthModal(true);
+    }
+  };
+
+  const fetchBalance = async () => {
+    try {
+      setBalanceLoading(true);
+      const apiBaseUrl = apiUrl;
+      const response = await fetch(
+        `${apiBaseUrl.endsWith("/") ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/balance?model_type=${balanceModelType}`,
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setBalanceData(data);
+        setBalanceError(null);
+      } else {
+        setBalanceError(
+          `Backend membalas error (HTTP ${response.status}). Angka di bawah BUKAN status data sebenarnya.`,
+        );
+      }
+    } catch (err) {
+      console.error(err);
+      setBalanceError(
+        `Gagal terhubung ke backend di "${apiUrl}". Angka di bawah BUKAN status data sebenarnya - pastikan server backend aktif dan URL API benar.`,
+      );
+    } finally {
+      setBalanceLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchBalance();
+  }, [apiUrl, balanceModelType]);
 
   const testApiConnection = async () => {
     setConnectionTestResult({ type: "info", msg: "Menguji koneksi..." });
@@ -1179,22 +1254,36 @@ export const DataCollection = ({ setView }) => {
                 </div>
               </div>
 
-              <div className="relative w-full sm:w-44">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Cari kata..."
-                  className="glass-input w-full rounded-xl py-1.5 pl-7 pr-3 text-[10px] font-semibold shadow-inner"
-                  autoComplete="off"
-                  autoCorrect="off"
-                  autoCapitalize="none"
-                  spellCheck="false"
-                />
+              <div className="flex gap-2 w-full sm:w-auto items-center">
+                <select
+                  value={recordModelType}
+                  onChange={(e) => {
+                    setRecordModelType(e.target.value);
+                    setSelectedWords([]);
+                    setActiveCategory("Semua");
+                  }}
+                  className="glass-input rounded-xl px-2.5 py-1.5 text-[10px] font-black bg-white/40 cursor-pointer border border-sky-300/40 text-sky-900 shadow-sm"
+                >
+                  <option value="clinical">Kosakata Klinis</option>
+                  <option value="alphabet">Abjad & Angka 1-9</option>
+                </select>
+                <div className="relative w-full sm:w-44">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Cari kata..."
+                    className="glass-input w-full rounded-xl py-1.5 pl-7 pr-3 text-[10px] font-semibold shadow-inner"
+                    autoComplete="off"
+                    autoCorrect="off"
+                    autoCapitalize="none"
+                    spellCheck="false"
+                  />
                 <Search
                   className="absolute left-2.5 top-2.5 text-slate-400"
                   size={11}
                 />
+                </div>
               </div>
             </div>
 
@@ -1596,10 +1685,7 @@ export const DataCollection = ({ setView }) => {
     );
   };
   const renderBalanceChecker = () => {
-    const [balanceData, setBalanceData] = useState(null);
-    const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
-    const [fetchError, setFetchError] = useState(null);
     
     const [activeModalLabel, setActiveModalLabel] = useState(null);
     const [activeModalDisplay, setActiveModalDisplay] = useState("");
@@ -1701,39 +1787,7 @@ export const DataCollection = ({ setView }) => {
       }
     };
 
-    const fetchBalance = async () => {
-      try {
-        setLoading(true);
-        const apiBaseUrl = apiUrl;
-        const response = await fetch(
-          `${apiBaseUrl.endsWith("/") ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/balance`,
-        );
-        if (response.ok) {
-          const data = await response.json();
-          setBalanceData(data);
-          setFetchError(null);
-        } else {
-          setFetchError(
-            `Backend membalas error (HTTP ${response.status}). Angka di bawah BUKAN status data sebenarnya.`,
-          );
-        }
-      } catch (err) {
-        console.error(err);
-        // Fetch gagal total (server tidak jalan, salah URL API, atau CORS).
-        // Jangan biarkan ini tampil sebagai "0 Kata" seolah dataset kosong -
-        // itu menyesatkan karena sampel bisa saja sudah ada di backend, hanya
-        // saja kita gagal terhubung untuk membacanya.
-        setFetchError(
-          `Gagal terhubung ke backend di "${apiUrl}". Angka di bawah BUKAN status data sebenarnya - pastikan server backend aktif dan URL API benar.`,
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    useEffect(() => {
-      fetchBalance();
-    }, [apiUrl]);
+    
 
     const filtered = useMemo(() => {
       if (!balanceData) return [];
@@ -1769,7 +1823,7 @@ export const DataCollection = ({ setView }) => {
       document.body.removeChild(link);
     };
 
-    if (loading) {
+    if (balanceLoading) {
       return (
         <div className="flex justify-center items-center py-20">
           <div className="flex flex-col items-center gap-3">
@@ -1791,7 +1845,7 @@ export const DataCollection = ({ setView }) => {
 
     return (
       <div className="flex flex-col gap-6 animate-slide-up">
-        {fetchError && (
+        {balanceError && (
           <div className="glass-panel rounded-3xl p-4 border border-rose-400/40 bg-rose-500/10 shadow-md flex items-start gap-2.5">
             <AlertTriangle size={18} className="text-rose-600 mt-0.5 shrink-0" />
             <div>
@@ -1799,7 +1853,7 @@ export const DataCollection = ({ setView }) => {
                 Tidak bisa memuat status dataset dari backend
               </span>
               <p className="text-[11px] font-semibold text-rose-700">
-                {fetchError}
+                {balanceError}
               </p>
             </div>
           </div>
@@ -1876,6 +1930,14 @@ export const DataCollection = ({ setView }) => {
               </p>
             </div>
             <div className="flex gap-2 w-full sm:w-auto">
+              <select
+                value={balanceModelType}
+                onChange={(e) => setBalanceModelType(e.target.value)}
+                className="glass-input rounded-xl px-2.5 py-1.5 text-[11px] font-black bg-white/40 cursor-pointer border border-sky-300/40 text-sky-900 shadow-sm"
+              >
+                <option value="clinical">Kosakata Klinis</option>
+                <option value="alphabet">Abjad & Angka 1-9</option>
+              </select>
               <div className="relative flex-1 sm:w-48">
                 <input
                   type="text"
@@ -1895,6 +1957,12 @@ export const DataCollection = ({ setView }) => {
                 title="Refresh data"
               >
                 <RefreshCw size={13} />
+              </button>
+              <button
+                onClick={handleOpenHealthReport}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-500/10 border border-emerald-300/30 px-4 py-2 text-xs font-bold text-emerald-700 hover:bg-emerald-500/25 active:scale-[0.98] transition-all shadow-sm"
+              >
+                Laporan Kesehatan (.md)
               </button>
               <button
                 onClick={handleExportCSV}
@@ -1964,6 +2032,7 @@ export const DataCollection = ({ setView }) => {
                     <td className="py-3 px-4 text-right whitespace-nowrap">
                       <button
                         onClick={() => {
+                          setRecordModelType(balanceModelType);
                           setSelectedWords([b.label]);
                           handleTabChange("record");
                         }}
@@ -2132,6 +2201,16 @@ export const DataCollection = ({ setView }) => {
     const [architecture, setArchitecture] = useState("gru");
     const [epochs, setEpochs] = useState(120);
     const [selectedWords, setSelectedWords] = useState([]);
+
+    // Auto-select recommended words on mount or when balanceData changes
+    useEffect(() => {
+      if (balanceData && selectedWords.length === 0) {
+        const recommended = balanceData.balance
+          .filter(b => b.status === "Cukup")
+          .map(b => b.label);
+        setSelectedWords(recommended);
+      }
+    }, [balanceData]);
     const [isTraining, setIsTraining] = useState(false);
     const [logs, setLogs] = useState("");
     const [progress, setProgress] = useState(0);
@@ -2177,12 +2256,13 @@ export const DataCollection = ({ setView }) => {
     const [trainingCategory, setTrainingCategory] = useState("Semua");
 
     const trainingCategories = useMemo(() => {
-      const cats = new Set(vocabulary.map((v) => v.category));
+      const list = modelType === "alphabet" ? ALPHABET_LIST : vocabulary;
+      const cats = new Set(list.map((v) => v.category));
       return ["Semua", ...Array.from(cats)];
-    }, [vocabulary]);
+    }, [vocabulary, modelType]);
 
     const trainingFilteredWords = useMemo(() => {
-      let list = vocabulary;
+      let list = modelType === "alphabet" ? ALPHABET_LIST : vocabulary;
       if (trainingCategory !== "Semua") {
         list = list.filter((v) => v.category === trainingCategory);
       }
@@ -2197,7 +2277,7 @@ export const DataCollection = ({ setView }) => {
         seen.add(v.word);
         return true;
       });
-    }, [vocabulary, trainingCategory, trainingSearch]);
+    }, [vocabulary, trainingCategory, trainingSearch, modelType]);
 
     useEffect(() => {
       if (logContainerRef.current) {
@@ -2440,6 +2520,22 @@ export const DataCollection = ({ setView }) => {
                   className="hover:text-slate-800 disabled:opacity-40"
                 >
                   Pilih Semua
+                </button>
+                <span>|</span>
+                <button
+                  type="button"
+                  disabled={isTraining}
+                  onClick={() => {
+                    if (balanceData) {
+                      const recommended = balanceData.balance
+                        .filter((b) => b.status === "Cukup")
+                        .map((b) => b.label);
+                      setSelectedWords(recommended);
+                    }
+                  }}
+                  className="text-emerald-700 font-extrabold hover:text-emerald-800 disabled:opacity-40"
+                >
+                  Pilih Rekomendasi
                 </button>
                 <span>|</span>
                 <button

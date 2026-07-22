@@ -1,6 +1,6 @@
 # DATASET_HEALTH_REPORT
 
-Generated at: 2026-07-20T17:09:48
+Generated at: 2026-07-21T19:38:46
 
 ## Contract
 
@@ -14,7 +14,7 @@ Generated at: 2026-07-20T17:09:48
 - Filter label: `all`
 - Filter signer: `all`
 - Max empty frame ratio: `10.00%`
-- Valid samples: **1838**
+- Valid samples: **2882**
 - Invalid samples: **270**
 
 ## Samples Per Label
@@ -52,28 +52,28 @@ Generated at: 2026-07-20T17:09:48
 | `tinggi` | 50 | 1 | 0.00% | ok |
 | `berat tengkuk` | 0 | 0 | - | missing |
 | `leher` | 45 | 1 | 0.00% | ok |
-| `jantung` | 0 | 0 | - | missing |
-| `normal` | 0 | 0 | - | missing |
-| `gula` | 0 | 0 | - | missing |
-| `manis` | 0 | 0 | - | missing |
-| `lemas` | 45 | 1 | 0.00% | ok |
+| `jantung` | 50 | 1 | 0.00% | ok |
+| `normal` | 50 | 1 | 0.00% | ok |
+| `gula` | 50 | 1 | 0.00% | ok |
+| `manis` | 50 | 1 | 0.00% | ok |
+| `lemas` | 94 | 2 | 0.00% | ok |
 | `haus` | 0 | 0 | - | missing |
-| `kencing` | 0 | 0 | - | missing |
-| `luka` | 0 | 0 | - | missing |
+| `kencing` | 50 | 1 | 0.00% | ok |
+| `luka` | 50 | 1 | 0.00% | ok |
 | `kering` | 0 | 0 | - | missing |
-| `kesemutan` | 0 | 0 | - | missing |
-| `kaki` | 45 | 1 | 0.00% | ok |
-| `lapar` | 0 | 0 | - | missing |
-| `nyeri` | 45 | 1 | 0.00% | ok |
-| `otot` | 0 | 0 | - | missing |
-| `sendi` | 0 | 0 | - | missing |
-| `tulang` | 0 | 0 | - | missing |
-| `patah` | 0 | 0 | - | missing |
-| `bengkak` | 0 | 0 | - | missing |
-| `pegal` | 0 | 0 | - | missing |
+| `kesemutan` | 50 | 1 | 0.00% | ok |
+| `kaki` | 93 | 2 | 0.00% | ok |
+| `lapar` | 50 | 1 | 0.00% | ok |
+| `nyeri` | 94 | 2 | 0.00% | ok |
+| `otot` | 49 | 1 | 0.00% | ok |
+| `sendi` | 50 | 1 | 0.00% | ok |
+| `tulang` | 50 | 1 | 0.00% | ok |
+| `patah` | 49 | 1 | 0.00% | ok |
+| `bengkak` | 49 | 1 | 0.00% | ok |
+| `pegal` | 49 | 1 | 0.00% | ok |
 | `linu` | 0 | 0 | - | missing |
-| `pinggang` | 0 | 0 | - | missing |
-| `punggung` | 45 | 1 | 0.00% | ok |
+| `pinggang` | 53 | 1 | 0.00% | ok |
+| `punggung` | 94 | 2 | 0.00% | ok |
 | `gerak` | 0 | 0 | - | missing |
 | `benjolan` | 0 | 0 | - | missing |
 | `tumor` | 0 | 0 | - | missing |
@@ -107,7 +107,7 @@ Generated at: 2026-07-20T17:09:48
 | `mengerti` | 0 | 0 | - | missing |
 | `tidak mengerti` | 0 | 0 | - | missing |
 | `darurat` | 0 | 0 | - | missing |
-| `cepat` | 0 | 0 | - | missing |
+| `cepat` | 50 | 1 | 0.00% | ok |
 | `keluarga` | 0 | 0 | - | missing |
 | `pulang` | 0 | 0 | - | missing |
 | `rumah sakit` | 0 | 0 | - | missing |
@@ -178,7 +178,7 @@ Generated at: 2026-07-20T17:09:48
 | `buruk` | 0 | 0 | - | missing |
 | `ringan` | 0 | 0 | - | missing |
 | `sedang` | 0 | 0 | - | missing |
-| `berat` | 0 | 0 | - | missing |
+| `berat` | 50 | 1 | 0.00% | ok |
 | `stabil` | 0 | 0 | - | missing |
 | `tidak stabil` | 0 | 0 | - | missing |
 | `sadar` | 0 | 0 | - | missing |
@@ -329,69 +329,73 @@ Generated at: 2026-07-20T17:09:48
 - `synthetic`: 45
 
 ### jantung
-- Belum ada data.
+- `glenn`: 50
 
 ### normal
-- Belum ada data.
+- `albert_william`: 50
 
 ### gula
-- Belum ada data.
+- `albert_cheng`: 50
 
 ### manis
-- Belum ada data.
+- `albert_cheng`: 50
 
 ### lemas
+- `albert_cheng`: 49
 - `synthetic`: 45
 
 ### haus
 - Belum ada data.
 
 ### kencing
-- Belum ada data.
+- `albert_cheng`: 50
 
 ### luka
-- Belum ada data.
+- `albert_cheng`: 50
 
 ### kering
 - Belum ada data.
 
 ### kesemutan
-- Belum ada data.
+- `albert_cheng`: 50
 
 ### kaki
+- `albert_cheng`: 48
 - `synthetic`: 45
 
 ### lapar
-- Belum ada data.
+- `albert_cheng`: 50
 
 ### nyeri
+- `albert_cheng`: 49
 - `synthetic`: 45
 
 ### otot
-- Belum ada data.
+- `albert_cheng`: 49
 
 ### sendi
-- Belum ada data.
+- `albert_cheng`: 50
 
 ### tulang
-- Belum ada data.
+- `albert_cheng`: 50
 
 ### patah
-- Belum ada data.
+- `albert_cheng`: 49
 
 ### bengkak
-- Belum ada data.
+- `albert_cheng`: 49
 
 ### pegal
-- Belum ada data.
+- `albert_cheng`: 49
 
 ### linu
 - Belum ada data.
 
 ### pinggang
-- Belum ada data.
+- `albert_cheng`: 53
 
 ### punggung
+- `albert_cheng`: 49
 - `synthetic`: 45
 
 ### gerak
@@ -494,7 +498,7 @@ Generated at: 2026-07-20T17:09:48
 - Belum ada data.
 
 ### cepat
-- Belum ada data.
+- `albert_cheng`: 50
 
 ### keluarga
 - Belum ada data.
@@ -707,7 +711,7 @@ Generated at: 2026-07-20T17:09:48
 - Belum ada data.
 
 ### berat
-- Belum ada data.
+- `albert_cheng`: 50
 
 ### stabil
 - Belum ada data.

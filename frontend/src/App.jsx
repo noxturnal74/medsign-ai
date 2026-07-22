@@ -15,6 +15,21 @@ function AppContent() {
     if (path === '/data-collection' || path.startsWith('/data-collection/')) {
       return 'data-collection';
     }
+    if (path === '/motion') {
+      return 'motion';
+    }
+    if (path === '/patient') {
+      return 'patient';
+    }
+    if (path === '/doctor') {
+      return 'doctor';
+    }
+    if (path === '/about') {
+      return 'about';
+    }
+    if (path === '/manual') {
+      return 'manual';
+    }
     return 'home';
   };
 

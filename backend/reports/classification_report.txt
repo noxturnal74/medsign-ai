@@ -1,9 +1,57 @@
               precision    recall  f1-score   support
 
-      tinggi       0.83      1.00      0.91        10
-      pusing       0.94      1.00      0.97        15
-       tensi       1.00      0.50      0.67         6
+       sakit       0.62      1.00      0.76        13
+      dokter       1.00      0.83      0.91         6
+        obat       1.00      0.67      0.80         6
+     periksa       1.00      1.00      1.00         5
+       malam       1.00      1.00      1.00         6
+       batuk       0.12      0.25      0.16        12
+       sesak       0.22      0.50      0.31        12
+        dada       0.61      0.69      0.65        16
+       dahak       0.93      1.00      0.96        13
+ tenggorokan       1.00      0.35      0.52        17
+   paru-paru       0.75      1.00      0.86         6
+        asma       0.86      1.00      0.92         6
+      pusing       0.88      0.47      0.61        15
+      kepala       0.89      0.53      0.67        15
+       tensi       1.00      1.00      1.00         6
+       darah       1.00      1.00      1.00        15
+      tinggi       1.00      1.00      1.00        10
+       leher       0.00      0.00      0.00         9
+     jantung       1.00      1.00      1.00        10
+      normal       1.00      1.00      1.00        10
+        gula       0.91      1.00      0.95        10
+       manis       0.91      1.00      0.95        10
+       lemas       0.39      0.74      0.51        19
+     kencing       1.00      0.90      0.95        10
+        luka       0.90      0.90      0.90        10
+   kesemutan       1.00      1.00      1.00        10
+        kaki       1.00      0.37      0.54        19
+       lapar       0.91      1.00      0.95        10
+       nyeri       1.00      0.53      0.69        19
+        otot       0.90      0.90      0.90        10
+       sendi       1.00      1.00      1.00        10
+      tulang       1.00      1.00      1.00        10
+       patah       1.00      1.00      1.00        10
+     bengkak       1.00      0.90      0.95        10
+       pegal       1.00      0.90      0.95        10
+    pinggang       1.00      0.90      0.95        10
+    punggung       1.00      0.63      0.77        19
+        mual       0.00      0.00      0.00         9
+      muntah       0.00      0.00      0.00         9
+       demam       0.00      0.00      0.00         9
+          ya       1.00      1.00      1.00         9
+       tidak       0.00      0.00      0.00         9
+      tolong       0.00      0.00      0.00         9
+       cepat       1.00      1.00      1.00        10
+        mata       0.00      0.00      0.00         9
+     telinga       0.00      0.00      0.00         9
+       perut       0.12      0.44      0.19         9
+      tangan       0.09      0.44      0.15         9
+       diare       0.00      0.00      0.00         9
+     pingsan       0.25      0.67      0.36         9
+       berat       0.91      1.00      0.95        10
 
-    accuracy                           0.90        31
-   macro avg       0.92      0.83      0.85        31
-weighted avg       0.92      0.90      0.89        31
+    accuracy                           0.66       542
+   macro avg       0.69      0.68      0.66       542
+weighted avg       0.71      0.66      0.66       542
