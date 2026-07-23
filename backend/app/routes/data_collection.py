@@ -719,3 +719,239 @@ async def upload_dataset_sample(
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Gagal menyimpan file: {str(e)}")
+
+# AI Dataset Augmentation Models & Routes
+from app.services.augmentation_service import AugmentationService
+augmentation_service = AugmentationService()
+
+class AugmentPreviewRequest(BaseModel):
+    label: str
+    techniques: List[str]
+
+class AugmentGenerateRequest(BaseModel):
+    model_type: str = "clinical"
+    selection: str = "all" # "all", "selected", "lacking", "low_confidence", "recommended"
+    selected_labels: List[str] = []
+    variations: int = 5
+    techniques: List[str] = ["transformer"]
+    enable_mirror: bool = True
+
+@router.get("/dataset/augment/stats")
+def get_augment_stats():
+    backend_dir = Path(__file__).resolve().parents[2]
+    landmarks_dir = backend_dir / "data" / "landmarks"
+    
+    total_original = 0
+    total_generated = 0
+    
+    if landmarks_dir.exists():
+        for f in landmarks_dir.glob("**/*.npy"):
+            if "_aug_" in f.name:
+                total_generated += 1
+            else:
+                total_original += 1
+                
+    ratio = round(total_generated / max(1, total_original), 2)
+    
+    return {
+        "total_original": total_original,
+        "total_generated": total_generated,
+        "augmentation_ratio": ratio,
+        "estimated_total": total_original + total_generated
+    }
+
+@router.post("/dataset/augment/preview")
+def preview_augmentation(request: AugmentPreviewRequest):
+    backend_dir = Path(__file__).resolve().parents[2]
+    landmarks_dir = backend_dir / "data" / "landmarks" / request.label
+    
+    if not landmarks_dir.exists():
+        raise HTTPException(status_code=404, detail=f"Dataset untuk kata '{request.label}' belum memiliki data asli.")
+        
+    npy_files = list(landmarks_dir.glob("**/*.npy"))
+    original_files = [f for f in npy_files if "_aug_" not in f.name]
+    
+    if not original_files:
+        raise HTTPException(status_code=404, detail="Tidak ditemukan sampel asli untuk kata ini.")
+        
+    try:
+        arr = np.load(str(original_files[0]))
+        augmented = augmentation_service.augment(arr, request.techniques)
+        
+        # Validation checks
+        if np.isnan(augmented).any() or np.isinf(augmented).any():
+            raise HTTPException(status_code=422, detail="Augmentasi menghasilkan nilai tidak valid (NaN/Infinity).")
+            
+        return {
+            "original": arr.tolist(),
+            "augmented": augmented.tolist()
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Gagal melakukan preview: {str(e)}")
+
+@router.post("/dataset/augment/generate")
+def generate_augmentation(request: AugmentGenerateRequest):
+    backend_dir = Path(__file__).resolve().parents[2]
+    landmarks_dir = backend_dir / "data" / "landmarks"
+    
+    # 1. Determine which labels to augment
+    labels_to_process = []
+    if request.selection == "all":
+        # Get all folders in landmarks_dir
+        if landmarks_dir.exists():
+            labels_to_process = [d.name for d in landmarks_dir.iterdir() if d.is_dir()]
+    elif request.selection == "selected":
+        labels_to_process = request.selected_labels
+    elif request.selection in ["lacking", "low_confidence", "recommended"]:
+        # Find labels from balanceData where total < 150
+        # Let's read and evaluate balanceData dynamically
+        balance_res = get_dataset_balance(request.model_type)
+        balance_items = balance_res.get("balance", [])
+        for item in balance_items:
+            total = item.get("total", 0)
+            # Smart thresholds
+            if request.selection == "lacking" and total < 150:
+                labels_to_process.append(item["label"])
+            elif request.selection == "low_confidence":
+                # Deterministic low confidence mapping matching frontend
+                seed = sum(ord(c) for c in item["label"])
+                avg_conf = min(96, max(30, 48 + (seed % 18) + (total * 1.6)))
+                if avg_conf < 80 and total > 0:
+                    labels_to_process.append(item["label"])
+            elif request.selection == "recommended":
+                # Smart recommend based on multiple conditions
+                seed = sum(ord(c) for c in item["label"])
+                avg_conf = min(96, max(30, 48 + (seed % 18) + (total * 1.6)))
+                avg_acc = min(98, max(25, 40 + (seed % 22) + (total * 1.8)))
+                unique_signers = len([c for c in item.get("counts", {}).values() if c > 0])
+                confusion_rate = max(1, min(75, 48 - (total * 1.5) + (seed % 14)))
+                recommend = avg_conf < 80 or avg_acc < 90 or total < 20 or unique_signers < 3 or confusion_rate > 15
+                if recommend:
+                    labels_to_process.append(item["label"])
+                    
+    if not labels_to_process:
+        return {"status": "success", "message": "Tidak ada kosa kata yang terpilih untuk augmentasi.", "count": 0}
+        
+    generated_count = 0
+    import csv
+    from datetime import datetime
+    
+    csv_path = backend_dir / "data" / "metadata" / "recordings.csv"
+    csv_path.parent.mkdir(parents=True, exist_ok=True)
+    file_exists = csv_path.exists()
+    
+    # Save files and register
+    try:
+        with csv_path.open("a", newline="", encoding="utf-8") as csvfile:
+            writer = csv.writer(csvfile)
+            if not file_exists:
+                writer.writerow(["timestamp", "filepath", "label", "signer", "frames"])
+                
+            for label in labels_to_process:
+                label_dir = landmarks_dir / label
+                if not label_dir.exists():
+                    continue
+                    
+                # Find all original .npy files for this label
+                original_files = []
+                for p in label_dir.glob("**/*.npy"):
+                    if "_aug_" not in p.name:
+                        original_files.append(p)
+                        
+                for file_path in original_files:
+                    try:
+                        # Load original array
+                        arr = np.load(str(file_path))
+                        if arr.shape != (30, 63):
+                            continue
+                            
+                        signer_name = file_path.parent.name
+                        base_name = file_path.stem
+                        
+                        # Determine variations count dynamically if custom or smart mode
+                        # Smart Mode: lacking words get more variations
+                        current_total = len(original_files)
+                        actual_vars = request.variations
+                        if request.selection == "recommended" or request.selection == "lacking":
+                            if current_total < 10:
+                                actual_vars = max(actual_vars, 8)
+                            elif current_total < 50:
+                                actual_vars = max(actual_vars, 5)
+                                
+                        for v_idx in range(1, actual_vars + 1):
+                            # Generate variation
+                            techniques = request.techniques.copy()
+                            if request.enable_mirror and np.random.choice([True, False]):
+                                techniques.append("mirror")
+                                
+                            augmented = augmentation_service.augment(arr, techniques)
+                            
+                            # Validation
+                            if np.isnan(augmented).any() or np.isinf(augmented).any():
+                                continue # Skip invalid outputs
+                                
+                            # Save file
+                            aug_filename = f"{base_name}_aug_{v_idx:03d}.npy"
+                            dest_path = file_path.parent / aug_filename
+                            np.save(str(dest_path), augmented)
+                            
+                            # Append to recordings.csv
+                            writer.writerow([
+                                datetime.now().isoformat(),
+                                f"landmarks/{label}/{signer_name}/{aug_filename}",
+                                label,
+                                signer_name,
+                                30
+                            ])
+                            generated_count += 1
+                    except Exception as e:
+                        print(f"Error processing {file_path}: {e}")
+                        
+        return {
+            "status": "success",
+            "message": f"Berhasil men-generate {generated_count} file sampel augmentasi baru.",
+            "count": generated_count
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Gagal melakukan proses augmentasi: {str(e)}")
+
+@router.post("/dataset/augment/delete")
+def delete_generated_augmentation():
+    backend_dir = Path(__file__).resolve().parents[2]
+    landmarks_dir = backend_dir / "data" / "landmarks"
+    
+    deleted_count = 0
+    if landmarks_dir.exists():
+        # Find and delete all *_aug_*.npy files
+        for p in list(landmarks_dir.glob("**/*_aug_*.npy")):
+            try:
+                p.unlink()
+                deleted_count += 1
+            except Exception as e:
+                print(f"Gagal menghapus {p}: {e}")
+                
+    # Update recordings.csv by filtering out augmented files
+    csv_path = backend_dir / "data" / "metadata" / "recordings.csv"
+    if csv_path.exists():
+        try:
+            rows = []
+            with csv_path.open("r", newline="", encoding="utf-8") as csvfile:
+                reader = csv.reader(csvfile)
+                headers = next(reader)
+                rows.append(headers)
+                for r in reader:
+                    # check if the filepath contains _aug_
+                    if "_aug_" not in r[1]:
+                        rows.append(r)
+                        
+            with csv_path.open("w", newline="", encoding="utf-8") as csvfile:
+                writer = csv.writer(csvfile)
+                writer.writerows(rows)
+        except Exception as e:
+            print(f"Gagal mengupdate recordings.csv: {e}")
+            
+    return {
+        "status": "success",
+        "message": f"Berhasil menghapus {deleted_count} file sampel hasil augmentasi.",
+        "count": deleted_count
+    }
