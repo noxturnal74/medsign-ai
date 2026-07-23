@@ -454,7 +454,7 @@ export const Home = ({ setView }) => {
 
               <h2 className="text-lg font-black text-slate-950 mt-1">Pilih Modul MedSign AI</h2>
 
-              <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-4">
+              <div className="flex flex-wrap gap-4 justify-center mt-4 w-full">
 
                 {dashboardItems.map((item, index) => {
 
@@ -468,7 +468,7 @@ export const Home = ({ setView }) => {
 
                       onClick={() => setView(item.id)}
 
-                      className="glass-panel hover:-translate-y-1 hover:bg-white/60 hover:shadow-lg hover:shadow-sky-500/10 active:scale-[0.98] transition-all duration-355 ease-out cursor-pointer rounded-3xl p-5 border border-white/60 flex flex-col justify-between h-[155px]"
+                      className="glass-panel hover:-translate-y-1 hover:bg-white/60 hover:shadow-lg hover:shadow-sky-500/10 active:scale-[0.98] transition-all duration-355 ease-out cursor-pointer rounded-3xl p-5 border border-white/60 flex flex-col justify-between h-[155px] w-full sm:w-[260px] shrink-0"
 
                       data-reveal
 

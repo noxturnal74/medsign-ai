@@ -22,21 +22,28 @@ export const Navbar = ({ currentView, setView }) => {
 
   return (
     <nav className="sticky top-0 z-50 px-3 pt-3 md:px-6">
-      <div className="glass-panel mx-auto flex max-w-7xl items-center justify-between gap-3 rounded-3xl px-3 py-2.5 md:px-4">
+      <div className="glass-panel mx-auto flex max-w-7xl items-center justify-between gap-2 rounded-2xl px-2 py-1.5 md:py-2 md:px-4">
         <button
-          className="group flex min-w-0 items-center gap-3 rounded-2xl px-2 py-1 text-left transition-transform hover:-translate-y-0.5"
+          className="group flex min-w-0 items-center gap-2 rounded-2xl px-1.5 py-0.5 text-left transition-transform hover:-translate-y-0.5"
           onClick={() => setView('home')}
         >
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/70 bg-white/75 p-1.5 shadow-lg shadow-sky-500/20 backdrop-blur-xl">
+          <span className="flex h-8 w-8 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-xl border border-white/70 bg-white/75 p-1 shadow-md shadow-sky-500/10 backdrop-blur-xl">
             <img
               src="/assets/medsign-mark.png"
               alt="Logo MedSign"
               className="h-full w-full object-contain"
             />
           </span>
-          <span className="hidden min-w-0 sm:block">
-            <span className="block text-base font-extrabold leading-tight text-slate-950">MedSign AI</span>
-            <span className="block truncate text-[11px] font-semibold text-slate-500">BISINDO medical assistant</span>
+          <span className="flex min-w-0 items-center gap-1.5">
+            <img
+              src="/assets/mascot.png"
+              alt="Mascot"
+              className="h-6 w-auto object-contain shrink-0"
+            />
+            <div className="hidden sm:block">
+              <span className="block text-sm md:text-base font-extrabold leading-tight text-slate-950">MedSign AI</span>
+              <span className="block truncate text-[10px] font-semibold text-slate-550">BISINDO medical assistant</span>
+            </div>
           </span>
         </button>
 

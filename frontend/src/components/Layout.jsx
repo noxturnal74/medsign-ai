@@ -1,4 +1,5 @@
 import React from 'react';
+import { Instagram, Facebook, Linkedin } from 'lucide-react';
 import { Navbar } from './Navbar';
 
 const footerLogos = [
@@ -31,6 +32,32 @@ export const Layout = ({ children, currentView, setView }) => {
           ))}
         </div>
         <span>MedSign AI / PKM-KC 2026 / BISINDO clinical communication assistant</span>
+        <div className="flex items-center justify-center gap-4 mt-2 border-t border-slate-200/50 pt-2 w-full max-w-xs">
+          <a
+            href="https://www.instagram.com/medsign.pkmkc/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-pink-600 transition-all flex items-center gap-1 text-[11px] font-bold text-slate-500"
+          >
+            <Instagram size={12} /> Instagram
+          </a>
+          <span className="text-slate-300">|</span>
+          <a
+            href="#"
+            onClick={(e) => e.preventDefault()}
+            className="hover:text-blue-650 transition-all flex items-center gap-1 text-[11px] font-bold text-slate-400 opacity-60 pointer-events-none"
+          >
+            <Facebook size={12} /> Facebook
+          </a>
+          <span className="text-slate-300">|</span>
+          <a
+            href="#"
+            onClick={(e) => e.preventDefault()}
+            className="hover:text-blue-700 transition-all flex items-center gap-1 text-[11px] font-bold text-slate-400 opacity-60 pointer-events-none"
+          >
+            <Linkedin size={12} /> LinkedIn
+          </a>
+        </div>
       </footer>
     </div>
   );
