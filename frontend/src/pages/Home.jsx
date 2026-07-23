@@ -61,21 +61,12 @@ const MARKETING_SITE_URL =
 
 
 const dashboardItems = [
-
   { id: 'motion', title: 'Motion Visualizer', desc: 'Visualisasi 3D neon trajektori isyarat BISINDO secara real-time.', icon: Video },
-
   { id: 'patient', title: 'Translate BISINDO', desc: 'Penerjemahan isyarat BISINDO pasien ke teks verbal medis.', icon: ScanLine },
-
   { id: 'doctor', title: 'Consultation', desc: 'Sistem komunikasi dua arah dokter-pasien dengan preset respon.', icon: HeartPulse },
-
   { id: 'patient', title: 'Patient Mode', desc: 'Layar khusus pasien tunarungu dengan input kamera terintegrasi.', icon: User },
-
   { id: 'doctor', title: 'Doctor Mode', desc: 'Layar khusus dokter untuk input teks, voice record, dan preset.', icon: Stethoscope },
-
-  { id: 'data-collection', title: 'History & Dataset', desc: 'Histori perekaman sampel dan manajemen antrean sesi.', icon: Database },
-
-  { id: 'data-collection', title: 'Settings', desc: 'Konfigurasi koneksi backend, model aktif, dan suara asisten.', icon: Sliders }
-
+  { id: 'data-collection', title: 'History & Dataset', desc: 'Histori perekaman sampel dan manajemen antrean sesi.', icon: Database }
 ];
 
 
