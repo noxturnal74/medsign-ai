@@ -34,17 +34,10 @@ export const Navbar = ({ currentView, setView }) => {
               className="h-full w-full object-contain"
             />
           </span>
-          <span className="flex min-w-0 items-center gap-1.5">
-            <img
-              src="/assets/mascot.png"
-              alt="Mascot"
-              className="h-5 md:h-6 w-auto object-contain shrink-0"
-            />
-            <div className="hidden sm:block">
-              <span className="block text-sm md:text-base font-extrabold leading-tight text-slate-950">MedSign AI</span>
-              <span className="block truncate text-[10px] font-semibold text-slate-550">BISINDO medical assistant</span>
-            </div>
-          </span>
+          <div className="hidden sm:block">
+            <span className="block text-sm md:text-base font-extrabold leading-tight text-slate-950">MedSign AI</span>
+            <span className="block truncate text-[10px] font-semibold text-slate-550">BISINDO medical assistant</span>
+          </div>
         </button>
 
         {/* Hamburger Menu for Mobile */}
