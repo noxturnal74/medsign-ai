@@ -5,6 +5,7 @@ export const useWebcam = () => {
   const [error, setError] = useState(null);
   const [devices, setDevices] = useState([]);
   const [selectedDeviceId, setSelectedDeviceId] = useState('');
+  const [facingMode, setFacingMode] = useState('user');
   
   const [videoElement, setVideoElement] = useState(null);
   const videoNodeRef = useRef(null);
@@ -43,10 +44,11 @@ export const useWebcam = () => {
     }
   }, [selectedDeviceId]);
 
-  const startCamera = useCallback(async (deviceIdToUse = null) => {
+  const startCamera = useCallback(async (deviceIdToUse = null, facingModeToUse = null) => {
     setError(null);
     try {
       const targetDeviceId = deviceIdToUse || selectedDeviceId;
+      const targetFacingMode = facingModeToUse || facingMode;
 
       // Check if we already have an active stream with the requested deviceId
       if (streamRef.current && streamRef.current.active) {
@@ -70,7 +72,7 @@ export const useWebcam = () => {
         video: {
           width: { ideal: 1280 },
           height: { ideal: 720 },
-          ...(targetDeviceId ? { deviceId: { exact: targetDeviceId } } : { facingMode: 'user' })
+          ...(targetDeviceId ? { deviceId: { exact: targetDeviceId } } : { facingMode: targetFacingMode })
         },
         audio: false
       };
@@ -156,6 +158,17 @@ export const useWebcam = () => {
     };
   }, []);
 
+  const toggleFacingMode = useCallback(() => {
+    const nextMode = facingMode === 'user' ? 'environment' : 'user';
+    setFacingMode(nextMode);
+    if (isActive) {
+      stopCamera();
+      setTimeout(() => {
+        startCamera(null, nextMode);
+      }, 100);
+    }
+  }, [facingMode, isActive, stopCamera, startCamera]);
+
   return {
     videoRef,
     videoElement,
@@ -165,6 +178,8 @@ export const useWebcam = () => {
     error,
     devices,
     selectedDeviceId,
-    setSelectedDeviceId
+    setSelectedDeviceId,
+    facingMode,
+    toggleFacingMode
   };
 };

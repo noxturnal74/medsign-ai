@@ -1,6 +1,6 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import predict, session, vocabulary, data_collection
+from app.routes import predict, session, vocabulary, data_collection, nlg
 from app.services.slt_adapter import SLTAdapterService
 from app.ml.labels import get_model_contract
 import json
@@ -35,6 +35,7 @@ def health_check():
         "api_version": "1.0.0",
         "mode": model_status["mode"],
         "model_loaded": model_status["model_loaded"],
+        "alphabet_loaded": model_status.get("alphabet_loaded", False),
         "labels_version": contract["version"],
         "label_count": model_status["label_count"],
         "threshold": model_status["threshold"],
@@ -50,6 +51,7 @@ app.include_router(predict.router, prefix="/api/v1", tags=["prediction"])
 app.include_router(session.router, prefix="/api/v1", tags=["session"])
 app.include_router(vocabulary.router, prefix="/api/v1", tags=["vocabulary"])
 app.include_router(data_collection.router, prefix="/api/v1", tags=["data_collection"])
+app.include_router(nlg.router, prefix="/api/v1", tags=["nlg"])
 
 # WebSocket Streaming Endpoint
 @app.websocket("/api/v1/stream")

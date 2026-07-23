@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback, useContext } from 'react';
 import { vocabulary } from '../data/vocabulary';
-import { AppContext } from '../context/AppContext';
+import { AppContext } from '../context/AppContextObject';
 
 export const useWebSocket = (url, onPrediction, isHandDetected, landmarks) => {
   const [isConnected, setIsConnected] = useState(false);

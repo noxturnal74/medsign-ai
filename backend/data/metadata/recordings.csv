@@ -1845,3 +1845,759 @@ timestamp,filepath,label,signer,frames
 2026-07-21T19:35:59.455539,landmarks/cepat/albert_cheng/cepat_albert_cheng_20260721_193133_cepat_048.npy,cepat,albert_cheng,30
 2026-07-21T19:36:05.258477,landmarks/cepat/albert_cheng/cepat_albert_cheng_20260721_193133_cepat_049.npy,cepat,albert_cheng,30
 2026-07-21T19:36:10.586055,landmarks/cepat/albert_cheng/cepat_albert_cheng_20260721_193133_cepat_050.npy,cepat,albert_cheng,30
+2026-07-22T16:30:29.685025,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_001.npy,keluarga,albert_cheng,30
+2026-07-22T16:30:35.795506,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_002.npy,keluarga,albert_cheng,30
+2026-07-22T16:30:42.298739,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_003.npy,keluarga,albert_cheng,30
+2026-07-22T16:30:48.792243,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_004.npy,keluarga,albert_cheng,30
+2026-07-22T16:30:55.579633,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_005.npy,keluarga,albert_cheng,30
+2026-07-22T16:31:01.734511,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_006.npy,keluarga,albert_cheng,30
+2026-07-22T16:31:07.985927,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_007.npy,keluarga,albert_cheng,30
+2026-07-22T16:31:13.527429,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_008.npy,keluarga,albert_cheng,30
+2026-07-22T16:31:19.460228,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_009.npy,keluarga,albert_cheng,30
+2026-07-22T16:31:25.476831,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_010.npy,keluarga,albert_cheng,30
+2026-07-22T16:31:32.248120,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_011.npy,keluarga,albert_cheng,30
+2026-07-22T16:31:38.703347,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_012.npy,keluarga,albert_cheng,30
+2026-07-22T16:31:45.282975,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_013.npy,keluarga,albert_cheng,30
+2026-07-22T16:31:51.352888,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_014.npy,keluarga,albert_cheng,30
+2026-07-22T16:31:58.364517,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_015.npy,keluarga,albert_cheng,30
+2026-07-22T16:32:05.147117,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_016.npy,keluarga,albert_cheng,30
+2026-07-22T16:32:11.798884,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_017.npy,keluarga,albert_cheng,30
+2026-07-22T16:32:17.398707,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_018.npy,keluarga,albert_cheng,30
+2026-07-22T16:32:23.392384,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_019.npy,keluarga,albert_cheng,30
+2026-07-22T16:32:29.632978,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_020.npy,keluarga,albert_cheng,30
+2026-07-22T16:32:36.691861,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_021.npy,keluarga,albert_cheng,30
+2026-07-22T16:32:42.932042,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_022.npy,keluarga,albert_cheng,30
+2026-07-22T16:32:49.572446,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_023.npy,keluarga,albert_cheng,30
+2026-07-22T16:32:55.761813,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_024.npy,keluarga,albert_cheng,30
+2026-07-22T16:33:02.384803,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_025.npy,keluarga,albert_cheng,30
+2026-07-22T16:33:08.575739,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_026.npy,keluarga,albert_cheng,30
+2026-07-22T16:33:15.384654,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_027.npy,keluarga,albert_cheng,30
+2026-07-22T16:33:21.759040,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_028.npy,keluarga,albert_cheng,30
+2026-07-22T16:33:28.394052,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_029.npy,keluarga,albert_cheng,30
+2026-07-22T16:33:33.986091,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_030.npy,keluarga,albert_cheng,30
+2026-07-22T16:33:39.910632,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_031.npy,keluarga,albert_cheng,30
+2026-07-22T16:33:46.050219,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_032.npy,keluarga,albert_cheng,30
+2026-07-22T16:33:53.074113,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_033.npy,keluarga,albert_cheng,30
+2026-07-22T16:33:59.386805,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_034.npy,keluarga,albert_cheng,30
+2026-07-22T16:34:05.930745,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_035.npy,keluarga,albert_cheng,30
+2026-07-22T16:34:12.133510,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_036.npy,keluarga,albert_cheng,30
+2026-07-22T16:34:18.620710,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_037.npy,keluarga,albert_cheng,30
+2026-07-22T16:34:24.937014,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_038.npy,keluarga,albert_cheng,30
+2026-07-22T16:34:31.500626,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_039.npy,keluarga,albert_cheng,30
+2026-07-22T16:34:37.710055,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_040.npy,keluarga,albert_cheng,30
+2026-07-22T16:34:44.344261,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_041.npy,keluarga,albert_cheng,30
+2026-07-22T16:34:50.632092,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_042.npy,keluarga,albert_cheng,30
+2026-07-22T16:34:57.362097,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_043.npy,keluarga,albert_cheng,30
+2026-07-22T16:35:03.883897,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_044.npy,keluarga,albert_cheng,30
+2026-07-22T16:35:10.674792,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_045.npy,keluarga,albert_cheng,30
+2026-07-22T16:35:17.090908,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_046.npy,keluarga,albert_cheng,30
+2026-07-22T16:35:23.958803,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_047.npy,keluarga,albert_cheng,30
+2026-07-22T16:35:29.703053,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_048.npy,keluarga,albert_cheng,30
+2026-07-22T16:35:36.560309,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_049.npy,keluarga,albert_cheng,30
+2026-07-22T16:35:43.249983,landmarks/keluarga/albert_cheng/keluarga_albert_cheng_20260722_163024_keluarga_050.npy,keluarga,albert_cheng,30
+2026-07-22T16:38:59.272996,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_001.npy,pulang,albert_cheng,30
+2026-07-22T16:39:05.647366,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_002.npy,pulang,albert_cheng,30
+2026-07-22T16:39:11.661610,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_003.npy,pulang,albert_cheng,30
+2026-07-22T16:39:17.669128,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_004.npy,pulang,albert_cheng,30
+2026-07-22T16:39:24.257534,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_005.npy,pulang,albert_cheng,30
+2026-07-22T16:39:32.810938,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_006.npy,pulang,albert_cheng,30
+2026-07-22T16:39:39.454304,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_007.npy,pulang,albert_cheng,30
+2026-07-22T16:39:45.107310,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_008.npy,pulang,albert_cheng,30
+2026-07-22T16:39:51.661351,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_009.npy,pulang,albert_cheng,30
+2026-07-22T16:39:57.916746,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_010.npy,pulang,albert_cheng,30
+2026-07-22T16:40:04.334999,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_011.npy,pulang,albert_cheng,30
+2026-07-22T16:40:10.718626,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_012.npy,pulang,albert_cheng,30
+2026-07-22T16:40:16.917341,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_013.npy,pulang,albert_cheng,30
+2026-07-22T16:40:24.634953,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_014.npy,pulang,albert_cheng,30
+2026-07-22T16:40:31.227908,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_015.npy,pulang,albert_cheng,30
+2026-07-22T16:40:37.602285,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_016.npy,pulang,albert_cheng,30
+2026-07-22T16:40:43.658478,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_017.npy,pulang,albert_cheng,30
+2026-07-22T16:40:50.104182,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_018.npy,pulang,albert_cheng,30
+2026-07-22T16:40:56.244449,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_019.npy,pulang,albert_cheng,30
+2026-07-22T16:41:02.565712,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_020.npy,pulang,albert_cheng,30
+2026-07-22T16:41:09.106157,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_021.npy,pulang,albert_cheng,30
+2026-07-22T16:41:15.303170,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_022.npy,pulang,albert_cheng,30
+2026-07-22T16:41:21.795427,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_023.npy,pulang,albert_cheng,30
+2026-07-22T16:41:28.211455,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_024.npy,pulang,albert_cheng,30
+2026-07-22T16:41:34.867367,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_025.npy,pulang,albert_cheng,30
+2026-07-22T16:41:40.548551,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_026.npy,pulang,albert_cheng,30
+2026-07-22T16:41:47.212273,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_027.npy,pulang,albert_cheng,30
+2026-07-22T16:41:53.380078,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_028.npy,pulang,albert_cheng,30
+2026-07-22T16:42:00.094501,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_029.npy,pulang,albert_cheng,30
+2026-07-22T16:42:06.337642,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_030.npy,pulang,albert_cheng,30
+2026-07-22T16:42:13.096686,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_031.npy,pulang,albert_cheng,30
+2026-07-22T16:42:19.290827,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_032.npy,pulang,albert_cheng,30
+2026-07-22T16:42:26.250384,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_033.npy,pulang,albert_cheng,30
+2026-07-22T16:42:32.381166,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_034.npy,pulang,albert_cheng,30
+2026-07-22T16:42:41.945178,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_035.npy,pulang,albert_cheng,30
+2026-07-22T16:42:48.353301,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_036.npy,pulang,albert_cheng,30
+2026-07-22T16:42:55.233883,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_037.npy,pulang,albert_cheng,30
+2026-07-22T16:43:01.599332,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_038.npy,pulang,albert_cheng,30
+2026-07-22T16:43:08.171345,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_039.npy,pulang,albert_cheng,30
+2026-07-22T16:43:14.549057,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_040.npy,pulang,albert_cheng,30
+2026-07-22T16:43:20.904513,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_041.npy,pulang,albert_cheng,30
+2026-07-22T16:43:27.532989,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_042.npy,pulang,albert_cheng,30
+2026-07-22T16:43:34.509685,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_043.npy,pulang,albert_cheng,30
+2026-07-22T16:43:40.836545,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_044.npy,pulang,albert_cheng,30
+2026-07-22T16:43:47.600885,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_045.npy,pulang,albert_cheng,30
+2026-07-22T16:43:53.888520,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_046.npy,pulang,albert_cheng,30
+2026-07-22T16:44:00.647082,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_047.npy,pulang,albert_cheng,30
+2026-07-22T16:44:06.377068,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_048.npy,pulang,albert_cheng,30
+2026-07-22T16:44:12.872407,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_049.npy,pulang,albert_cheng,30
+2026-07-22T16:44:19.138384,landmarks/pulang/albert_cheng/pulang_albert_cheng_20260722_163853_pulang_050.npy,pulang,albert_cheng,30
+2026-07-22T16:46:27.036921,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_001.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:46:32.675990,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_002.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:46:38.574970,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_003.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:46:44.135468,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_004.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:46:50.010316,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_005.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:46:55.653673,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_006.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:47:01.682955,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_007.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:47:07.290021,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_008.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:47:13.224838,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_009.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:47:18.822279,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_010.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:47:25.151538,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_011.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:47:30.712006,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_012.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:47:37.067779,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_013.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:47:42.883661,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_014.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:47:48.979053,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_015.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:47:55.809784,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_016.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:48:02.565998,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_017.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:48:08.833704,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_018.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:48:15.509824,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_019.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:48:21.924000,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_020.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:48:28.626256,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_021.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:48:35.168618,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_022.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:48:41.580970,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_023.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:48:48.318784,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_024.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:48:54.911087,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_025.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:49:01.566749,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_026.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:49:07.915150,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_027.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:49:14.515640,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_028.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:49:20.947385,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_029.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:49:27.755216,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_030.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:49:33.993410,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_031.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:49:40.880022,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_032.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:49:48.053582,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_033.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:49:54.860753,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_034.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:50:01.348344,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_035.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:50:08.074909,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_036.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:50:14.351185,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_037.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:50:22.875292,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_038.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:50:29.320400,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_039.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:50:36.062629,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_040.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:50:42.546271,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_041.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:50:49.215330,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_042.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:50:56.170169,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_043.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:51:03.209776,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_044.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:51:09.582512,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_045.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:51:16.405316,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_046.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:51:22.853093,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_047.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:51:29.716034,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_048.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:51:36.030365,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_049.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:51:42.883780,landmarks/rumah sakit/albert_cheng/rumah sakit_albert_cheng_20260722_164622_rumah sakit_050.npy,rumah sakit,albert_cheng,30
+2026-07-22T16:54:31.433558,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_165425_perawat_001.npy,perawat,albert_cheng,30
+2026-07-22T16:54:37.791235,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_165425_perawat_002.npy,perawat,albert_cheng,30
+2026-07-22T16:54:44.325566,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_165425_perawat_003.npy,perawat,albert_cheng,30
+2026-07-22T16:54:50.010514,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_165425_perawat_004.npy,perawat,albert_cheng,30
+2026-07-22T16:54:56.174825,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_165425_perawat_005.npy,perawat,albert_cheng,30
+2026-07-22T16:55:02.275631,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_165425_perawat_006.npy,perawat,albert_cheng,30
+2026-07-22T16:55:08.899949,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_165425_perawat_007.npy,perawat,albert_cheng,30
+2026-07-22T16:55:15.189172,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_165425_perawat_008.npy,perawat,albert_cheng,30
+2026-07-22T16:56:16.355927,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_001.npy,pasien,albert_cheng,30
+2026-07-22T16:56:21.949836,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_002.npy,pasien,albert_cheng,30
+2026-07-22T16:56:27.386248,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_003.npy,pasien,albert_cheng,30
+2026-07-22T16:56:33.909316,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_004.npy,pasien,albert_cheng,30
+2026-07-22T16:56:40.003448,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_005.npy,pasien,albert_cheng,30
+2026-07-22T16:56:46.504264,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_006.npy,pasien,albert_cheng,30
+2026-07-22T16:56:52.508020,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_007.npy,pasien,albert_cheng,30
+2026-07-22T16:56:58.420918,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_008.npy,pasien,albert_cheng,30
+2026-07-22T16:57:04.337791,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_009.npy,pasien,albert_cheng,30
+2026-07-22T16:57:10.737219,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_010.npy,pasien,albert_cheng,30
+2026-07-22T16:57:17.918154,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_011.npy,pasien,albert_cheng,30
+2026-07-22T16:57:24.208452,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_012.npy,pasien,albert_cheng,30
+2026-07-22T16:57:30.061691,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_013.npy,pasien,albert_cheng,30
+2026-07-22T16:57:36.300329,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_014.npy,pasien,albert_cheng,30
+2026-07-22T16:57:42.248745,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_015.npy,pasien,albert_cheng,30
+2026-07-22T16:57:47.986125,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_016.npy,pasien,albert_cheng,30
+2026-07-22T16:57:53.851395,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_017.npy,pasien,albert_cheng,30
+2026-07-22T16:58:00.295167,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_018.npy,pasien,albert_cheng,30
+2026-07-22T16:58:06.236886,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_019.npy,pasien,albert_cheng,30
+2026-07-22T16:58:12.699258,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_020.npy,pasien,albert_cheng,30
+2026-07-22T16:58:18.737510,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_021.npy,pasien,albert_cheng,30
+2026-07-22T16:58:25.101101,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_022.npy,pasien,albert_cheng,30
+2026-07-22T16:58:31.270212,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_023.npy,pasien,albert_cheng,30
+2026-07-22T16:58:37.604530,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_024.npy,pasien,albert_cheng,30
+2026-07-22T16:58:43.607540,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_025.npy,pasien,albert_cheng,30
+2026-07-22T16:58:49.955272,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_026.npy,pasien,albert_cheng,30
+2026-07-22T16:58:56.064307,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_027.npy,pasien,albert_cheng,30
+2026-07-22T16:59:02.392717,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_028.npy,pasien,albert_cheng,30
+2026-07-22T16:59:08.387328,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_029.npy,pasien,albert_cheng,30
+2026-07-22T16:59:14.657687,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_030.npy,pasien,albert_cheng,30
+2026-07-22T16:59:20.719509,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_031.npy,pasien,albert_cheng,30
+2026-07-22T16:59:26.939365,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_032.npy,pasien,albert_cheng,30
+2026-07-22T16:59:33.014857,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_033.npy,pasien,albert_cheng,30
+2026-07-22T16:59:39.371541,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_034.npy,pasien,albert_cheng,30
+2026-07-22T16:59:45.191516,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_035.npy,pasien,albert_cheng,30
+2026-07-22T16:59:51.480087,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_036.npy,pasien,albert_cheng,30
+2026-07-22T16:59:57.624873,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_037.npy,pasien,albert_cheng,30
+2026-07-22T17:00:04.448667,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_038.npy,pasien,albert_cheng,30
+2026-07-22T17:00:10.957136,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_039.npy,pasien,albert_cheng,30
+2026-07-22T17:00:17.389729,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_040.npy,pasien,albert_cheng,30
+2026-07-22T17:00:23.398929,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_041.npy,pasien,albert_cheng,30
+2026-07-22T17:00:29.707766,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_042.npy,pasien,albert_cheng,30
+2026-07-22T17:00:35.802257,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_043.npy,pasien,albert_cheng,30
+2026-07-22T17:00:42.094170,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_044.npy,pasien,albert_cheng,30
+2026-07-22T17:00:48.223706,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_045.npy,pasien,albert_cheng,30
+2026-07-22T17:00:54.909440,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_046.npy,pasien,albert_cheng,30
+2026-07-22T17:01:00.883419,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_047.npy,pasien,albert_cheng,30
+2026-07-22T17:01:07.180211,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_048.npy,pasien,albert_cheng,30
+2026-07-22T17:01:13.136210,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_049.npy,pasien,albert_cheng,30
+2026-07-22T17:01:19.590476,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_165611_pasien_050.npy,pasien,albert_cheng,30
+2026-07-22T17:02:31.486341,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_170226_pasien_001.npy,pasien,albert_cheng,30
+2026-07-22T17:02:37.556364,landmarks/pasien/albert_cheng/pasien_albert_cheng_20260722_170226_pasien_002.npy,pasien,albert_cheng,30
+2026-07-22T18:14:21.027240,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_001.npy,perawat,albert_cheng,30
+2026-07-22T18:14:27.237274,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_002.npy,perawat,albert_cheng,30
+2026-07-22T18:14:33.782990,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_003.npy,perawat,albert_cheng,30
+2026-07-22T18:14:40.016933,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_004.npy,perawat,albert_cheng,30
+2026-07-22T18:14:46.543147,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_005.npy,perawat,albert_cheng,30
+2026-07-22T18:14:54.517860,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_006.npy,perawat,albert_cheng,30
+2026-07-22T18:15:01.016973,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_007.npy,perawat,albert_cheng,30
+2026-07-22T18:15:07.753514,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_008.npy,perawat,albert_cheng,30
+2026-07-22T18:15:13.919239,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_009.npy,perawat,albert_cheng,30
+2026-07-22T18:15:20.600046,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_010.npy,perawat,albert_cheng,30
+2026-07-22T18:15:27.105071,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_011.npy,perawat,albert_cheng,30
+2026-07-22T18:15:33.667978,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_012.npy,perawat,albert_cheng,30
+2026-07-22T18:15:40.533036,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_013.npy,perawat,albert_cheng,30
+2026-07-22T18:15:47.514418,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_014.npy,perawat,albert_cheng,30
+2026-07-22T18:15:54.320653,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_015.npy,perawat,albert_cheng,30
+2026-07-22T18:16:00.529301,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_016.npy,perawat,albert_cheng,30
+2026-07-22T18:16:06.755833,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_017.npy,perawat,albert_cheng,30
+2026-07-22T18:16:12.895953,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_018.npy,perawat,albert_cheng,30
+2026-07-22T18:16:19.342924,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_019.npy,perawat,albert_cheng,30
+2026-07-22T18:16:26.190913,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_020.npy,perawat,albert_cheng,30
+2026-07-22T18:16:32.289537,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_021.npy,perawat,albert_cheng,30
+2026-07-22T18:16:41.553712,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_022.npy,perawat,albert_cheng,30
+2026-07-22T18:16:48.047568,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_023.npy,perawat,albert_cheng,30
+2026-07-22T18:16:54.371587,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_024.npy,perawat,albert_cheng,30
+2026-07-22T18:17:07.871098,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_026.npy,perawat,albert_cheng,30
+2026-07-22T18:17:14.276568,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_027.npy,perawat,albert_cheng,30
+2026-07-22T18:17:23.523344,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_028.npy,perawat,albert_cheng,30
+2026-07-22T18:17:30.137811,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_029.npy,perawat,albert_cheng,30
+2026-07-22T18:17:36.467147,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_030.npy,perawat,albert_cheng,30
+2026-07-22T18:17:43.171819,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_031.npy,perawat,albert_cheng,30
+2026-07-22T18:17:49.219353,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_032.npy,perawat,albert_cheng,30
+2026-07-22T18:17:56.127086,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_033.npy,perawat,albert_cheng,30
+2026-07-22T18:18:03.025319,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_034.npy,perawat,albert_cheng,30
+2026-07-22T18:18:09.259573,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_035.npy,perawat,albert_cheng,30
+2026-07-22T18:18:15.596650,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_036.npy,perawat,albert_cheng,30
+2026-07-22T18:18:21.906159,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_037.npy,perawat,albert_cheng,30
+2026-07-22T18:18:28.261610,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_038.npy,perawat,albert_cheng,30
+2026-07-22T18:18:34.426371,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_039.npy,perawat,albert_cheng,30
+2026-07-22T18:18:40.498296,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_040.npy,perawat,albert_cheng,30
+2026-07-22T18:18:50.390816,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_041.npy,perawat,albert_cheng,30
+2026-07-22T18:18:57.092570,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_042.npy,perawat,albert_cheng,30
+2026-07-22T18:19:03.582489,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_043.npy,perawat,albert_cheng,30
+2026-07-22T18:19:16.872938,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_045.npy,perawat,albert_cheng,30
+2026-07-22T18:19:23.062371,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_046.npy,perawat,albert_cheng,30
+2026-07-22T18:19:29.593113,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_047.npy,perawat,albert_cheng,30
+2026-07-22T18:19:35.841975,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_048.npy,perawat,albert_cheng,30
+2026-07-22T18:19:42.512825,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_049.npy,perawat,albert_cheng,30
+2026-07-22T18:19:48.653542,landmarks/perawat/albert_cheng/perawat_albert_cheng_20260722_181414_perawat_050.npy,perawat,albert_cheng,30
+2026-07-22T18:22:39.013951,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_001.npy,ambulans,albert_cheng,30
+2026-07-22T18:22:45.141312,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_002.npy,ambulans,albert_cheng,30
+2026-07-22T18:22:51.760551,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_003.npy,ambulans,albert_cheng,30
+2026-07-22T18:22:58.081372,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_004.npy,ambulans,albert_cheng,30
+2026-07-22T18:23:04.676055,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_005.npy,ambulans,albert_cheng,30
+2026-07-22T18:23:11.028794,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_006.npy,ambulans,albert_cheng,30
+2026-07-22T18:23:17.080981,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_007.npy,ambulans,albert_cheng,30
+2026-07-22T18:23:23.643593,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_008.npy,ambulans,albert_cheng,30
+2026-07-22T18:23:29.769585,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_009.npy,ambulans,albert_cheng,30
+2026-07-22T18:23:36.857898,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_010.npy,ambulans,albert_cheng,30
+2026-07-22T18:23:43.163023,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_011.npy,ambulans,albert_cheng,30
+2026-07-22T18:23:49.625856,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_012.npy,ambulans,albert_cheng,30
+2026-07-22T18:23:55.213308,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_013.npy,ambulans,albert_cheng,30
+2026-07-22T18:24:01.155217,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_014.npy,ambulans,albert_cheng,30
+2026-07-22T18:24:07.439370,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_015.npy,ambulans,albert_cheng,30
+2026-07-22T18:24:14.356499,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_016.npy,ambulans,albert_cheng,30
+2026-07-22T18:24:20.617712,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_017.npy,ambulans,albert_cheng,30
+2026-07-22T18:24:27.263658,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_018.npy,ambulans,albert_cheng,30
+2026-07-22T18:24:33.488167,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_019.npy,ambulans,albert_cheng,30
+2026-07-22T18:24:40.635616,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_020.npy,ambulans,albert_cheng,30
+2026-07-22T18:24:46.745582,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_021.npy,ambulans,albert_cheng,30
+2026-07-22T18:24:53.694771,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_022.npy,ambulans,albert_cheng,30
+2026-07-22T18:25:01.151011,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_023.npy,ambulans,albert_cheng,30
+2026-07-22T18:25:07.822699,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_024.npy,ambulans,albert_cheng,30
+2026-07-22T18:25:15.824863,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_025.npy,ambulans,albert_cheng,30
+2026-07-22T18:25:22.378884,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_026.npy,ambulans,albert_cheng,30
+2026-07-22T18:25:28.837939,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_027.npy,ambulans,albert_cheng,30
+2026-07-22T18:25:35.271728,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_028.npy,ambulans,albert_cheng,30
+2026-07-22T18:25:41.910390,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_029.npy,ambulans,albert_cheng,30
+2026-07-22T18:25:47.645020,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_030.npy,ambulans,albert_cheng,30
+2026-07-22T18:25:54.155524,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_031.npy,ambulans,albert_cheng,30
+2026-07-22T18:26:00.569071,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_032.npy,ambulans,albert_cheng,30
+2026-07-22T18:26:06.708849,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_033.npy,ambulans,albert_cheng,30
+2026-07-22T18:26:12.725058,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_034.npy,ambulans,albert_cheng,30
+2026-07-22T18:26:19.259718,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_035.npy,ambulans,albert_cheng,30
+2026-07-22T18:26:25.124630,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_036.npy,ambulans,albert_cheng,30
+2026-07-22T18:26:31.408576,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_037.npy,ambulans,albert_cheng,30
+2026-07-22T18:26:38.162483,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_038.npy,ambulans,albert_cheng,30
+2026-07-22T18:26:44.702895,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_039.npy,ambulans,albert_cheng,30
+2026-07-22T18:26:50.599999,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_040.npy,ambulans,albert_cheng,30
+2026-07-22T18:26:57.346959,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_041.npy,ambulans,albert_cheng,30
+2026-07-22T18:27:03.882345,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_042.npy,ambulans,albert_cheng,30
+2026-07-22T18:27:10.375751,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_043.npy,ambulans,albert_cheng,30
+2026-07-22T18:27:17.549061,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_044.npy,ambulans,albert_cheng,30
+2026-07-22T18:27:24.266347,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_045.npy,ambulans,albert_cheng,30
+2026-07-22T18:27:29.853097,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_046.npy,ambulans,albert_cheng,30
+2026-07-22T18:27:36.167294,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_047.npy,ambulans,albert_cheng,30
+2026-07-22T18:27:42.447955,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_048.npy,ambulans,albert_cheng,30
+2026-07-22T18:27:49.102634,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_049.npy,ambulans,albert_cheng,30
+2026-07-22T18:27:56.018292,landmarks/ambulans/albert_cheng/ambulans_albert_cheng_20260722_182231_ambulans_050.npy,ambulans,albert_cheng,30
+2026-07-22T18:29:58.001351,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_001.npy,suntik,albert_cheng,30
+2026-07-22T18:30:05.756288,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_002.npy,suntik,albert_cheng,30
+2026-07-22T18:30:12.153146,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_003.npy,suntik,albert_cheng,30
+2026-07-22T18:30:19.019283,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_004.npy,suntik,albert_cheng,30
+2026-07-22T18:30:27.521297,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_005.npy,suntik,albert_cheng,30
+2026-07-22T18:30:34.995963,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_006.npy,suntik,albert_cheng,30
+2026-07-22T18:30:41.676049,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_007.npy,suntik,albert_cheng,30
+2026-07-22T18:30:48.742391,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_008.npy,suntik,albert_cheng,30
+2026-07-22T18:30:55.699046,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_009.npy,suntik,albert_cheng,30
+2026-07-22T18:31:02.454637,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_010.npy,suntik,albert_cheng,30
+2026-07-22T18:31:09.274804,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_011.npy,suntik,albert_cheng,30
+2026-07-22T18:31:17.003746,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_012.npy,suntik,albert_cheng,30
+2026-07-22T18:31:23.385763,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_013.npy,suntik,albert_cheng,30
+2026-07-22T18:31:30.722519,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_014.npy,suntik,albert_cheng,30
+2026-07-22T18:31:37.642468,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_015.npy,suntik,albert_cheng,30
+2026-07-22T18:31:43.959409,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_016.npy,suntik,albert_cheng,30
+2026-07-22T18:31:50.768493,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_017.npy,suntik,albert_cheng,30
+2026-07-22T18:31:58.017783,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_018.npy,suntik,albert_cheng,30
+2026-07-22T18:32:04.687920,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_019.npy,suntik,albert_cheng,30
+2026-07-22T18:32:11.438152,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_020.npy,suntik,albert_cheng,30
+2026-07-22T18:32:18.584211,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_021.npy,suntik,albert_cheng,30
+2026-07-22T18:32:28.224084,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_022.npy,suntik,albert_cheng,30
+2026-07-22T18:32:35.510221,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_023.npy,suntik,albert_cheng,30
+2026-07-22T18:32:43.034122,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_024.npy,suntik,albert_cheng,30
+2026-07-22T18:32:49.379235,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_025.npy,suntik,albert_cheng,30
+2026-07-22T18:32:56.359685,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_026.npy,suntik,albert_cheng,30
+2026-07-22T18:33:03.058893,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_027.npy,suntik,albert_cheng,30
+2026-07-22T18:33:14.493302,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_028.npy,suntik,albert_cheng,30
+2026-07-22T18:33:21.031480,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_029.npy,suntik,albert_cheng,30
+2026-07-22T18:33:35.568711,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_030.npy,suntik,albert_cheng,30
+2026-07-22T18:33:43.304308,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_031.npy,suntik,albert_cheng,30
+2026-07-22T18:33:50.178143,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_032.npy,suntik,albert_cheng,30
+2026-07-22T18:33:57.194609,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_033.npy,suntik,albert_cheng,30
+2026-07-22T18:34:05.991997,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_034.npy,suntik,albert_cheng,30
+2026-07-22T18:34:15.026994,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_035.npy,suntik,albert_cheng,30
+2026-07-22T18:34:21.468903,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_036.npy,suntik,albert_cheng,30
+2026-07-22T18:34:31.510063,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_037.npy,suntik,albert_cheng,30
+2026-07-22T18:34:41.504425,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_038.npy,suntik,albert_cheng,30
+2026-07-22T18:34:50.306226,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_039.npy,suntik,albert_cheng,30
+2026-07-22T18:34:57.099155,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_040.npy,suntik,albert_cheng,30
+2026-07-22T18:35:06.499631,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_041.npy,suntik,albert_cheng,30
+2026-07-22T18:35:13.437434,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_042.npy,suntik,albert_cheng,30
+2026-07-22T18:35:23.205055,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_043.npy,suntik,albert_cheng,30
+2026-07-22T18:35:30.059096,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_044.npy,suntik,albert_cheng,30
+2026-07-22T18:35:36.734027,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_045.npy,suntik,albert_cheng,30
+2026-07-22T18:35:43.248376,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_046.npy,suntik,albert_cheng,30
+2026-07-22T18:35:54.010685,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_047.npy,suntik,albert_cheng,30
+2026-07-22T18:36:00.385895,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_048.npy,suntik,albert_cheng,30
+2026-07-22T18:36:07.073733,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_049.npy,suntik,albert_cheng,30
+2026-07-22T18:36:13.465117,landmarks/suntik/albert_cheng/suntik_albert_cheng_20260722_182950_suntik_050.npy,suntik,albert_cheng,30
+2026-07-22T18:38:35.570056,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_001.npy,infus,albert_cheng,30
+2026-07-22T18:38:43.982191,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_002.npy,infus,albert_cheng,30
+2026-07-22T18:38:54.758263,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_003.npy,infus,albert_cheng,30
+2026-07-22T18:39:01.465122,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_004.npy,infus,albert_cheng,30
+2026-07-22T18:39:10.488486,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_005.npy,infus,albert_cheng,30
+2026-07-22T18:39:16.636331,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_006.npy,infus,albert_cheng,30
+2026-07-22T18:39:22.514512,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_007.npy,infus,albert_cheng,30
+2026-07-22T18:39:28.583746,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_008.npy,infus,albert_cheng,30
+2026-07-22T18:39:35.430273,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_009.npy,infus,albert_cheng,30
+2026-07-22T18:39:42.064052,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_010.npy,infus,albert_cheng,30
+2026-07-22T18:39:47.945648,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_011.npy,infus,albert_cheng,30
+2026-07-22T18:39:54.698054,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_012.npy,infus,albert_cheng,30
+2026-07-22T18:40:03.494392,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_013.npy,infus,albert_cheng,30
+2026-07-22T18:40:09.843606,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_014.npy,infus,albert_cheng,30
+2026-07-22T18:40:16.307926,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_015.npy,infus,albert_cheng,30
+2026-07-22T18:40:22.665645,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_016.npy,infus,albert_cheng,30
+2026-07-22T18:40:30.104088,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_017.npy,infus,albert_cheng,30
+2026-07-22T18:40:36.748422,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_018.npy,infus,albert_cheng,30
+2026-07-22T18:40:42.668478,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_019.npy,infus,albert_cheng,30
+2026-07-22T18:40:49.291358,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_020.npy,infus,albert_cheng,30
+2026-07-22T18:40:55.504052,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_021.npy,infus,albert_cheng,30
+2026-07-22T18:41:04.006081,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_022.npy,infus,albert_cheng,30
+2026-07-22T18:41:12.800853,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_023.npy,infus,albert_cheng,30
+2026-07-22T18:41:20.999442,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_024.npy,infus,albert_cheng,30
+2026-07-22T18:41:27.390801,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_025.npy,infus,albert_cheng,30
+2026-07-22T18:41:34.095093,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_026.npy,infus,albert_cheng,30
+2026-07-22T18:41:40.596690,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_027.npy,infus,albert_cheng,30
+2026-07-22T18:41:46.762919,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_028.npy,infus,albert_cheng,30
+2026-07-22T18:41:53.007775,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_029.npy,infus,albert_cheng,30
+2026-07-22T18:42:00.514213,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_030.npy,infus,albert_cheng,30
+2026-07-22T18:42:07.195621,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_031.npy,infus,albert_cheng,30
+2026-07-22T18:42:13.723800,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_032.npy,infus,albert_cheng,30
+2026-07-22T18:42:19.813311,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_033.npy,infus,albert_cheng,30
+2026-07-22T18:42:26.316105,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_034.npy,infus,albert_cheng,30
+2026-07-22T18:42:32.980792,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_035.npy,infus,albert_cheng,30
+2026-07-22T18:42:44.028656,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_036.npy,infus,albert_cheng,30
+2026-07-22T18:42:51.170348,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_037.npy,infus,albert_cheng,30
+2026-07-22T18:42:58.284016,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_038.npy,infus,albert_cheng,30
+2026-07-22T18:43:06.057188,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_039.npy,infus,albert_cheng,30
+2026-07-22T18:43:13.263406,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_040.npy,infus,albert_cheng,30
+2026-07-22T18:43:19.984909,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_041.npy,infus,albert_cheng,30
+2026-07-22T18:43:26.411112,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_042.npy,infus,albert_cheng,30
+2026-07-22T18:43:33.302295,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_043.npy,infus,albert_cheng,30
+2026-07-22T18:43:39.638381,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_044.npy,infus,albert_cheng,30
+2026-07-22T18:43:48.512327,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_045.npy,infus,albert_cheng,30
+2026-07-22T18:43:57.147101,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_046.npy,infus,albert_cheng,30
+2026-07-22T18:44:05.534837,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_047.npy,infus,albert_cheng,30
+2026-07-22T18:44:11.923666,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_048.npy,infus,albert_cheng,30
+2026-07-22T18:44:18.517719,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_049.npy,infus,albert_cheng,30
+2026-07-22T18:44:26.572358,landmarks/infus/albert_cheng/infus_albert_cheng_20260722_183830_infus_050.npy,infus,albert_cheng,30
+2026-07-22T18:47:30.562419,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_001.npy,vaksin,albert_cheng,30
+2026-07-22T18:47:38.964225,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_002.npy,vaksin,albert_cheng,30
+2026-07-22T18:47:47.284200,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_003.npy,vaksin,albert_cheng,30
+2026-07-22T18:47:53.985264,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_004.npy,vaksin,albert_cheng,30
+2026-07-22T18:48:04.634936,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_005.npy,vaksin,albert_cheng,30
+2026-07-22T18:48:11.316221,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_006.npy,vaksin,albert_cheng,30
+2026-07-22T18:48:17.945463,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_007.npy,vaksin,albert_cheng,30
+2026-07-22T18:48:26.993942,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_008.npy,vaksin,albert_cheng,30
+2026-07-22T18:48:33.881861,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_009.npy,vaksin,albert_cheng,30
+2026-07-22T18:48:40.308304,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_010.npy,vaksin,albert_cheng,30
+2026-07-22T18:48:49.322192,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_011.npy,vaksin,albert_cheng,30
+2026-07-22T18:49:00.265063,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_012.npy,vaksin,albert_cheng,30
+2026-07-22T18:49:07.029315,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_013.npy,vaksin,albert_cheng,30
+2026-07-22T18:49:14.886454,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_014.npy,vaksin,albert_cheng,30
+2026-07-22T18:49:22.340784,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_015.npy,vaksin,albert_cheng,30
+2026-07-22T18:49:28.581712,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_016.npy,vaksin,albert_cheng,30
+2026-07-22T18:49:34.997313,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_017.npy,vaksin,albert_cheng,30
+2026-07-22T18:49:41.619562,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_018.npy,vaksin,albert_cheng,30
+2026-07-22T18:49:47.935213,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_019.npy,vaksin,albert_cheng,30
+2026-07-22T18:49:54.617482,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_020.npy,vaksin,albert_cheng,30
+2026-07-22T18:50:01.277414,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_021.npy,vaksin,albert_cheng,30
+2026-07-22T18:50:08.998709,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_022.npy,vaksin,albert_cheng,30
+2026-07-22T18:50:16.838725,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_023.npy,vaksin,albert_cheng,30
+2026-07-22T18:50:29.877840,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_024.npy,vaksin,albert_cheng,30
+2026-07-22T18:50:37.440332,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_025.npy,vaksin,albert_cheng,30
+2026-07-22T18:50:44.081995,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_026.npy,vaksin,albert_cheng,30
+2026-07-22T18:50:51.492474,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_027.npy,vaksin,albert_cheng,30
+2026-07-22T18:51:06.646391,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_028.npy,vaksin,albert_cheng,30
+2026-07-22T18:51:17.891416,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_029.npy,vaksin,albert_cheng,30
+2026-07-22T18:51:26.936711,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_030.npy,vaksin,albert_cheng,30
+2026-07-22T18:51:36.371250,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_031.npy,vaksin,albert_cheng,30
+2026-07-22T18:51:44.378972,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_032.npy,vaksin,albert_cheng,30
+2026-07-22T18:51:51.784533,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_033.npy,vaksin,albert_cheng,30
+2026-07-22T18:51:58.591300,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_034.npy,vaksin,albert_cheng,30
+2026-07-22T18:52:05.386788,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_035.npy,vaksin,albert_cheng,30
+2026-07-22T18:52:13.987660,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_036.npy,vaksin,albert_cheng,30
+2026-07-22T18:52:23.497431,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_037.npy,vaksin,albert_cheng,30
+2026-07-22T18:52:30.240382,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_038.npy,vaksin,albert_cheng,30
+2026-07-22T18:52:38.066953,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_039.npy,vaksin,albert_cheng,30
+2026-07-22T18:53:12.002141,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_040.npy,vaksin,albert_cheng,30
+2026-07-22T18:53:18.934596,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_041.npy,vaksin,albert_cheng,30
+2026-07-22T18:53:25.526534,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_042.npy,vaksin,albert_cheng,30
+2026-07-22T18:53:31.877137,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_043.npy,vaksin,albert_cheng,30
+2026-07-22T18:53:38.841201,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_044.npy,vaksin,albert_cheng,30
+2026-07-22T18:53:46.490986,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_045.npy,vaksin,albert_cheng,30
+2026-07-22T18:53:53.948508,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_046.npy,vaksin,albert_cheng,30
+2026-07-22T18:54:00.797545,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_047.npy,vaksin,albert_cheng,30
+2026-07-22T18:54:07.121374,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_048.npy,vaksin,albert_cheng,30
+2026-07-22T18:54:21.493014,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_049.npy,vaksin,albert_cheng,30
+2026-07-22T18:54:32.125523,landmarks/vaksin/albert_cheng/vaksin_albert_cheng_20260722_184721_vaksin_050.npy,vaksin,albert_cheng,30
+2026-07-22T18:57:16.439931,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_001.npy,laboratorium,albert_cheng,30
+2026-07-22T18:57:24.271353,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_002.npy,laboratorium,albert_cheng,30
+2026-07-22T18:57:33.349154,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_003.npy,laboratorium,albert_cheng,30
+2026-07-22T18:57:41.481516,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_004.npy,laboratorium,albert_cheng,30
+2026-07-22T18:57:47.673516,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_005.npy,laboratorium,albert_cheng,30
+2026-07-22T18:57:54.558672,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_006.npy,laboratorium,albert_cheng,30
+2026-07-22T18:58:01.057241,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_007.npy,laboratorium,albert_cheng,30
+2026-07-22T18:58:07.663551,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_008.npy,laboratorium,albert_cheng,30
+2026-07-22T18:58:19.411700,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_009.npy,laboratorium,albert_cheng,30
+2026-07-22T18:58:27.990159,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_010.npy,laboratorium,albert_cheng,30
+2026-07-22T18:58:35.343814,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_011.npy,laboratorium,albert_cheng,30
+2026-07-22T18:58:43.995785,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_012.npy,laboratorium,albert_cheng,30
+2026-07-22T18:58:50.455625,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_013.npy,laboratorium,albert_cheng,30
+2026-07-22T18:58:57.137951,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_014.npy,laboratorium,albert_cheng,30
+2026-07-22T18:59:03.813607,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_015.npy,laboratorium,albert_cheng,30
+2026-07-22T18:59:10.098238,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_016.npy,laboratorium,albert_cheng,30
+2026-07-22T18:59:16.287979,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_017.npy,laboratorium,albert_cheng,30
+2026-07-22T18:59:22.605936,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_018.npy,laboratorium,albert_cheng,30
+2026-07-22T18:59:28.699783,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_019.npy,laboratorium,albert_cheng,30
+2026-07-22T18:59:35.501061,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_020.npy,laboratorium,albert_cheng,30
+2026-07-22T18:59:41.642890,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_021.npy,laboratorium,albert_cheng,30
+2026-07-22T18:59:48.109830,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_022.npy,laboratorium,albert_cheng,30
+2026-07-22T18:59:54.533903,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_023.npy,laboratorium,albert_cheng,30
+2026-07-22T19:00:00.755300,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_024.npy,laboratorium,albert_cheng,30
+2026-07-22T19:00:07.138871,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_025.npy,laboratorium,albert_cheng,30
+2026-07-22T19:00:15.449548,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_026.npy,laboratorium,albert_cheng,30
+2026-07-22T19:00:22.665979,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_027.npy,laboratorium,albert_cheng,30
+2026-07-22T19:00:28.876260,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_028.npy,laboratorium,albert_cheng,30
+2026-07-22T19:00:36.104971,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_029.npy,laboratorium,albert_cheng,30
+2026-07-22T19:00:45.501435,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_030.npy,laboratorium,albert_cheng,30
+2026-07-22T19:00:52.257681,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_031.npy,laboratorium,albert_cheng,30
+2026-07-22T19:00:58.609647,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_032.npy,laboratorium,albert_cheng,30
+2026-07-22T19:01:06.500968,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_033.npy,laboratorium,albert_cheng,30
+2026-07-22T19:01:12.809295,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_034.npy,laboratorium,albert_cheng,30
+2026-07-22T19:01:22.637786,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_035.npy,laboratorium,albert_cheng,30
+2026-07-22T19:01:29.097994,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_036.npy,laboratorium,albert_cheng,30
+2026-07-22T19:01:35.575788,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_037.npy,laboratorium,albert_cheng,30
+2026-07-22T19:01:44.085364,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_038.npy,laboratorium,albert_cheng,30
+2026-07-22T19:01:50.522412,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_039.npy,laboratorium,albert_cheng,30
+2026-07-22T19:01:57.048631,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_040.npy,laboratorium,albert_cheng,30
+2026-07-22T19:02:04.063775,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_041.npy,laboratorium,albert_cheng,30
+2026-07-22T19:02:10.596534,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_042.npy,laboratorium,albert_cheng,30
+2026-07-22T19:02:16.709049,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_043.npy,laboratorium,albert_cheng,30
+2026-07-22T19:02:25.492070,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_044.npy,laboratorium,albert_cheng,30
+2026-07-22T19:02:31.993620,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_045.npy,laboratorium,albert_cheng,30
+2026-07-22T19:02:38.011180,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_046.npy,laboratorium,albert_cheng,30
+2026-07-22T19:02:44.388275,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_047.npy,laboratorium,albert_cheng,30
+2026-07-22T19:02:52.492850,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_048.npy,laboratorium,albert_cheng,30
+2026-07-22T19:02:59.277719,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_049.npy,laboratorium,albert_cheng,30
+2026-07-22T19:03:04.852718,landmarks/laboratorium/albert_cheng/laboratorium_albert_cheng_20260722_185710_laboratorium_050.npy,laboratorium,albert_cheng,30
+2026-07-22T19:05:05.134084,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_001.npy,rontgen,albert_cheng,30
+2026-07-22T19:05:11.447866,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_002.npy,rontgen,albert_cheng,30
+2026-07-22T19:05:17.839937,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_003.npy,rontgen,albert_cheng,30
+2026-07-22T19:05:24.987174,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_004.npy,rontgen,albert_cheng,30
+2026-07-22T19:05:31.346324,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_005.npy,rontgen,albert_cheng,30
+2026-07-22T19:05:37.927540,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_006.npy,rontgen,albert_cheng,30
+2026-07-22T19:05:43.601808,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_007.npy,rontgen,albert_cheng,30
+2026-07-22T19:05:51.376273,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_008.npy,rontgen,albert_cheng,30
+2026-07-22T19:05:57.082551,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_009.npy,rontgen,albert_cheng,30
+2026-07-22T19:06:03.616338,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_010.npy,rontgen,albert_cheng,30
+2026-07-22T19:06:10.282343,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_011.npy,rontgen,albert_cheng,30
+2026-07-22T19:06:16.514556,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_012.npy,rontgen,albert_cheng,30
+2026-07-22T19:06:23.092764,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_013.npy,rontgen,albert_cheng,30
+2026-07-22T19:06:29.703625,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_014.npy,rontgen,albert_cheng,30
+2026-07-22T19:06:36.753153,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_015.npy,rontgen,albert_cheng,30
+2026-07-22T19:06:46.986987,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_016.npy,rontgen,albert_cheng,30
+2026-07-22T19:07:02.501546,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_017.npy,rontgen,albert_cheng,30
+2026-07-22T19:07:08.964947,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_018.npy,rontgen,albert_cheng,30
+2026-07-22T19:07:17.247552,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_019.npy,rontgen,albert_cheng,30
+2026-07-22T19:07:23.941974,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_020.npy,rontgen,albert_cheng,30
+2026-07-22T19:07:30.592169,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_021.npy,rontgen,albert_cheng,30
+2026-07-22T19:07:36.733414,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_022.npy,rontgen,albert_cheng,30
+2026-07-22T19:07:45.441626,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_023.npy,rontgen,albert_cheng,30
+2026-07-22T19:07:51.572703,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_024.npy,rontgen,albert_cheng,30
+2026-07-22T19:07:57.936015,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_025.npy,rontgen,albert_cheng,30
+2026-07-22T19:08:05.478236,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_026.npy,rontgen,albert_cheng,30
+2026-07-22T19:08:12.467678,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_027.npy,rontgen,albert_cheng,30
+2026-07-22T19:08:19.012511,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_028.npy,rontgen,albert_cheng,30
+2026-07-22T19:08:25.099745,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_029.npy,rontgen,albert_cheng,30
+2026-07-22T19:08:31.562987,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_030.npy,rontgen,albert_cheng,30
+2026-07-22T19:08:37.728928,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_031.npy,rontgen,albert_cheng,30
+2026-07-22T19:08:44.907984,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_032.npy,rontgen,albert_cheng,30
+2026-07-22T19:08:51.848746,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_033.npy,rontgen,albert_cheng,30
+2026-07-22T19:08:58.037192,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_034.npy,rontgen,albert_cheng,30
+2026-07-22T19:09:05.116188,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_035.npy,rontgen,albert_cheng,30
+2026-07-22T19:09:11.733087,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_036.npy,rontgen,albert_cheng,30
+2026-07-22T19:09:18.026362,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_037.npy,rontgen,albert_cheng,30
+2026-07-22T19:09:24.899142,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_038.npy,rontgen,albert_cheng,30
+2026-07-22T19:09:31.117012,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_039.npy,rontgen,albert_cheng,30
+2026-07-22T19:09:37.994676,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_040.npy,rontgen,albert_cheng,30
+2026-07-22T19:09:47.974022,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_041.npy,rontgen,albert_cheng,30
+2026-07-22T19:09:54.364588,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_042.npy,rontgen,albert_cheng,30
+2026-07-22T19:10:01.470052,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_043.npy,rontgen,albert_cheng,30
+2026-07-22T19:10:07.956937,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_044.npy,rontgen,albert_cheng,30
+2026-07-22T19:10:14.255865,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_045.npy,rontgen,albert_cheng,30
+2026-07-22T19:10:20.669405,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_046.npy,rontgen,albert_cheng,30
+2026-07-22T19:10:27.587321,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_047.npy,rontgen,albert_cheng,30
+2026-07-22T19:10:33.997905,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_048.npy,rontgen,albert_cheng,30
+2026-07-22T19:10:40.250800,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_049.npy,rontgen,albert_cheng,30
+2026-07-22T19:10:47.687547,landmarks/rontgen/albert_cheng/rontgen_albert_cheng_20260722_190459_rontgen_050.npy,rontgen,albert_cheng,30
+2026-07-22T19:13:31.942677,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_001.npy,rawat inap,albert_cheng,30
+2026-07-22T19:13:38.536653,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_002.npy,rawat inap,albert_cheng,30
+2026-07-22T19:13:44.891542,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_003.npy,rawat inap,albert_cheng,30
+2026-07-22T19:13:51.331373,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_004.npy,rawat inap,albert_cheng,30
+2026-07-22T19:13:57.585198,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_005.npy,rawat inap,albert_cheng,30
+2026-07-22T19:14:04.487590,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_006.npy,rawat inap,albert_cheng,30
+2026-07-22T19:14:10.638738,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_007.npy,rawat inap,albert_cheng,30
+2026-07-22T19:14:17.224806,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_008.npy,rawat inap,albert_cheng,30
+2026-07-22T19:14:23.563248,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_009.npy,rawat inap,albert_cheng,30
+2026-07-22T19:14:29.690289,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_010.npy,rawat inap,albert_cheng,30
+2026-07-22T19:14:37.697213,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_011.npy,rawat inap,albert_cheng,30
+2026-07-22T19:14:47.015178,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_012.npy,rawat inap,albert_cheng,30
+2026-07-22T19:14:53.286350,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_013.npy,rawat inap,albert_cheng,30
+2026-07-22T19:14:59.739182,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_014.npy,rawat inap,albert_cheng,30
+2026-07-22T19:15:06.405098,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_015.npy,rawat inap,albert_cheng,30
+2026-07-22T19:15:14.017952,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_016.npy,rawat inap,albert_cheng,30
+2026-07-22T19:15:22.005994,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_017.npy,rawat inap,albert_cheng,30
+2026-07-22T19:15:28.539403,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_018.npy,rawat inap,albert_cheng,30
+2026-07-22T19:15:34.934483,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_019.npy,rawat inap,albert_cheng,30
+2026-07-22T19:15:42.489666,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_020.npy,rawat inap,albert_cheng,30
+2026-07-22T19:15:48.613050,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_021.npy,rawat inap,albert_cheng,30
+2026-07-22T19:15:58.468305,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_022.npy,rawat inap,albert_cheng,30
+2026-07-22T19:16:18.485237,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_023.npy,rawat inap,albert_cheng,30
+2026-07-22T19:16:26.775608,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_024.npy,rawat inap,albert_cheng,30
+2026-07-22T19:16:35.037296,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_025.npy,rawat inap,albert_cheng,30
+2026-07-22T19:16:41.366729,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_026.npy,rawat inap,albert_cheng,30
+2026-07-22T19:16:47.910051,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_027.npy,rawat inap,albert_cheng,30
+2026-07-22T19:16:54.071121,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_028.npy,rawat inap,albert_cheng,30
+2026-07-22T19:17:01.489222,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_029.npy,rawat inap,albert_cheng,30
+2026-07-22T19:17:07.880198,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_030.npy,rawat inap,albert_cheng,30
+2026-07-22T19:17:14.090041,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_031.npy,rawat inap,albert_cheng,30
+2026-07-22T19:17:22.001459,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_032.npy,rawat inap,albert_cheng,30
+2026-07-22T19:17:33.986559,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_033.npy,rawat inap,albert_cheng,30
+2026-07-22T19:17:40.426875,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_034.npy,rawat inap,albert_cheng,30
+2026-07-22T19:17:53.316289,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_035.npy,rawat inap,albert_cheng,30
+2026-07-22T19:18:08.579735,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_037.npy,rawat inap,albert_cheng,30
+2026-07-22T19:18:16.452297,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_038.npy,rawat inap,albert_cheng,30
+2026-07-22T19:18:29.094530,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_039.npy,rawat inap,albert_cheng,30
+2026-07-22T19:18:35.615389,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_040.npy,rawat inap,albert_cheng,30
+2026-07-22T19:18:41.917124,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_041.npy,rawat inap,albert_cheng,30
+2026-07-22T19:18:49.239396,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_042.npy,rawat inap,albert_cheng,30
+2026-07-22T19:18:58.487966,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_043.npy,rawat inap,albert_cheng,30
+2026-07-22T19:19:05.597200,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_044.npy,rawat inap,albert_cheng,30
+2026-07-22T19:19:12.298412,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_045.npy,rawat inap,albert_cheng,30
+2026-07-22T19:19:31.004691,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_046.npy,rawat inap,albert_cheng,30
+2026-07-22T19:19:37.496115,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_047.npy,rawat inap,albert_cheng,30
+2026-07-22T19:19:44.335985,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_048.npy,rawat inap,albert_cheng,30
+2026-07-22T19:20:01.483446,landmarks/rawat inap/albert_cheng/rawat inap_albert_cheng_20260722_191326_rawat inap_050.npy,rawat inap,albert_cheng,30
+2026-07-22T19:21:23.987999,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_001.npy,mata,albert_cheng,30
+2026-07-22T19:21:30.672895,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_002.npy,mata,albert_cheng,30
+2026-07-22T19:21:36.629852,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_003.npy,mata,albert_cheng,30
+2026-07-22T19:21:42.277859,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_004.npy,mata,albert_cheng,30
+2026-07-22T19:21:48.204494,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_005.npy,mata,albert_cheng,30
+2026-07-22T19:21:53.803861,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_006.npy,mata,albert_cheng,30
+2026-07-22T19:21:59.700459,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_007.npy,mata,albert_cheng,30
+2026-07-22T19:22:07.373051,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_008.npy,mata,albert_cheng,30
+2026-07-22T19:22:15.483599,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_009.npy,mata,albert_cheng,30
+2026-07-22T19:22:20.975819,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_010.npy,mata,albert_cheng,30
+2026-07-22T19:22:34.044028,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_012.npy,mata,albert_cheng,30
+2026-07-22T19:22:39.588980,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_013.npy,mata,albert_cheng,30
+2026-07-22T19:22:45.550342,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_014.npy,mata,albert_cheng,30
+2026-07-22T19:22:51.178511,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_015.npy,mata,albert_cheng,30
+2026-07-22T19:22:57.315047,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_016.npy,mata,albert_cheng,30
+2026-07-22T19:23:03.479855,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_017.npy,mata,albert_cheng,30
+2026-07-22T19:23:09.983264,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_018.npy,mata,albert_cheng,30
+2026-07-22T19:23:16.126456,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_019.npy,mata,albert_cheng,30
+2026-07-22T19:23:21.679459,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_020.npy,mata,albert_cheng,30
+2026-07-22T19:23:27.667716,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_021.npy,mata,albert_cheng,30
+2026-07-22T19:23:33.241720,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_022.npy,mata,albert_cheng,30
+2026-07-22T19:23:39.619891,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_023.npy,mata,albert_cheng,30
+2026-07-22T19:23:45.315477,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_024.npy,mata,albert_cheng,30
+2026-07-22T19:23:51.980579,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_025.npy,mata,albert_cheng,30
+2026-07-22T19:23:58.688624,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_026.npy,mata,albert_cheng,30
+2026-07-22T19:24:04.733983,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_027.npy,mata,albert_cheng,30
+2026-07-22T19:24:10.292138,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_028.npy,mata,albert_cheng,30
+2026-07-22T19:24:16.266838,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_029.npy,mata,albert_cheng,30
+2026-07-22T19:24:25.198554,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_030.npy,mata,albert_cheng,30
+2026-07-22T19:24:31.257273,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_031.npy,mata,albert_cheng,30
+2026-07-22T19:24:40.899363,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_032.npy,mata,albert_cheng,30
+2026-07-22T19:24:46.979081,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_033.npy,mata,albert_cheng,30
+2026-07-22T19:24:52.964756,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_034.npy,mata,albert_cheng,30
+2026-07-22T19:25:02.476644,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_035.npy,mata,albert_cheng,30
+2026-07-22T19:25:15.967676,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_036.npy,mata,albert_cheng,30
+2026-07-22T19:25:22.870701,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_037.npy,mata,albert_cheng,30
+2026-07-22T19:25:31.004869,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_038.npy,mata,albert_cheng,30
+2026-07-22T19:25:37.259228,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_039.npy,mata,albert_cheng,30
+2026-07-22T19:25:44.430937,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_040.npy,mata,albert_cheng,30
+2026-07-22T19:25:50.060575,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_041.npy,mata,albert_cheng,30
+2026-07-22T19:25:55.994821,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_042.npy,mata,albert_cheng,30
+2026-07-22T19:26:03.958618,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_043.npy,mata,albert_cheng,30
+2026-07-22T19:26:21.483952,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_044.npy,mata,albert_cheng,30
+2026-07-22T19:26:29.582867,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_045.npy,mata,albert_cheng,30
+2026-07-22T19:26:37.787188,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_046.npy,mata,albert_cheng,30
+2026-07-22T19:26:44.900284,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_047.npy,mata,albert_cheng,30
+2026-07-22T19:26:54.256146,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_048.npy,mata,albert_cheng,30
+2026-07-22T19:26:59.909046,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_049.npy,mata,albert_cheng,30
+2026-07-22T19:27:08.508210,landmarks/mata/albert_cheng/mata_albert_cheng_20260722_192110_mata_050.npy,mata,albert_cheng,30
+2026-07-22T19:28:29.882679,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_001.npy,hidung,albert_cheng,30
+2026-07-22T19:28:36.326645,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_002.npy,hidung,albert_cheng,30
+2026-07-22T19:28:42.378098,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_003.npy,hidung,albert_cheng,30
+2026-07-22T19:28:50.977101,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_004.npy,hidung,albert_cheng,30
+2026-07-22T19:28:57.310860,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_005.npy,hidung,albert_cheng,30
+2026-07-22T19:29:04.119218,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_006.npy,hidung,albert_cheng,30
+2026-07-22T19:29:10.246117,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_007.npy,hidung,albert_cheng,30
+2026-07-22T19:29:17.449550,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_008.npy,hidung,albert_cheng,30
+2026-07-22T19:29:23.164000,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_009.npy,hidung,albert_cheng,30
+2026-07-22T19:29:29.722527,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_010.npy,hidung,albert_cheng,30
+2026-07-22T19:29:35.366442,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_011.npy,hidung,albert_cheng,30
+2026-07-22T19:29:42.481552,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_012.npy,hidung,albert_cheng,30
+2026-07-22T19:29:48.077501,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_013.npy,hidung,albert_cheng,30
+2026-07-22T19:29:54.514667,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_014.npy,hidung,albert_cheng,30
+2026-07-22T19:30:01.787250,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_015.npy,hidung,albert_cheng,30
+2026-07-22T19:30:08.379848,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_016.npy,hidung,albert_cheng,30
+2026-07-22T19:30:14.707750,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_017.npy,hidung,albert_cheng,30
+2026-07-22T19:30:21.190691,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_018.npy,hidung,albert_cheng,30
+2026-07-22T19:30:28.262443,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_019.npy,hidung,albert_cheng,30
+2026-07-22T19:30:34.958660,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_020.npy,hidung,albert_cheng,30
+2026-07-22T19:30:40.552181,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_021.npy,hidung,albert_cheng,30
+2026-07-22T19:30:46.455322,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_022.npy,hidung,albert_cheng,30
+2026-07-22T19:30:52.098124,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_023.npy,hidung,albert_cheng,30
+2026-07-22T19:30:58.033209,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_024.npy,hidung,albert_cheng,30
+2026-07-22T19:31:05.053265,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_025.npy,hidung,albert_cheng,30
+2026-07-22T19:31:11.505617,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_026.npy,hidung,albert_cheng,30
+2026-07-22T19:31:18.337025,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_027.npy,hidung,albert_cheng,30
+2026-07-22T19:31:24.979792,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_028.npy,hidung,albert_cheng,30
+2026-07-22T19:31:31.071375,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_029.npy,hidung,albert_cheng,30
+2026-07-22T19:31:37.168616,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_030.npy,hidung,albert_cheng,30
+2026-07-22T19:31:42.958669,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_031.npy,hidung,albert_cheng,30
+2026-07-22T19:31:49.788933,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_032.npy,hidung,albert_cheng,30
+2026-07-22T19:31:55.334100,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_033.npy,hidung,albert_cheng,30
+2026-07-22T19:32:01.965796,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_034.npy,hidung,albert_cheng,30
+2026-07-22T19:32:08.263037,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_035.npy,hidung,albert_cheng,30
+2026-07-22T19:32:14.527960,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_036.npy,hidung,albert_cheng,30
+2026-07-22T19:32:20.103480,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_037.npy,hidung,albert_cheng,30
+2026-07-22T19:32:27.818194,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_038.npy,hidung,albert_cheng,30
+2026-07-22T19:32:34.278146,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_039.npy,hidung,albert_cheng,30
+2026-07-22T19:32:41.918830,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_040.npy,hidung,albert_cheng,30
+2026-07-22T19:32:47.498399,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_041.npy,hidung,albert_cheng,30
+2026-07-22T19:32:53.385229,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_042.npy,hidung,albert_cheng,30
+2026-07-22T19:32:59.461106,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_043.npy,hidung,albert_cheng,30
+2026-07-22T19:33:05.369542,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_044.npy,hidung,albert_cheng,30
+2026-07-22T19:33:12.112684,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_045.npy,hidung,albert_cheng,30
+2026-07-22T19:33:19.725514,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_046.npy,hidung,albert_cheng,30
+2026-07-22T19:33:25.308383,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_047.npy,hidung,albert_cheng,30
+2026-07-22T19:33:31.428297,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_048.npy,hidung,albert_cheng,30
+2026-07-22T19:33:36.998012,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_049.npy,hidung,albert_cheng,30
+2026-07-22T19:33:45.771449,landmarks/hidung/albert_cheng/hidung_albert_cheng_20260722_192824_hidung_050.npy,hidung,albert_cheng,30
+2026-07-22T19:34:54.082846,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_001.npy,mulut,albert_cheng,30
+2026-07-22T19:35:00.634108,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_002.npy,mulut,albert_cheng,30
+2026-07-22T19:35:06.677879,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_003.npy,mulut,albert_cheng,30
+2026-07-22T19:35:13.096554,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_004.npy,mulut,albert_cheng,30
+2026-07-22T19:35:18.918084,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_005.npy,mulut,albert_cheng,30
+2026-07-22T19:35:26.337365,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_006.npy,mulut,albert_cheng,30
+2026-07-22T19:35:31.943914,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_007.npy,mulut,albert_cheng,30
+2026-07-22T19:35:37.864737,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_008.npy,mulut,albert_cheng,30
+2026-07-22T19:35:43.821565,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_009.npy,mulut,albert_cheng,30
+2026-07-22T19:35:50.250678,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_010.npy,mulut,albert_cheng,30
+2026-07-22T19:35:56.954846,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_011.npy,mulut,albert_cheng,30
+2026-07-22T19:36:05.433903,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_012.npy,mulut,albert_cheng,30
+2026-07-22T19:36:11.616534,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_013.npy,mulut,albert_cheng,30
+2026-07-22T19:36:19.795985,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_014.npy,mulut,albert_cheng,30
+2026-07-22T19:36:25.338581,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_015.npy,mulut,albert_cheng,30
+2026-07-22T19:36:31.995545,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_016.npy,mulut,albert_cheng,30
+2026-07-22T19:37:01.863888,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_017.npy,mulut,albert_cheng,30
+2026-07-22T19:37:12.616156,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_018.npy,mulut,albert_cheng,30
+2026-07-22T19:37:20.427804,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_019.npy,mulut,albert_cheng,30
+2026-07-22T19:37:26.920729,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_020.npy,mulut,albert_cheng,30
+2026-07-22T19:37:34.385235,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_021.npy,mulut,albert_cheng,30
+2026-07-22T19:37:41.227886,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_022.npy,mulut,albert_cheng,30
+2026-07-22T19:37:46.840290,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_023.npy,mulut,albert_cheng,30
+2026-07-22T19:37:56.094048,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_024.npy,mulut,albert_cheng,30
+2026-07-22T19:38:05.047991,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_025.npy,mulut,albert_cheng,30
+2026-07-22T19:38:13.716268,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_026.npy,mulut,albert_cheng,30
+2026-07-22T19:38:26.363616,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_027.npy,mulut,albert_cheng,30
+2026-07-22T19:38:32.758675,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_028.npy,mulut,albert_cheng,30
+2026-07-22T19:38:40.248972,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_029.npy,mulut,albert_cheng,30
+2026-07-22T19:38:46.154991,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_030.npy,mulut,albert_cheng,30
+2026-07-22T19:38:53.238344,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_031.npy,mulut,albert_cheng,30
+2026-07-22T19:38:59.402933,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_032.npy,mulut,albert_cheng,30
+2026-07-22T19:39:04.996862,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_033.npy,mulut,albert_cheng,30
+2026-07-22T19:39:10.943820,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_034.npy,mulut,albert_cheng,30
+2026-07-22T19:39:17.118561,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_035.npy,mulut,albert_cheng,30
+2026-07-22T19:39:22.984454,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_036.npy,mulut,albert_cheng,30
+2026-07-22T19:39:30.090124,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_037.npy,mulut,albert_cheng,30
+2026-07-22T19:39:36.393907,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_038.npy,mulut,albert_cheng,30
+2026-07-22T19:39:42.020588,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_039.npy,mulut,albert_cheng,30
+2026-07-22T19:39:49.882751,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_040.npy,mulut,albert_cheng,30
+2026-07-22T19:39:55.606367,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_041.npy,mulut,albert_cheng,30
+2026-07-22T19:40:01.605564,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_042.npy,mulut,albert_cheng,30
+2026-07-22T19:40:07.924483,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_043.npy,mulut,albert_cheng,30
+2026-07-22T19:40:16.221021,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_044.npy,mulut,albert_cheng,30
+2026-07-22T19:40:22.379563,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_045.npy,mulut,albert_cheng,30
+2026-07-22T19:40:29.577910,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_046.npy,mulut,albert_cheng,30
+2026-07-22T19:40:35.752639,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_047.npy,mulut,albert_cheng,30
+2026-07-22T19:40:41.655766,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_048.npy,mulut,albert_cheng,30
+2026-07-22T19:40:47.227599,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_049.npy,mulut,albert_cheng,30
+2026-07-22T19:40:55.546272,landmarks/mulut/albert_cheng/mulut_albert_cheng_20260722_193449_mulut_050.npy,mulut,albert_cheng,30
+2026-07-22T19:43:43.922376,landmarks/lemas/albert_cheng/lemas_albert_cheng_20260721_161637_lemas_001.npy,lemas,albert_cheng,30

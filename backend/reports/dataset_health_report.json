@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-21T19:38:46",
+  "generated_at": "2026-07-22T19:46:33",
   "contract": {
     "version": "medsign-clinical-full-v1",
     "frame_count": 30,
@@ -206,7 +206,7 @@
     "signer_id": null,
     "max_empty_frame_ratio": 0.1
   },
-  "total_valid_samples": 2882,
+  "total_valid_samples": 3630,
   "total_invalid_samples": 270,
   "counts": {
     "sakit": 65,
@@ -244,7 +244,7 @@
     "normal": 50,
     "gula": 50,
     "manis": 50,
-    "lemas": 94,
+    "lemas": 95,
     "haus": 0,
     "kencing": 50,
     "luka": 50,
@@ -296,21 +296,21 @@
     "tidak mengerti": 0,
     "darurat": 0,
     "cepat": 50,
-    "keluarga": 0,
-    "pulang": 0,
-    "rumah sakit": 0,
-    "pasien": 0,
-    "perawat": 0,
-    "ambulans": 0,
-    "suntik": 0,
-    "infus": 0,
-    "vaksin": 0,
-    "laboratorium": 0,
-    "rontgen": 0,
-    "rawat inap": 0,
-    "mata": 45,
-    "hidung": 0,
-    "mulut": 0,
+    "keluarga": 50,
+    "pulang": 50,
+    "rumah sakit": 50,
+    "pasien": 52,
+    "perawat": 48,
+    "ambulans": 50,
+    "suntik": 50,
+    "infus": 50,
+    "vaksin": 50,
+    "laboratorium": 50,
+    "rontgen": 50,
+    "rawat inap": 48,
+    "mata": 94,
+    "hidung": 50,
+    "mulut": 50,
     "telinga": 45,
     "gigi": 0,
     "perut": 45,
@@ -524,7 +524,7 @@
       "albert_cheng": 50
     },
     "lemas": {
-      "albert_cheng": 49,
+      "albert_cheng": 50,
       "synthetic": 45
     },
     "haus": {},
@@ -623,23 +623,52 @@
     "cepat": {
       "albert_cheng": 50
     },
-    "keluarga": {},
-    "pulang": {},
-    "rumah sakit": {},
-    "pasien": {},
-    "perawat": {},
-    "ambulans": {},
-    "suntik": {},
-    "infus": {},
-    "vaksin": {},
-    "laboratorium": {},
-    "rontgen": {},
-    "rawat inap": {},
+    "keluarga": {
+      "albert_cheng": 50
+    },
+    "pulang": {
+      "albert_cheng": 50
+    },
+    "rumah sakit": {
+      "albert_cheng": 50
+    },
+    "pasien": {
+      "albert_cheng": 52
+    },
+    "perawat": {
+      "albert_cheng": 48
+    },
+    "ambulans": {
+      "albert_cheng": 50
+    },
+    "suntik": {
+      "albert_cheng": 50
+    },
+    "infus": {
+      "albert_cheng": 50
+    },
+    "vaksin": {
+      "albert_cheng": 50
+    },
+    "laboratorium": {
+      "albert_cheng": 50
+    },
+    "rontgen": {
+      "albert_cheng": 50
+    },
+    "rawat inap": {
+      "albert_cheng": 48
+    },
     "mata": {
+      "albert_cheng": 49,
       "synthetic": 45
     },
-    "hidung": {},
-    "mulut": {},
+    "hidung": {
+      "albert_cheng": 50
+    },
+    "mulut": {
+      "albert_cheng": 50
+    },
     "telinga": {
       "synthetic": 45
     },
@@ -832,21 +861,21 @@
     "tidak mengerti": null,
     "darurat": null,
     "cepat": 0.0,
-    "keluarga": null,
-    "pulang": null,
-    "rumah sakit": null,
-    "pasien": null,
-    "perawat": null,
-    "ambulans": null,
-    "suntik": null,
-    "infus": null,
-    "vaksin": null,
-    "laboratorium": null,
-    "rontgen": null,
-    "rawat inap": null,
+    "keluarga": 0.0,
+    "pulang": 0.0,
+    "rumah sakit": 0.0,
+    "pasien": 0.0,
+    "perawat": 0.0,
+    "ambulans": 0.0,
+    "suntik": 0.0,
+    "infus": 0.0,
+    "vaksin": 0.0,
+    "laboratorium": 0.0,
+    "rontgen": 0.0,
+    "rawat inap": 0.0,
     "mata": 0.0,
-    "hidung": null,
-    "mulut": null,
+    "hidung": 0.0,
+    "mulut": 0.0,
     "telinga": 0.0,
     "gigi": null,
     "perut": 0.0,

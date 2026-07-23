@@ -508,3 +508,214 @@ def train_dataset(request: TrainRequest):
             yield f"data: {line_str}\n\n"
 
     return StreamingResponse(log_generator(), media_type="text/event-stream")
+# New endpoints for model upload, auto-fix, and sample upload
+from fastapi import UploadFile, File, Form
+import shutil
+import io
+
+@router.post("/dataset/model/upload")
+async def upload_model_file(
+    model_type: str = Form(..., description="Tipe model: 'clinical' atau 'alphabet'"),
+    file: UploadFile = File(...)
+):
+    backend_dir = Path(__file__).resolve().parents[2]
+    models_dir = backend_dir / "models"
+    models_dir.mkdir(parents=True, exist_ok=True)
+    
+    filename = file.filename
+    if not filename.endswith(".tflite"):
+        raise HTTPException(status_code=400, detail="Hanya file model .tflite yang diperbolehkan")
+        
+    if model_type == "alphabet":
+        dest_filename = "bisindo_alphabet_v1.tflite"
+    else:
+        dest_filename = "medsign_mvp_v1.tflite"
+        
+    dest_path = models_dir / dest_filename
+    
+    from app.ml.model import ModelLoader
+    loader = ModelLoader()
+    with loader.lock:
+        if model_type == "alphabet":
+            loader.alphabet_interpreter = None
+            loader.alphabet_loaded = False
+        else:
+            loader.interpreter = None
+            loader.loaded = False
+        import gc
+        gc.collect()
+        import time
+        time.sleep(0.1)
+        
+        try:
+            contents = await file.read()
+            with dest_path.open("wb") as f:
+                f.write(contents)
+                
+            if model_type == "alphabet":
+                loader.load_alphabet(dest_path)
+            else:
+                loader.load(dest_path)
+                
+            return {
+                "status": "success",
+                "message": f"Model {model_type} berhasil diunggah dengan nama {dest_filename} dan dimuat."
+            }
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Gagal menyimpan model: {str(e)}")
+
+
+@router.post("/dataset/model/auto-fix")
+def auto_fix_models():
+    backend_dir = Path(__file__).resolve().parents[2]
+    models_dir = backend_dir / "models"
+    
+    if not models_dir.exists():
+        models_dir.mkdir(parents=True, exist_ok=True)
+        
+    tflite_files = list(models_dir.glob("*.tflite"))
+    if not tflite_files:
+        raise HTTPException(
+            status_code=404, 
+            detail="Tidak ditemukan file model .tflite apapun di direktori backend/models."
+        )
+        
+    fixed_clinical = False
+    fixed_alphabet = False
+    
+    from app.ml.model import ModelLoader
+    loader = ModelLoader()
+    
+    with loader.lock:
+        # Check clinical model
+        dest_clinical = models_dir / "medsign_mvp_v1.tflite"
+        if not dest_clinical.exists() or not loader.loaded:
+            candidates = [
+                f for f in tflite_files 
+                if "alphabet" not in f.name and f.name != "medsign_mvp_v1.tflite"
+            ]
+            if candidates:
+                candidates.sort(key=lambda x: x.stat().st_mtime, reverse=True)
+                best_candidate = candidates[0]
+                
+                loader.interpreter = None
+                loader.loaded = False
+                import gc
+                gc.collect()
+                import time
+                time.sleep(0.1)
+                
+                shutil.copy2(best_candidate, dest_clinical)
+                loader.load(dest_clinical)
+                fixed_clinical = True
+                
+        # Check alphabet model
+        dest_alphabet = models_dir / "bisindo_alphabet_v1.tflite"
+        if not dest_alphabet.exists() or not loader.alphabet_loaded:
+            candidates = [
+                f for f in tflite_files 
+                if "alphabet" in f.name and f.name != "bisindo_alphabet_v1.tflite"
+            ]
+            if candidates:
+                candidates.sort(key=lambda x: x.stat().st_mtime, reverse=True)
+                best_candidate = candidates[0]
+                
+                loader.alphabet_interpreter = None
+                loader.alphabet_loaded = False
+                import gc
+                gc.collect()
+                import time
+                time.sleep(0.1)
+                
+                shutil.copy2(best_candidate, dest_alphabet)
+                loader.load_alphabet(dest_alphabet)
+                fixed_alphabet = True
+                
+    if fixed_clinical or fixed_alphabet:
+        msg = "Perbaikan model selesai."
+        if fixed_clinical:
+            msg += " Model clinical berhasil diperbaiki."
+        if fixed_alphabet:
+            msg += " Model abjad berhasil diperbaiki."
+        return {"status": "success", "message": msg}
+    else:
+        if loader.loaded and loader.alphabet_loaded:
+            return {"status": "success", "message": "Semua model sudah terdeteksi dan aktif."}
+        else:
+            raise HTTPException(
+                status_code=400, 
+                detail="Tidak dapat menemukan file cadangan .tflite untuk memulihkan model."
+            )
+
+
+@router.post("/dataset/upload-sample")
+async def upload_dataset_sample(
+    file: UploadFile = File(...),
+    label: str = Form(...),
+    signer_id: str = Form(...),
+    session_id: str = Form("uploaded"),
+    take_index: int = Form(1)
+):
+    if not re.match(r"^[a-z0-9_]+$", signer_id):
+        raise HTTPException(
+            status_code=400,
+            detail="Signer ID harus menggunakan format lowercase underscore saja"
+        )
+    
+    contents = await file.read()
+    
+    try:
+        f_io = io.BytesIO(contents)
+        arr = np.load(f_io)
+        if arr.shape != (30, 63):
+            raise HTTPException(
+                status_code=400,
+                detail=f"Array shape harus (30, 63), tetapi file memiliki shape {arr.shape}"
+            )
+    except Exception as e:
+        raise HTTPException(
+            status_code=400,
+            detail=f"File bukan file npy valid atau tidak bisa dibaca: {str(e)}"
+        )
+        
+    backend_dir = Path(__file__).resolve().parents[2]
+    landmarks_dir = backend_dir / "data" / "landmarks"
+    
+    label_dir = landmarks_dir / label / signer_id
+    label_dir.mkdir(parents=True, exist_ok=True)
+    
+    orig_name = file.filename
+    if orig_name.endswith(".npy"):
+        clean_filename = orig_name
+    else:
+        clean_filename = f"{label}_{signer_id}_uploaded_{take_index:03d}.npy"
+        
+    file_path = label_dir / clean_filename
+    
+    try:
+        np.save(str(file_path), arr)
+        
+        csv_path = backend_dir / "data" / "metadata" / "recordings.csv"
+        import csv
+        from datetime import datetime
+        csv_path.parent.mkdir(parents=True, exist_ok=True)
+        file_exists = csv_path.exists()
+        with csv_path.open("a", newline="", encoding="utf-8") as csvfile:
+            writer = csv.writer(csvfile)
+            if not file_exists:
+                writer.writerow(["timestamp", "filepath", "label", "signer", "frames"])
+            writer.writerow([
+                datetime.now().isoformat(),
+                f"landmarks/{label}/{signer_id}/{clean_filename}",
+                label,
+                signer_id,
+                30
+            ])
+            
+        return {
+            "status": "success",
+            "message": f"File {clean_filename} berhasil diunggah dan disimpan.",
+            "file_path": str(file_path)
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Gagal menyimpan file: {str(e)}")

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { AppContext } from '../context/AppContext';
+import { AppContext } from '../context/AppContextObject';
 import { ArrowLeft, Play, Pause, Download, Video, Award, Clock, Activity, Sliders, CheckCircle2 } from 'lucide-react';
 
 export const MotionVisualizer = ({ setView }) => {
-  const { t } = useContext(AppContext);
+  const { t, vocabulary } = useContext(AppContext);
   const [duration, setDuration] = useState(30); // Default 30s
   const [isAnimating, setIsAnimating] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);

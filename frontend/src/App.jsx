@@ -18,11 +18,14 @@ function AppContent() {
     if (path === '/motion') {
       return 'motion';
     }
-    if (path === '/patient') {
+    if (path === '/patient' || path === '/translate') {
       return 'patient';
     }
-    if (path === '/doctor') {
+    if (path === '/doctor' || path === '/consultation') {
       return 'doctor';
+    }
+    if (path === '/history' || path === '/settings') {
+      return 'data-collection';
     }
     if (path === '/about') {
       return 'about';

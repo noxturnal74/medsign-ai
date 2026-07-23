@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { AppContext } from '../context/AppContext';
+import { AppContext } from '../context/AppContextObject';
 import { ArrowLeft, BookOpen, CheckCircle, Code, FileText, ShieldCheck, Terminal } from 'lucide-react';
 
 const frontendItems = [

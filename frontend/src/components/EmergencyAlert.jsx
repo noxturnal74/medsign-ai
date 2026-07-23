@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { AppContext } from '../context/AppContext';
+import { AppContext } from '../context/AppContextObject';
 import { AlertOctagon } from 'lucide-react';
 
 const emergencyWords = new Set([
@@ -20,7 +20,7 @@ export const EmergencyAlert = () => {
   if (!lastDetected) return null;
 
   const { prediction } = lastDetected;
-  const isEmergency = emergencyWords.has(prediction.toLowerCase());
+  const isEmergency = prediction ? emergencyWords.has(prediction.toLowerCase()) : false;
 
   if (!isEmergency) return null;
 

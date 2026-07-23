@@ -1,16 +1,39 @@
-import React, { createContext, useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { vocabulary } from '../data/vocabulary';
 import { translations } from '../data/translations';
-
-export const AppContext = createContext();
+import { AppContext } from './AppContextObject';
 
 export const AppProvider = ({ children }) => {
+  // --- STATES ---
   const [ttsEnabled, setTtsEnabled] = useState(true);
   const [vocabList, setVocabList] = useState(vocabulary);
   const [language, setLanguageState] = useState(() => {
     return localStorage.getItem('medsign_lang') || 'id';
   });
+  const [sessionLog, setSessionLog] = useState([]);
+  const [sentence, setSentence] = useState([]);
+  const [lastDetected, setLastDetected] = useState(null);
+  const [cameraActive, setCameraActive] = useState(false);
+  const [isBackendConnected, setIsBackendConnected] = useState(false);
+  const [serverState, setServerState] = useState('demo'); // 'demo' | 'connected' | 'disconnected'
+  const [spellingMode, setSpellingMode] = useState(false);
+  const [spelledText, setSpelledText] = useState("");
+  const [speakingText, setSpeakingText] = useState("");
+  const [speakingProgress, setSpeakingProgress] = useState(0);
+  const [isTtsPaused, setIsTtsPaused] = useState(false);
+  const [availableVoices, setAvailableVoices] = useState([]);
+  const [selectedVoiceName, setSelectedVoiceNameState] = useState(() => {
+    return localStorage.getItem('medsign_selected_voice') || '';
+  });
+  const [wordRecommendations, setWordRecommendations] = useState([]);
+  const [generatedSentence, setGeneratedSentence] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
 
+  // --- REFS ---
+  const sentenceTimerRef = useRef(null);
+  const lastSentenceLengthRef = useRef(0);
+
+  // --- CALLBACKS & HELPERS ---
   const setLanguage = (lang) => {
     setLanguageState(lang);
     localStorage.setItem('medsign_lang', lang);
@@ -37,11 +60,9 @@ export const AppProvider = ({ children }) => {
       if (response.ok) {
         const data = await response.json();
         if (data && data.words) {
-          // Merge static and backend vocabularies
           const merged = [...vocabulary];
           data.words.forEach(w => {
-            if (!merged.some(m => m.word === w.word)) {
-              // Map category back to user-friendly name if needed
+            if (!merged.some(m => m.word.toLowerCase() === w.word.toLowerCase())) {
               merged.push({
                 id: w.id,
                 word: w.word,
@@ -50,7 +71,18 @@ export const AppProvider = ({ children }) => {
               });
             }
           });
-          setVocabList(merged);
+          
+          const uniqueMerged = [];
+          const seen = new Set();
+          merged.forEach(item => {
+            const slug = item.word.toLowerCase().trim();
+            if (!seen.has(slug)) {
+              seen.add(slug);
+              uniqueMerged.push(item);
+            }
+          });
+          window.vocabList = uniqueMerged;
+          setVocabList(uniqueMerged);
         }
       }
     } catch (err) {
@@ -58,24 +90,41 @@ export const AppProvider = ({ children }) => {
     }
   }, []);
 
-  useEffect(() => {
-    refreshVocabulary();
-  }, [refreshVocabulary]);
-  const [sessionLog, setSessionLog] = useState([]);
-  const [sentence, setSentence] = useState([]);
-  const [lastDetected, setLastDetected] = useState(null);
-  const [cameraActive, setCameraActive] = useState(false);
-  const [isBackendConnected, setIsBackendConnected] = useState(false);
-  const [serverState, setServerState] = useState('demo'); // 'demo' | 'connected' | 'disconnected'
-  
-  // State baru untuk abjad BISINDO Spelling Mode (A-Z)
-  const [spellingMode, setSpellingMode] = useState(false);
-  const [spelledText, setSpelledText] = useState("");
-  
-  // TTS Voice & Progress States
-  const [speakingText, setSpeakingText] = useState("");
-  const [speakingProgress, setSpeakingProgress] = useState(0);
-  const [isTtsPaused, setIsTtsPaused] = useState(false);
+  const getSentenceSuggestions = useCallback((words) => {
+    if (!words || words.length === 0) return [];
+    const lowerWords = words.map(w => w.toLowerCase());
+    const suggestions = [];
+
+    if (lowerWords.includes('sakit') && lowerWords.includes('dada')) {
+      suggestions.push("Saya mengalami nyeri dada.");
+      suggestions.push("Dada saya sakit sekali.");
+    }
+    if (lowerWords.includes('sesak') || lowerWords.includes('napas')) {
+      suggestions.push("Saya mengalami sesak napas.");
+      suggestions.push("Saya tidak bisa bernapas.");
+    }
+    if (lowerWords.includes('demam') || lowerWords.includes('panas')) {
+      suggestions.push("Saya mengalami demam tinggi.");
+      suggestions.push("Badan saya terasa panas.");
+    }
+    if (lowerWords.includes('pusing') || lowerWords.includes('kepala')) {
+      suggestions.push("Saya merasa pusing kepala.");
+      suggestions.push("Kepala saya terasa pening.");
+    }
+    
+    if (suggestions.length === 0 && words.length > 0) {
+      const joined = words.join(' ');
+      suggestions.push(`Saya merasakan ${joined}.`);
+      suggestions.push(`Keluhan saya adalah ${words.join(', ')}.`);
+    }
+
+    return Array.from(new Set(suggestions)).slice(0, 3);
+  }, []);
+
+  const setSelectedVoiceName = (voiceName) => {
+    setSelectedVoiceNameState(voiceName);
+    localStorage.setItem('medsign_selected_voice', voiceName);
+  };
 
   const pauseTts = useCallback(() => {
     if (typeof window !== 'undefined' && window.speechSynthesis) {
@@ -99,72 +148,7 @@ export const AppProvider = ({ children }) => {
       setSpeakingProgress(0);
     }
   }, []);
-  const [availableVoices, setAvailableVoices] = useState([]);
-  const [selectedVoiceName, setSelectedVoiceNameState] = useState(() => {
-    return localStorage.getItem('medsign_selected_voice') || '';
-  });
 
-  const setSelectedVoiceName = (voiceName) => {
-    setSelectedVoiceNameState(voiceName);
-    localStorage.setItem('medsign_selected_voice', voiceName);
-  };
-
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.speechSynthesis) {
-      const loadVoices = () => {
-        const voices = window.speechSynthesis.getVoices();
-        // Filter voices for Indonesian, English, or any available
-        setAvailableVoices(voices);
-      };
-      loadVoices();
-      if (window.speechSynthesis.onvoiceschanged !== undefined) {
-        window.speechSynthesis.onvoiceschanged = loadVoices;
-      }
-    }
-  }, []);
-
-  // AI Recommendation automatic sentence builder
-  const getSentenceSuggestions = useCallback((words) => {
-    if (!words || words.length === 0) return [];
-    const lowerWords = words.map(w => w.toLowerCase());
-    const suggestions = [];
-
-    if (lowerWords.includes('sakit') && lowerWords.includes('dada')) {
-      suggestions.push("Saya mengalami nyeri dada.");
-      suggestions.push("Dada saya sakit sekali.");
-    }
-    if (lowerWords.includes('sesak') || lowerWords.includes('napas')) {
-      suggestions.push("Saya merasa sesak napas.");
-      suggestions.push("Napas saya terasa berat.");
-    }
-    if (lowerWords.includes('pusing') || lowerWords.includes('kepala')) {
-      suggestions.push("Kepala saya terasa sangat pusing.");
-      suggestions.push("Saya pusing dan lemas.");
-    }
-    if (lowerWords.includes('mual') || lowerWords.includes('muntah')) {
-      suggestions.push("Perut saya mual dan ingin muntah.");
-    }
-    if (lowerWords.includes('demam') || lowerWords.includes('tinggi')) {
-      suggestions.push("Badan saya demam tinggi.");
-    }
-    if (lowerWords.includes('tensi') || lowerWords.includes('tinggi')) {
-      suggestions.push("Tekanan darah saya tinggi.");
-    }
-    if (lowerWords.includes('tolong') || lowerWords.includes('bantuan segera')) {
-      suggestions.push("Tolong, saya butuh bantuan medis segera!");
-    }
-
-    // Dynamic fallback matching any words
-    if (suggestions.length === 0) {
-      const joined = words.join(" dan ");
-      suggestions.push(`Saya merasakan ${joined}.`);
-      suggestions.push(`Keluhan saya adalah ${words.join(', ')}.`);
-    }
-
-    return Array.from(new Set(suggestions)).slice(0, 3);
-  }, []);
-
-  // Web Speech API for TTS with progress tracking and custom voice selection
   const speak = useCallback((text) => {
     if (!ttsEnabled || !window.speechSynthesis) return;
     window.speechSynthesis.cancel(); 
@@ -174,7 +158,6 @@ export const AppProvider = ({ children }) => {
 
     const utterance = new SpeechSynthesisUtterance(text);
     
-    // Set custom voice if selected
     if (selectedVoiceName && availableVoices.length > 0) {
       const voice = availableVoices.find(v => v.name === selectedVoiceName);
       if (voice) {
@@ -186,13 +169,12 @@ export const AppProvider = ({ children }) => {
     
     utterance.rate = 0.95;
 
-    // Simulate progress in case browser doesn't trigger onboundary events properly
-    const durationEst = Math.max(1000, text.length * 75); // 75ms per character, min 1s
+    const durationEst = Math.max(1000, text.length * 75);
     let elapsed = 0;
     setIsTtsPaused(false);
     
     const progressInterval = setInterval(() => {
-      if (window.speechSynthesis.paused) return; // Pause the simulation too
+      if (window.speechSynthesis.paused) return;
       elapsed += 40;
       const pct = Math.min(100, (elapsed / durationEst) * 100);
       setSpeakingProgress(pct);
@@ -224,10 +206,9 @@ export const AppProvider = ({ children }) => {
     window.speechSynthesis.speak(utterance);
   }, [ttsEnabled, selectedVoiceName, availableVoices]);
 
-  // Sentence functions
   const appendWord = useCallback((word) => {
     setSentence((prev) => {
-      if (prev.length >= 10) return prev; // Limit to 10 words
+      if (prev.length >= 10) return prev;
       return [...prev, word];
     });
   }, []);
@@ -240,7 +221,6 @@ export const AppProvider = ({ children }) => {
     setSentence([]);
   }, []);
 
-  // Utility mutator untuk teks ejaan abjad (Mode Eja)
   const appendLetter = useCallback((letter) => {
     setSpelledText((prev) => {
       if (prev.length >= 100) return prev;
@@ -266,7 +246,6 @@ export const AppProvider = ({ children }) => {
     setSpelledText("");
   }, []);
 
-  // Session Log functions
   const addLogEntry = useCallback((entry) => {
     const newEntry = {
       id: Math.random().toString(36).substr(2, 9),
@@ -275,7 +254,6 @@ export const AppProvider = ({ children }) => {
     };
     setSessionLog((prev) => [newEntry, ...prev]);
 
-    // Speak automatically if spoken word is added
     if (entry.role === 'doctor') {
       speak(entry.text);
     } else if (entry.role === 'patient') {
@@ -286,6 +264,113 @@ export const AppProvider = ({ children }) => {
   const clearLog = useCallback(() => {
     setSessionLog([]);
   }, []);
+
+  const appendWordRecommendation = useCallback((word) => {
+    setSentence(prev => {
+      if (prev.length === 0) return [word];
+      const last = prev[prev.length - 1].toLowerCase().trim();
+      const rec = word.toLowerCase().trim();
+      if (rec.includes(last)) {
+        return [...prev.slice(0, -1), word];
+      }
+      return [...prev, word];
+    });
+  }, []);
+
+  // --- EFFECTS ---
+  useEffect(() => {
+    refreshVocabulary();
+  }, [refreshVocabulary]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      const loadVoices = () => {
+        const voices = window.speechSynthesis.getVoices();
+        setAvailableVoices(voices);
+      };
+      loadVoices();
+      if (window.speechSynthesis.onvoiceschanged !== undefined) {
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (sentence.length === 0) {
+      setWordRecommendations([]);
+      return;
+    }
+    const lastWord = sentence[sentence.length - 1];
+    const fetchRecommendations = async () => {
+      try {
+        const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+        const response = await fetch(
+          `${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/nlg/recommend?word=${encodeURIComponent(lastWord)}`
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setWordRecommendations(data.recommendations || []);
+        }
+      } catch (err) {
+        console.error("Gagal mengambil rekomendasi kata:", err);
+      }
+    };
+    fetchRecommendations();
+  }, [sentence]);
+
+  useEffect(() => {
+    if (sentence.length === 0) {
+      setGeneratedSentence("");
+      lastSentenceLengthRef.current = 0;
+      return;
+    }
+
+    if (sentenceTimerRef.current) {
+      clearTimeout(sentenceTimerRef.current);
+    }
+
+    if (sentence.length <= lastSentenceLengthRef.current) {
+      return;
+    }
+    lastSentenceLengthRef.current = sentence.length;
+
+    sentenceTimerRef.current = setTimeout(async () => {
+      setIsGenerating(true);
+      try {
+        const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+        const response = await fetch(
+          `${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/nlg/generate-sentence`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ words: sentence })
+          }
+        );
+        if (response.ok) {
+          const data = await response.json();
+          const finalSentence = data.sentence;
+          setGeneratedSentence(finalSentence);
+
+          addLogEntry({
+            role: 'patient',
+            text: finalSentence,
+            confidence: 1.0,
+            isNlg: true
+          });
+        }
+      } catch (err) {
+        console.error("Gagal generate kalimat NLG:", err);
+      } finally {
+        setIsGenerating(false);
+      }
+    }, 2500);
+
+    return () => {
+      if (sentenceTimerRef.current) {
+        clearTimeout(sentenceTimerRef.current);
+      }
+    };
+  }, [sentence, addLogEntry]);
 
   return (
     <AppContext.Provider
@@ -312,7 +397,6 @@ export const AppProvider = ({ children }) => {
         speak,
         vocabulary: vocabList,
         refreshVocabulary,
-        // Ekspos state & mutator untuk Mode Eja
         spellingMode,
         setSpellingMode,
         spelledText,
@@ -324,13 +408,16 @@ export const AppProvider = ({ children }) => {
         language,
         setLanguage,
         t,
-        // TTS & AI Suggestions
         speakingText,
         speakingProgress,
         availableVoices,
         selectedVoiceName,
         setSelectedVoiceName,
         getSentenceSuggestions,
+        wordRecommendations,
+        appendWordRecommendation,
+        generatedSentence,
+        isGenerating,
         isTtsPaused,
         pauseTts,
         resumeTts,

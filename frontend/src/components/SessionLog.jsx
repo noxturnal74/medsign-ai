@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { AppContext } from '../context/AppContext';
+import { AppContext } from '../context/AppContextObject';
 import { Clipboard, Download, FileText, Stethoscope, Trash2, UserRound } from 'lucide-react';
 
 export const SessionLog = () => {

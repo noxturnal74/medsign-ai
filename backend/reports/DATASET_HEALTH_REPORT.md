@@ -1,6 +1,6 @@
 # DATASET_HEALTH_REPORT
 
-Generated at: 2026-07-21T19:38:46
+Generated at: 2026-07-22T19:46:33
 
 ## Contract
 
@@ -14,7 +14,7 @@ Generated at: 2026-07-21T19:38:46
 - Filter label: `all`
 - Filter signer: `all`
 - Max empty frame ratio: `10.00%`
-- Valid samples: **2882**
+- Valid samples: **3630**
 - Invalid samples: **270**
 
 ## Samples Per Label
@@ -56,7 +56,7 @@ Generated at: 2026-07-21T19:38:46
 | `normal` | 50 | 1 | 0.00% | ok |
 | `gula` | 50 | 1 | 0.00% | ok |
 | `manis` | 50 | 1 | 0.00% | ok |
-| `lemas` | 94 | 2 | 0.00% | ok |
+| `lemas` | 95 | 2 | 0.00% | ok |
 | `haus` | 0 | 0 | - | missing |
 | `kencing` | 50 | 1 | 0.00% | ok |
 | `luka` | 50 | 1 | 0.00% | ok |
@@ -108,21 +108,21 @@ Generated at: 2026-07-21T19:38:46
 | `tidak mengerti` | 0 | 0 | - | missing |
 | `darurat` | 0 | 0 | - | missing |
 | `cepat` | 50 | 1 | 0.00% | ok |
-| `keluarga` | 0 | 0 | - | missing |
-| `pulang` | 0 | 0 | - | missing |
-| `rumah sakit` | 0 | 0 | - | missing |
-| `pasien` | 0 | 0 | - | missing |
-| `perawat` | 0 | 0 | - | missing |
-| `ambulans` | 0 | 0 | - | missing |
-| `suntik` | 0 | 0 | - | missing |
-| `infus` | 0 | 0 | - | missing |
-| `vaksin` | 0 | 0 | - | missing |
-| `laboratorium` | 0 | 0 | - | missing |
-| `rontgen` | 0 | 0 | - | missing |
-| `rawat inap` | 0 | 0 | - | missing |
-| `mata` | 45 | 1 | 0.00% | ok |
-| `hidung` | 0 | 0 | - | missing |
-| `mulut` | 0 | 0 | - | missing |
+| `keluarga` | 50 | 1 | 0.00% | ok |
+| `pulang` | 50 | 1 | 0.00% | ok |
+| `rumah sakit` | 50 | 1 | 0.00% | ok |
+| `pasien` | 52 | 1 | 0.00% | ok |
+| `perawat` | 48 | 1 | 0.00% | ok |
+| `ambulans` | 50 | 1 | 0.00% | ok |
+| `suntik` | 50 | 1 | 0.00% | ok |
+| `infus` | 50 | 1 | 0.00% | ok |
+| `vaksin` | 50 | 1 | 0.00% | ok |
+| `laboratorium` | 50 | 1 | 0.00% | ok |
+| `rontgen` | 50 | 1 | 0.00% | ok |
+| `rawat inap` | 48 | 1 | 0.00% | ok |
+| `mata` | 94 | 2 | 0.00% | ok |
+| `hidung` | 50 | 1 | 0.00% | ok |
+| `mulut` | 50 | 1 | 0.00% | ok |
 | `telinga` | 45 | 1 | 0.00% | ok |
 | `gigi` | 0 | 0 | - | missing |
 | `perut` | 45 | 1 | 0.00% | ok |
@@ -341,7 +341,7 @@ Generated at: 2026-07-21T19:38:46
 - `albert_cheng`: 50
 
 ### lemas
-- `albert_cheng`: 49
+- `albert_cheng`: 50
 - `synthetic`: 45
 
 ### haus
@@ -501,49 +501,50 @@ Generated at: 2026-07-21T19:38:46
 - `albert_cheng`: 50
 
 ### keluarga
-- Belum ada data.
+- `albert_cheng`: 50
 
 ### pulang
-- Belum ada data.
+- `albert_cheng`: 50
 
 ### rumah sakit
-- Belum ada data.
+- `albert_cheng`: 50
 
 ### pasien
-- Belum ada data.
+- `albert_cheng`: 52
 
 ### perawat
-- Belum ada data.
+- `albert_cheng`: 48
 
 ### ambulans
-- Belum ada data.
+- `albert_cheng`: 50
 
 ### suntik
-- Belum ada data.
+- `albert_cheng`: 50
 
 ### infus
-- Belum ada data.
+- `albert_cheng`: 50
 
 ### vaksin
-- Belum ada data.
+- `albert_cheng`: 50
 
 ### laboratorium
-- Belum ada data.
+- `albert_cheng`: 50
 
 ### rontgen
-- Belum ada data.
+- `albert_cheng`: 50
 
 ### rawat inap
-- Belum ada data.
+- `albert_cheng`: 48
 
 ### mata
+- `albert_cheng`: 49
 - `synthetic`: 45
 
 ### hidung
-- Belum ada data.
+- `albert_cheng`: 50
 
 ### mulut
-- Belum ada data.
+- `albert_cheng`: 50
 
 ### telinga
 - `synthetic`: 45

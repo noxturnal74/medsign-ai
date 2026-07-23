@@ -1,0 +1,1346 @@
+{
+  "sakit": {
+    "id": 1,
+    "category": "Kategori Umum & Kata Interaksi",
+    "emergency": false,
+    "tts": "sakit",
+    "formal": "sakit"
+  },
+  "dokter": {
+    "id": 2,
+    "category": "Kategori Umum & Kata Interaksi",
+    "emergency": false,
+    "tts": "dokter",
+    "formal": "dokter"
+  },
+  "obat": {
+    "id": 3,
+    "category": "Kategori Umum & Kata Interaksi",
+    "emergency": false,
+    "tts": "obat",
+    "formal": "obat"
+  },
+  "periksa": {
+    "id": 4,
+    "category": "Kategori Umum & Kata Interaksi",
+    "emergency": false,
+    "tts": "periksa",
+    "formal": "periksa"
+  },
+  "sembuh": {
+    "id": 5,
+    "category": "Kategori Umum & Kata Interaksi",
+    "emergency": false,
+    "tts": "sembuh",
+    "formal": "sembuh"
+  },
+  "resep": {
+    "id": 6,
+    "category": "Kategori Umum & Kata Interaksi",
+    "emergency": false,
+    "tts": "resep",
+    "formal": "resep"
+  },
+  "alergi": {
+    "id": 7,
+    "category": "Kategori Umum & Kata Interaksi",
+    "emergency": false,
+    "tts": "alergi",
+    "formal": "alergi"
+  },
+  "berapa": {
+    "id": 8,
+    "category": "Kategori Umum & Kata Interaksi",
+    "emergency": false,
+    "tts": "berapa",
+    "formal": "berapa"
+  },
+  "kapan": {
+    "id": 74,
+    "category": "Kata Tanya",
+    "emergency": false,
+    "tts": "kapan",
+    "formal": "kapan"
+  },
+  "pagi": {
+    "id": 131,
+    "category": "Obat & Pengobatan",
+    "emergency": false,
+    "tts": "pagi",
+    "formal": "pagi"
+  },
+  "siang": {
+    "id": 132,
+    "category": "Obat & Pengobatan",
+    "emergency": false,
+    "tts": "siang",
+    "formal": "siang"
+  },
+  "malam": {
+    "id": 133,
+    "category": "Obat & Pengobatan",
+    "emergency": false,
+    "tts": "malam",
+    "formal": "malam"
+  },
+  "makan": {
+    "id": 13,
+    "category": "Kategori Umum & Kata Interaksi",
+    "emergency": false,
+    "tts": "makan",
+    "formal": "makan"
+  },
+  "minum": {
+    "id": 14,
+    "category": "Kategori Umum & Kata Interaksi",
+    "emergency": false,
+    "tts": "minum",
+    "formal": "minum"
+  },
+  "batuk": {
+    "id": 15,
+    "category": "Sistem Pernapasan",
+    "emergency": false,
+    "tts": "batuk",
+    "formal": "batuk"
+  },
+  "sesak": {
+    "id": 16,
+    "category": "Sistem Pernapasan",
+    "emergency": true,
+    "tts": "sesak",
+    "formal": "sesak"
+  },
+  "napas": {
+    "id": 17,
+    "category": "Sistem Pernapasan",
+    "emergency": false,
+    "tts": "napas",
+    "formal": "napas"
+  },
+  "dada": {
+    "id": 18,
+    "category": "Sistem Pernapasan",
+    "emergency": false,
+    "tts": "dada",
+    "formal": "dada"
+  },
+  "dahak": {
+    "id": 19,
+    "category": "Sistem Pernapasan",
+    "emergency": false,
+    "tts": "dahak",
+    "formal": "dahak"
+  },
+  "pilek": {
+    "id": 20,
+    "category": "Sistem Pernapasan",
+    "emergency": false,
+    "tts": "pilek",
+    "formal": "pilek"
+  },
+  "flu": {
+    "id": 21,
+    "category": "Sistem Pernapasan",
+    "emergency": false,
+    "tts": "flu",
+    "formal": "flu"
+  },
+  "tenggorokan": {
+    "id": 22,
+    "category": "Sistem Pernapasan",
+    "emergency": false,
+    "tts": "tenggorokan",
+    "formal": "tenggorokan"
+  },
+  "paru-paru": {
+    "id": 23,
+    "category": "Sistem Pernapasan",
+    "emergency": false,
+    "tts": "paru-paru",
+    "formal": "paru-paru"
+  },
+  "asma": {
+    "id": 24,
+    "category": "Sistem Pernapasan",
+    "emergency": true,
+    "tts": "asma",
+    "formal": "asma"
+  },
+  "pusing": {
+    "id": 170,
+    "category": "Kondisi Pasien",
+    "emergency": false,
+    "tts": "pusing",
+    "formal": "pusing"
+  },
+  "kepala": {
+    "id": 26,
+    "category": "Hipertensi / Kardiovaskular",
+    "emergency": false,
+    "tts": "kepala",
+    "formal": "kepala"
+  },
+  "tensi": {
+    "id": 27,
+    "category": "Hipertensi / Kardiovaskular",
+    "emergency": false,
+    "tts": "tensi",
+    "formal": "tensi"
+  },
+  "darah": {
+    "id": 28,
+    "category": "Hipertensi / Kardiovaskular",
+    "emergency": false,
+    "tts": "darah",
+    "formal": "darah"
+  },
+  "tinggi": {
+    "id": 29,
+    "category": "Hipertensi / Kardiovaskular",
+    "emergency": false,
+    "tts": "tinggi",
+    "formal": "tinggi"
+  },
+  "berat tengkuk": {
+    "id": 30,
+    "category": "Hipertensi / Kardiovaskular",
+    "emergency": false,
+    "tts": "berat tengkuk",
+    "formal": "berat tengkuk"
+  },
+  "leher": {
+    "id": 31,
+    "category": "Hipertensi / Kardiovaskular",
+    "emergency": false,
+    "tts": "leher",
+    "formal": "leher"
+  },
+  "jantung": {
+    "id": 32,
+    "category": "Hipertensi / Kardiovaskular",
+    "emergency": false,
+    "tts": "jantung",
+    "formal": "jantung"
+  },
+  "normal": {
+    "id": 160,
+    "category": "Pemeriksaan Medis",
+    "emergency": false,
+    "tts": "normal",
+    "formal": "normal"
+  },
+  "gula": {
+    "id": 34,
+    "category": "Diabetes Mellitus Tipe 2",
+    "emergency": false,
+    "tts": "gula",
+    "formal": "gula"
+  },
+  "manis": {
+    "id": 35,
+    "category": "Diabetes Mellitus Tipe 2",
+    "emergency": false,
+    "tts": "manis",
+    "formal": "manis"
+  },
+  "lemas": {
+    "id": 36,
+    "category": "Diabetes Mellitus Tipe 2",
+    "emergency": false,
+    "tts": "lemas",
+    "formal": "lemas"
+  },
+  "haus": {
+    "id": 37,
+    "category": "Diabetes Mellitus Tipe 2",
+    "emergency": false,
+    "tts": "haus",
+    "formal": "haus"
+  },
+  "kencing": {
+    "id": 38,
+    "category": "Diabetes Mellitus Tipe 2",
+    "emergency": false,
+    "tts": "kencing",
+    "formal": "kencing"
+  },
+  "luka": {
+    "id": 39,
+    "category": "Diabetes Mellitus Tipe 2",
+    "emergency": false,
+    "tts": "luka",
+    "formal": "luka"
+  },
+  "kering": {
+    "id": 40,
+    "category": "Diabetes Mellitus Tipe 2",
+    "emergency": false,
+    "tts": "kering",
+    "formal": "kering"
+  },
+  "kesemutan": {
+    "id": 41,
+    "category": "Diabetes Mellitus Tipe 2",
+    "emergency": false,
+    "tts": "kesemutan",
+    "formal": "kesemutan"
+  },
+  "kaki": {
+    "id": 42,
+    "category": "Diabetes Mellitus Tipe 2",
+    "emergency": false,
+    "tts": "kaki",
+    "formal": "kaki"
+  },
+  "lapar": {
+    "id": 43,
+    "category": "Diabetes Mellitus Tipe 2",
+    "emergency": false,
+    "tts": "lapar",
+    "formal": "lapar"
+  },
+  "nyeri": {
+    "id": 44,
+    "category": "Gangguan Muskuloskeletal",
+    "emergency": false,
+    "tts": "nyeri",
+    "formal": "nyeri"
+  },
+  "otot": {
+    "id": 45,
+    "category": "Gangguan Muskuloskeletal",
+    "emergency": false,
+    "tts": "otot",
+    "formal": "otot"
+  },
+  "sendi": {
+    "id": 46,
+    "category": "Gangguan Muskuloskeletal",
+    "emergency": false,
+    "tts": "sendi",
+    "formal": "sendi"
+  },
+  "tulang": {
+    "id": 47,
+    "category": "Gangguan Muskuloskeletal",
+    "emergency": false,
+    "tts": "tulang",
+    "formal": "tulang"
+  },
+  "patah": {
+    "id": 48,
+    "category": "Gangguan Muskuloskeletal",
+    "emergency": true,
+    "tts": "patah",
+    "formal": "patah"
+  },
+  "bengkak": {
+    "id": 49,
+    "category": "Gangguan Muskuloskeletal",
+    "emergency": false,
+    "tts": "bengkak",
+    "formal": "bengkak"
+  },
+  "pegal": {
+    "id": 50,
+    "category": "Gangguan Muskuloskeletal",
+    "emergency": false,
+    "tts": "pegal",
+    "formal": "pegal"
+  },
+  "linu": {
+    "id": 51,
+    "category": "Gangguan Muskuloskeletal",
+    "emergency": false,
+    "tts": "linu",
+    "formal": "linu"
+  },
+  "pinggang": {
+    "id": 52,
+    "category": "Gangguan Muskuloskeletal",
+    "emergency": false,
+    "tts": "pinggang",
+    "formal": "pinggang"
+  },
+  "punggung": {
+    "id": 53,
+    "category": "Gangguan Muskuloskeletal",
+    "emergency": false,
+    "tts": "punggung",
+    "formal": "punggung"
+  },
+  "gerak": {
+    "id": 54,
+    "category": "Gangguan Muskuloskeletal",
+    "emergency": false,
+    "tts": "gerak",
+    "formal": "gerak"
+  },
+  "benjolan": {
+    "id": 55,
+    "category": "Neoplasma / Tumor & Kanker",
+    "emergency": false,
+    "tts": "benjolan",
+    "formal": "benjolan"
+  },
+  "tumor": {
+    "id": 56,
+    "category": "Neoplasma / Tumor & Kanker",
+    "emergency": false,
+    "tts": "tumor",
+    "formal": "tumor"
+  },
+  "kanker": {
+    "id": 57,
+    "category": "Neoplasma / Tumor & Kanker",
+    "emergency": false,
+    "tts": "kanker",
+    "formal": "kanker"
+  },
+  "operasi": {
+    "id": 58,
+    "category": "Neoplasma / Tumor & Kanker",
+    "emergency": false,
+    "tts": "operasi",
+    "formal": "operasi"
+  },
+  "besar": {
+    "id": 59,
+    "category": "Neoplasma / Tumor & Kanker",
+    "emergency": false,
+    "tts": "besar",
+    "formal": "besar"
+  },
+  "tumbuh": {
+    "id": 60,
+    "category": "Neoplasma / Tumor & Kanker",
+    "emergency": false,
+    "tts": "tumbuh",
+    "formal": "tumbuh"
+  },
+  "susah": {
+    "id": 61,
+    "category": "Gejala Tambahan & Instruksi Medis",
+    "emergency": false,
+    "tts": "susah",
+    "formal": "susah"
+  },
+  "tidur": {
+    "id": 62,
+    "category": "Gejala Tambahan & Instruksi Medis",
+    "emergency": false,
+    "tts": "tidur",
+    "formal": "tidur"
+  },
+  "mual": {
+    "id": 63,
+    "category": "Gejala Tambahan & Instruksi Medis",
+    "emergency": false,
+    "tts": "mual",
+    "formal": "mual"
+  },
+  "muntah": {
+    "id": 64,
+    "category": "Gejala Tambahan & Instruksi Medis",
+    "emergency": false,
+    "tts": "muntah",
+    "formal": "muntah"
+  },
+  "demam": {
+    "id": 65,
+    "category": "Gejala Tambahan & Instruksi Medis",
+    "emergency": false,
+    "tts": "demam",
+    "formal": "demam"
+  },
+  "panas": {
+    "id": 66,
+    "category": "Gejala Tambahan & Instruksi Medis",
+    "emergency": false,
+    "tts": "panas",
+    "formal": "panas"
+  },
+  "dingin": {
+    "id": 67,
+    "category": "Gejala Tambahan & Instruksi Medis",
+    "emergency": false,
+    "tts": "dingin",
+    "formal": "dingin"
+  },
+  "bahaya": {
+    "id": 68,
+    "category": "Gejala Tambahan & Instruksi Medis",
+    "emergency": true,
+    "tts": "bahaya",
+    "formal": "bahaya"
+  },
+  "istirahat": {
+    "id": 69,
+    "category": "Gejala Tambahan & Instruksi Medis",
+    "emergency": false,
+    "tts": "istirahat",
+    "formal": "istirahat"
+  },
+  "bantuan": {
+    "id": 70,
+    "category": "Gejala Tambahan & Instruksi Medis",
+    "emergency": true,
+    "tts": "bantuan",
+    "formal": "bantuan"
+  },
+  "apa": {
+    "id": 71,
+    "category": "Kata Tanya",
+    "emergency": false,
+    "tts": "apa",
+    "formal": "apa"
+  },
+  "siapa": {
+    "id": 72,
+    "category": "Kata Tanya",
+    "emergency": false,
+    "tts": "siapa",
+    "formal": "siapa"
+  },
+  "di mana": {
+    "id": 73,
+    "category": "Kata Tanya",
+    "emergency": false,
+    "tts": "di mana",
+    "formal": "di mana"
+  },
+  "mengapa": {
+    "id": 75,
+    "category": "Kata Tanya",
+    "emergency": false,
+    "tts": "mengapa",
+    "formal": "mengapa"
+  },
+  "bagaimana": {
+    "id": 76,
+    "category": "Kata Tanya",
+    "emergency": false,
+    "tts": "bagaimana",
+    "formal": "bagaimana"
+  },
+  "berapa lama": {
+    "id": 77,
+    "category": "Kata Tanya",
+    "emergency": false,
+    "tts": "berapa lama",
+    "formal": "berapa lama"
+  },
+  "sejak kapan": {
+    "id": 78,
+    "category": "Kata Tanya",
+    "emergency": false,
+    "tts": "sejak kapan",
+    "formal": "sejak kapan"
+  },
+  "bagian mana": {
+    "id": 79,
+    "category": "Kata Tanya",
+    "emergency": false,
+    "tts": "bagian mana",
+    "formal": "bagian mana"
+  },
+  "seberapa sering": {
+    "id": 80,
+    "category": "Kata Tanya",
+    "emergency": false,
+    "tts": "seberapa sering",
+    "formal": "seberapa sering"
+  },
+  "ya": {
+    "id": 81,
+    "category": "Komunikasi Dasar",
+    "emergency": false,
+    "tts": "ya",
+    "formal": "ya"
+  },
+  "tidak": {
+    "id": 82,
+    "category": "Komunikasi Dasar",
+    "emergency": false,
+    "tts": "tidak",
+    "formal": "tidak"
+  },
+  "tolong": {
+    "id": 83,
+    "category": "Komunikasi Dasar",
+    "emergency": true,
+    "tts": "tolong",
+    "formal": "tolong"
+  },
+  "terima kasih": {
+    "id": 84,
+    "category": "Komunikasi Dasar",
+    "emergency": false,
+    "tts": "terima kasih",
+    "formal": "terima kasih"
+  },
+  "mengerti": {
+    "id": 85,
+    "category": "Komunikasi Dasar",
+    "emergency": false,
+    "tts": "mengerti",
+    "formal": "mengerti"
+  },
+  "tidak mengerti": {
+    "id": 86,
+    "category": "Komunikasi Dasar",
+    "emergency": false,
+    "tts": "tidak mengerti",
+    "formal": "tidak mengerti"
+  },
+  "darurat": {
+    "id": 87,
+    "category": "Komunikasi Dasar",
+    "emergency": true,
+    "tts": "darurat",
+    "formal": "darurat"
+  },
+  "cepat": {
+    "id": 88,
+    "category": "Komunikasi Dasar",
+    "emergency": false,
+    "tts": "cepat",
+    "formal": "cepat"
+  },
+  "keluarga": {
+    "id": 89,
+    "category": "Komunikasi Dasar",
+    "emergency": false,
+    "tts": "keluarga",
+    "formal": "keluarga"
+  },
+  "pulang": {
+    "id": 90,
+    "category": "Komunikasi Dasar",
+    "emergency": false,
+    "tts": "pulang",
+    "formal": "pulang"
+  },
+  "rumah sakit": {
+    "id": 91,
+    "category": "Fasilitas & Tindakan Medis",
+    "emergency": false,
+    "tts": "rumah sakit",
+    "formal": "rumah sakit"
+  },
+  "pasien": {
+    "id": 92,
+    "category": "Fasilitas & Tindakan Medis",
+    "emergency": false,
+    "tts": "pasien",
+    "formal": "pasien"
+  },
+  "perawat": {
+    "id": 93,
+    "category": "Fasilitas & Tindakan Medis",
+    "emergency": false,
+    "tts": "perawat",
+    "formal": "perawat"
+  },
+  "ambulans": {
+    "id": 94,
+    "category": "Fasilitas & Tindakan Medis",
+    "emergency": true,
+    "tts": "ambulans",
+    "formal": "ambulans"
+  },
+  "suntik": {
+    "id": 95,
+    "category": "Fasilitas & Tindakan Medis",
+    "emergency": false,
+    "tts": "suntik",
+    "formal": "suntik"
+  },
+  "infus": {
+    "id": 96,
+    "category": "Fasilitas & Tindakan Medis",
+    "emergency": false,
+    "tts": "infus",
+    "formal": "infus"
+  },
+  "vaksin": {
+    "id": 97,
+    "category": "Fasilitas & Tindakan Medis",
+    "emergency": false,
+    "tts": "vaksin",
+    "formal": "vaksin"
+  },
+  "laboratorium": {
+    "id": 144,
+    "category": "Pemeriksaan Medis",
+    "emergency": false,
+    "tts": "laboratorium",
+    "formal": "laboratorium"
+  },
+  "rontgen": {
+    "id": 99,
+    "category": "Fasilitas & Tindakan Medis",
+    "emergency": false,
+    "tts": "rontgen",
+    "formal": "rontgen"
+  },
+  "rawat inap": {
+    "id": 100,
+    "category": "Fasilitas & Tindakan Medis",
+    "emergency": false,
+    "tts": "rawat inap",
+    "formal": "rawat inap"
+  },
+  "mata": {
+    "id": 101,
+    "category": "Bagian Tubuh",
+    "emergency": false,
+    "tts": "mata",
+    "formal": "mata"
+  },
+  "hidung": {
+    "id": 102,
+    "category": "Bagian Tubuh",
+    "emergency": false,
+    "tts": "hidung",
+    "formal": "hidung"
+  },
+  "mulut": {
+    "id": 103,
+    "category": "Bagian Tubuh",
+    "emergency": false,
+    "tts": "mulut",
+    "formal": "mulut"
+  },
+  "telinga": {
+    "id": 104,
+    "category": "Bagian Tubuh",
+    "emergency": false,
+    "tts": "telinga",
+    "formal": "telinga"
+  },
+  "gigi": {
+    "id": 105,
+    "category": "Bagian Tubuh",
+    "emergency": false,
+    "tts": "gigi",
+    "formal": "gigi"
+  },
+  "perut": {
+    "id": 106,
+    "category": "Bagian Tubuh",
+    "emergency": false,
+    "tts": "perut",
+    "formal": "perut"
+  },
+  "tangan": {
+    "id": 107,
+    "category": "Bagian Tubuh",
+    "emergency": false,
+    "tts": "tangan",
+    "formal": "tangan"
+  },
+  "jari": {
+    "id": 108,
+    "category": "Bagian Tubuh",
+    "emergency": false,
+    "tts": "jari",
+    "formal": "jari"
+  },
+  "lutut": {
+    "id": 109,
+    "category": "Bagian Tubuh",
+    "emergency": false,
+    "tts": "lutut",
+    "formal": "lutut"
+  },
+  "bahu": {
+    "id": 110,
+    "category": "Bagian Tubuh",
+    "emergency": false,
+    "tts": "bahu",
+    "formal": "bahu"
+  },
+  "gatal": {
+    "id": 111,
+    "category": "Gejala Tambahan",
+    "emergency": false,
+    "tts": "gatal",
+    "formal": "gatal"
+  },
+  "diare": {
+    "id": 112,
+    "category": "Gejala Tambahan",
+    "emergency": false,
+    "tts": "diare",
+    "formal": "diare"
+  },
+  "pendarahan": {
+    "id": 113,
+    "category": "Gejala Tambahan",
+    "emergency": true,
+    "tts": "pendarahan",
+    "formal": "pendarahan"
+  },
+  "pingsan": {
+    "id": 114,
+    "category": "Gejala Tambahan",
+    "emergency": true,
+    "tts": "pingsan",
+    "formal": "pingsan"
+  },
+  "kejang": {
+    "id": 115,
+    "category": "Gejala Tambahan",
+    "emergency": true,
+    "tts": "kejang",
+    "formal": "kejang"
+  },
+  "meriang": {
+    "id": 116,
+    "category": "Gejala Tambahan",
+    "emergency": false,
+    "tts": "meriang",
+    "formal": "meriang"
+  },
+  "kaku": {
+    "id": 117,
+    "category": "Gejala Tambahan",
+    "emergency": false,
+    "tts": "kaku",
+    "formal": "kaku"
+  },
+  "mati rasa": {
+    "id": 118,
+    "category": "Gejala Tambahan",
+    "emergency": false,
+    "tts": "mati rasa",
+    "formal": "mati rasa"
+  },
+  "sakit kepala": {
+    "id": 119,
+    "category": "Gejala Tambahan",
+    "emergency": true,
+    "tts": "sakit kepala",
+    "formal": "sakit kepala"
+  },
+  "cedera": {
+    "id": 120,
+    "category": "Gejala Tambahan",
+    "emergency": true,
+    "tts": "cedera",
+    "formal": "cedera"
+  },
+  "apotek": {
+    "id": 121,
+    "category": "Obat & Pengobatan",
+    "emergency": false,
+    "tts": "apotek",
+    "formal": "apotek"
+  },
+  "tablet": {
+    "id": 122,
+    "category": "Obat & Pengobatan",
+    "emergency": false,
+    "tts": "tablet",
+    "formal": "tablet"
+  },
+  "kapsul": {
+    "id": 123,
+    "category": "Obat & Pengobatan",
+    "emergency": false,
+    "tts": "kapsul",
+    "formal": "kapsul"
+  },
+  "sirup": {
+    "id": 124,
+    "category": "Obat & Pengobatan",
+    "emergency": false,
+    "tts": "sirup",
+    "formal": "sirup"
+  },
+  "antibiotik": {
+    "id": 125,
+    "category": "Obat & Pengobatan",
+    "emergency": false,
+    "tts": "antibiotik",
+    "formal": "antibiotik"
+  },
+  "vitamin": {
+    "id": 126,
+    "category": "Obat & Pengobatan",
+    "emergency": false,
+    "tts": "vitamin",
+    "formal": "vitamin"
+  },
+  "dosis": {
+    "id": 127,
+    "category": "Obat & Pengobatan",
+    "emergency": false,
+    "tts": "dosis",
+    "formal": "dosis"
+  },
+  "minum obat": {
+    "id": 128,
+    "category": "Obat & Pengobatan",
+    "emergency": false,
+    "tts": "minum obat",
+    "formal": "minum obat"
+  },
+  "sebelum makan": {
+    "id": 129,
+    "category": "Obat & Pengobatan",
+    "emergency": false,
+    "tts": "sebelum makan",
+    "formal": "sebelum makan"
+  },
+  "sesudah makan": {
+    "id": 130,
+    "category": "Obat & Pengobatan",
+    "emergency": false,
+    "tts": "sesudah makan",
+    "formal": "sesudah makan"
+  },
+  "hari": {
+    "id": 134,
+    "category": "Obat & Pengobatan",
+    "emergency": false,
+    "tts": "hari",
+    "formal": "hari"
+  },
+  "minggu": {
+    "id": 135,
+    "category": "Obat & Pengobatan",
+    "emergency": false,
+    "tts": "minggu",
+    "formal": "minggu"
+  },
+  "bulan": {
+    "id": 136,
+    "category": "Obat & Pengobatan",
+    "emergency": false,
+    "tts": "bulan",
+    "formal": "bulan"
+  },
+  "kontrol": {
+    "id": 137,
+    "category": "Obat & Pengobatan",
+    "emergency": false,
+    "tts": "kontrol",
+    "formal": "kontrol"
+  },
+  "terapi": {
+    "id": 138,
+    "category": "Obat & Pengobatan",
+    "emergency": false,
+    "tts": "terapi",
+    "formal": "terapi"
+  },
+  "rehabilitasi": {
+    "id": 139,
+    "category": "Obat & Pengobatan",
+    "emergency": false,
+    "tts": "rehabilitasi",
+    "formal": "rehabilitasi"
+  },
+  "efek samping": {
+    "id": 140,
+    "category": "Obat & Pengobatan",
+    "emergency": false,
+    "tts": "efek samping",
+    "formal": "efek samping"
+  },
+  "pemeriksaan": {
+    "id": 141,
+    "category": "Pemeriksaan Medis",
+    "emergency": false,
+    "tts": "pemeriksaan",
+    "formal": "pemeriksaan"
+  },
+  "hasil": {
+    "id": 142,
+    "category": "Pemeriksaan Medis",
+    "emergency": false,
+    "tts": "hasil",
+    "formal": "hasil"
+  },
+  "tes": {
+    "id": 143,
+    "category": "Pemeriksaan Medis",
+    "emergency": false,
+    "tts": "tes",
+    "formal": "tes"
+  },
+  "urine": {
+    "id": 146,
+    "category": "Pemeriksaan Medis",
+    "emergency": false,
+    "tts": "urine",
+    "formal": "urine"
+  },
+  "tekanan darah": {
+    "id": 147,
+    "category": "Pemeriksaan Medis",
+    "emergency": false,
+    "tts": "tekanan darah",
+    "formal": "tekanan darah"
+  },
+  "berat badan": {
+    "id": 148,
+    "category": "Pemeriksaan Medis",
+    "emergency": false,
+    "tts": "berat badan",
+    "formal": "berat badan"
+  },
+  "tinggi badan": {
+    "id": 149,
+    "category": "Pemeriksaan Medis",
+    "emergency": false,
+    "tts": "tinggi badan",
+    "formal": "tinggi badan"
+  },
+  "suhu tubuh": {
+    "id": 150,
+    "category": "Pemeriksaan Medis",
+    "emergency": false,
+    "tts": "suhu tubuh",
+    "formal": "suhu tubuh"
+  },
+  "denyut nadi": {
+    "id": 151,
+    "category": "Pemeriksaan Medis",
+    "emergency": false,
+    "tts": "denyut nadi",
+    "formal": "denyut nadi"
+  },
+  "napas cepat": {
+    "id": 152,
+    "category": "Pemeriksaan Medis",
+    "emergency": false,
+    "tts": "napas cepat",
+    "formal": "napas cepat"
+  },
+  "napas lambat": {
+    "id": 153,
+    "category": "Pemeriksaan Medis",
+    "emergency": false,
+    "tts": "napas lambat",
+    "formal": "napas lambat"
+  },
+  "foto rontgen": {
+    "id": 154,
+    "category": "Pemeriksaan Medis",
+    "emergency": false,
+    "tts": "foto rontgen",
+    "formal": "foto rontgen"
+  },
+  "usg": {
+    "id": 155,
+    "category": "Pemeriksaan Medis",
+    "emergency": false,
+    "tts": "usg",
+    "formal": "usg"
+  },
+  "ct scan": {
+    "id": 156,
+    "category": "Pemeriksaan Medis",
+    "emergency": false,
+    "tts": "ct scan",
+    "formal": "ct scan"
+  },
+  "mri": {
+    "id": 157,
+    "category": "Pemeriksaan Medis",
+    "emergency": false,
+    "tts": "mri",
+    "formal": "mri"
+  },
+  "positif": {
+    "id": 158,
+    "category": "Pemeriksaan Medis",
+    "emergency": false,
+    "tts": "positif",
+    "formal": "positif"
+  },
+  "negatif": {
+    "id": 159,
+    "category": "Pemeriksaan Medis",
+    "emergency": false,
+    "tts": "negatif",
+    "formal": "negatif"
+  },
+  "baik": {
+    "id": 161,
+    "category": "Kondisi Pasien",
+    "emergency": false,
+    "tts": "baik",
+    "formal": "baik"
+  },
+  "buruk": {
+    "id": 162,
+    "category": "Kondisi Pasien",
+    "emergency": false,
+    "tts": "buruk",
+    "formal": "buruk"
+  },
+  "ringan": {
+    "id": 163,
+    "category": "Kondisi Pasien",
+    "emergency": false,
+    "tts": "ringan",
+    "formal": "ringan"
+  },
+  "sedang": {
+    "id": 164,
+    "category": "Kondisi Pasien",
+    "emergency": false,
+    "tts": "sedang",
+    "formal": "sedang"
+  },
+  "berat": {
+    "id": 165,
+    "category": "Kondisi Pasien",
+    "emergency": false,
+    "tts": "berat",
+    "formal": "berat"
+  },
+  "stabil": {
+    "id": 166,
+    "category": "Kondisi Pasien",
+    "emergency": false,
+    "tts": "stabil",
+    "formal": "stabil"
+  },
+  "tidak stabil": {
+    "id": 167,
+    "category": "Kondisi Pasien",
+    "emergency": false,
+    "tts": "tidak stabil",
+    "formal": "tidak stabil"
+  },
+  "sadar": {
+    "id": 168,
+    "category": "Kondisi Pasien",
+    "emergency": false,
+    "tts": "sadar",
+    "formal": "sadar"
+  },
+  "tidak sadar": {
+    "id": 169,
+    "category": "Kondisi Pasien",
+    "emergency": true,
+    "tts": "tidak sadar",
+    "formal": "tidak sadar"
+  },
+  "lemah": {
+    "id": 171,
+    "category": "Kondisi Pasien",
+    "emergency": false,
+    "tts": "lemah",
+    "formal": "lemah"
+  },
+  "lelah": {
+    "id": 172,
+    "category": "Kondisi Pasien",
+    "emergency": false,
+    "tts": "lelah",
+    "formal": "lelah"
+  },
+  "gelisah": {
+    "id": 173,
+    "category": "Kondisi Pasien",
+    "emergency": false,
+    "tts": "gelisah",
+    "formal": "gelisah"
+  },
+  "cemas": {
+    "id": 174,
+    "category": "Kondisi Pasien",
+    "emergency": false,
+    "tts": "cemas",
+    "formal": "cemas"
+  },
+  "takut": {
+    "id": 175,
+    "category": "Kondisi Pasien",
+    "emergency": false,
+    "tts": "takut",
+    "formal": "takut"
+  },
+  "sedih": {
+    "id": 176,
+    "category": "Kondisi Pasien",
+    "emergency": false,
+    "tts": "sedih",
+    "formal": "sedih"
+  },
+  "stres": {
+    "id": 177,
+    "category": "Kondisi Pasien",
+    "emergency": false,
+    "tts": "stres",
+    "formal": "stres"
+  },
+  "nyaman": {
+    "id": 178,
+    "category": "Kondisi Pasien",
+    "emergency": false,
+    "tts": "nyaman",
+    "formal": "nyaman"
+  },
+  "tidak nyaman": {
+    "id": 179,
+    "category": "Kondisi Pasien",
+    "emergency": false,
+    "tts": "tidak nyaman",
+    "formal": "tidak nyaman"
+  },
+  "sehat": {
+    "id": 180,
+    "category": "Kondisi Pasien",
+    "emergency": false,
+    "tts": "sehat",
+    "formal": "sehat"
+  },
+  "pendaftaran": {
+    "id": 181,
+    "category": "Komunikasi Rumah Sakit",
+    "emergency": false,
+    "tts": "pendaftaran",
+    "formal": "pendaftaran"
+  },
+  "nomor antrean": {
+    "id": 182,
+    "category": "Komunikasi Rumah Sakit",
+    "emergency": false,
+    "tts": "nomor antrean",
+    "formal": "nomor antrean"
+  },
+  "ruang tunggu": {
+    "id": 183,
+    "category": "Komunikasi Rumah Sakit",
+    "emergency": false,
+    "tts": "ruang tunggu",
+    "formal": "ruang tunggu"
+  },
+  "ruang periksa": {
+    "id": 184,
+    "category": "Komunikasi Rumah Sakit",
+    "emergency": false,
+    "tts": "ruang periksa",
+    "formal": "ruang periksa"
+  },
+  "kamar pasien": {
+    "id": 185,
+    "category": "Komunikasi Rumah Sakit",
+    "emergency": false,
+    "tts": "kamar pasien",
+    "formal": "kamar pasien"
+  },
+  "instalasi gawat darurat": {
+    "id": 186,
+    "category": "Komunikasi Rumah Sakit",
+    "emergency": true,
+    "tts": "instalasi gawat darurat",
+    "formal": "instalasi gawat darurat"
+  },
+  "dokter spesialis": {
+    "id": 187,
+    "category": "Komunikasi Rumah Sakit",
+    "emergency": false,
+    "tts": "dokter spesialis",
+    "formal": "dokter spesialis"
+  },
+  "jadwal": {
+    "id": 188,
+    "category": "Komunikasi Rumah Sakit",
+    "emergency": false,
+    "tts": "jadwal",
+    "formal": "jadwal"
+  },
+  "janji temu": {
+    "id": 189,
+    "category": "Komunikasi Rumah Sakit",
+    "emergency": false,
+    "tts": "janji temu",
+    "formal": "janji temu"
+  },
+  "rujukan": {
+    "id": 190,
+    "category": "Komunikasi Rumah Sakit",
+    "emergency": false,
+    "tts": "rujukan",
+    "formal": "rujukan"
+  },
+  "administrasi": {
+    "id": 191,
+    "category": "Komunikasi Rumah Sakit",
+    "emergency": false,
+    "tts": "administrasi",
+    "formal": "administrasi"
+  },
+  "pembayaran": {
+    "id": 192,
+    "category": "Komunikasi Rumah Sakit",
+    "emergency": false,
+    "tts": "pembayaran",
+    "formal": "pembayaran"
+  },
+  "bpjs": {
+    "id": 193,
+    "category": "Komunikasi Rumah Sakit",
+    "emergency": false,
+    "tts": "bpjs",
+    "formal": "bpjs"
+  },
+  "asuransi": {
+    "id": 194,
+    "category": "Komunikasi Rumah Sakit",
+    "emergency": false,
+    "tts": "asuransi",
+    "formal": "asuransi"
+  },
+  "identitas": {
+    "id": 195,
+    "category": "Komunikasi Rumah Sakit",
+    "emergency": false,
+    "tts": "identitas",
+    "formal": "identitas"
+  },
+  "kartu pasien": {
+    "id": 196,
+    "category": "Komunikasi Rumah Sakit",
+    "emergency": false,
+    "tts": "kartu pasien",
+    "formal": "kartu pasien"
+  },
+  "pendamping": {
+    "id": 197,
+    "category": "Komunikasi Rumah Sakit",
+    "emergency": false,
+    "tts": "pendamping",
+    "formal": "pendamping"
+  },
+  "wali": {
+    "id": 198,
+    "category": "Komunikasi Rumah Sakit",
+    "emergency": false,
+    "tts": "wali",
+    "formal": "wali"
+  },
+  "tanda tangan": {
+    "id": 199,
+    "category": "Komunikasi Rumah Sakit",
+    "emergency": false,
+    "tts": "tanda tangan",
+    "formal": "tanda tangan"
+  },
+  "selesai": {
+    "id": 200,
+    "category": "Komunikasi Rumah Sakit",
+    "emergency": false,
+    "tts": "selesai",
+    "formal": "selesai"
+  }
+}
