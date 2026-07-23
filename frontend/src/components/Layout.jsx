@@ -45,7 +45,7 @@ export const Layout = ({ children, currentView, setView }) => {
           <a
             href="#"
             onClick={(e) => e.preventDefault()}
-            className="hover:text-blue-650 transition-all flex items-center gap-1 text-[11px] font-bold text-slate-400 opacity-60 pointer-events-none"
+            className="hover:text-blue-650 transition-all flex items-center gap-1 text-[11px] font-bold text-slate-500"
           >
             <Facebook size={12} /> Facebook
           </a>
@@ -53,7 +53,7 @@ export const Layout = ({ children, currentView, setView }) => {
           <a
             href="#"
             onClick={(e) => e.preventDefault()}
-            className="hover:text-blue-700 transition-all flex items-center gap-1 text-[11px] font-bold text-slate-400 opacity-60 pointer-events-none"
+            className="hover:text-blue-700 transition-all flex items-center gap-1 text-[11px] font-bold text-slate-500"
           >
             <Linkedin size={12} /> LinkedIn
           </a>
