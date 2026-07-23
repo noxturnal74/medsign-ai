@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 
-export const useMediaPipe = (isActive, videoElement) => {
+export const useMediaPipe = (isActive, videoElement, isMirrored = true) => {
   const [canvasElement, setCanvasElement] = useState(null);
   const canvasRef = useCallback((node) => {
     setCanvasElement(node);
@@ -148,6 +148,18 @@ export const useMediaPipe = (isActive, videoElement) => {
       const height = canvas.height;
       ctx.clearRect(0, 0, width, height);
 
+      const drawText = (text, x, y) => {
+        if (isMirrored) {
+          ctx.save();
+          ctx.translate(x, 0);
+          ctx.scale(-1, 1);
+          ctx.fillText(text, 0, y);
+          ctx.restore();
+        } else {
+          ctx.fillText(text, x, y);
+        }
+      };
+
       // Render camera feed
       if (videoElement && videoElement.readyState === videoElement.HAVE_ENOUGH_DATA) {
         // A. Draw video frame
@@ -274,7 +286,7 @@ export const useMediaPipe = (isActive, videoElement) => {
             if (lms[9]) {
               ctx.fillStyle = '#ffffff';
               ctx.font = 'bold 11px sans-serif';
-              ctx.fillText(handText, lms[9].x * width - 15, lms[9].y * height - 12);
+              drawText(handText, lms[9].x * width, lms[9].y * height - 12);
             }
           });
 
@@ -296,7 +308,7 @@ export const useMediaPipe = (isActive, videoElement) => {
 
           ctx.fillStyle = '#34d399';
           ctx.font = 'bold 9px sans-serif';
-          ctx.fillText('● ' + allHands.length + ' TANGAN TERDETEKSI ✓', 26, 32);
+          drawText('● ' + allHands.length + ' TANGAN TERDETEKSI ✓', 26, 32);
         } else {
           // If no hand detected
           // Draw 'MENUNGGU TANGAN...' Badge
@@ -310,7 +322,7 @@ export const useMediaPipe = (isActive, videoElement) => {
 
           ctx.fillStyle = '#fbbf24';
           ctx.font = 'bold 9px sans-serif';
-          ctx.fillText('○ MENUNGGU TANGAN...', 26, 32);
+          drawText('○ MENUNGGU TANGAN...', 26, 32);
         }
       } else {
         // Loading state
@@ -320,7 +332,7 @@ export const useMediaPipe = (isActive, videoElement) => {
         ctx.fillStyle = '#94a3b8';
         ctx.font = '13px sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('Memulai kamera, silakan tunggu...', width / 2, height / 2);
+        drawText('Memulai kamera, silakan tunggu...', width / 2, height / 2);
       }
 
       animationFrameId.current = requestAnimationFrame(drawLoop);

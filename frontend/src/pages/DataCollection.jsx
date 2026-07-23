@@ -885,11 +885,9 @@ export const DataCollection = ({ setView }) => {
 
 
   const { canvasRef, isHandDetected, landmarks, fps, lux } = useMediaPipe(
-
     isActive,
-
     videoElement,
-
+    isMirrored,
   );
 
 
