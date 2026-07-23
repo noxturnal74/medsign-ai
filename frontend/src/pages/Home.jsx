@@ -336,7 +336,7 @@ export const Home = ({ setView }) => {
 
       <section className="relative px-4 pb-10 pt-8 md:px-8 lg:px-12">
 
-        <div className="mx-auto grid max-w-7xl items-center gap-7 lg:grid-cols-[1.02fr_0.98fr]">
+        <div className="mx-auto grid max-w-7xl items-start gap-7 lg:grid-cols-[1.02fr_0.98fr]">
 
           <div className="glass-panel rounded-[32px] p-5 md:p-8" data-reveal>
 
