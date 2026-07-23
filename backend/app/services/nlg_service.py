@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
+import re
 
 class NLGService:
     def __init__(self):
@@ -190,6 +191,53 @@ class NLGService:
                 "template": "Keadaan saya terasa lebih buruk."
             }
         ]
+
+    def simplify_doctor_speech(self, raw_text: str) -> str:
+        text = raw_text.strip().lower()
+        if not text:
+            return ""
+        
+        # Remove common Indonesian filler words and speech-to-text noise
+        fillers = [
+            r"\bah\b", r"\beh\b", r"\buh\b", r"\boh\b", r"\bum\b", r"\bhm+\b", r"\bee+\b",
+            r"\banu\b", r"\bapaan\b", r"\bsih\b", r"\bdong\b", r"\bdeh\b", r"\bya\b",
+            r"\bkan\b", r"\blah\b", r"\bkok\b", r"\bgitu\b", r"\bkayak\b", r"\bkayaknya\b",
+            r"\baduh\b", r"\bwaduh\b", r"\bapa namanya\b", r"\bdan lain-lain\b", r"\bdll\b"
+        ]
+        for pattern in fillers:
+            text = re.sub(pattern, "", text)
+            
+        # Standardize informal words to medical-formal Indonesian
+        replacements = {
+            "ga": "tidak",
+            "gak": "tidak",
+            "ndak": "tidak",
+            "udah": "sudah",
+            "aja": "saja",
+            "kalo": "kalau",
+            "gimana": "bagaimana",
+            "capek": "lelah",
+            "ilang": "hilang",
+            "nyeri sekali": "sakit sekali"
+        }
+        for k, v in replacements.items():
+            text = re.sub(r"\b" + k + r"\b", v, text)
+            
+        # Deduplicate consecutive identical words
+        words = text.split()
+        unique_words = []
+        for w in words:
+            if not unique_words or unique_words[-1] != w:
+                unique_words.append(w)
+        
+        text = " ".join(unique_words)
+        
+        # Capitalize and add proper punctuation
+        if text:
+            text = text.capitalize()
+            if not text.endswith((".", "?", "!")):
+                text += "."
+        return text
 
     def recommend_next_words(self, word: str) -> list[str]:
         word_clean = word.strip().lower()

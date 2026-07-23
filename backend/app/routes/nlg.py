@@ -26,6 +26,22 @@ def get_recommendations(word: str):
     recs = nlg_service.recommend_next_words(word)
     return RecommendResponse(word=word, recommendations=recs)
 
+class SimplifyRequest(BaseModel):
+    text: str
+
+class SimplifyResponse(BaseModel):
+    original: str
+    simplified: str
+
+@router.post("/nlg/simplify-speech", response_model=SimplifyResponse)
+def simplify_speech(request: SimplifyRequest):
+    """
+    Menyederhanakan transkrip suara dokter dengan menghapus kata-kata
+    noise/filler (speech-to-text noise) dan memformalkan kalimat.
+    """
+    simplified = nlg_service.simplify_doctor_speech(request.text)
+    return SimplifyResponse(original=request.text, simplified=simplified)
+
 @router.post("/nlg/generate-sentence", response_model=SentenceResponse)
 def generate_sentence(request: SentenceRequest):
     """
