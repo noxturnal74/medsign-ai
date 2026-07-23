@@ -370,30 +370,28 @@ export const Home = ({ setView }) => {
 
 
 
-            <div className="max-w-3xl">
-
-              <img
-
-                src="/assets/medsign-logo.png"
-
-                alt="Logo MedSign"
-
-                className="mb-5 h-14 w-auto max-w-[250px] object-contain md:h-16 md:max-w-[320px]"
-
-              />
-
-              <h1 className="text-4xl font-black leading-tight text-slate-950 md:text-5xl xl:text-6xl">
-
-                {t('heroTitle')}
-
-              </h1>
-
-              <p className="mt-4 max-w-2xl text-base font-semibold leading-7 text-slate-600">
-
-                {t('heroDesc')}
-
-              </p>
-
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="max-w-xl">
+                <img
+                  src="/assets/medsign-logo.png"
+                  alt="Logo MedSign"
+                  className="mb-5 h-14 w-auto max-w-[250px] object-contain md:h-16 md:max-w-[320px]"
+                />
+                <h1 className="text-4xl font-black leading-tight text-slate-950 md:text-5xl xl:text-6xl">
+                  {t('heroTitle')}
+                </h1>
+                <p className="mt-4 max-w-2xl text-base font-semibold leading-7 text-slate-600">
+                  {t('heroDesc')}
+                </p>
+              </div>
+              <div className="shrink-0 flex items-center justify-center p-2.5 bg-white/40 rounded-3xl border border-white/60 shadow-sm backdrop-blur-md">
+                <img
+                  src="/assets/mascot2.png"
+                  alt="MedSign Mascot"
+                  className="h-32 md:h-44 w-auto object-contain animate-bounce"
+                  style={{ animationDuration: '3s' }}
+                />
+              </div>
             </div>
 
 
@@ -448,71 +446,7 @@ export const Home = ({ setView }) => {
 
 
 
-            <div className="mt-8">
 
-              <span className="text-[10px] font-black uppercase text-sky-700 tracking-wider">Dashboard Layanan</span>
-
-              <h2 className="text-lg font-black text-slate-950 mt-1">Pilih Modul MedSign AI</h2>
-
-              <div className="flex flex-wrap gap-4 justify-center mt-4 w-full">
-
-                {dashboardItems.map((item, index) => {
-
-                  const Icon = item.icon;
-
-                  return (
-
-                    <div
-
-                      key={item.title}
-
-                      onClick={() => setView(item.id)}
-
-                      className="glass-panel hover:-translate-y-1 hover:bg-white/60 hover:shadow-lg hover:shadow-sky-500/10 active:scale-[0.98] transition-all duration-355 ease-out cursor-pointer rounded-3xl p-5 border border-white/60 flex flex-col justify-between h-[155px] w-full sm:w-[260px] shrink-0"
-
-                      data-reveal
-
-                      style={{ transitionDelay: `${index * 60}ms` }}
-
-                    >
-
-                      <div>
-
-                        <div className="flex items-center justify-between">
-
-                          <span className="text-xs font-black uppercase tracking-wider text-slate-800">{item.title}</span>
-
-                          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-sky-500/10 text-sky-600">
-
-                            <Icon size={16} />
-
-                          </div>
-
-                        </div>
-
-                        <p className="mt-3 text-[11px] font-semibold leading-relaxed text-slate-500">
-
-                          {item.desc}
-
-                        </p>
-
-                      </div>
-
-                      <div className="text-[10px] font-black text-sky-600 uppercase flex items-center gap-1 mt-2">
-
-                        Buka Modul <ArrowRight size={10} />
-
-                      </div>
-
-                    </div>
-
-                  );
-
-                })}
-
-              </div>
-
-            </div>
 
           </div>
 
@@ -622,6 +556,43 @@ export const Home = ({ setView }) => {
 
         </div>
 
+      </section>
+
+      {/* Dashboard Section */}
+      <section className="px-4 py-8 md:px-8 lg:px-12" data-reveal>
+        <div className="glass-panel mx-auto max-w-7xl rounded-[32px] p-6 md:p-8 flex flex-col gap-4 border border-white/60">
+          <span className="text-[10px] font-black uppercase text-sky-700 tracking-wider">Dashboard Layanan</span>
+          <h2 className="text-lg font-black text-slate-950">Pilih Modul MedSign AI</h2>
+          <div className="flex flex-wrap gap-4 justify-center mt-4 w-full">
+            {dashboardItems.map((item, index) => {
+              const Icon = item.icon;
+              return (
+                <div
+                  key={item.title}
+                  onClick={() => setView(item.id)}
+                  className="glass-panel hover:-translate-y-1 hover:bg-white/60 hover:shadow-lg hover:shadow-sky-500/10 active:scale-[0.98] transition-all duration-355 ease-out cursor-pointer rounded-3xl p-5 border border-white/60 flex flex-col justify-between h-[155px] w-full sm:w-[260px] shrink-0"
+                  data-reveal
+                  style={{ transitionDelay: `${index * 60}ms` }}
+                >
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-black uppercase tracking-wider text-slate-800">{item.title}</span>
+                      <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-sky-500/10 text-sky-600">
+                        <Icon size={16} />
+                      </div>
+                    </div>
+                    <p className="mt-3 text-[11px] font-semibold leading-relaxed text-slate-500">
+                      {item.desc}
+                    </p>
+                  </div>
+                  <div className="text-[10px] font-black text-sky-600 uppercase flex items-center gap-1 mt-2">
+                    Buka Modul <ArrowRight size={10} />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </section>
 
 
