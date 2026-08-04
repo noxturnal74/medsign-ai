@@ -149,31 +149,7 @@ const institutionLogos = [
 
 
 
-const MascotAnimator = () => {
-  const [frame, setFrame] = React.useState(1);
 
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setFrame((prev) => (prev % 4) + 1);
-    }, 450); // Smooth cycle: 450ms per frame
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div className="flex items-center gap-3.5 bg-slate-900/60 border border-white/10 rounded-2xl px-4 py-2.5 shadow-lg select-none backdrop-blur-xl max-w-xs animate-slide-up">
-      <img
-        src={`/assets/mascot_frame${frame}.png`}
-        alt="MedSign Active Mascot"
-        className="h-16 w-auto object-contain transition-all duration-200"
-      />
-      <div className="text-left">
-        <span className="text-[8px] font-black text-sky-400 uppercase tracking-widest block animate-pulse">MedSign AI</span>
-        <span className="text-xs font-black text-slate-100 uppercase tracking-wide block mt-0.5">Asisten Pintar</span>
-        <span className="text-[9px] font-semibold text-slate-400 block mt-0.5 leading-normal">Menganalisis gerakan...</span>
-      </div>
-    </div>
-  );
-};
 
 export const Home = ({ setView }) => {
 
@@ -388,7 +364,7 @@ export const Home = ({ setView }) => {
 
 
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-              <div className="max-w-xl">
+              <div className="max-w-2xl">
                 <img
                   src="/assets/medsign-logo.png"
                   alt="Logo MedSign"
@@ -397,17 +373,9 @@ export const Home = ({ setView }) => {
                 <h1 className="text-4xl font-black leading-tight text-slate-950 md:text-5xl xl:text-6xl">
                   {t('heroTitle')}
                 </h1>
-                <p className="mt-4 max-w-2xl text-base font-semibold leading-7 text-slate-600">
+                <p className="mt-4 max-w-3xl text-base font-semibold leading-7 text-slate-600">
                   {t('heroDesc')}
                 </p>
-              </div>
-              <div className="shrink-0 flex items-center justify-center p-2.5 bg-white/40 rounded-3xl border border-white/60 shadow-sm backdrop-blur-md">
-                <img
-                  src="/assets/mascot2.png"
-                  alt="MedSign Mascot"
-                  className="h-32 md:h-44 w-auto object-contain animate-bounce"
-                  style={{ animationDuration: '3s' }}
-                />
               </div>
             </div>
 
@@ -551,10 +519,7 @@ export const Home = ({ setView }) => {
 
                             </div>
               
-              {/* Mascot Animator */}
-              <div className="mt-4 flex justify-end pr-1 border-t border-white/10 pt-4">
-                <MascotAnimator />
-              </div>
+
             </div>
 
             <div className="float-panel absolute -right-2 -top-4 hidden rounded-3xl border border-white/70 bg-white/70 px-4 py-3 text-slate-900 shadow-xl shadow-sky-900/10 backdrop-blur-2xl md:block">

@@ -30,6 +30,16 @@ def save_sample(request: SaveSampleRequest):
             status_code=400,
             detail="Signer ID harus menggunakan format lowercase underscore saja (contoh: albert_william)"
         )
+    if not re.match(r"^[a-z0-9_-]+$", request.label):
+        raise HTTPException(
+            status_code=400,
+            detail="Label tidak valid"
+        )
+    if not re.match(r"^[a-zA-Z0-9_-]+$", request.session_id):
+        raise HTTPException(
+            status_code=400,
+            detail="Session ID tidak valid"
+        )
     # 1. Validasi frames
     if len(request.frames) != 30:
         raise HTTPException(status_code=400, detail="Sequence frames harus berjumlah tepat 30")
@@ -112,6 +122,8 @@ class DeleteSampleRequest(BaseModel):
 
 @router.get("/dataset/samples/{label}")
 def get_dataset_samples(label: str):
+    if not re.match(r"^[a-z0-9_-]+$", label):
+        raise HTTPException(status_code=400, detail="Label tidak valid")
     backend_dir = Path(__file__).resolve().parents[2]
     landmarks_dir = backend_dir / "data" / "landmarks" / label
     
@@ -138,6 +150,12 @@ def get_dataset_samples(label: str):
 
 @router.post("/dataset/samples/delete")
 def delete_dataset_sample(request: DeleteSampleRequest):
+    if not re.match(r"^[a-z0-9_-]+$", request.label):
+        raise HTTPException(status_code=400, detail="Label tidak valid")
+    if not re.match(r"^[a-z0-9_]+$", request.signer):
+        raise HTTPException(status_code=400, detail="Signer tidak valid")
+    if not request.filename.endswith(".npy") or "/" in request.filename or chr(92) in request.filename or ".." in request.filename:
+        raise HTTPException(status_code=400, detail="Nama file tidak valid")
     backend_dir = Path(__file__).resolve().parents[2]
     file_path = backend_dir / "data" / "landmarks" / request.label / request.signer / request.filename
     if file_path.exists() and file_path.is_file():
@@ -165,6 +183,13 @@ class BulkDeleteSamplesRequest(BaseModel):
 
 @router.post("/dataset/samples/delete-bulk")
 def delete_dataset_samples_bulk(request: BulkDeleteSamplesRequest):
+    if not re.match(r"^[a-z0-9_-]+$", request.label):
+        raise HTTPException(status_code=400, detail="Label tidak valid")
+    for item in request.samples:
+        if not re.match(r"^[a-z0-9_]+$", item.signer):
+            raise HTTPException(status_code=400, detail="Signer tidak valid")
+        if not item.filename.endswith(".npy") or "/" in item.filename or chr(92) in item.filename or ".." in item.filename:
+            raise HTTPException(status_code=400, detail="Nama file tidak valid")
     backend_dir = Path(__file__).resolve().parents[2]
     deleted_count = 0
     errors = []
@@ -213,13 +238,15 @@ def get_dataset_health_report():
 
 @router.get("/dataset/motion/{label}")
 def get_dataset_motion(label: str):
+    if not re.match(r"^[a-z0-9_-]+$", label):
+        raise HTTPException(status_code=400, detail="Label tidak valid")
     backend_dir = Path(__file__).resolve().parents[2]
     landmarks_dir = backend_dir / "data" / "landmarks" / label
     if landmarks_dir.exists():
         npy_files = list(landmarks_dir.glob("**/*.npy"))
         if npy_files:
             try:
-                arr = np.load(str(npy_files[0]))
+                arr = np.load(str(npy_files[0]), allow_pickle=False)
                 if arr.shape == (30, 63):
                     return {
                         "status": "success",
@@ -321,6 +348,10 @@ class FinalizeModelRequest(BaseModel):
 
 @router.post("/dataset/train/finalize")
 def finalize_model(request: FinalizeModelRequest):
+    if request.model_type not in ["clinical", "alphabet"]:
+        raise HTTPException(status_code=400, detail="model_type harus 'clinical' atau 'alphabet'")
+    if request.action not in ["replace", "save_new"]:
+        raise HTTPException(status_code=400, detail="action harus 'replace' atau 'save_new'")
     backend_dir = Path(__file__).resolve().parents[2]
     models_dir = backend_dir / "models"
     
@@ -434,6 +465,16 @@ def finalize_model(request: FinalizeModelRequest):
 
 @router.post("/dataset/train")
 def train_dataset(request: TrainRequest):
+    if request.architecture not in ["gru", "lstm"]:
+        raise HTTPException(status_code=400, detail="Architecture harus 'gru' atau 'lstm'")
+    if not (1 <= request.epochs <= 1000):
+        raise HTTPException(status_code=400, detail="Epochs harus di antara 1 dan 1000")
+    if not (0.01 <= request.test_size <= 0.9):
+        raise HTTPException(status_code=400, detail="Test size harus di antara 0.01 dan 0.9")
+    if request.labels:
+        for label in request.labels:
+            if not re.match(r"^[a-z0-9_-]+$", label):
+                raise HTTPException(status_code=400, detail=f"Label '{label}' tidak valid")
     async def log_generator():
         backend_dir = Path(__file__).resolve().parents[2]
         import sys
@@ -518,6 +559,8 @@ async def upload_model_file(
     model_type: str = Form(..., description="Tipe model: 'clinical' atau 'alphabet'"),
     file: UploadFile = File(...)
 ):
+    if model_type not in ["clinical", "alphabet"]:
+        raise HTTPException(status_code=400, detail="model_type harus 'clinical' atau 'alphabet'")
     backend_dir = Path(__file__).resolve().parents[2]
     models_dir = backend_dir / "models"
     models_dir.mkdir(parents=True, exist_ok=True)
@@ -656,6 +699,11 @@ async def upload_dataset_sample(
     session_id: str = Form("uploaded"),
     take_index: int = Form(1)
 ):
+    if not re.match(r"^[a-z0-9_-]+$", label):
+        raise HTTPException(
+            status_code=400,
+            detail="Label tidak valid"
+        )
     if not re.match(r"^[a-z0-9_]+$", signer_id):
         raise HTTPException(
             status_code=400,
@@ -666,7 +714,7 @@ async def upload_dataset_sample(
     
     try:
         f_io = io.BytesIO(contents)
-        arr = np.load(f_io)
+        arr = np.load(f_io, allow_pickle=False)
         if arr.shape != (30, 63):
             raise HTTPException(
                 status_code=400,
@@ -686,7 +734,9 @@ async def upload_dataset_sample(
     
     orig_name = file.filename
     if orig_name.endswith(".npy"):
-        clean_filename = orig_name
+        clean_filename = Path(orig_name).name
+        if not clean_filename.endswith(".npy") or "/" in clean_filename or chr(92) in clean_filename or ".." in clean_filename:
+            clean_filename = f"{label}_{signer_id}_uploaded_{take_index:03d}.npy"
     else:
         clean_filename = f"{label}_{signer_id}_uploaded_{take_index:03d}.npy"
         
@@ -762,6 +812,8 @@ def get_augment_stats():
 
 @router.post("/dataset/augment/preview")
 def preview_augmentation(request: AugmentPreviewRequest):
+    if not re.match(r"^[a-z0-9_-]+$", request.label):
+        raise HTTPException(status_code=400, detail="Label tidak valid")
     backend_dir = Path(__file__).resolve().parents[2]
     landmarks_dir = backend_dir / "data" / "landmarks" / request.label
     
@@ -775,7 +827,7 @@ def preview_augmentation(request: AugmentPreviewRequest):
         raise HTTPException(status_code=404, detail="Tidak ditemukan sampel asli untuk kata ini.")
         
     try:
-        arr = np.load(str(original_files[0]))
+        arr = np.load(str(original_files[0]), allow_pickle=False)
         augmented = augmentation_service.augment(arr, request.techniques)
         
         # Validation checks
@@ -799,8 +851,11 @@ def generate_augmentation(request: AugmentGenerateRequest):
     if request.selection == "all":
         # Get all folders in landmarks_dir
         if landmarks_dir.exists():
-            labels_to_process = [d.name for d in landmarks_dir.iterdir() if d.is_dir()]
+            labels_to_process = [d.name for d in landmarks_dir.iterdir() if d.is_dir() and re.match(r"^[a-z0-9_-]+$", d.name)]
     elif request.selection == "selected":
+        for label in request.selected_labels:
+            if not re.match(r"^[a-z0-9_-]+$", label):
+                raise HTTPException(status_code=400, detail=f"Label '{label}' tidak valid")
         labels_to_process = request.selected_labels
     elif request.selection in ["lacking", "low_confidence", "recommended"]:
         # Find labels from balanceData where total < 150
@@ -861,7 +916,7 @@ def generate_augmentation(request: AugmentGenerateRequest):
                 for file_path in original_files:
                     try:
                         # Load original array
-                        arr = np.load(str(file_path))
+                        arr = np.load(str(file_path), allow_pickle=False)
                         if arr.shape != (30, 63):
                             continue
                             
@@ -955,3 +1010,39 @@ def delete_generated_augmentation():
         "message": f"Berhasil menghapus {deleted_count} file sampel hasil augmentasi.",
         "count": deleted_count
     }
+
+
+import zipfile
+import tempfile
+from fastapi.responses import FileResponse
+
+@router.get("/dataset/augment/download")
+def download_augmented_dataset():
+    backend_dir = Path(__file__).resolve().parents[2]
+    landmarks_dir = backend_dir / "data" / "landmarks"
+    
+    if not landmarks_dir.exists():
+        raise HTTPException(status_code=404, detail="Dataset directory does not exist")
+        
+    temp_zip = tempfile.NamedTemporaryFile(delete=False, suffix=".zip")
+    temp_zip.close()
+    
+    has_files = False
+    with zipfile.ZipFile(temp_zip.name, "w", zipfile.ZIP_DEFLATED) as zipf:
+        for p in landmarks_dir.glob("**/*_aug_*.npy"):
+            has_files = True
+            rel_path = p.relative_to(landmarks_dir)
+            zipf.write(p, arcname=rel_path)
+            
+    if not has_files:
+        try:
+            os.unlink(temp_zip.name)
+        except:
+            pass
+        raise HTTPException(status_code=404, detail="Tidak ditemukan file sampel hasil augmentasi untuk didownload.")
+        
+    return FileResponse(
+        temp_zip.name,
+        media_type="application/zip",
+        filename="augmented_dataset.zip"
+    )

@@ -109,6 +109,7 @@ export const DataCollection = ({ setView }) => {
 
     if (path === "/data-collection/balance") return "balance";
 
+    if (path === "/data-collection/augmentation") return "augmentation";
     if (path === "/data-collection/training") return "training";
 
     return "record";
@@ -145,6 +146,7 @@ export const DataCollection = ({ setView }) => {
 
       if (path === "/data-collection/balance") setActiveTab("balance");
 
+      else if (path === "/data-collection/augmentation") setActiveTab("augmentation");
       else if (path === "/data-collection/training") setActiveTab("training");
 
       else setActiveTab("record");
@@ -219,6 +221,8 @@ export const DataCollection = ({ setView }) => {
   const [previewData, setPreviewData] = useState(null);
   const [previewLabel, setPreviewLabel] = useState("");
   const [previewFrameIdx, setPreviewFrameIdx] = useState(0);
+  const [augmentMessage, setAugmentMessage] = useState(null);
+  const [augmentError, setAugmentError] = useState(null);
 
   const fetchAugmentStats = async () => {
     try {
@@ -3790,12 +3794,20 @@ export const DataCollection = ({ setView }) => {
       }
     };
 
+    const handleDownloadAugmentation = () => {
+      const apiBaseUrl = apiUrl;
+      const downloadUrl = `${apiBaseUrl.endsWith("/") ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/augment/download`;
+      window.open(downloadUrl, "_blank");
+    };
+
     const handleGenerateAugmentation = async () => {
       setIsAugmenting(true);
+      setAugmentMessage(null);
+      setAugmentError(null);
       try {
         const apiBaseUrl = apiUrl;
         const response = await fetch(
-          `${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/augment/generate`,
+          `${apiBaseUrl.endsWith("/") ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/augment/generate`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -3811,15 +3823,14 @@ export const DataCollection = ({ setView }) => {
         );
         const data = await response.json();
         if (response.ok) {
-          alert(data.message || "Augmentasi selesai!");
+          setAugmentMessage(data.message || "Augmentasi selesai!");
           fetchBalance();
           fetchAugmentStats();
         } else {
-          alert(data.detail || "Gagal melakukan augmentasi.");
+          setAugmentError(data.detail || "Gagal melakukan augmentasi.");
         }
       } catch (err) {
-        console.error(err);
-        alert("Terjadi kesalahan koneksi saat augmentasi.");
+        setAugmentError("Terjadi kesalahan koneksi saat melakukan augmentasi.");
       } finally {
         setIsAugmenting(false);
       }
@@ -3829,27 +3840,26 @@ export const DataCollection = ({ setView }) => {
       if (!window.confirm("Apakah Anda yakin ingin menghapus seluruh dataset hasil augmentasi? Dataset asli tidak akan terpengaruh.")) {
         return;
       }
+      setAugmentMessage(null);
+      setAugmentError(null);
       try {
         const apiBaseUrl = apiUrl;
         const response = await fetch(
-          `${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/augment/delete`,
+          `${apiBaseUrl.endsWith("/") ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/augment/delete`,
           { method: "POST" }
         );
         const data = await response.json();
         if (response.ok) {
-          alert(data.message || "Dataset augmentasi berhasil dihapus.");
+          setAugmentMessage(data.message || "Dataset augmentasi berhasil dihapus.");
           fetchBalance();
           fetchAugmentStats();
         } else {
-          alert(data.detail || "Gagal menghapus dataset.");
+          setAugmentError(data.detail || "Gagal menghapus dataset.");
         }
       } catch (err) {
-        console.error(err);
-        alert("Terjadi kesalahan koneksi.");
+        setAugmentError("Terjadi kesalahan koneksi saat menghapus dataset.");
       }
     };
-
-
 
     const handleRetakeSample = (sample) => {
 
@@ -4959,79 +4969,30 @@ export const DataCollection = ({ setView }) => {
       <div className="flex flex-col gap-6 animate-slide-up">
 
         {balanceError && (
-
-          <div className="glass-panel rounded-3xl p-4 border border-rose-400/40 bg-rose-500/10 shadow-md flex items-start gap-2.5">
-
-            <AlertTriangle size={18} className="text-rose-600 mt-0.5 shrink-0" />
-
-            <div>
-
-              <span className="block text-xs font-black text-rose-950">
-
-                Tidak bisa memuat status dataset dari backend
-
-              </span>
-
-              <p className="text-[11px] font-semibold text-rose-700">
-
-                {balanceError}
-
-              </p>
-
-            </div>
-
-          </div>
-
+          <Alert severity="error" className="rounded-2xl">
+            <AlertTitle className="font-black text-xs uppercase">Tidak bisa memuat status dataset dari backend</AlertTitle>
+            <span className="text-[11px] font-semibold">{balanceError}</span>
+          </Alert>
         )}
 
         {offlineTakes.length > 0 && (
-
-          <div className="glass-panel rounded-3xl p-4 border border-amber-400/40 bg-amber-500/10 shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-
-            <div className="flex items-start gap-2.5">
-
-              <AlertTriangle size={18} className="text-amber-600 mt-0.5 shrink-0" />
-
-              <div>
-
-                <span className="block text-xs font-black text-amber-950">
-
-                  Ada {offlineTakes.length} take tersimpan lokal, belum masuk laporan ini
-
-                </span>
-
-                <p className="text-[11px] font-semibold text-amber-700">
-
-                  Take yang gagal terkirim ke backend disimpan sementara di
-
-                  browser (localStorage) dan belum dihitung di sini. Itu
-
-                  sebabnya histori perekaman bisa menunjukkan data, sementara
-
-                  laporan keseimbangan di bawah masih 0. Sinkronkan dulu di
-
-                  tab "Ambil Data".
-
-                </p>
-
-              </div>
-
-            </div>
-
-            <button
-
-              onClick={() => handleTabChange("record")}
-
-              className="inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-[11px] py-2 px-3.5 shadow-sm active:scale-[0.98] transition-all"
-
-            >
-
-              Ke Halaman Sinkronisasi
-
-            </button>
-
-          </div>
-
+          <Alert
+            severity="warning"
+            className="rounded-2xl"
+            action={
+              <button
+                onClick={() => handleTabChange("record")}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-[10px] py-1.5 px-3 shadow-sm active:scale-[0.98] transition-all"
+              >
+                Ke Halaman Sinkronisasi
+              </button>
+            }
+          >
+            <AlertTitle className="font-black text-xs uppercase">Ada {offlineTakes.length} take tersimpan lokal, belum masuk laporan ini</AlertTitle>
+            <span className="text-[11px] font-semibold">
+              Take yang gagal terkirim ke backend disimpan sementara di browser (localStorage) dan belum dihitung di sini.
+            </span>
+          </Alert>
         )}
 
         {/* 1. Model Health Dashboard Summary Cards */}
@@ -5068,160 +5029,6 @@ export const DataCollection = ({ setView }) => {
 
         </div>
 
-        {/* AI Dataset Augmentation Card */}
-        <div className="glass-panel rounded-[32px] p-6 flex flex-col gap-4 border border-white/60 bg-white/40 shadow-xl animate-slide-up">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-200/50 pb-3">
-            <div className="flex items-center gap-2.5">
-              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-violet-500/10 text-violet-600">
-                <Sliders size={16} />
-              </div>
-              <div>
-                <span className="block text-xs font-black text-slate-950 uppercase tracking-wider">AI Dataset Augmentation</span>
-                <span className="text-[10px] font-semibold text-slate-500">Lipat gandakan dataset Anda secara otomatis dengan augmentasi spasial &amp; temporal</span>
-              </div>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <button
-                onClick={handleGenerateAugmentation}
-                disabled={isAugmenting || augmentStats.total_original === 0}
-                className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-violet-500 to-indigo-600 hover:from-violet-600 hover:to-indigo-700 text-white font-black text-[10px] py-2 px-3.5 shadow-md active:scale-[0.98] transition-all disabled:opacity-40"
-              >
-                {isAugmenting ? "Generating..." : "Generate Augmented Dataset"}
-              </button>
-              <button
-                onClick={handleDeleteAugmentation}
-                disabled={isAugmenting || augmentStats.total_generated === 0}
-                className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-rose-500/10 border border-rose-300/30 text-rose-700 hover:bg-rose-500/20 font-bold text-[10px] py-2 px-3.5 shadow-sm active:scale-[0.98] transition-all"
-              >
-                Delete Generated Dataset
-              </button>
-            </div>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-4 text-xs">
-            {/* Stats */}
-            <div className="surface-panel rounded-2xl p-4 border border-slate-200 flex flex-col justify-between">
-              <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider block">Stats Augmentasi</span>
-              <div className="flex flex-col gap-1.5 mt-2 font-bold text-slate-700">
-                <div className="flex justify-between border-b border-slate-100 pb-1 text-[10px]">
-                  <span>Original Dataset:</span>
-                  <span className="text-slate-900 font-black">{augmentStats.total_original}</span>
-                </div>
-                <div className="flex justify-between border-b border-slate-100 pb-1 text-[10px]">
-                  <span>Generated Dataset:</span>
-                  <span className="text-violet-700 font-black">{augmentStats.total_generated}</span>
-                </div>
-                <div className="flex justify-between border-b border-slate-100 pb-1 text-[10px]">
-                  <span>Ratio:</span>
-                  <span className="text-slate-900 font-black">{augmentStats.augmentation_ratio}x</span>
-                </div>
-                <div className="flex justify-between text-[10px]">
-                  <span>Total Setelah Augmentasi:</span>
-                  <span className="text-slate-900 font-black">{augmentStats.estimated_total}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Selection */}
-            <div className="surface-panel rounded-2xl p-4 border border-slate-200 flex flex-col gap-2">
-              <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider block">1. Pilih Vocabulary</span>
-              <select
-                value={augmentSelection}
-                onChange={(e) => setAugmentSelection(e.target.value)}
-                className="glass-input rounded-xl px-2.5 py-1.5 text-[10px] font-black bg-white cursor-pointer w-full border border-slate-200 text-slate-700"
-              >
-                <option value="all">Semua Vocabulary</option>
-                <option value="selected">Vocabulary tertentu ({selectedWords.length} terpilih)</option>
-                <option value="lacking">Vocabulary kurang sample (&lt; 150)</option>
-                <option value="low_confidence">Vocabulary confidence rendah (&lt; 80%)</option>
-                <option value="recommended">Rekomendasi Pintar AI (Adaptif)</option>
-              </select>
-              <p className="text-[9px] text-slate-400 font-semibold italic mt-0.5 leading-normal">
-                {augmentSelection === "recommended" ? "AI akan secara otomatis mengaugmentasi lebih banyak pada kata bersampel sedikit/low confidence, dan melewatkan kosa kata lengkap." : "Augmentasikan kosa kata terpilih secara merata sesuai parameter di bawah."}
-              </p>
-            </div>
-
-            {/* Variations */}
-            <div className="surface-panel rounded-2xl p-4 border border-slate-200 flex flex-col gap-2">
-              <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider block">2. Jumlah Variasi per Sampel</span>
-              <div className="flex gap-1.5">
-                {[2, 5, 10].map(v => (
-                  <button
-                    key={v}
-                    onClick={() => setAugmentVariations(v)}
-                    className={`flex-1 rounded-lg py-1.5 text-xs font-black transition-all active:scale-[0.96] ${
-                      augmentVariations === v ? "bg-violet-600 text-white shadow-sm" : "bg-white border border-slate-200 text-slate-650 hover:bg-slate-50"
-                    }`}
-                  >
-                    {v}x
-                  </button>
-                ))}
-              </div>
-              <div className="flex items-center gap-1.5 mt-0.5">
-                <input
-                  type="number"
-                  min="1"
-                  max="50"
-                  value={augmentVariations}
-                  onChange={(e) => setAugmentVariations(Math.max(1, parseInt(e.target.value) || 1))}
-                  className="glass-input rounded-lg w-16 px-2 py-1 text-[10px] font-bold text-center border border-slate-200 shadow-inner"
-                />
-                <span className="text-[9px] font-bold text-slate-400">Variasi Custom (maks 50)</span>
-              </div>
-            </div>
-
-            {/* Techniques */}
-            <div className="surface-panel rounded-2xl p-4 border border-slate-200 flex flex-col gap-1.5">
-              <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider block">3. Metode Transformasi &amp; Mirror</span>
-              
-              <div className="flex items-center gap-2 text-[10px] font-bold text-slate-750 mb-1">
-                <input
-                  type="checkbox"
-                  id="enableMirror"
-                  checked={enableMirror}
-                  onChange={() => setEnableMirror(!enableMirror)}
-                  className="rounded border-slate-300 text-violet-600 focus:ring-violet-500 h-3.5 w-3.5 cursor-pointer"
-                />
-                <label htmlFor="enableMirror" className="cursor-pointer">Aktifkan Mirror (Horizontal Flip)</label>
-              </div>
-
-              <div className="grid grid-cols-2 gap-1 max-h-[85px] overflow-y-auto pr-1">
-                {[
-                  { id: "transformer", label: "Transformer AI" },
-                  { id: "translation", label: "Translation" },
-                  { id: "scale", label: "Scaling" },
-                  { id: "rotation", label: "Rotation" },
-                  { id: "offset", label: "Random Noise" },
-                  { id: "jitter", label: "Landmark Jitter" },
-                  { id: "shift", label: "Temporal Shift" },
-                  { id: "speed", label: "Random Speed" }
-                ].map(tech => {
-                  const active = augmentTechniques.includes(tech.id);
-                  return (
-                    <button
-                      key={tech.id}
-                      onClick={() => {
-                        if (active) {
-                          setAugmentTechniques(augmentTechniques.filter(t => t !== tech.id));
-                        } else {
-                          setAugmentTechniques([...augmentTechniques, tech.id]);
-                        }
-                      }}
-                      className={`rounded px-1.5 py-1 text-[8px] font-black uppercase border text-center transition-all ${
-                        active ? "bg-violet-500/10 border-violet-300 text-violet-850" : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50"
-                      }`}
-                    >
-                      {tech.label}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-
         {/* 2. Heatmap & AI Recommendation / Interactive Charts Columns */}
 
         <div className="grid gap-6 lg:grid-cols-[1fr_1.4fr]">
@@ -5248,7 +5055,7 @@ export const DataCollection = ({ setView }) => {
 
             <p className="text-[10px] font-semibold text-slate-500 leading-normal mb-1">
 
-              {"Rekomendasi kata medis dengan kualitas dataset kurang optimal (Confidence < 80%, Akurasi < 90%, Sampel < 20, Confusion tinggi):"}
+              {"Rekomendasi kata medis dengan kualitas dataset kurang optimal (Confidence < 80%, Akurasi < 90%, Sampel < 150, Responden < 3, atau Confusion tinggi):"}
 
             </p>
 
@@ -5325,7 +5132,7 @@ export const DataCollection = ({ setView }) => {
 
                     <div className="grid grid-cols-2 gap-2 text-[9px] font-semibold text-slate-500 bg-white/40 p-1.5 rounded-lg border border-slate-100">
 
-                      <span>Sampel: <strong className="text-slate-800">{w.total} / 20</strong></span>
+                      <span>Sampel: <strong className="text-slate-800">{w.total} / {w.targetSamples || 300}</strong></span>
 
                       <span>Responden: <strong className="text-slate-800">{w.uniqueSigners}</strong></span>
 
@@ -6439,6 +6246,464 @@ export const DataCollection = ({ setView }) => {
     );
 
   };
+
+﻿  const LandmarkPreview = ({ original, augmented, frameIdx }) => {
+    const canvasRef = React.useRef(null);
+    const [mode, setMode] = React.useState("overlay"); // "original" | "augmented" | "overlay"
+
+    React.useEffect(() => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      const width = canvas.width;
+      const height = canvas.height;
+      ctx.clearRect(0, 0, width, height);
+
+      // Draw background grid
+      ctx.strokeStyle = "rgba(148, 163, 184, 0.1)";
+      ctx.lineWidth = 1;
+      for (let x = 20; x < width; x += 20) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, height);
+        ctx.stroke();
+      }
+      for (let y = 20; y < height; y += 20) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+        ctx.stroke();
+      }
+
+      const bones = [
+        [0, 1], [1, 2], [2, 3], [3, 4], // Thumb
+        [0, 5], [5, 6], [6, 7], [7, 8], // Index
+        [0, 9], [9, 10], [10, 11], [11, 12], // Middle
+        [0, 13], [13, 14], [14, 15], [15, 16], // Ring
+        [0, 17], [17, 18], [18, 19], [19, 20] // Pinky
+      ];
+
+      const drawHand = (frameData, jointColor, boneColor) => {
+        if (!frameData || frameData.length !== 63) return;
+
+        const joints = [];
+        for (let i = 0; i < 21; i++) {
+          const x = frameData[i * 3] * width;
+          const y = frameData[i * 3 + 1] * height;
+          joints.push({ x, y });
+        }
+
+        // Draw bones
+        ctx.strokeStyle = boneColor;
+        ctx.lineWidth = 3.5;
+        bones.forEach(([a, b]) => {
+          const p1 = joints[a];
+          const p2 = joints[b];
+          if (p1 && p2) {
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+          }
+        });
+
+        // Draw joints
+        joints.forEach((p, idx) => {
+          const r = idx === 0 ? 6 : 4;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+          ctx.fillStyle = jointColor;
+          ctx.fill();
+          ctx.strokeStyle = "white";
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        });
+      };
+
+      const origFrame = original ? original[frameIdx] : null;
+      const augFrame = augmented ? augmented[frameIdx] : null;
+
+      if (mode === "original" || mode === "overlay") {
+        drawHand(origFrame, "rgba(56, 189, 248, 0.95)", "rgba(56, 189, 248, 0.35)"); // Sky blue
+      }
+      if (mode === "augmented" || mode === "overlay") {
+        const jointCol = mode === "overlay" ? "rgba(236, 72, 153, 0.95)" : "rgba(139, 92, 246, 0.95)";
+        const boneCol = mode === "overlay" ? "rgba(236, 72, 153, 0.35)" : "rgba(139, 92, 246, 0.35)";
+        drawHand(augFrame, jointCol, boneCol);
+      }
+    }, [original, augmented, frameIdx, mode]);
+
+    return (
+      <div className="surface-panel rounded-2xl p-4 border border-slate-200 flex flex-col gap-3">
+        <div className="flex items-center justify-between">
+          <span className="text-[10px] font-black text-slate-800 uppercase tracking-wide">Pratinjau Koordinat Landmark</span>
+          <div className="flex gap-1 rounded-lg bg-slate-100 p-0.5 select-none text-[8px] font-black">
+            {[
+              { id: "original", label: "Original" },
+              { id: "augmented", label: "Augmented" },
+              { id: "overlay", label: "Overlay" }
+            ].map(m => (
+              <button
+                key={m.id}
+                type="button"
+                onClick={() => setMode(m.id)}
+                className={`rounded px-2 py-1 uppercase transition-all ${mode === m.id ? "bg-white text-violet-700 shadow-sm border border-slate-200/10" : "text-slate-500 hover:text-slate-950"}`}
+              >
+                {m.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="relative flex justify-center bg-slate-950 rounded-xl overflow-hidden py-4 shadow-inner border border-slate-800">
+          <canvas ref={canvasRef} width={260} height={260} className="object-contain" />
+        </div>
+        
+        <div className="text-center text-[10px] text-slate-400 font-bold">
+          Frame {frameIdx + 1} dari 30
+        </div>
+      </div>
+    );
+  };
+
+  const renderAiAugmentation = () => {
+    return (
+      <div className="flex flex-col gap-6 animate-slide-up">
+        {/* Notifications */}
+        {augmentError && (
+          <Alert severity="error" onClose={() => setAugmentError(null)} className="rounded-2xl">
+            <AlertTitle className="font-black text-xs uppercase">Gagal Melakukan Augmentasi</AlertTitle>
+            <span className="text-[11px] font-semibold">{augmentError}</span>
+          </Alert>
+        )}
+
+        {augmentMessage && (
+          <Alert severity="success" onClose={() => setAugmentMessage(null)} className="rounded-2xl">
+            <AlertTitle className="font-black text-xs uppercase">Sukses</AlertTitle>
+            <span className="text-[11px] font-semibold">{augmentMessage}</span>
+          </Alert>
+        )}
+
+        {/* main grid */}
+        <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
+          {/* left panel: Configuration & Actions */}
+          <div className="glass-panel rounded-[32px] p-6 flex flex-col gap-5 border border-white/60 bg-white/40 shadow-xl">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-200/50 pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-violet-500/10 text-violet-600">
+                  <Sliders size={16} />
+                </div>
+                <div>
+                  <span className="block text-xs font-black text-slate-950 uppercase tracking-wider">AI Dataset Augmentation</span>
+                  <span className="text-[10px] font-semibold text-slate-500">Meningkatkan jumlah dataset training secara spasial &amp; temporal</span>
+                </div>
+              </div>
+              
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={handleGenerateAugmentation}
+                  disabled={isAugmenting}
+                  className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-violet-500 to-indigo-600 hover:from-violet-600 hover:to-indigo-700 text-white font-black text-[10px] py-2 px-3.5 shadow-md active:scale-[0.98] transition-all disabled:opacity-40"
+                >
+                  {isAugmenting ? "Generating..." : "Generate Augmented Dataset"}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDownloadAugmentation}
+                  disabled={isAugmenting}
+                  className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 font-bold text-[10px] py-2 px-3.5 shadow-sm active:scale-[0.98] transition-all disabled:opacity-40"
+                >
+                  <Download size={10} />
+                  Download ZIP
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDeleteAugmentation}
+                  disabled={isAugmenting}
+                  className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-rose-500/10 border border-rose-300/30 text-rose-700 hover:bg-rose-500/20 font-bold text-[10px] py-2 px-3.5 shadow-sm active:scale-[0.98] transition-all disabled:opacity-40"
+                >
+                  <Trash size={10} />
+                  Delete Dataset
+                </button>
+              </div>
+            </div>
+
+            {/* Progress bar when augmenting */}
+            {isAugmenting && (
+              <div className="bg-violet-50 border border-violet-100 rounded-2xl p-4 flex flex-col gap-2 animate-fade-in">
+                <div className="flex justify-between text-[10px] font-black text-violet-850">
+                  <span>Proses Augmentasi AI Sedang Berjalan...</span>
+                  <span className="animate-pulse">Mohon Tunggu</span>
+                </div>
+                <div className="w-full bg-violet-200/50 rounded-full h-2.5 overflow-hidden">
+                  <div className="bg-violet-600 h-2.5 rounded-full animate-progress-bar w-full" />
+                </div>
+                <span className="text-[8.5px] font-semibold text-slate-500">
+                  Menerapkan transformasi spasial dan temporal ke seluruh sampel terpilih.
+                </span>
+              </div>
+            )}
+
+            <div className="grid gap-4 md:grid-cols-2 text-xs">
+              {/* Stats */}
+              <div className="surface-panel rounded-2xl p-4 border border-slate-200 flex flex-col justify-between">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-1">
+                  <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider block">Stats Augmentasi</span>
+                  <button
+                    type="button"
+                    onClick={fetchAugmentStats}
+                    className="text-[9px] font-black text-violet-600 hover:text-violet-850 transition-all select-none hover:underline"
+                  >
+                    Refresh
+                  </button>
+                </div>
+                <div className="flex flex-col gap-1.5 mt-2 font-bold text-slate-700">
+                  <div className="flex justify-between border-b border-slate-100 pb-1 text-[10px]">
+                    <span>Original Dataset:</span>
+                    <span className="text-slate-900 font-black">{augmentStats.total_original}</span>
+                  </div>
+                  <div className="flex justify-between border-b border-slate-100 pb-1 text-[10px]">
+                    <span>Generated Dataset:</span>
+                    <span className="text-violet-700 font-black">{augmentStats.total_generated}</span>
+                  </div>
+                  <div className="flex justify-between border-b border-slate-100 pb-1 text-[10px]">
+                    <span>Ratio:</span>
+                    <span className="text-slate-900 font-black">{augmentStats.augmentation_ratio}x</span>
+                  </div>
+                  <div className="flex justify-between border-b border-slate-100 pb-1 text-[10px]">
+                    <span>Vocabulary Coverage:</span>
+                    <span className="text-slate-900 font-black">{statsSummary.vocabCoverage || "0%"}</span>
+                  </div>
+                  <div className="flex justify-between border-b border-slate-100 pb-1 text-[10px]">
+                    <span>Est. Training Improvement:</span>
+                    <span className="text-emerald-700 font-black">
+                      +{Math.round((augmentStats.total_generated / Math.max(1, augmentStats.total_original)) * 100)}%
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-[10px] pt-1">
+                    <span>Total Setelah Augmentasi:</span>
+                    <span className="text-slate-900 font-black">{augmentStats.estimated_total}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Selection */}
+              <div className="surface-panel rounded-2xl p-4 border border-slate-200 flex flex-col gap-2">
+                <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider block">1. Pilih Vocabulary</span>
+                <select
+                  value={augmentSelection}
+                  onChange={(e) => setAugmentSelection(e.target.value)}
+                  className="glass-input rounded-xl px-2.5 py-1.5 text-[10px] font-black bg-white cursor-pointer w-full border border-slate-200 text-slate-700"
+                >
+                  <option value="all">Semua Vocabulary</option>
+                  <option value="selected">Vocabulary tertentu ({selectedWords.length} terpilih)</option>
+                  <option value="lacking">Vocabulary kurang sample (&lt; 150)</option>
+                  <option value="low_confidence">Vocabulary confidence rendah (&lt; 80%)</option>
+                  <option value="recommended">Rekomendasi Pintar AI (Adaptif)</option>
+                </select>
+                <p className="text-[9px] text-slate-400 font-semibold italic mt-0.5 leading-normal">
+                  {augmentSelection === "recommended" ? "AI akan secara otomatis mengaugmentasi lebih banyak pada kata bersampel sedikit/low confidence, dan melewatkan kosa kata lengkap." : "Augmentasikan kosa kata terpilih secara merata sesuai parameter di bawah."}
+                </p>
+                
+                {augmentSelection === "selected" && (
+                  <div className="mt-1 border border-slate-150 rounded-lg p-2 bg-slate-50/50 max-h-[110px] overflow-y-auto flex flex-col gap-1.5 select-none">
+                    <div className="flex justify-between items-center pb-1 mb-1 border-b border-slate-200">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedWords(evaluatedList.map(w => w.label))}
+                        className="text-[8px] font-black text-violet-600 hover:underline"
+                      >
+                        Pilih Semua
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedWords([])}
+                        className="text-[8px] font-black text-rose-600 hover:underline"
+                      >
+                        Bersihkan
+                      </button>
+                    </div>
+                    {evaluatedList.length === 0 ? (
+                      <span className="text-[9px] text-slate-400 italic">Memuat kosa kata...</span>
+                    ) : (
+                      evaluatedList.map((w) => {
+                        const active = selectedWords.includes(w.label);
+                        return (
+                          <label key={w.label} className="flex items-center gap-1.5 cursor-pointer text-[10px] font-semibold text-slate-700 hover:text-slate-900">
+                            <input
+                              type="checkbox"
+                              checked={active}
+                              onChange={() => {
+                                if (active) {
+                                  setSelectedWords(selectedWords.filter(x => x !== w.label));
+                                } else {
+                                  setSelectedWords([...selectedWords, w.label]);
+                                }
+                              }}
+                              className="rounded border-slate-300 text-violet-600 focus:ring-violet-500 h-3 w-3 cursor-pointer shrink-0"
+                            />
+                            <span className="truncate">{w.display}</span>
+                          </label>
+                        );
+                      })
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Variations */}
+              <div className="surface-panel rounded-2xl p-4 border border-slate-200 flex flex-col gap-2">
+                <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider block">2. Jumlah Variasi per Sampel</span>
+                <div className="flex gap-1.5">
+                  {[2, 5, 10].map(v => (
+                    <button
+                      key={v}
+                      type="button"
+                      onClick={() => setAugmentVariations(v)}
+                      className={`flex-1 rounded-lg py-1.5 text-xs font-black transition-all active:scale-[0.96] ${
+                        augmentVariations === v ? "bg-violet-600 text-white shadow-sm" : "bg-white border border-slate-200 text-slate-650 hover:bg-slate-50"
+                      }`}
+                    >
+                      {v}x
+                    </button>
+                  ))}
+                </div>
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <input
+                    type="number"
+                    min="1"
+                    max="50"
+                    value={augmentVariations}
+                    onChange={(e) => setAugmentVariations(Math.max(1, parseInt(e.target.value) || 1))}
+                    className="glass-input rounded-lg w-16 px-2 py-1 text-[10px] font-bold text-center border border-slate-200 shadow-inner"
+                  />
+                  <span className="text-[9px] font-bold text-slate-400">Variasi Custom (maks 50)</span>
+                </div>
+              </div>
+
+              {/* Techniques */}
+              <div className="surface-panel rounded-2xl p-4 border border-slate-200 flex flex-col gap-1.5">
+                <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider block">3. Metode Transformasi &amp; Mirror</span>
+                
+                <div className="flex items-center gap-2 text-[10px] font-bold text-slate-750 mb-1">
+                  <input
+                    type="checkbox"
+                    id="enableMirror"
+                    checked={enableMirror}
+                    onChange={() => setEnableMirror(!enableMirror)}
+                    className="rounded border-slate-300 text-violet-600 focus:ring-violet-500 h-3.5 w-3.5 cursor-pointer"
+                  />
+                  <label htmlFor="enableMirror" className="cursor-pointer">Aktifkan Mirror (Horizontal Flip)</label>
+                </div>
+
+                <div className="grid grid-cols-2 gap-1 max-h-[85px] overflow-y-auto pr-1">
+                  {[
+                    { id: "transformer", label: "Transformer AI" },
+                    { id: "translation", label: "Translation" },
+                    { id: "scale", label: "Scaling" },
+                    { id: "rotation", label: "Rotation" },
+                    { id: "offset", label: "Random Noise" },
+                    { id: "jitter", label: "Landmark Jitter" },
+                    { id: "shift", label: "Temporal Shift" },
+                    { id: "speed", label: "Random Speed" }
+                  ].map(tech => {
+                    const active = augmentTechniques.includes(tech.id);
+                    return (
+                      <button
+                        key={tech.id}
+                        type="button"
+                        onClick={() => {
+                          if (active) {
+                            setAugmentTechniques(augmentTechniques.filter(t => t !== tech.id));
+                          } else {
+                            setAugmentTechniques([...augmentTechniques, tech.id]);
+                          }
+                        }}
+                        className={`rounded px-1.5 py-1 text-[8px] font-black uppercase border text-center transition-all ${
+                          active ? "bg-violet-500/10 border-violet-300 text-violet-850" : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50"
+                        }`}
+                      >
+                        {tech.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+            
+            {/* Metadata and Info Panel */}
+            <div className="surface-panel rounded-2xl p-4 border border-slate-200 flex flex-col gap-2">
+              <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider block">Dataset Metadata &amp; Safety</span>
+              <p className="text-[10px] text-slate-650 font-semibold leading-relaxed">
+                Setiap data augmentasi diberi label suffix <code className="text-violet-750 font-bold bg-violet-50 px-1 rounded">_aug_</code> secara otomatis untuk menjaga integritas file dataset asli. Metadata perekaman juga dicatat ke dalam berkas <code className="text-slate-800 font-bold bg-slate-100 px-1 rounded">recordings.csv</code> dengan mencantumkan nama parent dataset dan teknik transformasi yang digunakan.
+              </p>
+            </div>
+          </div>
+
+          {/* right panel: Live Preview Visualizer */}
+          <div className="glass-panel rounded-[32px] p-6 flex flex-col gap-4 border border-white/60 bg-white/40 shadow-xl">
+            <div className="flex items-center gap-2 border-b border-slate-200/50 pb-2">
+              <Sparkles size={16} className="text-violet-600" />
+              <h3 className="text-sm font-black text-slate-900 uppercase tracking-wide">
+                Landmark Live Preview
+              </h3>
+            </div>
+            
+            <div className="flex flex-col gap-3">
+              <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider block">Pilih Kata untuk Preview</span>
+              <select
+                value={previewLabel}
+                onChange={(e) => {
+                  const label = e.target.value;
+                  if (label) {
+                    handlePreviewAugmentation(label);
+                  } else {
+                    setPreviewData(null);
+                    setPreviewLabel("");
+                  }
+                }}
+                className="glass-input rounded-xl px-2.5 py-1.5 text-[10px] font-black bg-white cursor-pointer w-full border border-slate-200 text-slate-700"
+              >
+                <option value="">-- Pilih Kosakata --</option>
+                {evaluatedList.filter(w => w.total > 0).map(w => (
+                  <option key={w.label} value={w.label}>{w.display} ({w.total} sampel)</option>
+                ))}
+              </select>
+            </div>
+
+            {previewData ? (
+              <div className="flex flex-col gap-3">
+                <LandmarkPreview 
+                  original={previewData.original} 
+                  augmented={previewData.augmented} 
+                  frameIdx={previewFrameIdx} 
+                />
+                <div className="flex items-center gap-2 mt-1">
+                  <span className="text-[9px] font-bold text-slate-400 w-8">F-1</span>
+                  <input
+                    type="range"
+                    min="0"
+                    max="29"
+                    value={previewFrameIdx}
+                    onChange={(e) => setPreviewFrameIdx(parseInt(e.target.value))}
+                    className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-violet-600"
+                  />
+                  <span className="text-[9px] font-bold text-slate-400 w-8 text-right">F-30</span>
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center border border-dashed border-slate-200 rounded-2xl py-16 text-center bg-slate-50/20">
+                <Video size={24} className="text-slate-300 animate-pulse" />
+                <span className="text-[10px] text-slate-400 font-black mt-2">Pilih kosakata bersampel di atas untuk memuat visualisasi</span>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
 
   const renderTrainingModel = () => {
 
@@ -7626,6 +7891,26 @@ export const DataCollection = ({ setView }) => {
 
             <button
 
+              onClick={() => handleTabChange("augmentation")}
+
+              className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all ${
+
+                activeTab === "augmentation"
+
+                  ? "bg-white text-sky-700 shadow-sm border border-slate-200/20"
+
+                  : "text-slate-500 hover:text-slate-950"
+
+              }`}
+
+            >
+
+              ✨ AI Augmentation
+
+            </button>
+
+            <button
+
               onClick={() => handleTabChange("training")}
 
               className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all ${
@@ -7668,7 +7953,11 @@ export const DataCollection = ({ setView }) => {
 
                 ? "Balance Checker"
 
-                : "Training Model"}
+                : activeTab === "augmentation"
+
+                  ? "AI Augmentation"
+
+                  : "Training Model"}
 
           </h2>
 
@@ -7739,6 +8028,22 @@ export const DataCollection = ({ setView }) => {
       >
 
         {renderBalanceChecker()}
+
+      </div>
+
+      <div
+
+        style={{
+
+          display:
+
+            !isSessionActive && activeTab === "augmentation" ? "block" : "none",
+
+        }}
+
+      >
+
+        {renderAiAugmentation()}
 
       </div>
 

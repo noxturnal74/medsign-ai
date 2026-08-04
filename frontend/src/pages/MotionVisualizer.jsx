@@ -186,7 +186,7 @@ export const MotionVisualizer = ({ setView }) => {
         }
       }
       if (!isRealDataset) {
-        rawPoints = getGestureTrajectory(selectedGesture, t);
+        rawPoints = getGestureTrajectory(selectedGesture, elapsedTime);
       }
       const projPoints = rawPoints.map(p => project(p[0], p[1], p[2]));
 

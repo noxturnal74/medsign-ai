@@ -22,6 +22,7 @@ Aplikasi ini menggunakan teknologi **Computer Vision** real-time berbasis MediaP
 5.  **Panduan Kosakata Pintasan (`VocabularyGuide.jsx`):** Grid 35 kosakata medis prioritas terbagi dalam 5 kategori klinis, berfungsi sebagai pintasan klik manual bila kamera terganggu.
 6.  **Pencatatan Sesi & Ekspor (`SessionLog.jsx`):** Linimasa transkrip dua arah terstruktur (Pasien vs Dokter) dengan tombol salin papan klip dan ekspor `.txt`.
 7.  **Emergency Alert (`EmergencyAlert.jsx`):** Blinking alarm merah visual jika mendeteksi kata-kata bernilai darurat (*emergency*).
+8.  **AI Dataset Augmentation (`DataCollection.jsx` & `augmentation_service.py`):** Panel manajemen dan pelipatan dataset secara spasial/temporal (seperti mirroring, rotasi, translasi, dan noise temporal) untuk meningkatkan volume dataset training dan generalisasi model deep learning.
 
 ---
 
@@ -51,6 +52,9 @@ medsign-ai/
 │   │   │   ├── Home.jsx
 │   │   │   ├── PatientView.jsx
 │   │   │   ├── DoctorView.jsx
+│   │   │   ├── DataCollection.jsx
+│   │   │   ├── MotionVisualizer.jsx
+│   │   │   ├── UserManual.jsx
 │   │   │   └── About.jsx
 │   │   ├── hooks/
 │   │   │   ├── useWebcam.js
@@ -67,9 +71,15 @@ medsign-ai/
 │   ├── app/
 │   │   ├── main.py
 │   │   ├── routes/
+│   │   │   ├── data_collection.py
+│   │   │   ├── nlg.py
 │   │   │   ├── predict.py
 │   │   │   ├── session.py
 │   │   │   └── vocabulary.py
+│   │   ├── services/
+│   │   │   ├── augmentation_service.py
+│   │   │   ├── nlg_service.py
+│   │   │   └── slt_adapter.py
 │   │   └── schemas.py
 │   ├── requirements.txt
 │   └── Dockerfile

@@ -6,12 +6,11 @@ class NLGService:
     def __init__(self):
         self.recommendations = {
             "sakit": [
-                "sakit kepala", "sakit perut", "sakit dada", "sakit tenggorokan", 
-                "terasa sakit", "penyakit", "sakit sejak kapan", "sakit sekali"
+                "sakit kepala", "sakit perut", "sakit dada", "sakit sejak kapan", "sakit saat bergerak",
+                "terasa sakit", "sakit sekali"
             ],
             "obat": [
-                "minum obat", "resep obat", "alergi obat", "dosis obat", 
-                "efek samping obat", "mengobati", "pengobatan"
+                "obat ini", "harga obat", "resep obat", "minum obat", "efek samping obat"
             ],
             "periksa": [
                 "periksa dokter", "pemeriksaan fisik", "diperiksa", "ruang periksa"
@@ -94,6 +93,10 @@ class NLGService:
         }
         
         self.sentence_templates = [
+            {
+                "keys": {"hamil", "obat", "aman"},
+                "template": "Apakah obat ini aman dikonsumsi selama kehamilan?"
+            },
             {
                 "keys": {"hamil", "boleh", "obat"},
                 "template": "Apakah obat ini aman untuk ibu hamil?"

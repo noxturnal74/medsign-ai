@@ -47,6 +47,9 @@ def add_vocabulary(request: AddVocabularyRequest):
     word_clean = request.word.strip().lower()
     if not word_clean:
         raise HTTPException(status_code=400, detail="Kata tidak boleh kosong")
+    import re
+    if not re.match(r"^[a-z0-9_-]+$", word_clean):
+        raise HTTPException(status_code=400, detail="Kata hanya boleh berisi karakter alfanumerik, hyphen, atau underscore")
         
     # Read labels.json
     backend_dir = Path(__file__).resolve().parents[2]
