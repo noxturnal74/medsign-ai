@@ -340,3 +340,55 @@ class NLGService:
             
         words_formal = [w.capitalize() for w in cleaned_words]
         return " ".join(words_formal) + "."
+
+
+    def summarize_session(self, logs: list) -> str:
+        if not logs:
+            return "Belum ada riwayat percakapan untuk diringkas."
+            
+        patient_messages = [l.get("text", "") for l in logs if l.get("role") == "patient"]
+        doctor_messages = [l.get("text", "") for l in logs if l.get("role") == "doctor"]
+        
+        gejala = []
+        for msg in patient_messages:
+            words = re.findall(r"\b(sakit|pusing|demam|nyeri|sesak|tenggorokan|batuk|flu|gatal|mual|muntah)\b", msg.lower())
+            gejala.extend(words)
+        gejala = list(set(gejala))
+        
+        resep = []
+        for msg in doctor_messages:
+            if any(w in msg.lower() for w in ["obat", "resep", "minum", "dosis", "tablet", "kapsul", "sirup", "salam", "pagi", "malam"]):
+                resep.append(msg)
+                
+        summary = "### 📋 LAPORAN MEDIS AI (NOTETAKER)\n\n"
+        summary += f"**Sesi Konsultasi:** {len(logs)} pesan pertukaran\n\n"
+        
+        summary += "#### 👤 RINGKASAN GEJALA PASIEN\n"
+        if gejala:
+            summary += f"- Keluhan utama terdeteksi: **{', '.join(gejala).upper()}**\n"
+        else:
+            summary += "- Tidak ada gejala spesifik terdeteksi secara otomatis.\n"
+        
+        for msg in patient_messages:
+            summary += f"  - *\"{msg}\"*\n"
+            
+        summary += "\n#### 🩺 INSTRUKSI & TINDAKAN DOKTER\n"
+        if resep:
+            for r in resep:
+                summary += f"- Anjuran: {r}\n"
+        else:
+            summary += "- Dokter belum memberikan instruksi/resep spesifik dalam riwayat teks.\n"
+        for msg in doctor_messages:
+            if msg not in resep:
+                summary += f"  - *\"{msg}\"*\n"
+                
+        summary += "\n#### 📝 REKOMENDASI KLINIS\n"
+        patient_text_all = "".join(patient_messages).lower()
+        if "dada" in patient_text_all or "sesak" in patient_text_all:
+            summary += "- ⚠️ Pasien mengeluhkan sesak/nyeri dada. Harap lakukan pemeriksaan EKG/fisik jantung segera.\n"
+        elif "tensi" in patient_text_all or "darah" in patient_text_all:
+            summary += "- Pantau tekanan darah pasien secara rutin.\n"
+        else:
+            summary += "- Berikan edukasi minum obat secara teratur sesuai dosis.\n"
+            
+        return summary

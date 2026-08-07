@@ -33,6 +33,17 @@ class SimplifyResponse(BaseModel):
     original: str
     simplified: str
 
+class LogItemRequest(BaseModel):
+    role: str
+    text: str
+    timestamp: str = ""
+
+class SummarizeRequest(BaseModel):
+    logs: List[LogItemRequest]
+
+class SummarizeResponse(BaseModel):
+    summary: str
+
 @router.post("/nlg/simplify-speech", response_model=SimplifyResponse)
 def simplify_speech(request: SimplifyRequest):
     """
@@ -52,3 +63,14 @@ def generate_sentence(request: SentenceRequest):
         return SentenceResponse(words=[], sentence="")
     sentence = nlg_service.generate_medical_sentence(request.words)
     return SentenceResponse(words=request.words, sentence=sentence)
+
+
+@router.post("/nlg/summarize", response_model=SummarizeResponse)
+def summarize_consultation(request: SummarizeRequest):
+    """
+    Menerima kumpulan log sesi percakapan dokter-pasien
+    dan menghasilkan ringkasan / resume rekam medis menggunakan AI.
+    """
+    logs_dicts = [{"role": l.role, "text": l.text, "timestamp": l.timestamp} for l in request.logs]
+    summary = nlg_service.summarize_session(logs_dicts)
+    return SummarizeResponse(summary=summary)

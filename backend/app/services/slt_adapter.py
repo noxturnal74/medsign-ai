@@ -16,6 +16,7 @@ model_loader.load_alphabet("models/bisindo_alphabet_v1.tflite")
 
 class SLTAdapterService:
     def __init__(self):
+        self.locked_model = None
         self.check_and_reload()
         self.contract = get_model_contract()
         self.available = model_loader.loaded
@@ -23,6 +24,9 @@ class SLTAdapterService:
         print(f"[SLT_ADAPTER] Mode clinical: {'PRODUCTION' if self.available else 'MODEL_UNAVAILABLE'}")
 
     def check_and_reload(self):
+        if self.locked_model is not None:
+            return
+            
         from pathlib import Path
         model_path = Path("models/medsign_mvp_v1.tflite")
         resolved_path = model_loader._resolve_model_path(model_path)
@@ -38,6 +42,21 @@ class SLTAdapterService:
                     model_loader.load(model_path)
             except Exception as e:
                 print(f"[SLT_ADAPTER] Gagal mengecek/memuat ulang model: {e}")
+
+    def select_model(self, model_name: str, model_type: str = "clinical"):
+        from pathlib import Path
+        model_path = Path("models") / model_name
+        if model_type == "alphabet":
+            model_loader.load_alphabet(model_path)
+            print(f"[SLT_ADAPTER] Active alphabet model set to: {model_name}")
+        else:
+            self.locked_model = model_name
+            model_loader.load(model_path)
+            print(f"[SLT_ADAPTER] Active clinical model set to: {model_name}")
+
+    def reset_model(self):
+        self.locked_model = None
+        self.check_and_reload()
 
     def status(self) -> dict:
         status = model_loader.status()

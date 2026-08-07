@@ -1046,3 +1046,64 @@ def download_augmented_dataset():
         media_type="application/zip",
         filename="augmented_dataset.zip"
     )
+
+
+# --- Model Selection & Management Endpoints ---
+class ModelSelectRequest(BaseModel):
+    model_name: str
+    model_type: str = "clinical" # "clinical" | "alphabet"
+
+@router.get("/dataset/models")
+def list_available_models():
+    import os
+    backend_dir = Path(__file__).resolve().parents[2]
+    models_dir = backend_dir / "models"
+    
+    tflite_files = list(models_dir.glob("*.tflite"))
+    models_list = []
+    
+    from app.ml.model import ModelLoader
+    loader = ModelLoader()
+    active_clinical = loader.status().get("model_path")
+    
+    for f in tflite_files:
+        try:
+            mtime = datetime.fromtimestamp(f.stat().st_mtime).strftime("%Y-%m-%d %H:%M:%S")
+            size_mb = round(f.stat().st_size / (1024 * 1024), 2)
+        except Exception:
+            mtime = "-"
+            size_mb = 0.0
+            
+        is_active = False
+        if active_clinical and Path(active_clinical).name == f.name:
+            is_active = True
+            
+        models_list.append({
+            "name": f.name,
+            "size_mb": size_mb,
+            "last_modified": mtime,
+            "is_active": is_active,
+            "type": "alphabet" if "alphabet" in f.name else "clinical"
+        })
+        
+    return models_list
+
+@router.post("/dataset/models/select")
+def select_active_model(request: ModelSelectRequest):
+    try:
+        from app.services.slt_adapter import SLTAdapterService
+        service = SLTAdapterService()
+        service.select_model(request.model_name, request.model_type)
+        return {"status": "success", "message": f"Berhasil memuat model {request.model_name}"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Gagal memuat model: {str(e)}")
+
+@router.post("/dataset/models/reset")
+def reset_active_model():
+    try:
+        from app.services.slt_adapter import SLTAdapterService
+        service = SLTAdapterService()
+        service.reset_model()
+        return {"status": "success", "message": "Model berhasil direset ke default"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

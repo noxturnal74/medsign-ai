@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+﻿import React, { useContext, useState, useEffect } from 'react';
 
 import { AppContext } from '../context/AppContextObject';
 
@@ -9,6 +9,7 @@ import { TranslationDisplay } from '../components/TranslationDisplay';
 import { VocabularyGuide } from '../components/VocabularyGuide';
 
 import { SessionLog } from '../components/SessionLog';
+import { TtsDashboardModal } from '../components/TtsDashboardModal';
 
 
 
@@ -79,6 +80,49 @@ export const PatientView = ({ setView }) => {
   } = useContext(AppContext);
 
   const [showGuideModal, setShowGuideModal] = useState(false);
+  const [showTtsModal, setShowTtsModal] = useState(false);
+  const [models, setModels] = useState([]);
+  const [activeModel, setActiveModel] = useState("");
+
+  const fetchModels = async () => {
+    try {
+      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/models`);
+      if (response.ok) {
+        const data = await response.json();
+        setModels(data);
+        const active = data.find(m => m.is_active);
+        if (active) {
+          setActiveModel(active.name);
+        }
+      }
+    } catch (err) {
+      console.error("Gagal memuat daftar model:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchModels();
+  }, []);
+
+  const handleModelChange = async (modelName) => {
+    try {
+      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/models/select`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ model_name: modelName })
+      });
+      if (response.ok) {
+        setActiveModel(modelName);
+        alert(`Model berhasil diubah ke: ${modelName}`);
+      } else {
+        alert("Gagal mengubah model.");
+      }
+    } catch (err) {
+      alert("Gagal menghubungi backend.");
+    }
+  };
 
 
 
@@ -93,8 +137,8 @@ export const PatientView = ({ setView }) => {
 
 
   return (
-
-    <div className="flex w-full flex-col gap-6 animate-slide-up">
+    <>
+      <div className="flex w-full flex-col gap-6 animate-slide-up">
 
       <div className="glass-panel flex items-center justify-between rounded-3xl p-4">
 
@@ -744,6 +788,11 @@ export const PatientView = ({ setView }) => {
 
 
 
+      </div>
+
+      {/* Modal Dashboard & Uji Suara TTS */}
+      <TtsDashboardModal isOpen={showTtsModal} onClose={() => setShowTtsModal(false)} />
+
       {/* Modal Panduan Isyarat */}
 
       {showGuideModal && (
@@ -788,7 +837,7 @@ export const PatientView = ({ setView }) => {
 
       )}
 
-    </div>
+    </>
 
   );
 

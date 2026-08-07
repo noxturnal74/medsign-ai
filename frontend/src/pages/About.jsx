@@ -16,19 +16,14 @@ const backendItems = [
   'Struktur logging sesi dan audit konsultasi'
 ];
 
-const docs = [
-  ['PRD.md.pdf', 'Product Requirements'],
-  ['SRS.md.pdf', 'Software Requirements'],
-  ['SDD.md.pdf', 'Software Design'],
-  ['UI_UX_FLOW.md.pdf', 'Wireframes & Flow'],
-  ['TASK_BREAKDOWN.md.pdf', 'Sprint Roadmap'],
-  ['PROJECT_CONTEXT_PROMPT.md.pdf', 'LLM Context']
-];
+
 
 export const About = ({ setView }) => {
   const { t } = useContext(AppContext);
+  const [zoomedImg, setZoomedImg] = React.useState(null);
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 py-2 animate-slide-up">
+    <>
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 py-2 animate-slide-up">
       <div className="glass-panel flex items-center justify-between rounded-3xl p-4">
         <button
           onClick={() => setView('home')}
@@ -66,17 +61,26 @@ export const About = ({ setView }) => {
         <div className="mt-8 border-t border-white/60 pt-7">
           <div className="mb-4 flex items-center gap-2">
             <BookOpen size={18} className="text-amber-600" />
-            <h4 className="text-sm font-black text-slate-950">{t('projectDocs')}</h4>
+            <h4 className="text-sm font-black text-slate-950">Tim Pengembang MedSign AI</h4>
           </div>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {docs.map(([name, description]) => (
-              <div key={name} className="surface-panel rounded-2xl p-3">
-                <div className="flex items-start gap-2.5">
-                  <FileText size={16} className="mt-0.5 shrink-0 text-sky-600" />
-                  <div className="min-w-0">
-                    <span className="block truncate text-[11px] font-black uppercase text-slate-800">{name}</span>
-                    <span className="text-[10px] font-semibold text-slate-500">{description}</span>
-                  </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { name: "Albert William Saputra", role: "Fullstack Developer & Integration", img: "/assets/albert_2.jpg" },
+              { name: "Albert Cheng", role: "Integration & Dataset Collector", img: "/assets/albert_cheng_3.jpg" },
+              { name: "Glenn", role: "UI/UX & Dataset Collector", img: "/assets/glenn_2.jpg" },
+              { name: "Loren", role: "Marketing & Dataset Collector", img: "/assets/loren_2.jpg" }
+            ].map((member) => (
+              <div key={member.name} className="surface-panel rounded-3xl p-4 flex flex-col items-center text-center gap-3 border border-white/40 shadow-sm hover:scale-[1.02] transition-all">
+                <img 
+                  src={member.img} 
+                  alt={member.name} 
+                  onClick={() => setZoomedImg(member)}
+                  className="w-20 h-20 rounded-full object-cover border-2 border-sky-500/30 shadow-inner cursor-pointer hover:scale-105 hover:border-sky-500 transition-all duration-300"
+                  title="Klik untuk memperbesar foto"
+                />
+                <div>
+                  <span className="block text-xs font-black text-slate-900">{member.name}</span>
+                  <span className="text-[10px] font-semibold text-slate-500">{member.role}</span>
                 </div>
               </div>
             ))}
@@ -88,7 +92,36 @@ export const About = ({ setView }) => {
           {t('limitStatementDesc')}
         </div>
       </div>
-    </div>
+      </div>
+
+      {zoomedImg && (
+        <div 
+          className="fixed inset-0 z-[99999] flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4 animate-fade-in"
+          onClick={() => setZoomedImg(null)}
+        >
+          <div 
+            className="relative bg-white rounded-3xl p-6 max-w-xs w-full flex flex-col items-center gap-4 shadow-2xl border border-white/20 animate-scale-up text-slate-800"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              onClick={() => setZoomedImg(null)}
+              className="absolute top-3 right-3 text-slate-400 hover:text-slate-900 transition-all font-black text-lg p-1.5"
+            >
+              ✕
+            </button>
+            <img 
+              src={zoomedImg.img} 
+              alt={zoomedImg.name} 
+              className="w-40 h-40 rounded-full object-cover border-4 border-sky-500/20 shadow-lg"
+            />
+            <div className="text-center">
+              <h4 className="text-sm font-black text-slate-950">{zoomedImg.name}</h4>
+              <p className="text-[10px] font-semibold text-slate-500 mt-1">{zoomedImg.role}</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

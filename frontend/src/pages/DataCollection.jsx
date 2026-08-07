@@ -74,6 +74,7 @@ import {
 
   BrainCircuit,
   Activity,
+  Video,
 } from "lucide-react";
 import { Backdrop, CircularProgress, Alert, AlertTitle, Skeleton } from "@mui/material";
 
@@ -223,6 +224,7 @@ export const DataCollection = ({ setView }) => {
   const [previewFrameIdx, setPreviewFrameIdx] = useState(0);
   const [augmentMessage, setAugmentMessage] = useState(null);
   const [augmentError, setAugmentError] = useState(null);
+  const [augmentSearchQuery, setAugmentSearchQuery] = useState("");
 
   const fetchAugmentStats = async () => {
     try {
@@ -236,6 +238,480 @@ export const DataCollection = ({ setView }) => {
       console.error("Gagal mengambil statistik augmentasi:", err);
     }
   };
+
+  const handlePreviewAugmentation = async (label) => {
+    try {
+      const apiBaseUrl = apiUrl;
+      const response = await fetch(
+        `${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/augment/preview`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ label, techniques: augmentTechniques })
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setPreviewData(data);
+        setPreviewLabel(label);
+        setPreviewFrameIdx(0);
+      } else {
+        alert("Gagal memuat pratinjau: pastikan kata ini memiliki data sampel asli.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Kesalahan koneksi saat memuat pratinjau.");
+    }
+  };
+
+  const handleDownloadAugmentation = () => {
+    const apiBaseUrl = apiUrl;
+    const downloadUrl = `${apiBaseUrl.endsWith("/") ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/augment/download`;
+    window.open(downloadUrl, "_blank");
+  };
+
+  const handleGenerateAugmentation = async () => {
+    setIsAugmenting(true);
+    setAugmentMessage(null);
+    setAugmentError(null);
+    try {
+      const apiBaseUrl = apiUrl;
+      const response = await fetch(
+        `${apiBaseUrl.endsWith("/") ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/augment/generate`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            model_type: balanceModelType,
+            selection: augmentSelection,
+            selected_labels: selectedWords,
+            variations: parseInt(augmentVariations) || 5,
+            techniques: augmentTechniques,
+            enable_mirror: enableMirror
+          })
+        }
+      );
+      const data = await response.json();
+      if (response.ok) {
+        setAugmentMessage(data.message || "Augmentasi selesai!");
+        fetchBalance();
+        fetchAugmentStats();
+      } else {
+        setAugmentError(data.detail || "Gagal melakukan augmentasi.");
+      }
+    } catch (err) {
+      setAugmentError("Terjadi kesalahan koneksi saat melakukan augmentasi.");
+    } finally {
+      setIsAugmenting(false);
+    }
+  };
+
+  const handleDeleteAugmentation = async () => {
+    if (!window.confirm("Apakah Anda yakin ingin menghapus seluruh dataset hasil augmentasi? Dataset asli tidak akan terpengaruh.")) {
+      return;
+    }
+    setAugmentMessage(null);
+    setAugmentError(null);
+    try {
+      const apiBaseUrl = apiUrl;
+      const response = await fetch(
+        `${apiBaseUrl.endsWith("/") ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/augment/delete`,
+        { method: "POST" }
+      );
+      const data = await response.json();
+      if (response.ok) {
+        setAugmentMessage(data.message || "Dataset augmentasi berhasil dihapus.");
+        fetchBalance();
+        fetchAugmentStats();
+      } else {
+        setAugmentError(data.detail || "Gagal menghapus dataset.");
+      }
+    } catch (err) {
+      setAugmentError("Terjadi kesalahan koneksi saat menghapus dataset.");
+    }
+  };
+
+  const evaluatedList = useMemo(() => {
+
+    if (!balanceData) return [];
+
+    return balanceData.balance.map((b) => {
+
+      const totalSamples = b.total;
+
+      const counts = b.counts || {};
+
+      const uniqueSigners = Object.values(counts).filter(c => c > 0).length;
+
+      
+
+      let seed = 0;
+
+      for (let i = 0; i < b.label.length; i++) {
+
+        seed += b.label.charCodeAt(i);
+
+      }
+
+      
+
+      // Task 1, 5, 6, 19: Autocompute quality indicators
+
+      const avgConfidence = Math.round(Math.min(96, Math.max(30, 48 + (seed % 18) + (totalSamples * 1.6))));
+
+      const avgAccuracy = Math.round(Math.min(98, Math.max(25, 40 + (seed % 22) + (totalSamples * 1.8))));
+
+      const confusionRate = Math.round(Math.max(1, Math.min(75, 48 - (totalSamples * 1.5) + (seed % 14))));
+
+      const mispredictionFreq = Math.max(0, Math.round((confusionRate * totalSamples) / 100));
+
+      
+
+      let healthStatus = "Critical";
+
+      if (totalSamples >= 20 && avgAccuracy >= 90 && uniqueSigners >= 3) {
+
+        healthStatus = "Excellent";
+
+      } else if (totalSamples >= 15 && avgAccuracy >= 80 && uniqueSigners >= 2) {
+
+        healthStatus = "Good";
+
+      } else if (totalSamples >= 10 && avgAccuracy >= 70 && uniqueSigners >= 1) {
+
+        healthStatus = "Fair";
+
+      } else if (totalSamples >= 5) {
+
+        healthStatus = "Poor";
+
+      }
+
+      
+
+      let highlightBg = "border-rose-300/40 bg-rose-500/5 text-rose-900";
+
+      let badgeText = "NEED MORE DATA";
+
+      let badgeColor = "bg-rose-500/10 text-rose-700 border-rose-500/20";
+
+      let statusColor = "red";
+
+      let statusText = "Sangat Kurang";
+
+      
+
+      if (totalSamples >= 20 && uniqueSigners >= 3 && avgAccuracy >= 80) {
+
+        statusText = "Cukup";
+
+        statusColor = "green";
+
+        highlightBg = "border-emerald-300/40 bg-emerald-500/5 text-emerald-950 font-black";
+
+        badgeText = "READY";
+
+        badgeColor = "bg-emerald-500/10 text-emerald-700 border-emerald-500/20";
+
+      } else if (totalSamples >= 5 && uniqueSigners >= 1) {
+
+        statusText = "Kurang";
+
+        statusColor = "yellow";
+
+        if (totalSamples >= 12) {
+
+          highlightBg = "border-amber-300/40 bg-amber-500/5 text-amber-905";
+
+          badgeText = "READY"; // Hampir Lengkap
+
+          badgeColor = "bg-amber-500/10 text-amber-700 border-amber-500/20";
+
+        } else if (avgConfidence < 80) {
+
+          highlightBg = "border-orange-300/40 bg-orange-500/5 text-orange-905";
+
+          badgeText = "LOW CONFIDENCE";
+
+          badgeColor = "bg-orange-500/10 text-orange-700 border-orange-500/20";
+
+        } else {
+
+          highlightBg = "border-amber-300/40 bg-amber-500/5 text-amber-905";
+
+          badgeText = "READY";
+
+          badgeColor = "bg-amber-500/10 text-amber-700 border-amber-500/20";
+
+        }
+
+      }
+
+      
+
+      if (totalSamples === 0) {
+
+        badgeText = "BELUM DIREKAM";
+
+        badgeColor = "bg-slate-500/10 text-slate-700 border-slate-500/20";
+
+        statusColor = "blue";
+
+        statusText = "Belum Direkam";
+
+        highlightBg = "border-slate-300/40 bg-slate-500/5 text-slate-905";
+
+      }
+
+      
+
+      // Task 3: Estimated Missing Samples (Target 300)
+
+      const targetSamples = 300;
+
+      const missingSamples = Math.max(0, targetSamples - totalSamples);
+
+      
+
+      // Task 5: Difficulty indicator
+
+      let difficultyStars = "***";
+
+      let difficultyText = "Sedang";
+
+      if (avgAccuracy >= 90 && confusionRate <= 5) {
+
+        difficultyStars = "*****";
+
+        difficultyText = "Sangat Mudah";
+
+      } else if (avgAccuracy >= 80 && confusionRate <= 10) {
+
+        difficultyStars = "****";
+
+        difficultyText = "Mudah";
+
+      } else if (avgAccuracy >= 70 && confusionRate <= 15) {
+
+        difficultyStars = "***";
+
+        difficultyText = "Sedang";
+
+      } else if (avgAccuracy >= 60 && confusionRate <= 25) {
+
+        difficultyStars = "**";
+
+        difficultyText = "Sulit";
+
+      } else {
+
+        difficultyStars = "*";
+
+        difficultyText = "Sangat Sulit";
+
+      }
+
+      
+
+      // Task 6: Confidence History Sparkline Data
+
+      const confHistory = [
+
+        Math.max(30, avgConfidence - 4),
+
+        Math.max(30, avgConfidence - 2),
+
+        Math.max(30, avgConfidence + 1),
+
+        Math.max(30, avgConfidence - 1),
+
+        avgConfidence
+
+      ];
+
+      
+
+      // Task 18: Active Learning Recommendation trigger
+
+      const recommendForRetake = 
+
+        avgConfidence < 80 || 
+
+        avgAccuracy < 90 || 
+
+        totalSamples < 150 || 
+
+        uniqueSigners < 3 || 
+
+        confusionRate > 15;
+
+        
+
+      let reasons = [];
+
+      if (totalSamples < 150) reasons.push(`Sampel < 150`);
+
+      if (uniqueSigners < 3) reasons.push(`Responden < 3`);
+
+      if (avgConfidence < 80) reasons.push(`Confidence < 80%`);
+
+      if (avgAccuracy < 90) reasons.push(`Akurasi < 90%`);
+
+      if (confusionRate > 15) reasons.push(`Confusion tinggi`);
+
+      
+
+      return {
+
+        ...b,
+
+        total: totalSamples,
+
+        uniqueSigners,
+
+        avgConfidence,
+
+        avgAccuracy,
+
+        confusionRate,
+
+        mispredictionFreq,
+
+        status: statusText,
+
+        statusColor,
+
+        healthStatus,
+
+        highlightBg,
+
+        badgeText,
+
+        badgeColor,
+
+        missingSamples,
+
+        targetSamples,
+
+        difficultyStars,
+
+        difficultyText,
+
+        confHistory,
+
+        recommendForRetake,
+
+        reason: reasons.join(", ")
+
+      };
+
+    });
+
+  }, [balanceData]);
+
+
+
+  const balanceCategories = useMemo(() => {
+
+    if (!balanceData) return [];
+
+    const cats = new Set(balanceData.balance.map(b => b.category));
+
+    return Array.from(cats);
+
+  }, [balanceData]);
+
+
+
+  // Task 7, 12, 16, 22: Model Health & Quality Score Summary
+
+  const statsSummary = useMemo(() => {
+
+    if (evaluatedList.length === 0) return {
+
+      datasetCoverage: "0%",
+
+      vocabCoverage: "0%",
+
+      avgConfidence: "0%",
+
+      avgAccuracy: "0%",
+
+      needRetraining: "Tidak",
+
+      missingSamples: 0,
+
+      qualityScore: 0,
+
+      cukupCount: 0,
+
+      kurangCount: 0,
+
+      needRetakeCount: 0
+
+    };
+
+    
+
+    const totalWords = evaluatedList.length;
+
+    const cukupWords = evaluatedList.filter(w => w.status === "Cukup").length;
+
+    const kurangWords = evaluatedList.filter(w => w.status === "Kurang").length;
+
+    const activeWords = evaluatedList.filter(w => w.total > 0).length;
+
+    const needRetakeCount = evaluatedList.filter(w => w.recommendForRetake && w.total > 0).length;
+
+    
+
+    const sumConfidence = evaluatedList.reduce((sum, w) => sum + w.avgConfidence, 0);
+
+    const sumAccuracy = evaluatedList.reduce((sum, w) => sum + w.avgAccuracy, 0);
+
+    const totalMissing = evaluatedList.reduce((sum, w) => sum + w.missingSamples, 0);
+
+    
+
+    const avgConfidenceVal = Math.round(sumConfidence / totalWords);
+
+    const avgAccuracyVal = Math.round(sumAccuracy / totalWords);
+
+    
+
+    // Dataset Quality Score calculation
+
+    const balanceScore = Math.max(10, 100 - (totalMissing / (totalWords * 10)));
+
+    const qualityScore = Math.round((avgAccuracyVal + avgConfidenceVal + balanceScore) / 3);
+
+    
+
+    return {
+
+      datasetCoverage: `${Math.round((cukupWords / totalWords) * 100)}%`,
+
+      vocabCoverage: `${Math.round((activeWords / totalWords) * 100)}%`,
+
+      avgConfidence: `${avgConfidenceVal}%`,
+
+      avgAccuracy: `${avgAccuracyVal}%`,
+
+      needRetraining: totalMissing > 0 ? "Ya (Latih Ulang)" : "Tidak",
+
+      missingSamples: totalMissing,
+
+      qualityScore,
+
+      cukupCount: cukupWords,
+
+      kurangCount: kurangWords + evaluatedList.filter(w => w.status === "Sangat Kurang").length,
+
+      needRetakeCount
+
+    };
+
+  }, [evaluatedList]);
 
   const [showHealthModal, setShowHealthModal] = useState(false);
 
@@ -1945,7 +2421,7 @@ export const DataCollection = ({ setView }) => {
 
                   <span className="text-[9px] font-bold text-slate-500">
 
-                    💡 Jarak Ideal:{" "}
+                    Info Jarak Ideal:{" "}
 
                     <span className="text-slate-800 font-black">
 
@@ -1961,7 +2437,7 @@ export const DataCollection = ({ setView }) => {
 
                     <span className="text-[9px] font-black text-rose-600 animate-pulse">
 
-                      ⚠️ Ruangan Redup! Mohon tambah cahaya.
+                      Peringatan: Ruangan Redup! Mohon tambah cahaya.
 
                     </span>
 
@@ -3769,98 +4245,6 @@ export const DataCollection = ({ setView }) => {
 
     const [selectedSamples, setSelectedSamples] = useState([]);
 
-    const handlePreviewAugmentation = async (label) => {
-      try {
-        const apiBaseUrl = apiUrl;
-        const response = await fetch(
-          `${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/augment/preview`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ label, techniques: augmentTechniques })
-          }
-        );
-        if (response.ok) {
-          const data = await response.json();
-          setPreviewData(data);
-          setPreviewLabel(label);
-          setPreviewFrameIdx(0);
-        } else {
-          alert("Gagal memuat pratinjau: pastikan kata ini memiliki data sampel asli.");
-        }
-      } catch (err) {
-        console.error(err);
-        alert("Kesalahan koneksi saat memuat pratinjau.");
-      }
-    };
-
-    const handleDownloadAugmentation = () => {
-      const apiBaseUrl = apiUrl;
-      const downloadUrl = `${apiBaseUrl.endsWith("/") ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/augment/download`;
-      window.open(downloadUrl, "_blank");
-    };
-
-    const handleGenerateAugmentation = async () => {
-      setIsAugmenting(true);
-      setAugmentMessage(null);
-      setAugmentError(null);
-      try {
-        const apiBaseUrl = apiUrl;
-        const response = await fetch(
-          `${apiBaseUrl.endsWith("/") ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/augment/generate`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              model_type: balanceModelType,
-              selection: augmentSelection,
-              selected_labels: selectedWords,
-              variations: parseInt(augmentVariations) || 5,
-              techniques: augmentTechniques,
-              enable_mirror: enableMirror
-            })
-          }
-        );
-        const data = await response.json();
-        if (response.ok) {
-          setAugmentMessage(data.message || "Augmentasi selesai!");
-          fetchBalance();
-          fetchAugmentStats();
-        } else {
-          setAugmentError(data.detail || "Gagal melakukan augmentasi.");
-        }
-      } catch (err) {
-        setAugmentError("Terjadi kesalahan koneksi saat melakukan augmentasi.");
-      } finally {
-        setIsAugmenting(false);
-      }
-    };
-
-    const handleDeleteAugmentation = async () => {
-      if (!window.confirm("Apakah Anda yakin ingin menghapus seluruh dataset hasil augmentasi? Dataset asli tidak akan terpengaruh.")) {
-        return;
-      }
-      setAugmentMessage(null);
-      setAugmentError(null);
-      try {
-        const apiBaseUrl = apiUrl;
-        const response = await fetch(
-          `${apiBaseUrl.endsWith("/") ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/augment/delete`,
-          { method: "POST" }
-        );
-        const data = await response.json();
-        if (response.ok) {
-          setAugmentMessage(data.message || "Dataset augmentasi berhasil dihapus.");
-          fetchBalance();
-          fetchAugmentStats();
-        } else {
-          setAugmentError(data.detail || "Gagal menghapus dataset.");
-        }
-      } catch (err) {
-        setAugmentError("Terjadi kesalahan koneksi saat menghapus dataset.");
-      }
-    };
-
     const handleRetakeSample = (sample) => {
 
       if (!isActive) {
@@ -4289,387 +4673,7 @@ export const DataCollection = ({ setView }) => {
 
 
 
-    const evaluatedList = useMemo(() => {
 
-      if (!balanceData) return [];
-
-      return balanceData.balance.map((b) => {
-
-        const totalSamples = b.total;
-
-        const counts = b.counts || {};
-
-        const uniqueSigners = Object.values(counts).filter(c => c > 0).length;
-
-        
-
-        let seed = 0;
-
-        for (let i = 0; i < b.label.length; i++) {
-
-          seed += b.label.charCodeAt(i);
-
-        }
-
-        
-
-        // Task 1, 5, 6, 19: Autocompute quality indicators
-
-        const avgConfidence = Math.round(Math.min(96, Math.max(30, 48 + (seed % 18) + (totalSamples * 1.6))));
-
-        const avgAccuracy = Math.round(Math.min(98, Math.max(25, 40 + (seed % 22) + (totalSamples * 1.8))));
-
-        const confusionRate = Math.round(Math.max(1, Math.min(75, 48 - (totalSamples * 1.5) + (seed % 14))));
-
-        const mispredictionFreq = Math.max(0, Math.round((confusionRate * totalSamples) / 100));
-
-        
-
-        let healthStatus = "Critical";
-
-        if (totalSamples >= 20 && avgAccuracy >= 90 && uniqueSigners >= 3) {
-
-          healthStatus = "Excellent";
-
-        } else if (totalSamples >= 15 && avgAccuracy >= 80 && uniqueSigners >= 2) {
-
-          healthStatus = "Good";
-
-        } else if (totalSamples >= 10 && avgAccuracy >= 70 && uniqueSigners >= 1) {
-
-          healthStatus = "Fair";
-
-        } else if (totalSamples >= 5) {
-
-          healthStatus = "Poor";
-
-        }
-
-        
-
-        let highlightBg = "border-rose-300/40 bg-rose-500/5 text-rose-900";
-
-        let badgeText = "NEED MORE DATA";
-
-        let badgeColor = "bg-rose-500/10 text-rose-700 border-rose-500/20";
-
-        let statusColor = "🔴";
-
-        let statusText = "Sangat Kurang";
-
-        
-
-        if (totalSamples >= 20 && uniqueSigners >= 3 && avgAccuracy >= 80) {
-
-          statusText = "Cukup";
-
-          statusColor = "🟢";
-
-          highlightBg = "border-emerald-300/40 bg-emerald-500/5 text-emerald-950 font-black";
-
-          badgeText = "READY";
-
-          badgeColor = "bg-emerald-500/10 text-emerald-700 border-emerald-500/20";
-
-        } else if (totalSamples >= 5 && uniqueSigners >= 1) {
-
-          statusText = "Kurang";
-
-          statusColor = "🟡";
-
-          if (totalSamples >= 12) {
-
-            highlightBg = "border-amber-300/40 bg-amber-500/5 text-amber-905";
-
-            badgeText = "READY"; // Hampir Lengkap
-
-            badgeColor = "bg-amber-500/10 text-amber-700 border-amber-500/20";
-
-          } else if (avgConfidence < 80) {
-
-            highlightBg = "border-orange-300/40 bg-orange-500/5 text-orange-905";
-
-            badgeText = "LOW CONFIDENCE";
-
-            badgeColor = "bg-orange-500/10 text-orange-700 border-orange-500/20";
-
-          } else {
-
-            highlightBg = "border-amber-300/40 bg-amber-500/5 text-amber-905";
-
-            badgeText = "READY";
-
-            badgeColor = "bg-amber-500/10 text-amber-700 border-amber-500/20";
-
-          }
-
-        }
-
-        
-
-        if (totalSamples === 0) {
-
-          badgeText = "BELUM DIREKAM";
-
-          badgeColor = "bg-slate-500/10 text-slate-700 border-slate-500/20";
-
-          statusColor = "🔵";
-
-          statusText = "Belum Direkam";
-
-          highlightBg = "border-slate-300/40 bg-slate-500/5 text-slate-905";
-
-        }
-
-        
-
-        // Task 3: Estimated Missing Samples (Target 300)
-
-        const targetSamples = 300;
-
-        const missingSamples = Math.max(0, targetSamples - totalSamples);
-
-        
-
-        // Task 5: Difficulty indicator
-
-        let difficultyStars = "★★★";
-
-        let difficultyText = "Sedang";
-
-        if (avgAccuracy >= 90 && confusionRate <= 5) {
-
-          difficultyStars = "★★★★★";
-
-          difficultyText = "Sangat Mudah";
-
-        } else if (avgAccuracy >= 80 && confusionRate <= 10) {
-
-          difficultyStars = "★★★★";
-
-          difficultyText = "Mudah";
-
-        } else if (avgAccuracy >= 70 && confusionRate <= 15) {
-
-          difficultyStars = "★★★";
-
-          difficultyText = "Sedang";
-
-        } else if (avgAccuracy >= 60 && confusionRate <= 25) {
-
-          difficultyStars = "★★";
-
-          difficultyText = "Sulit";
-
-        } else {
-
-          difficultyStars = "★";
-
-          difficultyText = "Sangat Sulit";
-
-        }
-
-        
-
-        // Task 6: Confidence History Sparkline Data
-
-        const confHistory = [
-
-          Math.max(30, avgConfidence - 4),
-
-          Math.max(30, avgConfidence - 2),
-
-          Math.max(30, avgConfidence + 1),
-
-          Math.max(30, avgConfidence - 1),
-
-          avgConfidence
-
-        ];
-
-        
-
-        // Task 18: Active Learning Recommendation trigger
-
-        const recommendForRetake = 
-
-          avgConfidence < 80 || 
-
-          avgAccuracy < 90 || 
-
-          totalSamples < 150 || 
-
-          uniqueSigners < 3 || 
-
-          confusionRate > 15;
-
-          
-
-        let reasons = [];
-
-        if (totalSamples < 150) reasons.push(`Sampel < 150`);
-
-        if (uniqueSigners < 3) reasons.push(`Responden < 3`);
-
-        if (avgConfidence < 80) reasons.push(`Confidence < 80%`);
-
-        if (avgAccuracy < 90) reasons.push(`Akurasi < 90%`);
-
-        if (confusionRate > 15) reasons.push(`Confusion tinggi`);
-
-        
-
-        return {
-
-          ...b,
-
-          total: totalSamples,
-
-          uniqueSigners,
-
-          avgConfidence,
-
-          avgAccuracy,
-
-          confusionRate,
-
-          mispredictionFreq,
-
-          status: statusText,
-
-          statusColor,
-
-          healthStatus,
-
-          highlightBg,
-
-          badgeText,
-
-          badgeColor,
-
-          missingSamples,
-
-          targetSamples,
-
-          difficultyStars,
-
-          difficultyText,
-
-          confHistory,
-
-          recommendForRetake,
-
-          reason: reasons.join(", ")
-
-        };
-
-      });
-
-    }, [balanceData]);
-
-
-
-    const balanceCategories = useMemo(() => {
-
-      if (!balanceData) return [];
-
-      const cats = new Set(balanceData.balance.map(b => b.category));
-
-      return Array.from(cats);
-
-    }, [balanceData]);
-
-
-
-    // Task 7, 12, 16, 22: Model Health & Quality Score Summary
-
-    const statsSummary = useMemo(() => {
-
-      if (evaluatedList.length === 0) return {
-
-        datasetCoverage: "0%",
-
-        vocabCoverage: "0%",
-
-        avgConfidence: "0%",
-
-        avgAccuracy: "0%",
-
-        needRetraining: "Tidak",
-
-        missingSamples: 0,
-
-        qualityScore: 0,
-
-        cukupCount: 0,
-
-        kurangCount: 0,
-
-        needRetakeCount: 0
-
-      };
-
-      
-
-      const totalWords = evaluatedList.length;
-
-      const cukupWords = evaluatedList.filter(w => w.status === "Cukup").length;
-
-      const kurangWords = evaluatedList.filter(w => w.status === "Kurang").length;
-
-      const activeWords = evaluatedList.filter(w => w.total > 0).length;
-
-      const needRetakeCount = evaluatedList.filter(w => w.recommendForRetake && w.total > 0).length;
-
-      
-
-      const sumConfidence = evaluatedList.reduce((sum, w) => sum + w.avgConfidence, 0);
-
-      const sumAccuracy = evaluatedList.reduce((sum, w) => sum + w.avgAccuracy, 0);
-
-      const totalMissing = evaluatedList.reduce((sum, w) => sum + w.missingSamples, 0);
-
-      
-
-      const avgConfidenceVal = Math.round(sumConfidence / totalWords);
-
-      const avgAccuracyVal = Math.round(sumAccuracy / totalWords);
-
-      
-
-      // Dataset Quality Score calculation
-
-      const balanceScore = Math.max(10, 100 - (totalMissing / (totalWords * 10)));
-
-      const qualityScore = Math.round((avgAccuracyVal + avgConfidenceVal + balanceScore) / 3);
-
-      
-
-      return {
-
-        datasetCoverage: `${Math.round((cukupWords / totalWords) * 100)}%`,
-
-        vocabCoverage: `${Math.round((activeWords / totalWords) * 100)}%`,
-
-        avgConfidence: `${avgConfidenceVal}%`,
-
-        avgAccuracy: `${avgAccuracyVal}%`,
-
-        needRetraining: totalMissing > 0 ? "Ya (Latih Ulang)" : "Tidak",
-
-        missingSamples: totalMissing,
-
-        qualityScore,
-
-        cukupCount: cukupWords,
-
-        kurangCount: kurangWords + evaluatedList.filter(w => w.status === "Sangat Kurang").length,
-
-        needRetakeCount
-
-      };
-
-    }, [evaluatedList]);
 
 
 
@@ -5607,17 +5611,12 @@ export const DataCollection = ({ setView }) => {
 
 
               <button
-
                 onClick={fetchBalance}
-
-                className="inline-flex items-center justify-center rounded-xl bg-white border border-white/80 p-2 text-slate-600 hover:text-slate-950 transition-all shadow-sm"
-
+                disabled={balanceLoading}
+                className="inline-flex items-center justify-center rounded-xl bg-white border border-white/80 p-2 text-slate-600 hover:text-slate-950 transition-all shadow-sm disabled:opacity-50"
                 title="Refresh data"
-
               >
-
-                <RefreshCw size={13} />
-
+                <RefreshCw size={13} className={balanceLoading ? "animate-spin" : ""} />
               </button>
 
 
@@ -6247,7 +6246,7 @@ export const DataCollection = ({ setView }) => {
 
   };
 
-﻿  const LandmarkPreview = ({ original, augmented, frameIdx }) => {
+  const LandmarkPreview = ({ original, augmented, frameIdx }) => {
     const canvasRef = React.useRef(null);
     const [mode, setMode] = React.useState("overlay"); // "original" | "augmented" | "overlay"
 
@@ -6283,14 +6282,30 @@ export const DataCollection = ({ setView }) => {
         [0, 17], [17, 18], [18, 19], [19, 20] // Pinky
       ];
 
-      const drawHand = (frameData, jointColor, boneColor) => {
+      const drawHand = (frameData, jointColor, boneColor, referenceFrame) => {
         if (!frameData || frameData.length !== 63) return;
 
         const joints = [];
         for (let i = 0; i < 21; i++) {
-          const x = frameData[i * 3] * width;
-          const y = frameData[i * 3 + 1] * height;
-          joints.push({ x, y });
+          const rx = frameData[i * 3];
+          const ry = frameData[i * 3 + 1];
+          
+          let isValid = true;
+          if (referenceFrame && referenceFrame.length === 63) {
+            const origX = referenceFrame[i * 3];
+            const origY = referenceFrame[i * 3 + 1];
+            if (origX === 0 && origY === 0) {
+              isValid = false;
+            }
+          } else {
+            if (rx === 0 && ry === 0) {
+              isValid = false;
+            }
+          }
+
+          const x = rx * width;
+          const y = ry * height;
+          joints.push({ x, y, isValid });
         }
 
         // Draw bones
@@ -6299,7 +6314,7 @@ export const DataCollection = ({ setView }) => {
         bones.forEach(([a, b]) => {
           const p1 = joints[a];
           const p2 = joints[b];
-          if (p1 && p2) {
+          if (p1 && p2 && p1.isValid && p2.isValid) {
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
@@ -6309,6 +6324,7 @@ export const DataCollection = ({ setView }) => {
 
         // Draw joints
         joints.forEach((p, idx) => {
+          if (!p.isValid) return;
           const r = idx === 0 ? 6 : 4;
           ctx.beginPath();
           ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
@@ -6324,12 +6340,12 @@ export const DataCollection = ({ setView }) => {
       const augFrame = augmented ? augmented[frameIdx] : null;
 
       if (mode === "original" || mode === "overlay") {
-        drawHand(origFrame, "rgba(56, 189, 248, 0.95)", "rgba(56, 189, 248, 0.35)"); // Sky blue
+        drawHand(origFrame, "rgba(56, 189, 248, 0.95)", "rgba(56, 189, 248, 0.35)", origFrame); // Sky blue
       }
       if (mode === "augmented" || mode === "overlay") {
         const jointCol = mode === "overlay" ? "rgba(236, 72, 153, 0.95)" : "rgba(139, 92, 246, 0.95)";
         const boneCol = mode === "overlay" ? "rgba(236, 72, 153, 0.35)" : "rgba(139, 92, 246, 0.35)";
-        drawHand(augFrame, jointCol, boneCol);
+        drawHand(augFrame, jointCol, boneCol, origFrame);
       }
     }, [original, augmented, frameIdx, mode]);
 
@@ -6447,7 +6463,7 @@ export const DataCollection = ({ setView }) => {
 
             <div className="grid gap-4 md:grid-cols-2 text-xs">
               {/* Stats */}
-              <div className="surface-panel rounded-2xl p-4 border border-slate-200 flex flex-col justify-between">
+              <div className="surface-panel rounded-2xl p-4 border border-slate-200 flex flex-col gap-3">
                 <div className="flex items-center justify-between border-b border-slate-100 pb-1">
                   <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider block">Stats Augmentasi</span>
                   <button
@@ -6507,47 +6523,60 @@ export const DataCollection = ({ setView }) => {
                 </p>
                 
                 {augmentSelection === "selected" && (
-                  <div className="mt-1 border border-slate-150 rounded-lg p-2 bg-slate-50/50 max-h-[110px] overflow-y-auto flex flex-col gap-1.5 select-none">
-                    <div className="flex justify-between items-center pb-1 mb-1 border-b border-slate-200">
-                      <button
-                        type="button"
-                        onClick={() => setSelectedWords(evaluatedList.map(w => w.label))}
-                        className="text-[8px] font-black text-violet-600 hover:underline"
-                      >
-                        Pilih Semua
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setSelectedWords([])}
-                        className="text-[8px] font-black text-rose-600 hover:underline"
-                      >
-                        Bersihkan
-                      </button>
+                  <div className="flex flex-col gap-2 mt-1">
+                    <input
+                      type="text"
+                      placeholder="Cari kosakata..."
+                      value={augmentSearchQuery}
+                      onChange={(e) => setAugmentSearchQuery(e.target.value)}
+                      className="glass-input w-full rounded-xl px-3 py-1.5 text-xs font-semibold border border-slate-200 bg-white"
+                    />
+                    <div className="border border-slate-150 rounded-lg p-2 bg-slate-50/50 max-h-[250px] overflow-y-auto flex flex-col gap-1.5 select-none">
+                      <div className="flex justify-between items-center pb-1 mb-1 border-b border-slate-200">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedWords(evaluatedList.map(w => w.label))}
+                          className="text-[8px] font-black text-violet-600 hover:underline"
+                        >
+                          Pilih Semua
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedWords([])}
+                          className="text-[8px] font-black text-rose-600 hover:underline"
+                        >
+                          Bersihkan
+                        </button>
+                      </div>
+                      {evaluatedList.length === 0 ? (
+                        <span className="text-[9px] text-slate-400 italic">Memuat kosa kata...</span>
+                      ) : evaluatedList.filter(w => w.display.toLowerCase().includes(augmentSearchQuery.toLowerCase())).length === 0 ? (
+                        <span className="text-[9px] text-slate-400 italic">Kosakata tidak ditemukan...</span>
+                      ) : (
+                        evaluatedList
+                          .filter(w => w.display.toLowerCase().includes(augmentSearchQuery.toLowerCase()))
+                          .map((w) => {
+                            const active = selectedWords.includes(w.label);
+                            return (
+                              <label key={w.label} className="flex items-center gap-1.5 cursor-pointer text-[10px] font-semibold text-slate-700 hover:text-slate-900">
+                                <input
+                                  type="checkbox"
+                                  checked={active}
+                                  onChange={() => {
+                                    if (active) {
+                                      setSelectedWords(selectedWords.filter(x => x !== w.label));
+                                    } else {
+                                      setSelectedWords([...selectedWords, w.label]);
+                                    }
+                                  }}
+                                  className="rounded border-slate-300 text-violet-600 focus:ring-violet-500 h-3 w-3 cursor-pointer shrink-0"
+                                />
+                                <span className="truncate">{w.display}</span>
+                              </label>
+                            );
+                          })
+                      )}
                     </div>
-                    {evaluatedList.length === 0 ? (
-                      <span className="text-[9px] text-slate-400 italic">Memuat kosa kata...</span>
-                    ) : (
-                      evaluatedList.map((w) => {
-                        const active = selectedWords.includes(w.label);
-                        return (
-                          <label key={w.label} className="flex items-center gap-1.5 cursor-pointer text-[10px] font-semibold text-slate-700 hover:text-slate-900">
-                            <input
-                              type="checkbox"
-                              checked={active}
-                              onChange={() => {
-                                if (active) {
-                                  setSelectedWords(selectedWords.filter(x => x !== w.label));
-                                } else {
-                                  setSelectedWords([...selectedWords, w.label]);
-                                }
-                              }}
-                              className="rounded border-slate-300 text-violet-600 focus:ring-violet-500 h-3 w-3 cursor-pointer shrink-0"
-                            />
-                            <span className="truncate">{w.display}</span>
-                          </label>
-                        );
-                      })
-                    )}
                   </div>
                 )}
               </div>
@@ -6572,13 +6601,13 @@ export const DataCollection = ({ setView }) => {
                 <div className="flex items-center gap-1.5 mt-0.5">
                   <input
                     type="number"
-                    min="1"
+                    min="0"
                     max="50"
                     value={augmentVariations}
-                    onChange={(e) => setAugmentVariations(Math.max(1, parseInt(e.target.value) || 1))}
+                    onChange={(e) => setAugmentVariations(Math.max(0, parseInt(e.target.value) || 0))}
                     className="glass-input rounded-lg w-16 px-2 py-1 text-[10px] font-bold text-center border border-slate-200 shadow-inner"
                   />
-                  <span className="text-[9px] font-bold text-slate-400">Variasi Custom (maks 50)</span>
+                  <span className="text-[9px] font-bold text-slate-400">Variasi Custom (0-50)</span>
                 </div>
               </div>
 
@@ -6628,6 +6657,48 @@ export const DataCollection = ({ setView }) => {
                       </button>
                     );
                   })}
+                </div>
+              </div>
+
+              {/* Guidance & Formulas Accordion */}
+              <div className="surface-panel rounded-2xl p-4 border border-slate-200 flex flex-col gap-2.5 bg-slate-50/50 mt-1">
+                <span className="text-[10px] font-black text-slate-800 uppercase tracking-wide block border-b border-slate-100 pb-1.5">
+                  📝 Panduan, Rumus &amp; Parameter Transformasi
+                </span>
+                <div className="flex flex-col gap-2 text-[10px] text-slate-655 font-semibold leading-relaxed max-h-[170px] overflow-y-auto pr-1">
+                  <div>
+                    <strong className="text-slate-900 block font-bold">1. Mirror (Horizontal Flip)</strong>
+                    <span className="block text-slate-500">Rumus: <code className="text-violet-600 bg-white px-1 rounded">x' = 1 - x, y' = y</code></span>
+                    <span>Membalik sumbu-x secara horizontal untuk mensimulasikan orientasi isyarat tangan kiri seolah-olah tangan kanan.</span>
+                  </div>
+                  <div className="border-t border-slate-200/60 pt-2">
+                    <strong className="text-slate-900 block font-bold">2. Transformer AI</strong>
+                    <span>Menggunakan neural model untuk mengestimasi deformasi anatomi sendi tangan secara realistis.</span>
+                  </div>
+                  <div className="border-t border-slate-200/60 pt-2">
+                    <strong className="text-slate-900 block font-bold">3. Translation (Pergeseran)</strong>
+                    <span className="block text-slate-500">Rumus: <code className="text-violet-600 bg-white px-1 rounded">x' = x + dx, y' = y + dy</code></span>
+                    <span>Menggeser seluruh joint tangan dengan parameter pergeseran acak <code className="bg-white px-1 rounded">dx, dy ∈ [-0.05, 0.05]</code>.</span>
+                  </div>
+                  <div className="border-t border-slate-200/60 pt-2">
+                    <strong className="text-slate-900 block font-bold">4. Scaling (Penskalaan)</strong>
+                    <span className="block text-slate-500">Rumus: <code className="text-violet-600 bg-white px-1 rounded">x' = (x - cx)*s + cx</code></span>
+                    <span>Memperbesar/memperkecil tangan dengan faktor skala acak <code className="bg-white px-1 rounded">s ∈ [0.9, 1.1]</code> terhadap titik pergelangan.</span>
+                  </div>
+                  <div className="border-t border-slate-200/60 pt-2">
+                    <strong className="text-slate-900 block font-bold">5. Rotation (Rotasi 2D)</strong>
+                    <span className="block text-slate-500">Rumus: <code className="text-violet-600 bg-white px-1 rounded">x' = x cos(θ) - y sin(θ)</code></span>
+                    <span>Memutar sendi tangan dengan sudut acak <code className="bg-white px-1 rounded">θ ∈ [-10°, 10°]</code> untuk mensimulasikan kemiringan kamera.</span>
+                  </div>
+                  <div className="border-t border-slate-200/60 pt-2">
+                    <strong className="text-slate-900 block font-bold">6. Random Noise &amp; Jitter</strong>
+                    <span className="block text-slate-500">Rumus: <code className="text-violet-600 bg-white px-1 rounded">x' = x + ε, ε ~ N(0, 0.002)</code></span>
+                    <span>Menambahkan noise Gaussian kecil secara spasial dan temporal untuk mensimulasikan gangguan tracking/kamera redup.</span>
+                  </div>
+                  <div className="border-t border-slate-200/60 pt-2">
+                    <strong className="text-slate-900 block font-bold">7. Temporal Shift &amp; Speed</strong>
+                    <span>Mengubah kecepatan sequence (mempercepat/memperlambat frame) dan menggeser index start/end untuk simulasi tempo gerakan isyarat.</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -7128,21 +7199,18 @@ export const DataCollection = ({ setView }) => {
               </label>
 
               <select
-
                 value={architecture}
-
                 onChange={(e) => setArchitecture(e.target.value)}
-
                 disabled={isTraining}
-
                 className="glass-input rounded-xl px-3 py-2 text-xs font-semibold appearance-none bg-white/40 cursor-pointer"
-
               >
-
                 <option value="gru">GRU (Recommended - Faster & Light)</option>
-
                 <option value="lstm">LSTM (Standard Recurrent Model)</option>
-
+                <option value="simplernn">SimpleRNN (Classic Recurrent Baseline)</option>
+                <option value="bigru">Bidirectional GRU (Advanced Temporal)</option>
+                <option value="bilstm">Bidirectional LSTM (Advanced Temporal)</option>
+                <option value="cnn1d">1D CNN (Fast Convolutional)</option>
+                <option value="dnn">Deep Neural Network (DNN / MLP Static)</option>
               </select>
 
             </div>
@@ -7681,7 +7749,7 @@ export const DataCollection = ({ setView }) => {
 
               <span className="text-xs font-black text-emerald-600 uppercase tracking-wider">
 
-                ✅ Selesai Berhasil
+                Selesai Berhasil
 
               </span>
 
@@ -7691,7 +7759,7 @@ export const DataCollection = ({ setView }) => {
 
               <span className="text-xs font-black text-rose-600 uppercase tracking-wider">
 
-                ❌ Gagal
+                Gagal
 
               </span>
 
@@ -7753,7 +7821,7 @@ export const DataCollection = ({ setView }) => {
 
                 <div className={`text-[10px] font-bold mt-1 ${finalizeStatus === 'success' ? 'text-emerald-700' : 'text-rose-600'}`}>
 
-                  {finalizeStatus === 'success' ? '✓ ' : '✗ '}{finalizeMsg}
+                  {finalizeStatus === 'success' ? 'Sukses ' : 'Gagal '}{finalizeMsg}
 
                 </div>
 
@@ -7905,7 +7973,7 @@ export const DataCollection = ({ setView }) => {
 
             >
 
-              ✨ AI Augmentation
+              AI Augmentation
 
             </button>
 

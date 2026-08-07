@@ -1,6 +1,6 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import predict, session, vocabulary, data_collection, nlg
+from app.routes import predict, session, vocabulary, data_collection, nlg, tts
 from app.services.slt_adapter import SLTAdapterService
 from app.ml.labels import get_model_contract
 import json
@@ -52,6 +52,7 @@ app.include_router(session.router, prefix="/api/v1", tags=["session"])
 app.include_router(vocabulary.router, prefix="/api/v1", tags=["vocabulary"])
 app.include_router(data_collection.router, prefix="/api/v1", tags=["data_collection"])
 app.include_router(nlg.router, prefix="/api/v1", tags=["nlg"])
+app.include_router(tts.router, prefix="/api/v1", tags=["tts"])
 
 # WebSocket Streaming Endpoint
 @app.websocket("/api/v1/stream")

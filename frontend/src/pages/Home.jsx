@@ -153,7 +153,7 @@ const institutionLogos = [
 
 export const Home = ({ setView }) => {
 
-  const { t, language } = useContext(AppContext);
+  const { t, language, setShowFeatureModal } = useContext(AppContext);
 
   const scopeRef = useRef(null);
 
@@ -413,19 +413,13 @@ export const Home = ({ setView }) => {
 
               </button>
 
-              <a
-
-                href={MARKETING_SITE_URL}
-
+              <button
+                onClick={() => setShowFeatureModal(true)}
                 className="glass-button rounded-2xl px-5 py-3 text-sm font-bold text-sky-700"
-
               >
-
                 <ExternalLink size={18} />
-
-                Landing Page
-
-              </a>
+                Fitur Desktop/Phone
+              </button>
 
             </div>
 

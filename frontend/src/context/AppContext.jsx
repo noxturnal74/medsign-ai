@@ -7,9 +7,7 @@ export const AppProvider = ({ children }) => {
   // --- STATES ---
   const [ttsEnabled, setTtsEnabled] = useState(true);
   const [vocabList, setVocabList] = useState(vocabulary);
-  const [language, setLanguageState] = useState(() => {
-    return localStorage.getItem('medsign_lang') || 'id';
-  });
+  const [language, setLanguageState] = useState('id');
   const [sessionLog, setSessionLog] = useState([]);
   const [sentence, setSentence] = useState([]);
   const [lastDetected, setLastDetected] = useState(null);
@@ -28,6 +26,49 @@ export const AppProvider = ({ children }) => {
   const [wordRecommendations, setWordRecommendations] = useState([]);
   const [generatedSentence, setGeneratedSentence] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [showFeatureModal, setShowFeatureModal] = useState(false);
+  const [toast, setToast] = useState(null);
+
+  const showToast = useCallback((message, type = "info") => {
+    setToast({ message, type });
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.alert = (msg) => {
+        let type = "info";
+        const lower = msg.toLowerCase();
+        if (lower.includes("gagal") || lower.includes("error") || lower.includes("kesalahan")) {
+          type = "error";
+        } else if (lower.includes("berhasil") || lower.includes("sukses") || lower.includes("selesai") || lower.includes("aktif")) {
+          type = "success";
+        }
+        showToast(msg, type);
+      };
+    }
+  }, [showToast]);
+
+  // Auto-clear toast
+  useEffect(() => {
+    if (!toast) return;
+    const timer = setTimeout(() => {
+      setToast(null);
+    }, 3200);
+    return () => clearTimeout(timer);
+  }, [toast]);
+  const [layoutMode, setLayoutModeState] = useState(() => {
+    return localStorage.getItem('medsign_layout_mode') || 'desktop';
+  });
+
+  const setLayoutMode = (mode) => {
+    setLayoutModeState(mode);
+    localStorage.setItem('medsign_layout_mode', mode);
+    document.documentElement.classList.toggle('phone-mode', mode === 'phone');
+  };
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('phone-mode', layoutMode === 'phone');
+  }, [layoutMode]);
 
   // --- REFS ---
   const sentenceTimerRef = useRef(null);
@@ -124,6 +165,18 @@ export const AppProvider = ({ children }) => {
   const setSelectedVoiceName = (voiceName) => {
     setSelectedVoiceNameState(voiceName);
     localStorage.setItem('medsign_selected_voice', voiceName);
+  };
+
+  const getVoiceLabel = (voice) => {
+    const name = voice.name;
+    const n = name.toLowerCase();
+    let gender = "Umum";
+    if (n.includes('gadis') || n.includes('gisella') || n.includes('damayanti') || n.includes('gita') || n.includes('siti') || n.includes('female') || n.includes('perempuan') || n.includes('wanita') || n.includes('google') || n.includes('zira') || n.includes('hazel')) {
+      gender = "Perempuan";
+    } else if (n.includes('ardi') || n.includes('andika') || n.includes('dave') || n.includes('male') || n.includes('laki') || n.includes('pria') || n.includes('david') || n.includes('george')) {
+      gender = "Laki-laki";
+    }
+    return `${name} (Suara ${gender}) [${voice.lang}]`;
   };
 
   const pauseTts = useCallback(() => {
@@ -286,7 +339,34 @@ export const AppProvider = ({ children }) => {
     if (typeof window !== 'undefined' && window.speechSynthesis) {
       const loadVoices = () => {
         const voices = window.speechSynthesis.getVoices();
-        setAvailableVoices(voices);
+        // Filter hanya suara Indonesia; fallback ke semua suara jika tidak ada
+        const idVoices = voices.filter(v => v.lang.toLowerCase().startsWith('id'));
+        const pool = idVoices.length > 0 ? idVoices : voices;
+        const sorted = [...pool].sort((a, b) => {
+          const aGM = a.name.toLowerCase().includes('google') || a.name.toLowerCase().includes('microsoft');
+          const bGM = b.name.toLowerCase().includes('google') || b.name.toLowerCase().includes('microsoft');
+          if (aGM && !bGM) return -1;
+          if (!aGM && bGM) return 1;
+          return a.name.localeCompare(b.name);
+        });
+        setAvailableVoices(sorted);
+
+        // Auto-select Andika/Ardi (Microsoft Male) as default if available
+        const savedVoice = localStorage.getItem('medsign_selected_voice');
+        if (!savedVoice && sorted.length > 0) {
+          const maleVoice = sorted.find(v => {
+            const name = v.name.toLowerCase();
+            return name.includes('andika') || name.includes('ardi') || name.includes('male') || name.includes('laki');
+          });
+          if (maleVoice) {
+            setSelectedVoiceNameState(maleVoice.name);
+          } else {
+            const defaultVoice = sorted.find(v => v.default);
+            if (defaultVoice) {
+              setSelectedVoiceNameState(defaultVoice.name);
+            }
+          }
+        }
       };
       loadVoices();
       if (window.speechSynthesis.onvoiceschanged !== undefined) {
@@ -413,8 +493,15 @@ export const AppProvider = ({ children }) => {
         availableVoices,
         selectedVoiceName,
         setSelectedVoiceName,
+        getVoiceLabel,
         getSentenceSuggestions,
         wordRecommendations,
+        showFeatureModal,
+        setShowFeatureModal,
+        layoutMode,
+        setLayoutMode,
+        toast,
+        setToast,
         appendWordRecommendation,
         generatedSentence,
         isGenerating,

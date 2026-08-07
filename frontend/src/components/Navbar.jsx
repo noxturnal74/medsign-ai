@@ -17,7 +17,7 @@ const navItems = [
 ];
 
 export const Navbar = ({ currentView, setView }) => {
-  const { ttsEnabled, setTtsEnabled, language, setLanguage, t } = useContext(AppContext);
+  const { ttsEnabled, setTtsEnabled, language, setLanguage, t, setShowFeatureModal } = useContext(AppContext);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
@@ -82,7 +82,7 @@ export const Navbar = ({ currentView, setView }) => {
             <span className="hidden lg:inline">{ttsEnabled ? t('voiceActive') : t('voiceInactive')}</span>
           </button>
 
-          <div className="relative shrink-0 select-none">
+          <div className="hidden relative shrink-0 select-none">
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
@@ -100,14 +100,14 @@ export const Navbar = ({ currentView, setView }) => {
             </div>
           </div>
 
-          <a
-            href={MARKETING_SITE_URL}
+          <button
+            onClick={() => setShowFeatureModal(true)}
             className="glass-button rounded-2xl px-3 py-2 text-xs font-bold text-sky-700"
-            title="Buka landing page MedSign"
+            title="Buka perbandingan fitur Desktop vs Phone"
           >
             <ExternalLink size={16} />
-            <span className="hidden lg:inline">{t('landing')}</span>
-          </a>
+            <span className="hidden lg:inline">Fitur Desktop/Phone</span>
+          </button>
         </div>
       </div>
 
@@ -154,7 +154,7 @@ export const Navbar = ({ currentView, setView }) => {
               <select
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
-                className="appearance-none pr-8 pl-3 py-1.5 text-xs font-bold rounded-xl bg-white/40 border border-white/70 text-slate-700 cursor-pointer shadow-sm w-[110px]"
+                className="hidden appearance-none pr-8 pl-3 py-1.5 text-xs font-bold rounded-xl bg-white/40 border border-white/70 text-slate-700 cursor-pointer shadow-sm w-[110px]"
               >
                 <option value="id">🇮🇩 ID</option>
                 <option value="en">🇬🇧 EN</option>

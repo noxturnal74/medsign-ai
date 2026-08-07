@@ -26,7 +26,7 @@ try:
     import tensorflow as tf
     from tensorflow.keras import Sequential
     from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
-    from tensorflow.keras.layers import GRU, LSTM, Dense, Dropout, Input, Masking
+    from tensorflow.keras.layers import GRU, LSTM, SimpleRNN, Bidirectional, Conv1D, GlobalAveragePooling1D, Flatten, Dense, Dropout, Input, Masking
     from tensorflow.keras.utils import to_categorical
 
     TF_AVAILABLE = True
@@ -158,20 +158,59 @@ def split_dataset(X: np.ndarray, y: np.ndarray, signers: np.ndarray, test_size_r
 
 
 def build_model(architecture: str, num_classes: int, learning_rate: float):
-    recurrent = GRU if architecture == "gru" else LSTM
+    # Standard recurrent layers
+    if architecture == "gru":
+        layer = GRU(64, return_sequences=False, unroll=True, name="gru_64")
+    elif architecture == "lstm":
+        layer = LSTM(64, return_sequences=False, unroll=True, name="lstm_64")
+    elif architecture == "simplernn":
+        layer = SimpleRNN(64, return_sequences=False, unroll=True, name="simplernn_64")
+    elif architecture == "bigru":
+        layer = Bidirectional(GRU(32, return_sequences=False, unroll=True), name="bigru_64")
+    elif architecture == "bilstm":
+        layer = Bidirectional(LSTM(32, return_sequences=False, unroll=True), name="bilstm_64")
+    elif architecture == "cnn1d":
+        model = Sequential([
+            Input(shape=(FRAME_COUNT, FEATURE_COUNT)),
+            Conv1D(64, 3, activation='relu', padding='same'),
+            Dropout(0.20),
+            Conv1D(64, 3, activation='relu', padding='same'),
+            GlobalAveragePooling1D(),
+            Dropout(0.20),
+            Dense(64, activation='relu'),
+            Dropout(0.20),
+            Dense(num_classes, activation='softmax', name="clinical_output")
+        ])
+        model.compile(
+            optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
+            loss="categorical_crossentropy",
+            metrics=["accuracy"],
+        )
+        return model
+    elif architecture == "dnn":
+        model = Sequential([
+            Input(shape=(FRAME_COUNT, FEATURE_COUNT)),
+            Flatten(),
+            Dense(128, activation='relu'),
+            Dropout(0.25),
+            Dense(64, activation='relu'),
+            Dropout(0.20),
+            Dense(num_classes, activation='softmax', name="clinical_output")
+        ])
+        model.compile(
+            optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
+            loss="categorical_crossentropy",
+            metrics=["accuracy"],
+        )
+        return model
+    else:
+        layer = GRU(64, return_sequences=False, unroll=True, name="gru_64")
+
     model = Sequential(
         [
             Input(shape=(FRAME_COUNT, FEATURE_COUNT)),
             Masking(mask_value=0.0),
-            # unroll=True: penting untuk kompatibilitas TFLite standar.
-            # Tanpa ini, GRU/LSTM menghasilkan ops TensorListReserve yang
-            # membutuhkan Flex delegate saat runtime — dan TFLite interpreter
-            # bawaan tidak menyertakan Flex delegate secara default.
-            # unroll=True mengembangkan loop recurrent menjadi operasi statis
-            # yang 100% didukung oleh TFLite builtin ops tanpa Flex.
-            # Trade-off: sedikit lebih besar dan hanya cocok untuk sequence
-            # panjang tetap (FRAME_COUNT=30 tidak masalah).
-            recurrent(64, return_sequences=False, unroll=True, name=f"{architecture}_64"),
+            layer,
             Dropout(0.30),
             Dense(64, activation="relu"),
             Dropout(0.20),

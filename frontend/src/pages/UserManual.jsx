@@ -7,6 +7,36 @@ import {
 
 export const UserManual = ({ setView }) => {
   const [activeFaq, setActiveFaq] = useState(null);
+  const [activeSection, setActiveSection] = useState('manual');
+
+  useEffect(() => {
+    const sections = ['manual', 'workflow', 'communication', 'training', 'faq', 'technology'];
+    const observerOptions = {
+      root: null,
+      rootMargin: '-20% 0px -60% 0px',
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => {
+      sections.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) observer.unobserve(el);
+      });
+    };
+  }, []);
 
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
@@ -151,10 +181,10 @@ export const UserManual = ({ setView }) => {
       </div>
 
       {/* Main Grid Layout */}
-      <div className="grid gap-8 md:grid-cols-[240px_1fr] min-w-0 w-full overflow-hidden">
+      <div className="grid gap-8 md:grid-cols-[240px_1fr] min-w-0 w-full">
         {/* Navigation Sidebar */}
-        <aside className="hidden md:block">
-          <div className="sticky top-20 flex flex-col gap-1.5 p-1 bg-white/20 rounded-3xl border border-white/40 backdrop-blur-xl">
+        <aside className="hidden md:block sticky top-24 self-start">
+          <div className="flex flex-col gap-1.5 p-1 bg-white/20 rounded-3xl border border-white/40 backdrop-blur-xl">
             {[
               { id: 'manual', label: 'Manual Pengguna', icon: BookOpen },
               { id: 'workflow', label: 'Alur Sistem', icon: Activity },
@@ -164,11 +194,16 @@ export const UserManual = ({ setView }) => {
               { id: 'technology', label: 'Teknologi Stack', icon: Sliders }
             ].map((sec) => {
               const Icon = sec.icon;
+              const active = activeSection === sec.id;
               return (
                 <button
                   key={sec.id}
                   onClick={() => scrollToSection(sec.id)}
-                  className="flex items-center gap-2.5 rounded-2xl border border-transparent px-4 py-3 text-left text-xs font-black text-slate-600 hover:bg-white hover:text-sky-700 active:scale-[0.98] transition-all"
+                  className={`flex items-center gap-2.5 rounded-2xl border px-4 py-3 text-left text-xs font-black transition-all ${
+                    active
+                      ? "bg-white border-sky-300/30 text-sky-700 shadow-sm shadow-sky-500/5"
+                      : "border-transparent text-slate-600 hover:bg-white hover:text-sky-700 active:scale-[0.98]"
+                  }`}
                 >
                   <Icon size={15} />
                   {sec.label}
@@ -179,7 +214,7 @@ export const UserManual = ({ setView }) => {
         </aside>
 
         {/* Content sections */}
-        <div className="flex flex-col gap-10">
+        <div className="flex flex-col gap-10 w-full min-w-0 pr-2">
           
           {/* Section 1: Manual Pengguna */}
           <section id="manual" className="glass-panel rounded-[32px] p-6 md:p-8 flex flex-col gap-6 shadow-xl border border-white/60">

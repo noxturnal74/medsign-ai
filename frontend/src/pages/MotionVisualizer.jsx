@@ -12,6 +12,50 @@ export const MotionVisualizer = ({ setView }) => {
   const [realGestureFrames, setRealGestureFrames] = useState(null);
   const [isLoadingRealData, setIsLoadingRealData] = useState(false);
 
+  // 3D Orbit Camera Controls Refs & States
+  const [autoOrbit, setAutoOrbit] = useState(true);
+  const rotXRef = useRef(0.2);
+  const rotYRef = useRef(0.5);
+  const zoomRef = useRef(350);
+  const offsetXRef = useRef(0);
+  const offsetYRef = useRef(0);
+  const autoOrbitRef = useRef(true);
+  const isDraggingRef = useRef(false);
+  const lastMouseXRef = useRef(0);
+  const lastMouseYRef = useRef(0);
+
+  const handleMouseDown = (e) => {
+    isDraggingRef.current = true;
+    lastMouseXRef.current = e.clientX;
+    lastMouseYRef.current = e.clientY;
+    autoOrbitRef.current = false;
+    setAutoOrbit(false);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDraggingRef.current) return;
+    const dx = e.clientX - lastMouseXRef.current;
+    const dy = e.clientY - lastMouseYRef.current;
+    lastMouseXRef.current = e.clientX;
+    lastMouseYRef.current = e.clientY;
+
+    if (e.shiftKey) {
+      offsetXRef.current += dx * 0.5;
+      offsetYRef.current += dy * 0.5;
+    } else {
+      rotYRef.current -= dx * 0.007;
+      rotXRef.current = Math.max(-Math.PI / 2.1, Math.min(Math.PI / 2.1, rotXRef.current - dy * 0.007));
+    }
+  };
+
+  const handleMouseUpOrLeave = () => {
+    isDraggingRef.current = false;
+  };
+
+  const handleWheel = (e) => {
+    zoomRef.current = Math.max(100, Math.min(1000, zoomRef.current + e.deltaY * 0.4));
+  };
+
   useEffect(() => {
     const fetchRealMotion = async () => {
       try {
@@ -138,12 +182,19 @@ export const MotionVisualizer = ({ setView }) => {
 
       // Camera Orbit logic (Rotasi 3D Space)
       const t = time / 1000;
-      const angleY = t * 0.4; // Orbit rotation speed
-      const angleX = Math.sin(t * 0.2) * 0.3; // Tilt pitch
+      let angleY = rotYRef.current;
+      let angleX = rotXRef.current;
 
-      const focalLength = 350;
-      const centerX = width / 2;
-      const centerY = height / 2 - 20;
+      if (autoOrbitRef.current) {
+        angleY = t * 0.4;
+        angleX = Math.sin(t * 0.2) * 0.3;
+        rotYRef.current = angleY;
+        rotXRef.current = angleX;
+      }
+
+      const focalLength = zoomRef.current;
+      const centerX = width / 2 + offsetXRef.current;
+      const centerY = height / 2 - 20 + offsetYRef.current;
 
       // Project 3D point to 2D screen coordinate
       const project = (x3d, y3d, z3d) => {
@@ -294,7 +345,7 @@ export const MotionVisualizer = ({ setView }) => {
       cancelAnimationFrame(requestRef.current);
     }
     return () => cancelAnimationFrame(requestRef.current);
-  }, [isAnimating, duration, selectedGesture, elapsedTime]);
+  }, [isAnimating, duration, selectedGesture]);
 
   const handlePlayPause = () => {
     if (elapsedTime >= duration) {
@@ -358,11 +409,53 @@ export const MotionVisualizer = ({ setView }) => {
         {/* Left: 3D Canvas Rendering Area */}
         <div className="flex flex-col gap-4">
           <div className="glass-panel glass-dark relative aspect-video w-full overflow-hidden rounded-[28px] border border-white/10 shadow-2xl">
+            {/* Floating 3D Controls */}
+            <div className="absolute top-4 right-4 z-10 flex flex-col gap-2 items-end">
+              <button
+                type="button"
+                onClick={() => {
+                  const next = !autoOrbit;
+                  setAutoOrbit(next);
+                  autoOrbitRef.current = next;
+                }}
+                className={`glass-button rounded-xl px-2.5 py-1 text-[9px] font-black uppercase text-white border border-white/10 transition-all select-none ${
+                  autoOrbit ? "bg-sky-600/80 border-sky-400" : "bg-slate-900/80 hover:bg-slate-900"
+                }`}
+              >
+                Orbit: {autoOrbit ? "Auto" : "Locked"}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  rotXRef.current = 0.2;
+                  rotYRef.current = 0.5;
+                  zoomRef.current = 350;
+                  offsetXRef.current = 0;
+                  offsetYRef.current = 0;
+                  autoOrbitRef.current = true;
+                  setAutoOrbit(true);
+                }}
+                className="glass-button rounded-xl px-2.5 py-1 text-[9px] font-black uppercase text-white bg-slate-900/80 hover:bg-slate-900 border border-white/10 transition-all select-none"
+              >
+                Reset View
+              </button>
+            </div>
+
+            {/* Instruction Legend tooltip */}
+            <div className="absolute bottom-4 right-4 z-10 text-[8.5px] font-semibold text-slate-400 bg-slate-950/75 border border-white/10 px-2.5 py-1 rounded-xl pointer-events-none select-none tracking-wide">
+              Drag: Putar 3D &bull; Shift+Drag: Geser &bull; Scroll: Zoom
+            </div>
+
             <canvas
               ref={canvasRef}
               width={640}
               height={480}
-              className="h-full w-full object-cover"
+              className="h-full w-full object-cover cursor-grab active:cursor-grabbing"
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUpOrLeave}
+              onMouseLeave={handleMouseUpOrLeave}
+              onWheel={handleWheel}
             />
             {elapsedTime >= duration && (
               <div className="absolute inset-0 flex items-center justify-center bg-slate-950/75 backdrop-blur-sm transition-all duration-300">
