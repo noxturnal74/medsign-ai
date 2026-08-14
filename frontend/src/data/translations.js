@@ -1,6 +1,14 @@
 ﻿export const translations = {
   id: {
+
     home: "Beranda",
+    about: "Tentang Kami",
+    manual: "Aplikasi",
+    services: "Layanan",
+    articles_page: "Artikel",
+    patient: "Pendeteksi Isyarat",
+    contact: "Kontak",
+
     patient: "Pasien",
     doctor: "Dokter",
     dataset: "Dataset",

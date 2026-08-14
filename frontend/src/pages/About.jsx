@@ -67,8 +67,8 @@ export const About = ({ setView }) => {
             {[
               { name: "Albert William Saputra", role: "Fullstack Developer & Integration", img: "/assets/albert_2.jpg" },
               { name: "Albert Cheng", role: "Integration & Dataset Collector", img: "/assets/albert_cheng_3.jpg" },
-              { name: "Glenn", role: "UI/UX & Dataset Collector", img: "/assets/glenn_2.jpg" },
-              { name: "Loren", role: "Marketing & Dataset Collector", img: "/assets/loren_2.jpg" }
+              { name: "Glenn Emmanuel Abraham", role: "UI/UX & Dataset Collector", img: "/assets/glenn_2.jpg" },
+              { name: "Lorensa Amelia", role: "Marketing & Dataset Collector", img: "/assets/loren_2.jpg" }
             ].map((member) => (
               <div key={member.name} className="surface-panel rounded-3xl p-4 flex flex-col items-center text-center gap-3 border border-white/40 shadow-sm hover:scale-[1.02] transition-all">
                 <img 

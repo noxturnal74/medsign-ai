@@ -1,4 +1,4 @@
-/** @type {import('tailwindcss').Config} */
+﻿/** @type {import('tailwindcss').Config} */
 export default {
   content: [
     "./index.html",
@@ -7,6 +7,16 @@ export default {
   theme: {
     extend: {
       colors: {
+        info: "var(--info)",
+        "info-foreground": "var(--info-foreground)",
+        success: "var(--success)",
+        "success-foreground": "var(--success-foreground)",
+        warning: "var(--warning)",
+        "warning-foreground": "var(--warning-foreground)",
+        destructive: {
+          DEFAULT: "var(--destructive)",
+          foreground: "var(--destructive-foreground)",
+        },
         medical: {
           dark: '#020b14',
           slate: '#0f172a',

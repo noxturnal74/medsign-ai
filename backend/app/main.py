@@ -1,10 +1,26 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import predict, session, vocabulary, data_collection, nlg, tts
+from app.routes import predict, session, vocabulary, data_collection, nlg, tts, auth, patient, admin
 from app.services.slt_adapter import SLTAdapterService
 from app.ml.labels import get_model_contract
 import json
 import time
+import os
+from pathlib import Path
+
+# Load .env jika ada (dev lokal); Vercel pakai env var langsung
+_env_path = Path(__file__).parent.parent / ".env"
+if _env_path.exists():
+    try:
+        from dotenv import load_dotenv
+        load_dotenv(_env_path)
+    except ImportError:
+        # python-dotenv belum install, parse manual
+        for line in _env_path.read_text().splitlines():
+            line = line.strip()
+            if line and not line.startswith("#") and "=" in line:
+                k, _, v = line.partition("=")
+                os.environ.setdefault(k.strip(), v.strip())
 
 app = FastAPI(
     title="MedSign AI API Backend",
@@ -53,6 +69,9 @@ app.include_router(vocabulary.router, prefix="/api/v1", tags=["vocabulary"])
 app.include_router(data_collection.router, prefix="/api/v1", tags=["data_collection"])
 app.include_router(nlg.router, prefix="/api/v1", tags=["nlg"])
 app.include_router(tts.router, prefix="/api/v1", tags=["tts"])
+app.include_router(auth.router, prefix="/api/v1", tags=["auth"])
+app.include_router(patient.router, prefix="/api/v1", tags=["patient"])
+app.include_router(admin.router, prefix="/api/v1", tags=["admin"])
 
 # WebSocket Streaming Endpoint
 @app.websocket("/api/v1/stream")

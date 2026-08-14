@@ -40,7 +40,7 @@
     position: relative;
     isolation: isolate;
     min-height: 100vh;
-    overflow-x: hidden;
+    overflow-x: clip;
     background:
       linear-gradient(115deg, rgba(235, 248, 255, 0.95), rgba(228, 252, 242, 0.92) 50%, rgba(255, 244, 238, 0.9) 100%),
       linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(240, 246, 252, 0.6));
@@ -366,18 +366,69 @@
   }
 }
 
-/* ── Phone Mode ─────────────────────────────────── */
-html.phone-mode main {
-  max-width: 480px !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
+/* ?? Phone Mode ??????????????????????????????????????????? */
+/* Simulates a phone frame: 430px container centered on desktop */
+html.phone-mode body {
+  background: #0f172a;
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden;
 }
 
-html.phone-mode .lg\:grid-cols-12,
+html.phone-mode .app-shell {
+  max-width: 430px !important;
+  width: 100% !important;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.08),
+    0 40px 80px rgba(0,0,0,0.6);
+  border-radius: 0;
+  position: relative;
+}
+
+/* Lock all major width-containers inside phone frame */
+html.phone-mode main {
+  max-width: 430px !important;
+  width: 100% !important;
+  margin: 0 !important;
+  overflow-x: hidden;
+}
+
+html.phone-mode .max-w-7xl,
+html.phone-mode .max-w-6xl,
+html.phone-mode .max-w-5xl,
+html.phone-mode .max-w-4xl,
+html.phone-mode .max-w-3xl,
+html.phone-mode .max-w-2xl,
+html.phone-mode .max-w-xl,
+html.phone-mode .max-w-lg,
+html.phone-mode .max-w-md {
+  max-width: 100% !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+/* Grid collapse: all multi-col ? single col in phone mode */
+html.phone-mode .lg\:grid-cols-6,
+html.phone-mode .lg\:grid-cols-4,
+html.phone-mode .lg\:grid-cols-3,
+html.phone-mode .lg\:grid-cols-2,
+html.phone-mode .md\:grid-cols-4,
+html.phone-mode .md\:grid-cols-3,
 html.phone-mode .md\:grid-cols-2,
+html.phone-mode .sm\:grid-cols-3,
 html.phone-mode .sm\:grid-cols-2,
-html.phone-mode .md\:grid-cols-3 {
+html.phone-mode .grid-cols-3,
+html.phone-mode .lg\:grid-cols-12 {
   grid-template-columns: 1fr !important;
+}
+
+/* Canvas fills its sticky container ? no overflow */
+html.phone-mode canvas {
+  width: 100% !important;
+  height: 100% !important;
 }
 
 html.phone-mode .glass-panel {
@@ -387,4 +438,75 @@ html.phone-mode .glass-panel {
 
 html.phone-mode aside {
   display: none !important;
+}
+
+/* Hide desktop nav pill, show hamburger in phone mode */
+html.phone-mode .desktop-nav {
+  display: none !important;
+}
+
+html.phone-mode .show-mobile {
+  display: inline-flex !important;
+}
+
+/* Constrain fixed navigation bar in phone-mode */
+html.phone-mode nav {
+  max-width: 430px !important;
+  left: 50% !important;
+  right: auto !important;
+  width: 100% !important;
+  transform: translateX(-50%) !important;
+}
+
+/* Constrain mobile menu overlay inside the phone simulation */
+html.phone-mode .mobile-menu-overlay {
+  max-width: 430px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+}
+
+/* Constrain mobile menu dropdown inside the phone simulation */
+html.phone-mode .mobile-menu-dropdown {
+  left: 50% !important;
+  right: auto !important;
+  width: calc(100% - 24px) !important;
+  max-width: 406px !important; /* 430px - 24px */
+  transform: translateX(-50%) !important;
+}
+
+/* Constrain floating CS widget inside the phone simulation */
+html.phone-mode .floating-cs-widget {
+  right: max(1.5rem, calc(50% - 215px + 1.5rem)) !important;
+}
+
+/* Constrain custom toast inside the phone simulation */
+html.phone-mode .custom-toast {
+  max-width: calc(430px - 2rem) !important;
+}
+
+/* Constrain splash screen inside the phone simulation */
+html.phone-mode .app-splash-screen {
+  max-width: 430px !important;
+  width: 100% !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+}
+
+
+/* Lenis smooth scroll styles */
+html.lenis, html.lenis body {
+  height: auto;
+}
+.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis-smooth [data-lenis-prevent] {
+  overflow-anchor: none;
+}
+.lenis-stopped {
+  overflow: hidden;
+}
+.lenis-scrolling iframe {
+  pointer-events: none;
 }

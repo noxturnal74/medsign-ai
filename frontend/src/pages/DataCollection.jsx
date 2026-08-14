@@ -75,6 +75,7 @@ import {
   BrainCircuit,
   Activity,
   Video,
+  Instagram,
 } from "lucide-react";
 import { Backdrop, CircularProgress, Alert, AlertTitle, Skeleton } from "@mui/material";
 
@@ -102,7 +103,40 @@ const ALPHABET_LIST = [
 
 export const DataCollection = ({ setView }) => {
 
-  const { vocabulary, refreshVocabulary, serverState } = useContext(AppContext);
+  const downloadHeatmapAsFile = (format) => {
+    // Printable view generation helper
+    const originalContent = document.body.innerHTML;
+    const printArea = document.getElementById("heatmap-grid-printable");
+    if (!printArea) return;
+    
+    if (format === 'pdf') {
+      window.print();
+    } else {
+      alert(`Mengunduh Heatmap sebagai ${format.toUpperCase()} (Simulasi screenshot canvas ekspor...)`);
+      const link = document.createElement("a");
+      link.download = `heatmap_quality_report.${format}`;
+      link.href = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600'><rect width='100%' height='100%' fill='white'/><text x='20' y='40' font-family='sans-serif' font-size='20' font-weight='bold' fill='black'>MedSign AI - Heatmap Kualitas Vocabulary</text></svg>";
+      link.click();
+    }
+  };
+
+
+  const handleFileChange = (e, setter, editingObj = null, fieldName = "") => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      if (editingObj && fieldName) {
+        setter({ ...editingObj, [fieldName]: reader.result });
+      } else {
+        setter(reader.result);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+
+  const { vocabulary, refreshVocabulary, serverState, currentUser } = useContext(AppContext);
 
   const [activeTab, setActiveTab] = useState(() => {
 
@@ -223,6 +257,677 @@ export const DataCollection = ({ setView }) => {
   const [previewLabel, setPreviewLabel] = useState("");
   const [previewFrameIdx, setPreviewFrameIdx] = useState(0);
   const [augmentMessage, setAugmentMessage] = useState(null);
+
+  // --- ADMIN CONTENT MANAGEMENT STATES ---
+  const [adminArticles, setAdminArticles] = useState([]);
+  const [newArticleTitle, setNewArticleTitle] = useState("");
+  const [newArticleSlug, setNewArticleSlug] = useState("");
+  const [newArticleCover, setNewArticleCover] = useState("");
+  const [newArticleExcerpt, setNewArticleExcerpt] = useState("");
+  const [newArticleCategory, setNewArticleCategory] = useState("Edukasi BISINDO");
+  const [newArticleStatus, setNewArticleStatus] = useState("published");
+  const [newArticleContent, setNewArticleContent] = useState("");
+  const [editingArticle, setEditingArticle] = useState(null);
+
+  const [adminInstagramPosts, setAdminInstagramPosts] = useState([]);
+  const [newInstagramPostUrl, setNewInstagramPostUrl] = useState("");
+  const [newInstagramPostThumbnail, setNewInstagramPostThumbnail] = useState("");
+  const [newInstagramPostCaption, setNewInstagramPostCaption] = useState("");
+  const [newInstagramPostOrder, setNewInstagramPostOrder] = useState(0);
+  const [newInstagramPostActive, setNewInstagramPostActive] = useState(1);
+  const [editingInstagramPost, setEditingInstagramPost] = useState(null);
+
+  const [adminMitra, setAdminMitra] = useState([]);
+  const [newMitraName, setNewMitraName] = useState("");
+  const [newMitraLogo, setNewMitraLogo] = useState("");
+  const [newMitraWebsite, setNewMitraWebsite] = useState("");
+  const [newMitraCategory, setNewMitraCategory] = useState("");
+  const [newMitraOrder, setNewMitraOrder] = useState(0);
+  const [newMitraActive, setNewMitraActive] = useState(1);
+  const [editingMitra, setEditingMitra] = useState(null);
+
+  const [adminReviews, setAdminReviews] = useState([]);
+  const [newReviewName, setNewReviewName] = useState("");
+  const [newReviewRole, setNewReviewRole] = useState("");
+  const [newReviewRating, setNewReviewRating] = useState(5.0);
+  const [newReviewContent, setNewReviewContent] = useState("");
+  const [editingReview, setEditingReview] = useState(null);
+  const [newReviewAvatar, setNewReviewAvatar] = useState("");
+  const [showHeatmapZoom, setShowHeatmapZoom] = useState(false);
+  const [zoomCols, setZoomCols] = useState("all");
+
+  const handleDownloadHeatmapPNG = () => {
+    const list = evaluatedList;
+    if (list.length === 0) return;
+
+    let cols = 8;
+    if (zoomCols !== "all") {
+      cols = parseInt(zoomCols);
+    }
+
+    const rows = Math.ceil(list.length / cols);
+    const cellW = 140;
+    const cellH = 45;
+    const pad = 8;
+    const margin = 20;
+
+    const canvas = document.createElement("canvas");
+    canvas.width = cols * (cellW + pad) - pad + margin * 2;
+    canvas.height = rows * (cellH + pad) - pad + margin * 2 + 50;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#0f172a";
+    ctx.font = "bold 14px sans-serif";
+    ctx.fillText("MedSign AI - Heatmap Kualitas Vocabulary", margin, margin + 15);
+
+    ctx.font = "9px sans-serif";
+    ctx.fillStyle = "rgba(16, 185, 129, 0.15)";
+    ctx.fillRect(margin + 300, margin + 5, 40, 15);
+    ctx.strokeStyle = "rgba(16, 185, 129, 0.35)";
+    ctx.strokeRect(margin + 300, margin + 5, 40, 15);
+    ctx.fillStyle = "#065f46";
+    ctx.fillText("Cukup", margin + 308, margin + 16);
+
+    ctx.fillStyle = "rgba(245, 158, 11, 0.15)";
+    ctx.fillRect(margin + 350, margin + 5, 40, 15);
+    ctx.strokeStyle = "rgba(245, 158, 11, 0.35)";
+    ctx.strokeRect(margin + 350, margin + 5, 40, 15);
+    ctx.fillStyle = "#92400e";
+    ctx.fillText("Kurang", margin + 356, margin + 16);
+
+    ctx.fillStyle = "rgba(239, 68, 68, 0.15)";
+    ctx.fillRect(margin + 400, margin + 5, 40, 15);
+    ctx.strokeStyle = "rgba(239, 68, 68, 0.35)";
+    ctx.strokeRect(margin + 400, margin + 5, 40, 15);
+    ctx.fillStyle = "#991b1b";
+    ctx.fillText("S. Kurang", margin + 402, margin + 16);
+
+    const startY = margin + 40;
+    list.forEach((w, idx) => {
+      const r = Math.floor(idx / cols);
+      const c = idx % cols;
+
+      const x = margin + c * (cellW + pad);
+      const y = startY + r * (cellH + pad);
+
+      let fill = "rgba(239, 68, 68, 0.15)";
+      let border = "rgba(239, 68, 68, 0.35)";
+      let textCol = "#991b1b";
+
+      if (w.status === "Cukup") {
+        fill = "rgba(16, 185, 129, 0.15)";
+        border = "rgba(16, 185, 129, 0.35)";
+        textCol = "#065f46";
+      } else if (w.status === "Kurang") {
+        fill = "rgba(245, 158, 11, 0.15)";
+        border = "rgba(245, 158, 11, 0.35)";
+        textCol = "#92400e";
+      }
+
+      ctx.fillStyle = fill;
+      ctx.fillRect(x, y, cellW, cellH);
+      ctx.strokeStyle = border;
+      ctx.lineWidth = 1;
+      ctx.strokeRect(x, y, cellW, cellH);
+
+      ctx.fillStyle = textCol;
+      ctx.font = "bold 9px sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(w.display.toUpperCase(), x + cellW / 2, y + cellH / 2);
+    });
+
+    const link = document.createElement("a");
+    link.download = `heatmap_kualitas_vocabulary_${zoomCols}_kolom.png`;
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  };
+
+  // Fetch helpers
+  const fetchAdminArticles = async () => {
+    try {
+      const res = await fetch(`${apiUrl}/api/v1/articles`);
+      if (res.ok) {
+        const data = await res.json();
+        setAdminArticles(data);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const fetchAdminInstagramPosts = async () => {
+    try {
+      const res = await fetch(`${apiUrl}/api/v1/instagram-posts`);
+      if (res.ok) {
+        const data = await res.json();
+        setAdminInstagramPosts(data);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const fetchAdminMitra = async () => {
+    try {
+      const res = await fetch(`${apiUrl}/api/v1/mitra`);
+      if (res.ok) {
+        const data = await res.json();
+        setAdminMitra(data);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const fetchAdminReviews = async () => {
+    try {
+      const res = await fetch(`${apiUrl}/api/v1/reviews`);
+      if (res.ok) {
+        const data = await res.json();
+        setAdminReviews(data);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // Initial fetch for admin view
+  useEffect(() => {
+    if (currentUser?.role === 'admin') {
+      fetchAdminArticles();
+      fetchAdminInstagramPosts();
+      fetchAdminMitra();
+      fetchAdminReviews();
+    }
+  }, [currentUser]);
+
+  // Article handlers
+  const handleCreateArticle = async (e) => {
+    e.preventDefault();
+    if (!currentUser?.token) return;
+    try {
+      const slug = newArticleSlug || newArticleTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      const body = {
+        title: newArticleTitle,
+        slug: slug,
+        cover_image: newArticleCover || null,
+        content: newArticleContent,
+        excerpt: newArticleExcerpt || null,
+        category: newArticleCategory || "Edukasi BISINDO",
+        author: currentUser.name || "Admin",
+        status: newArticleStatus
+      };
+      const res = await fetch(`${apiUrl}/api/v1/admin/articles`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${currentUser.token}`
+        },
+        body: JSON.stringify(body)
+      });
+      if (res.ok) {
+        setNewArticleTitle('');
+        setNewArticleSlug('');
+        setNewArticleCover('');
+        setNewArticleExcerpt('');
+        setNewArticleContent('');
+        fetchAdminArticles();
+        alert('Artikel berhasil dibuat!');
+      } else {
+        const err = await res.json();
+        alert(`Gagal membuat artikel: ${err.detail || 'Error'}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error saat membuat artikel');
+    }
+  };
+
+  const handleUpdateArticle = async (e) => {
+    e.preventDefault();
+    if (!currentUser?.token || !editingArticle) return;
+    try {
+      const slug = editingArticle.slug || editingArticle.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      const body = {
+        title: editingArticle.title,
+        slug: slug,
+        cover_image: editingArticle.cover_image || null,
+        content: editingArticle.content,
+        excerpt: editingArticle.excerpt || null,
+        category: editingArticle.category || "Edukasi BISINDO",
+        author: editingArticle.author || "Admin",
+        status: editingArticle.status
+      };
+      const res = await fetch(`${apiUrl}/api/v1/admin/articles/${editingArticle.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${currentUser.token}`
+        },
+        body: JSON.stringify(body)
+      });
+      if (res.ok) {
+        setEditingArticle(null);
+        fetchAdminArticles();
+        alert('Artikel berhasil diperbarui!');
+      } else {
+        const err = await res.json();
+        alert(`Gagal mengedit artikel: ${err.detail || 'Error'}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error saat mengedit artikel');
+    }
+  };
+
+  const handleDeleteArticle = async (id) => {
+    if (!confirm('Apakah Anda yakin ingin menghapus artikel ini?')) return;
+    if (!currentUser?.token) return;
+    try {
+      const res = await fetch(`${apiUrl}/api/v1/admin/articles/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${currentUser.token}`
+        }
+      });
+      if (res.ok) {
+        fetchAdminArticles();
+        alert('Artikel berhasil dihapus!');
+      } else {
+        const err = await res.json();
+        alert(`Gagal menghapus artikel: ${err.detail || 'Error'}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error saat menghapus artikel');
+    }
+  };
+
+  // Instagram post handlers
+  const handleCreateInstagramPost = async (e) => {
+    e.preventDefault();
+    if (!currentUser?.token) return;
+    try {
+      const body = {
+        post_url: newInstagramPostUrl,
+        thumbnail_image: newInstagramPostThumbnail || null,
+        caption_short: newInstagramPostCaption || "",
+        display_order: newInstagramPostOrder,
+        is_active: newInstagramPostActive
+      };
+      const res = await fetch(`${apiUrl}/api/v1/admin/instagram-posts`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${currentUser.token}`
+        },
+        body: JSON.stringify(body)
+      });
+      if (res.ok) {
+        setNewInstagramPostUrl('');
+        setNewInstagramPostThumbnail('');
+        setNewInstagramPostCaption('');
+        setNewInstagramPostOrder(0);
+        setNewInstagramPostActive(1);
+        fetchAdminInstagramPosts();
+        alert('Feed Instagram berhasil ditambahkan!');
+      } else {
+        const err = await res.json();
+        alert(`Gagal menambahkan feed: ${err.detail || 'Error'}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error saat menambahkan feed');
+    }
+  };
+
+  const handleUpdateInstagramPost = async (e) => {
+    e.preventDefault();
+    if (!currentUser?.token || !editingInstagramPost) return;
+    try {
+      const body = {
+        post_url: editingInstagramPost.post_url,
+        thumbnail_image: editingInstagramPost.thumbnail_image || null,
+        caption_short: editingInstagramPost.caption_short || "",
+        display_order: editingInstagramPost.display_order,
+        is_active: editingInstagramPost.is_active
+      };
+      const res = await fetch(`${apiUrl}/api/v1/admin/instagram-posts/${editingInstagramPost.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${currentUser.token}`
+        },
+        body: JSON.stringify(body)
+      });
+      if (res.ok) {
+        setEditingInstagramPost(null);
+        fetchAdminInstagramPosts();
+        alert('Feed Instagram berhasil diperbarui!');
+      } else {
+        const err = await res.json();
+        alert(`Gagal memperbarui feed: ${err.detail || 'Error'}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error saat memperbarui feed');
+    }
+  };
+
+  const handleDeleteInstagramPost = async (id) => {
+    if (!confirm('Apakah Anda yakin ingin menghapus feed instagram ini?')) return;
+    if (!currentUser?.token) return;
+    try {
+      const res = await fetch(`${apiUrl}/api/v1/admin/instagram-posts/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${currentUser.token}`
+        }
+      });
+      if (res.ok) {
+        fetchAdminInstagramPosts();
+        alert('Feed Instagram berhasil dihapus!');
+      } else {
+        const err = await res.json();
+        alert(`Gagal menghapus feed: ${err.detail || 'Error'}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error saat menghapus feed');
+    }
+  };
+
+  // Mitra handlers
+  const handleCreateMitra = async (e) => {
+    e.preventDefault();
+    if (!currentUser?.token) return;
+    try {
+      const body = {
+        name: newMitraName,
+        logo: newMitraLogo || "",
+        website_url: newMitraWebsite || null,
+        category: newMitraCategory || null,
+        display_order: newMitraOrder,
+        is_active: newMitraActive
+      };
+      const res = await fetch(`${apiUrl}/api/v1/admin/mitra`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${currentUser.token}`
+        },
+        body: JSON.stringify(body)
+      });
+      if (res.ok) {
+        setNewMitraName('');
+        setNewMitraLogo('');
+        setNewMitraWebsite('');
+        setNewMitraCategory('');
+        setNewMitraOrder(0);
+        setNewMitraActive(1);
+        fetchAdminMitra();
+        alert('Data mitra berhasil ditambahkan!');
+      } else {
+        const err = await res.json();
+        alert(`Gagal menambahkan mitra: ${err.detail || 'Error'}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error saat menambahkan mitra');
+    }
+  };
+
+  const handleUpdateMitra = async (e) => {
+    e.preventDefault();
+    if (!currentUser?.token || !editingMitra) return;
+    try {
+      const body = {
+        name: editingMitra.name,
+        logo: editingMitra.logo || "",
+        website_url: editingMitra.website_url || null,
+        category: editingMitra.category || null,
+        display_order: editingMitra.display_order,
+        is_active: editingMitra.is_active
+      };
+      const res = await fetch(`${apiUrl}/api/v1/admin/mitra/${editingMitra.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${currentUser.token}`
+        },
+        body: JSON.stringify(body)
+      });
+      if (res.ok) {
+        setEditingMitra(null);
+        fetchAdminMitra();
+        alert('Data mitra berhasil diperbarui!');
+      } else {
+        const err = await res.json();
+        alert(`Gagal memperbarui mitra: ${err.detail || 'Error'}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error saat memperbarui mitra');
+    }
+  };
+
+  const handleDeleteMitra = async (id) => {
+    if (!confirm('Apakah Anda yakin ingin menghapus data mitra ini?')) return;
+    if (!currentUser?.token) return;
+    try {
+      const res = await fetch(`${apiUrl}/api/v1/admin/mitra/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${currentUser.token}`
+        }
+      });
+      if (res.ok) {
+        fetchAdminMitra();
+        alert('Data mitra berhasil dihapus!');
+      } else {
+        const err = await res.json();
+        alert(`Gagal menghapus mitra: ${err.detail || 'Error'}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error saat menghapus mitra');
+    }
+  };
+
+  const handleMitraDragStart = (e, index) => {
+    e.dataTransfer.setData("text/plain", index);
+  };
+
+  const handleMitraDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleMitraDrop = async (e, targetIdx) => {
+    const sourceIdx = parseInt(e.dataTransfer.getData("text/plain"));
+    if (sourceIdx === targetIdx || isNaN(sourceIdx)) return;
+
+    const reordered = [...adminMitra];
+    const [removed] = reordered.splice(sourceIdx, 1);
+    reordered.splice(targetIdx, 0, removed);
+
+    // Update display_order based on new index
+    const updated = reordered.map((item, index) => ({
+      ...item,
+      display_order: index + 1
+    }));
+
+    setAdminMitra(updated);
+
+    try {
+      for (const item of updated) {
+        await fetch(`${apiUrl}/api/v1/admin/mitra/${item.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${currentUser.token}`
+          },
+          body: JSON.stringify({
+            name: item.name,
+            logo: item.logo,
+            website_url: item.website_url,
+            category: item.category,
+            display_order: item.display_order,
+            is_active: item.is_active
+          })
+        });
+      }
+      fetchAdminMitra();
+    } catch (err) {
+      console.error("Gagal menyimpan urutan mitra baru:", err);
+    }
+  };
+
+  const handleInstagramDragStart = (e, index) => {
+    e.dataTransfer.setData("text/plain", index);
+  };
+
+  const handleInstagramDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleInstagramDrop = async (e, targetIdx) => {
+    const sourceIdx = parseInt(e.dataTransfer.getData("text/plain"));
+    if (sourceIdx === targetIdx || isNaN(sourceIdx)) return;
+
+    const reordered = [...adminInstagramPosts];
+    const [removed] = reordered.splice(sourceIdx, 1);
+    reordered.splice(targetIdx, 0, removed);
+
+    // Update display_order based on new index
+    const updated = reordered.map((item, index) => ({
+      ...item,
+      display_order: index + 1
+    }));
+
+    setAdminInstagramPosts(updated);
+
+    try {
+      for (const item of updated) {
+        await fetch(`${apiUrl}/api/v1/admin/instagram-posts/${item.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${currentUser.token}`
+          },
+          body: JSON.stringify({
+            post_url: item.post_url,
+            thumbnail_image: item.thumbnail_image || null,
+            caption_short: item.caption_short || "",
+            display_order: item.display_order,
+            is_active: item.is_active
+          })
+        });
+      }
+      fetchAdminInstagramPosts();
+    } catch (err) {
+      console.error("Gagal menyimpan urutan feed instagram baru:", err);
+    }
+  };
+
+  // Review handlers
+  const handleCreateReview = async (e) => {
+    e.preventDefault();
+    if (!currentUser?.token) return;
+    try {
+      const body = {
+        name: newReviewName,
+        role: newReviewRole,
+        rating: parseFloat(newReviewRating),
+        content: newReviewContent,
+        avatar: newReviewAvatar || null
+      };
+      const res = await fetch(`${apiUrl}/api/v1/admin/reviews`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${currentUser.token}`
+        },
+        body: JSON.stringify(body)
+      });
+      if (res.ok) {
+        setNewReviewName('');
+        setNewReviewRole('');
+        setNewReviewRating(5.0);
+        setNewReviewContent('');
+        setNewReviewAvatar('');
+        fetchAdminReviews();
+        alert('Ulasan berhasil ditambahkan!');
+      } else {
+        const err = await res.json();
+        alert(`Gagal menambahkan ulasan: ${err.detail || 'Error'}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error saat menambahkan ulasan');
+    }
+  };
+
+  const handleUpdateReview = async (e) => {
+    e.preventDefault();
+    if (!currentUser?.token || !editingReview) return;
+    try {
+      const body = {
+        name: editingReview.name,
+        role: editingReview.role,
+        rating: parseFloat(editingReview.rating),
+        content: editingReview.content,
+        avatar: editingReview.avatar || null
+      };
+      const res = await fetch(`${apiUrl}/api/v1/admin/reviews/${editingReview.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${currentUser.token}`
+        },
+        body: JSON.stringify(body)
+      });
+      if (res.ok) {
+        setEditingReview(null);
+        fetchAdminReviews();
+        alert('Ulasan berhasil diperbarui!');
+      } else {
+        const err = await res.json();
+        alert(`Gagal memperbarui ulasan: ${err.detail || 'Error'}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error saat memperbarui ulasan');
+    }
+  };
+
+  const handleDeleteReview = async (id) => {
+    if (!confirm('Apakah Anda yakin ingin menghapus ulasan ini?')) return;
+    if (!currentUser?.token) return;
+    try {
+      const res = await fetch(`${apiUrl}/api/v1/admin/reviews/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${currentUser.token}`
+        }
+      });
+      if (res.ok) {
+        fetchAdminReviews();
+        alert('Ulasan berhasil dihapus!');
+      } else {
+        const err = await res.json();
+        alert(`Gagal menghapus ulasan: ${err.detail || 'Error'}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error saat menghapus ulasan');
+    }
+  };
   const [augmentError, setAugmentError] = useState(null);
   const [augmentSearchQuery, setAugmentSearchQuery] = useState("");
 
@@ -1222,7 +1927,7 @@ export const DataCollection = ({ setView }) => {
 
   const categories = useMemo(() => {
 
-    const list = recordModelType === "alphabet" ? ALPHABET_LIST : vocabulary;
+    const list = recordModelType === "alphabet" ? ALPHABET_LIST : vocabulary.filter(w => w.category !== "Abjad" && w.category !== "Angka");
 
     const cats = new Set(list.map((v) => v.category));
 
@@ -1234,7 +1939,7 @@ export const DataCollection = ({ setView }) => {
 
   const filteredWords = useMemo(() => {
 
-    let list = recordModelType === "alphabet" ? ALPHABET_LIST : vocabulary;
+    let list = recordModelType === "alphabet" ? ALPHABET_LIST : vocabulary.filter(w => w.category !== "Abjad" && w.category !== "Angka");
 
     if (activeCategory !== "Semua") {
 
@@ -4230,6 +4935,8 @@ export const DataCollection = ({ setView }) => {
   const renderBalanceChecker = () => {
 
     const [search, setSearch] = useState("");
+    const [aiRecStatusFilter, setAiRecStatusFilter] = useState("Semua");
+    const [showFullHeatmap, setShowFullHeatmap] = useState(false);
 
     
 
@@ -5043,15 +5750,31 @@ export const DataCollection = ({ setView }) => {
 
           <div className="glass-panel rounded-[32px] p-6 flex flex-col gap-4 border border-white/60 bg-white/40 shadow-xl">
 
-            <div className="flex items-center gap-2 border-b border-slate-200/50 pb-2">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200/50 pb-2 gap-2">
 
-              <BrainCircuit size={18} className="text-violet-600 animate-pulse" />
+              <div className="flex items-center gap-2">
 
-              <h3 className="text-sm font-black text-slate-900 uppercase tracking-wide">
+                <BrainCircuit size={18} className="text-violet-600 animate-pulse" />
 
-                AI Data Recommendation &amp; Prioritas Rekam
+                <h3 className="text-sm font-black text-slate-900 uppercase tracking-wide">
 
-              </h3>
+                  AI Data Recommendation &amp; Prioritas Rekam
+
+                </h3>
+
+              </div>
+
+              <select
+                value={aiRecStatusFilter}
+                onChange={(e) => setAiRecStatusFilter(e.target.value)}
+                className="glass-input rounded-xl px-2.5 py-1 text-[10px] font-black bg-white/40 cursor-pointer border border-sky-300/40 text-sky-900 shadow-sm"
+              >
+                <option value="Semua">Semua Kualitas</option>
+                <option value="Cukup">Cukup</option>
+                <option value="Kurang">Kurang</option>
+                <option value="Sangat Kurang">Sangat Kurang</option>
+                <option value="Belum Direkam">Belum Direkam</option>
+              </select>
 
             </div>
 
@@ -5067,7 +5790,10 @@ export const DataCollection = ({ setView }) => {
 
             <div className="flex flex-col gap-2.5 overflow-y-auto max-h-[580px] pr-1">
 
-              {evaluatedList.filter(w => w.recommendForRetake).map((w) => {
+              {evaluatedList
+                .filter(w => w.recommendForRetake)
+                .filter(w => aiRecStatusFilter === "Semua" || w.status === aiRecStatusFilter)
+                .map((w) => {
 
                 const statusColorClass = w.status === "Cukup" 
 
@@ -5252,7 +5978,7 @@ export const DataCollection = ({ setView }) => {
 
               })}
 
-              {evaluatedList.filter(w => w.recommendForRetake).length === 0 && (
+              {evaluatedList.filter(w => w.recommendForRetake).filter(w => aiRecStatusFilter === "Semua" || w.status === aiRecStatusFilter).length === 0 && (
 
                 <div className="text-center py-10 text-xs font-semibold text-slate-400">
 
@@ -5289,6 +6015,14 @@ export const DataCollection = ({ setView }) => {
                     Heatmap Kualitas Vocabulary
 
                   </h3>
+
+                  <button
+                    onClick={() => setShowHeatmapZoom(true)}
+                    className="p-1 rounded bg-sky-500/10 text-sky-600 hover:bg-sky-500/20 hover:text-sky-700 transition-colors"
+                    title="Perbesar Heatmap"
+                  >
+                    <Maximize2 size={13} />
+                  </button>
 
                 </div>
 
@@ -6776,6 +7510,645 @@ export const DataCollection = ({ setView }) => {
   };
 
 
+  
+  const renderArticlesCrud = () => {
+    return (
+      <div className="grid gap-6 lg:grid-cols-[1fr_1.5fr] animate-slide-up text-slate-800">
+        {/* Left column: Form */}
+        <div className="flex flex-col gap-6">
+          <div className="glass-panel rounded-[32px] p-6 flex flex-col gap-5 shadow-xl shadow-sky-900/5">
+            <div className="flex items-center gap-2.5 border-b border-slate-100 pb-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-sky-500/10 text-sky-600">
+                <Sliders size={16} />
+              </div>
+              <h3 className="text-base font-black text-slate-950">
+                {editingArticle ? "Edit Artikel" : "Tambah Artikel Baru"}
+              </h3>
+            </div>
+
+            <form onSubmit={editingArticle ? handleUpdateArticle : handleCreateArticle} className="flex flex-col gap-4">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-slate-505 uppercase tracking-wider">Judul Artikel</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Contoh: Manfaat Belajar BISINDO"
+                  value={editingArticle ? editingArticle.title : newArticleTitle}
+                  onChange={(e) => editingArticle ? setEditingArticle({...editingArticle, title: e.target.value}) : setNewArticleTitle(e.target.value)}
+                  className="glass-input rounded-xl px-3 py-2 text-xs font-black shadow-inner"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-slate-505 uppercase tracking-wider">Slug (Unique URL)</label>
+                <input
+                  type="text"
+                  placeholder="layanan-inklusif-teman-tuli (Auto jika kosong)"
+                  value={editingArticle ? editingArticle.slug : newArticleSlug}
+                  onChange={(e) => editingArticle ? setEditingArticle({...editingArticle, slug: e.target.value}) : setNewArticleSlug(e.target.value)}
+                  className="glass-input rounded-xl px-3 py-2 text-xs font-black shadow-inner"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-slate-505 uppercase tracking-wider">Cover Image (Upload File)</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleFileChange(e, editingArticle ? setEditingArticle : setNewArticleCover, editingArticle, "cover_image")}
+                  className="text-xs text-slate-500 bg-white/30 rounded-lg p-1.5 border border-sky-200/30"
+                />
+                {(editingArticle ? editingArticle.cover_image : newArticleCover) && (
+                  <img
+                    src={editingArticle ? editingArticle.cover_image : newArticleCover}
+                    alt="Preview"
+                    className="h-14 w-20 object-cover rounded-xl mt-1.5 border border-slate-200"
+                  />
+                )}
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-slate-505 uppercase tracking-wider">Excerpt (Ringkasan Preview)</label>
+                <input
+                  type="text"
+                  placeholder="Tulis ringkasan singkat artikel..."
+                  value={editingArticle ? (editingArticle.excerpt || "") : newArticleExcerpt}
+                  onChange={(e) => editingArticle ? setEditingArticle({...editingArticle, excerpt: e.target.value}) : setNewArticleExcerpt(e.target.value)}
+                  className="glass-input rounded-xl px-3 py-2 text-xs font-semibold shadow-inner"
+                />
+              </div>
+
+              <div className="flex gap-2">
+                <div className="flex-1 flex flex-col gap-1.5">
+                  <label className="text-[10px] font-bold text-slate-505 uppercase tracking-wider">Kategori</label>
+                  <select
+                    value={editingArticle ? editingArticle.category : newArticleCategory}
+                    onChange={(e) => editingArticle ? setEditingArticle({...editingArticle, category: e.target.value}) : setNewArticleCategory(e.target.value)}
+                    className="glass-input rounded-xl px-3 py-2 text-xs font-black appearance-none bg-white/40 cursor-pointer"
+                  >
+                    <option value="Edukasi BISINDO">Edukasi BISINDO</option>
+                    <option value="Cerita Komunitas">Cerita Komunitas</option>
+                    <option value="Update MedSign">Update MedSign</option>
+                  </select>
+                </div>
+
+                <div className="flex-1 flex flex-col gap-1.5">
+                  <label className="text-[10px] font-bold text-slate-505 uppercase tracking-wider">Status</label>
+                  <select
+                    value={editingArticle ? editingArticle.status : newArticleStatus}
+                    onChange={(e) => editingArticle ? setEditingArticle({...editingArticle, status: e.target.value}) : setNewArticleStatus(e.target.value)}
+                    className="glass-input rounded-xl px-3 py-2 text-xs font-black appearance-none bg-white/40 cursor-pointer"
+                  >
+                    <option value="published">Published</option>
+                    <option value="draft">Draft</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-slate-505 uppercase tracking-wider">Konten Artikel</label>
+                <textarea
+                  required
+                  rows={8}
+                  placeholder="Tulis konten lengkap artikel di sini..."
+                  value={editingArticle ? editingArticle.content : newArticleContent}
+                  onChange={(e) => editingArticle ? setEditingArticle({...editingArticle, content: e.target.value}) : setNewArticleContent(e.target.value)}
+                  className="glass-input rounded-2xl px-3 py-2 text-xs font-semibold shadow-inner resize-none leading-relaxed"
+                />
+              </div>
+
+              <div className="flex gap-2 mt-2">
+                <button
+                  type="submit"
+                  className="flex-1 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-black text-[10px] uppercase tracking-wider active:scale-[0.98] transition-all"
+                >
+                  {editingArticle ? "Simpan Perubahan" : "Simpan Artikel"}
+                </button>
+                {editingArticle && (
+                  <button
+                    type="button"
+                    onClick={() => setEditingArticle(null)}
+                    className="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50 font-bold text-[10px] uppercase"
+                  >
+                    Batal
+                  </button>
+                )}
+              </div>
+            </form>
+          </div>
+        </div>
+
+        {/* Right column: List */}
+        <div className="glass-panel rounded-[32px] p-6 flex flex-col gap-4 shadow-xl shadow-sky-900/5">
+          <span className="text-sm font-black text-slate-950">Daftar Artikel</span>
+          <div className="flex flex-col gap-3 overflow-y-auto max-h-[580px] pr-1">
+            {adminArticles.length === 0 ? (
+              <p className="text-xs font-semibold text-slate-400 py-6 text-center">Belum ada data artikel.</p>
+            ) : (
+              adminArticles.map((art) => (
+                <div key={art.id} className="surface-panel rounded-2xl p-4 border border-slate-100 flex flex-col gap-2.5">
+                  <div className="flex justify-between items-start gap-2">
+                    <div>
+                      <h4 className="text-xs font-black text-slate-950 leading-snug">{art.title}</h4>
+                      <span className="text-[9px] font-bold text-slate-400 block mt-0.5">{art.category} | Oleh: {art.author || "Admin"} | status: <span className={art.status === 'published' ? 'text-emerald-600 font-extrabold' : 'text-slate-500'}>{art.status}</span></span>
+                    </div>
+                    {art.cover_image && (
+                      <img src={art.cover_image} alt="Preview" className="h-10 w-14 object-cover rounded-lg shrink-0 border border-slate-100" />
+                    )}
+                  </div>
+                  <p className="text-[10px] font-semibold text-slate-500 leading-relaxed line-clamp-2">
+                    {art.content}
+                  </p>
+                  <div className="flex gap-2 justify-end border-t border-slate-50 pt-2">
+                    <button
+                      onClick={() => setEditingArticle(art)}
+                      className="text-[9px] font-black text-sky-600 hover:text-sky-700 uppercase"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteArticle(art.id)}
+                      className="text-[9px] font-black text-rose-600 hover:text-rose-700 uppercase"
+                    >
+                      Hapus
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderInstagramCrud = () => {
+    return (
+      <div className="grid gap-6 lg:grid-cols-[1fr_1.5fr] animate-slide-up text-slate-800">
+        {/* Left column: Form */}
+        <div className="flex flex-col gap-6">
+          <div className="glass-panel rounded-[32px] p-6 flex flex-col gap-5 shadow-xl shadow-sky-900/5">
+            <div className="flex items-center gap-2.5 border-b border-slate-100 pb-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-sky-500/10 text-sky-600">
+                <Sliders size={16} />
+              </div>
+              <h3 className="text-base font-black text-slate-950">
+                {editingInstagramPost ? "Edit Feed Instagram" : "Tambah Feed Instagram"}
+              </h3>
+            </div>
+
+            <form onSubmit={editingInstagramPost ? handleUpdateInstagramPost : handleCreateInstagramPost} className="flex flex-col gap-4">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-slate-505 uppercase tracking-wider">Instagram Post URL</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="https://instagram.com/p/C_..."
+                  value={editingInstagramPost ? editingInstagramPost.post_url : newInstagramPostUrl}
+                  onChange={(e) => editingInstagramPost ? setEditingInstagramPost({...editingInstagramPost, post_url: e.target.value}) : setNewInstagramPostUrl(e.target.value)}
+                  className="glass-input rounded-xl px-3 py-2 text-xs font-black shadow-inner"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-slate-505 uppercase tracking-wider">Thumbnail Image (Upload File)</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleFileChange(e, editingInstagramPost ? setEditingInstagramPost : setNewInstagramPostThumbnail, editingInstagramPost, "thumbnail_image")}
+                  className="text-xs text-slate-500 bg-white/30 rounded-lg p-1.5 border border-sky-200/30"
+                />
+                {(editingInstagramPost ? editingInstagramPost.thumbnail_image : newInstagramPostThumbnail) && (
+                  <img
+                    src={editingInstagramPost ? editingInstagramPost.thumbnail_image : newInstagramPostThumbnail}
+                    alt="Preview"
+                    className="h-14 w-14 object-cover rounded-xl mt-1.5 border border-slate-200"
+                  />
+                )}
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-slate-505 uppercase tracking-wider">Short Caption</label>
+                <input
+                  type="text"
+                  placeholder="Kegiatan sosialisasi BISINDO..."
+                  value={editingInstagramPost ? (editingInstagramPost.caption_short || "") : newInstagramPostCaption}
+                  onChange={(e) => editingInstagramPost ? setEditingInstagramPost({...editingInstagramPost, caption_short: e.target.value}) : setNewInstagramPostCaption(e.target.value)}
+                  className="glass-input rounded-xl px-3 py-2 text-xs font-semibold shadow-inner"
+                />
+              </div>
+
+              <div className="flex gap-2">
+                <div className="flex-1 flex flex-col gap-1.5">
+                  <label className="text-[10px] font-bold text-slate-505 uppercase tracking-wider">Display Order</label>
+                  <input
+                    type="number"
+                    value={editingInstagramPost ? editingInstagramPost.display_order : newInstagramPostOrder}
+                    onChange={(e) => editingInstagramPost ? setEditingInstagramPost({...editingInstagramPost, display_order: parseInt(e.target.value) || 0}) : setNewInstagramPostOrder(parseInt(e.target.value) || 0)}
+                    className="glass-input rounded-xl px-3 py-2 text-xs font-black shadow-inner"
+                  />
+                </div>
+
+                <div className="flex-1 flex flex-col gap-1.5">
+                  <label className="text-[10px] font-bold text-slate-505 uppercase tracking-wider">Status Tampil</label>
+                  <select
+                    value={editingInstagramPost ? editingInstagramPost.is_active : newInstagramPostActive}
+                    onChange={(e) => editingInstagramPost ? setEditingInstagramPost({...editingInstagramPost, is_active: parseInt(e.target.value)}) : setNewInstagramPostActive(parseInt(e.target.value))}
+                    className="glass-input rounded-xl px-3 py-2 text-xs font-black appearance-none bg-white/40 cursor-pointer"
+                  >
+                    <option value="1">Aktif (Tampilkan)</option>
+                    <option value="0">Sembunyikan</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex gap-2 mt-2">
+                <button
+                  type="submit"
+                  className="flex-1 py-2.5 rounded-xl bg-sky-650 hover:bg-sky-750 text-white font-black text-[10px] uppercase tracking-wider active:scale-[0.98] transition-all"
+                >
+                  {editingInstagramPost ? "Simpan Perubahan" : "Simpan Post"}
+                </button>
+                {editingInstagramPost && (
+                  <button
+                    type="button"
+                    onClick={() => setEditingInstagramPost(null)}
+                    className="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50 font-bold text-[10px] uppercase"
+                  >
+                    Batal
+                  </button>
+                )}
+              </div>
+            </form>
+          </div>
+        </div>
+
+        {/* Right column: List */}
+        <div className="glass-panel rounded-[32px] p-6 flex flex-col gap-4 shadow-xl shadow-sky-900/5">
+          <span className="text-sm font-black text-slate-950">Daftar Feed Instagram</span>
+          <p className="text-[9px] font-semibold text-slate-400 -mt-2">Geser (Drag & Drop) kartu untuk mengurutkan tampilan feed di website.</p>
+          <div className="grid gap-3 grid-cols-2 overflow-y-auto max-h-[580px] pr-1">
+            {adminInstagramPosts.length === 0 ? (
+              <p className="text-xs font-semibold text-slate-400 py-6 text-center col-span-2">Belum ada feed post.</p>
+            ) : (
+              adminInstagramPosts.map((post, index) => (
+                <div 
+                  key={post.id} 
+                  draggable
+                  onDragStart={(e) => handleInstagramDragStart(e, index)}
+                  onDragOver={handleInstagramDragOver}
+                  onDrop={(e) => handleInstagramDrop(e, index)}
+                  className="surface-panel rounded-2xl border border-slate-100 overflow-hidden flex flex-col justify-between cursor-grab active:cursor-grabbing hover:border-sky-300 transition-all"
+                >
+                  <div className="relative">
+                    <span className="absolute top-2 left-2 bg-slate-900/60 text-white rounded px-1 text-[8px] font-bold select-none cursor-grab">☰</span>
+                    <img src={post.thumbnail_image} alt="Thumbnail" className="aspect-video w-full object-cover border-b border-slate-100" />
+                  </div>
+                  <div className="p-3 flex-1 flex flex-col justify-between gap-2.5">
+                    <div>
+                      <p className="text-[10px] font-semibold text-slate-600 line-clamp-2 leading-relaxed">
+                        {post.caption_short || "No caption"}
+                      </p>
+                      <span className="text-[8px] font-bold text-slate-400 block mt-1 uppercase">Order: {post.display_order} | {post.is_active ? "Aktif" : "Sembunyi"}</span>
+                    </div>
+                    <div className="flex gap-2 justify-end border-t border-slate-50 pt-2">
+                      <button
+                        onClick={() => setEditingInstagramPost(post)}
+                        className="text-[9px] font-black text-sky-600 hover:text-sky-700 uppercase"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteInstagramPost(post.id)}
+                        className="text-[9px] font-black text-rose-600 hover:text-rose-700 uppercase"
+                      >
+                        Hapus
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderMitraCrud = () => {
+    return (
+      <div className="grid gap-6 lg:grid-cols-[1fr_1.5fr] animate-slide-up text-slate-800">
+        {/* Left column: Form */}
+        <div className="flex flex-col gap-6">
+          <div className="glass-panel rounded-[32px] p-6 flex flex-col gap-5 shadow-xl shadow-sky-900/5">
+            <div className="flex items-center gap-2.5 border-b border-slate-100 pb-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-sky-500/10 text-sky-600">
+                <Sliders size={16} />
+              </div>
+              <h3 className="text-base font-black text-slate-950">
+                {editingMitra ? "Edit Mitra" : "Tambah Mitra Baru"}
+              </h3>
+            </div>
+
+            <form onSubmit={editingMitra ? handleUpdateMitra : handleCreateMitra} className="flex flex-col gap-4">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-slate-505 uppercase tracking-wider">Nama Mitra</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Contoh: Yayasan Pembina Masjid Salman ITB"
+                  value={editingMitra ? editingMitra.name : newMitraName}
+                  onChange={(e) => editingMitra ? setEditingMitra({...editingMitra, name: e.target.value}) : setNewMitraName(e.target.value)}
+                  className="glass-input rounded-xl px-3 py-2 text-xs font-black shadow-inner"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-slate-505 uppercase tracking-wider">Logo Image (Upload File)</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleFileChange(e, editingMitra ? setEditingMitra : setNewMitraLogo, editingMitra, "logo")}
+                  className="text-xs text-slate-500 bg-white/30 rounded-lg p-1.5 border border-sky-200/30"
+                />
+                {(editingMitra ? editingMitra.logo : newMitraLogo) && (
+                  <img
+                    src={editingMitra ? editingMitra.logo : newMitraLogo}
+                    alt="Preview"
+                    className="h-14 w-14 object-contain rounded-xl mt-1.5 border border-slate-200 bg-slate-50 p-1"
+                  />
+                )}
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-slate-505 uppercase tracking-wider">Website URL</label>
+                <input
+                  type="text"
+                  placeholder="https://machung.ac.id"
+                  value={editingMitra ? (editingMitra.website_url || "") : newMitraWebsite}
+                  onChange={(e) => editingMitra ? setEditingMitra({...editingMitra, website_url: e.target.value}) : setNewMitraWebsite(e.target.value)}
+                  className="glass-input rounded-xl px-3 py-2 text-xs font-semibold shadow-inner"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-slate-505 uppercase tracking-wider">Kategori</label>
+                <input
+                  type="text"
+                  placeholder="Kementerian / RS / Institusi Pendidikan / dll"
+                  value={editingMitra ? (editingMitra.category || "") : newMitraCategory}
+                  onChange={(e) => editingMitra ? setEditingMitra({...editingMitra, category: e.target.value}) : setNewMitraCategory(e.target.value)}
+                  className="glass-input rounded-xl px-3 py-2 text-xs font-semibold shadow-inner"
+                />
+              </div>
+
+              <div className="flex gap-2">
+                <div className="flex-1 flex flex-col gap-1.5">
+                  <label className="text-[10px] font-bold text-slate-505 uppercase tracking-wider">Display Order</label>
+                  <input
+                    type="number"
+                    value={editingMitra ? editingMitra.display_order : newMitraOrder}
+                    onChange={(e) => editingMitra ? setEditingMitra({...editingMitra, display_order: parseInt(e.target.value) || 0}) : setNewMitraOrder(parseInt(e.target.value) || 0)}
+                    className="glass-input rounded-xl px-3 py-2 text-xs font-black shadow-inner"
+                  />
+                </div>
+
+                <div className="flex-1 flex flex-col gap-1.5">
+                  <label className="text-[10px] font-bold text-slate-505 uppercase tracking-wider">Status Tampil</label>
+                  <select
+                    value={editingMitra ? editingMitra.is_active : newMitraActive}
+                    onChange={(e) => editingMitra ? setEditingMitra({...editingMitra, is_active: parseInt(e.target.value)}) : setNewMitraActive(parseInt(e.target.value))}
+                    className="glass-input rounded-xl px-3 py-2 text-xs font-black appearance-none bg-white/40 cursor-pointer"
+                  >
+                    <option value="1">Aktif (Tampilkan)</option>
+                    <option value="0">Sembunyikan</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex gap-2 mt-2">
+                <button
+                  type="submit"
+                  className="flex-1 py-2.5 rounded-xl bg-sky-650 hover:bg-sky-750 text-white font-black text-[10px] uppercase tracking-wider active:scale-[0.98] transition-all"
+                >
+                  {editingMitra ? "Simpan Perubahan" : "Simpan Mitra"}
+                </button>
+                {editingMitra && (
+                  <button
+                    type="button"
+                    onClick={() => setEditingMitra(null)}
+                    className="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50 font-bold text-[10px] uppercase"
+                  >
+                    Batal
+                  </button>
+                )}
+              </div>
+            </form>
+          </div>
+        </div>
+
+        {/* Right column: List */}
+        <div className="glass-panel rounded-[32px] p-6 flex flex-col gap-4 shadow-xl shadow-sky-900/5">
+          <span className="text-sm font-black text-slate-950">Daftar Mitra & Kemitraan</span>
+          <p className="text-[9px] font-semibold text-slate-400 -mt-2">Geser (Drag & Drop) baris ☰ untuk mengurutkan tampilan logo di website.</p>
+          <div className="flex flex-col gap-3 overflow-y-auto max-h-[580px] pr-1">
+            {adminMitra.length === 0 ? (
+              <p className="text-xs font-semibold text-slate-400 py-6 text-center">Belum ada data mitra.</p>
+            ) : (
+              adminMitra.map((mit, index) => (
+                <div 
+                  key={mit.id} 
+                  draggable
+                  onDragStart={(e) => handleMitraDragStart(e, index)}
+                  onDragOver={handleMitraDragOver}
+                  onDrop={(e) => handleMitraDrop(e, index)}
+                  className="surface-panel rounded-2xl p-4 border border-slate-100 flex items-center justify-between gap-4 cursor-grab active:cursor-grabbing hover:border-sky-300 hover:bg-sky-50/10 transition-all"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-slate-400 font-bold select-none cursor-grab mr-1 text-[11px]">☰</span>
+                    <img src={mit.logo} alt="Logo" className="h-10 w-10 object-contain rounded-lg shrink-0 border border-slate-100 p-1" />
+                    <div>
+                      <h4 className="text-xs font-black text-slate-950 leading-snug">{mit.name}</h4>
+                      <span className="text-[9px] font-bold text-slate-400 block mt-0.5">{mit.category} | order: {mit.display_order}</span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-1 items-end shrink-0">
+                    <button
+                      onClick={() => setEditingMitra(mit)}
+                      className="text-[9px] font-black text-sky-600 hover:text-sky-700 uppercase"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteMitra(mit.id)}
+                      className="text-[9px] font-black text-rose-600 hover:text-rose-700 uppercase"
+                    >
+                      Hapus
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderReviewsCrud = () => {
+    return (
+      <div className="grid gap-6 lg:grid-cols-[1fr_1.5fr] animate-slide-up text-slate-800">
+        {/* Left: Form */}
+        <div className="flex flex-col gap-6">
+          <div className="glass-panel rounded-[32px] p-6 flex flex-col gap-5 shadow-xl shadow-sky-900/5">
+            <div className="flex items-center gap-2.5 border-b border-slate-100 pb-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-sky-500/10 text-sky-600">
+                <Sliders size={16} />
+              </div>
+              <h3 className="text-base font-black text-slate-950">
+                {editingReview ? "Edit Ulasan" : "Tambah Ulasan Baru"}
+              </h3>
+            </div>
+
+            <form onSubmit={editingReview ? handleUpdateReview : handleCreateReview} className="flex flex-col gap-4">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-slate-505 uppercase tracking-wider">Nama Pengguna</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Contoh: Glenn Perkasa"
+                  value={editingReview ? editingReview.name : newReviewName}
+                  onChange={(e) => editingReview ? setEditingReview({...editingReview, name: e.target.value}) : setNewReviewName(e.target.value)}
+                  className="glass-input rounded-xl px-3 py-2 text-xs font-black shadow-inner"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-slate-505 uppercase tracking-wider">Peran / Jabatan</label>
+                <input
+                  type="text"
+                  placeholder="Contoh: Responden Teman Tuli"
+                  value={editingReview ? editingReview.role : newReviewRole}
+                  onChange={(e) => editingReview ? setEditingReview({...editingReview, role: e.target.value}) : setNewReviewRole(e.target.value)}
+                  className="glass-input rounded-xl px-3 py-2 text-xs font-black shadow-inner"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-slate-505 uppercase tracking-wider">Rating (1-5)</label>
+                <input
+                  type="number"
+                  step="0.1"
+                  min="1"
+                  max="5"
+                  required
+                  value={editingReview ? editingReview.rating : newReviewRating}
+                  onChange={(e) => editingReview ? setEditingReview({...editingReview, rating: parseFloat(e.target.value) || 5.0}) : setNewReviewRating(parseFloat(e.target.value) || 5.0)}
+                  className="glass-input rounded-xl px-3 py-2 text-xs font-black shadow-inner"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-slate-505 uppercase tracking-wider">Isi Ulasan</label>
+                <textarea
+                  required
+                  rows={4}
+                  placeholder="Tulis ulasan/testimoni lengkap di sini..."
+                  value={editingReview ? editingReview.content : newReviewContent}
+                  onChange={(e) => editingReview ? setEditingReview({...editingReview, content: e.target.value}) : setNewReviewContent(e.target.value)}
+                  className="glass-input rounded-2xl px-3 py-2 text-xs font-semibold shadow-inner resize-none leading-relaxed"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-slate-505 uppercase tracking-wider">Foto Pengguna (Avatar)</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleFileChange(e, editingReview ? setEditingReview : setNewReviewAvatar, editingReview, "avatar")}
+                  className="text-xs text-slate-500 bg-white/30 rounded-lg p-1.5 border border-sky-200/30"
+                />
+                {(editingReview ? editingReview.avatar : newReviewAvatar) && (
+                  <img
+                    src={editingReview ? editingReview.avatar : newReviewAvatar}
+                    alt="Preview Avatar"
+                    className="h-10 w-10 object-cover rounded-full mt-1.5 border border-slate-200"
+                  />
+                )}
+              </div>
+
+              <div className="flex gap-2 mt-2">
+                <button
+                  type="submit"
+                  className="flex-1 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-black text-[10px] uppercase tracking-wider active:scale-[0.98] transition-all"
+                >
+                  {editingReview ? "Simpan Perubahan" : "Simpan Ulasan"}
+                </button>
+                {editingReview && (
+                  <button
+                    type="button"
+                    onClick={() => setEditingReview(null)}
+                    className="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50 font-bold text-[10px] uppercase"
+                  >
+                    Batal
+                  </button>
+                )}
+              </div>
+            </form>
+          </div>
+        </div>
+
+        {/* Right: List */}
+        <div className="glass-panel rounded-[32px] p-6 flex flex-col gap-4 shadow-xl shadow-sky-900/5">
+          <span className="text-sm font-black text-slate-950">Daftar Ulasan</span>
+          <div className="flex flex-col gap-3 overflow-y-auto max-h-[580px] pr-1">
+            {adminReviews.length === 0 ? (
+              <p className="text-xs font-semibold text-slate-400 py-6 text-center">Belum ada data ulasan.</p>
+            ) : (
+              adminReviews.map((rev) => (
+                <div key={rev.id} className="surface-panel rounded-2xl p-4 border border-slate-100 flex flex-col gap-2.5">
+                  <div className="flex justify-between items-start gap-2">
+                    <div className="flex items-center gap-3">
+                      {rev.avatar ? (
+                        <img src={rev.avatar} alt="Avatar" className="h-10 w-10 object-cover rounded-full border border-slate-100 shrink-0" />
+                      ) : (
+                        <div className="h-10 w-10 rounded-full bg-sky-100 flex items-center justify-center text-sky-700 font-black text-xs shrink-0">
+                          {rev.name[0]}
+                        </div>
+                      )}
+                      <div>
+                        <h4 className="text-xs font-black text-slate-950 leading-snug">{rev.name}</h4>
+                        <span className="text-[9px] font-bold text-slate-400 block mt-0.5">{rev.role} | {"⭐".repeat(Math.max(1, Math.min(5, Math.round(rev.rating || 5))))}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-[10px] font-semibold text-slate-500 leading-relaxed">
+                    "{rev.content}"
+                  </p>
+                  <div className="flex gap-2 justify-end border-t border-slate-50 pt-2">
+                    <button
+                      onClick={() => setEditingReview(rev)}
+                      className="text-[9px] font-black text-sky-600 hover:text-sky-700 uppercase"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteReview(rev.id)}
+                      className="text-[9px] font-black text-rose-600 hover:text-rose-700 uppercase"
+                    >
+                      Hapus
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+
   const renderTrainingModel = () => {
 
     const { vocabulary } = useContext(AppContext);
@@ -6898,7 +8271,7 @@ export const DataCollection = ({ setView }) => {
 
     const trainingCategories = useMemo(() => {
 
-      const list = modelType === "alphabet" ? ALPHABET_LIST : vocabulary;
+      const list = modelType === "alphabet" ? ALPHABET_LIST : vocabulary.filter(w => w.category !== "Abjad" && w.category !== "Angka");
 
       const cats = new Set(list.map((v) => v.category));
 
@@ -6910,7 +8283,7 @@ export const DataCollection = ({ setView }) => {
 
     const trainingFilteredWords = useMemo(() => {
 
-      let list = modelType === "alphabet" ? ALPHABET_LIST : vocabulary;
+      let list = modelType === "alphabet" ? ALPHABET_LIST : vocabulary.filter(w => w.category !== "Abjad" && w.category !== "Angka");
 
       if (trainingCategory !== "Semua") {
 
@@ -7997,6 +9370,50 @@ export const DataCollection = ({ setView }) => {
 
             </button>
 
+            <button
+              onClick={() => handleTabChange("articles")}
+              className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all ${
+                activeTab === "articles"
+                  ? "bg-white text-sky-700 shadow-sm border border-slate-200/20"
+                  : "text-slate-500 hover:text-slate-950"
+              }`}
+            >
+              Kelola Artikel
+            </button>
+
+            <button
+              onClick={() => handleTabChange("instagram")}
+              className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all ${
+                activeTab === "instagram"
+                  ? "bg-white text-sky-700 shadow-sm border border-slate-200/20"
+                  : "text-slate-500 hover:text-slate-950"
+              }`}
+            >
+              Kelola Instagram
+            </button>
+
+            <button
+              onClick={() => handleTabChange("reviews")}
+              className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all ${
+                activeTab === "reviews"
+                  ? "bg-white text-sky-700 shadow-sm border border-slate-200/20"
+                  : "text-slate-500 hover:text-slate-950"
+              }`}
+            >
+              Kelola Ulasan
+            </button>
+
+            <button
+              onClick={() => handleTabChange("mitra")}
+              className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all ${
+                activeTab === "mitra"
+                  ? "bg-white text-sky-700 shadow-sm border border-slate-200/20"
+                  : "text-slate-500 hover:text-slate-950"
+              }`}
+            >
+              Kelola Mitra
+            </button>
+
           </div>
 
         )}
@@ -8025,7 +9442,23 @@ export const DataCollection = ({ setView }) => {
 
                   ? "AI Augmentation"
 
-                  : "Training Model"}
+                  : activeTab === "training"
+
+                    ? "Training Model"
+
+                    : activeTab === "articles"
+
+                      ? "Kelola Artikel Terkini"
+
+                      : activeTab === "instagram"
+
+                        ? "Kelola Feed Instagram"
+
+                        : activeTab === "reviews"
+
+                          ? "Kelola Ulasan Pengguna"
+
+                          : "Kelola Mitra & Kemitraan"}
 
           </h2>
 
@@ -8130,6 +9563,131 @@ export const DataCollection = ({ setView }) => {
         {renderTrainingModel()}
 
       </div>
+
+      <div
+        style={{
+          display:
+            !isSessionActive && activeTab === "articles" ? "block" : "none",
+        }}
+      >
+        {renderArticlesCrud()}
+      </div>
+
+      <div
+        style={{
+          display:
+            !isSessionActive && activeTab === "instagram" ? "block" : "none",
+        }}
+      >
+        {renderInstagramCrud()}
+      </div>
+
+      <div
+        style={{
+          display:
+            !isSessionActive && activeTab === "reviews" ? "block" : "none",
+        }}
+      >
+        {renderReviewsCrud()}
+      </div>
+
+      <div
+        style={{
+          display:
+            !isSessionActive && activeTab === "mitra" ? "block" : "none",
+        }}
+      >
+        {renderMitraCrud()}
+      </div>
+
+      {/* Heatmap Zoom Modal */}
+      {showHeatmapZoom && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4 animate-fade-in" onClick={() => setShowHeatmapZoom(false)}>
+          <div className="relative bg-white rounded-[32px] p-6 max-w-6xl w-[95vw] max-h-[90vh] flex flex-col gap-5 shadow-2xl border border-white/20 animate-scale-up text-slate-800" onClick={(e) => e.stopPropagation()}>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-3.5 gap-3">
+              <div>
+                <h3 className="text-base font-black text-slate-950 uppercase tracking-wide">
+                  Heatmap Kualitas Vocabulary (Zoomed View)
+                </h3>
+                <p className="text-[10px] font-semibold text-slate-500 mt-0.5">
+                  Visualisasi sebaran kualitas data kosakata secara luas dan terstruktur.
+                </p>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-black text-slate-500 uppercase tracking-wider">Format Kolom:</span>
+                <select
+                  value={zoomCols}
+                  onChange={(e) => setZoomCols(e.target.value)}
+                  className="glass-input rounded-xl px-2.5 py-1 text-[10px] font-black bg-slate-50 cursor-pointer border border-slate-200 text-slate-700 shadow-sm"
+                >
+                  <option value="all">Auto (Semua)</option>
+                  <option value="4">4 Kolom</option>
+                  <option value="6">6 Kolom</option>
+                  <option value="8">8 Kolom</option>
+                  <option value="10">10 Kolom</option>
+                  <option value="12">12 Kolom</option>
+                </select>
+
+                <button
+                  onClick={handleDownloadHeatmapPNG}
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-black text-[10px] uppercase tracking-wider py-1.5 px-3 active:scale-[0.97] transition-all"
+                >
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                  Unduh PNG
+                </button>
+
+                <button
+                  onClick={() => setShowHeatmapZoom(false)}
+                  className="p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+            </div>
+
+            <div className="flex-1 overflow-y-auto pr-1">
+              <div className={`grid gap-2.5 ${
+                zoomCols === "4"
+                  ? "grid-cols-4"
+                  : zoomCols === "6"
+                    ? "grid-cols-6"
+                    : zoomCols === "8"
+                      ? "grid-cols-8"
+                      : zoomCols === "10"
+                        ? "grid-cols-10"
+                        : zoomCols === "12"
+                          ? "grid-cols-12"
+                          : "grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8"
+              }`}>
+                {evaluatedList.map((w) => {
+                  const heatColor = w.status === "Cukup"
+                    ? "bg-emerald-500/15 text-emerald-800 border-emerald-500/35 hover:bg-emerald-500/25 transition-all shadow-sm"
+                    : w.status === "Kurang"
+                      ? "bg-amber-500/15 text-amber-800 border-amber-500/35 hover:bg-amber-500/25 transition-all shadow-sm"
+                      : "bg-rose-500/15 text-rose-800 border-rose-500/35 hover:bg-rose-500/25 transition-all shadow-sm";
+
+                  return (
+                    <button
+                      key={w.label}
+                      onClick={() => {
+                        setActiveModalLabel(w.label);
+                        setActiveModalDisplay(w.display);
+                        fetchSamples(w.label);
+                        setShowHeatmapZoom(false);
+                      }}
+                      title={`${w.display.toUpperCase()} (Total: ${w.total}, Signers: ${w.uniqueSigners}, Akurasi: ${w.avgAccuracy}%, Confidence: ${w.avgConfidence}%)`}
+                      className={`flex items-center justify-center text-[10px] font-black uppercase tracking-wider py-3 px-3 rounded-xl border text-center transition-all active:scale-[0.97] hover:scale-[1.03] ${heatColor}`}
+                    >
+                      <span className="truncate">{w.display}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
 

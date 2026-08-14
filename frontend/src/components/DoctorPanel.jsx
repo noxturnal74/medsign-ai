@@ -74,7 +74,7 @@ const PRESET_CATEGORIES = {
 
 
 
-export const DoctorPanel = () => {
+export const DoctorPanel = ({ activeSessionId }) => {
 
   const { addLogEntry } = useContext(AppContext);
 
@@ -96,7 +96,7 @@ export const DoctorPanel = () => {
 
       text: phrase
 
-    });
+    }, activeSessionId);
 
   };
 
@@ -116,7 +116,7 @@ export const DoctorPanel = () => {
 
       text: cleanMsg
 
-    });
+    }, activeSessionId);
 
     setCustomMsg("");
 

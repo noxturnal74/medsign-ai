@@ -342,6 +342,76 @@ class NLGService:
         return " ".join(words_formal) + "."
 
 
+    
+    async def refine_sentence(self, text: str) -> dict:
+        """
+        Refine fragmented patient input into a complete, natural sentence.
+        Returns: {refined_sentence, confidence, follow_up, llm_used}
+        Falls back to template engine if OpenAI unavailable.
+        """
+        text = text.strip()
+        if not text:
+            return {"refined_sentence": "", "confidence": "low", "follow_up": [], "llm_used": False}
+
+        # ?? HOTFIX GUARD FOR DUPLICATE TEMPLATE CONCATENATIONS ??
+        def generate_recommendation_HOTFIX(raw_text, refined):
+            if not refined:
+                return raw_text
+            # Guard 1: prevent double prefix concatenation
+            prefix_words = ["saya", "merasakan", "mengalami", "terasa"]
+            for p in prefix_words:
+                if raw_text.lower().startswith(p) and refined.lower().replace(raw_text.lower(), "").strip().startswith(p):
+                    return raw_text
+            # Guard 2: prevent repetitive word phrases
+            words = refined.lower().split()
+            if len(words) != len(set(words)) and (len(words) - len(set(words))) > 2:
+                return raw_text
+            return refined
+
+        if self._client:
+            try:
+                response = self._client.chat.completions.create(
+                    model=self._model,
+                    messages=[
+                        {"role": "system", "content": _SYSTEM_PROMPT},
+                        {"role": "user", "content": text},
+                    ],
+                    response_format={"type": "json_object"},
+                    temperature=0.3,
+                    max_tokens=300,
+                )
+                raw = response.choices[0].message.content
+                parsed = json.loads(raw)
+                refined = parsed.get("refined_sentence", text)
+                return {
+                    "refined_sentence": generate_recommendation_HOTFIX(text, refined),
+                    "confidence": parsed.get("confidence", "medium"),
+                    "follow_up": parsed.get("follow_up", [])[:3],
+                    "llm_used": True,
+                }
+            except Exception as e:
+                print(f"[NLG] OpenAI error, falling back to template: {e}")
+
+        # ?? fallback: template engine ??
+        words = text.split()
+        fallback_sentence = self.generate_medical_sentence(words)
+        word_count = len(words)
+        confidence = "high" if word_count >= 4 else ("medium" if word_count >= 2 else "low")
+        follow_up = []
+        if confidence in ("low", "medium"):
+            follow_up = [
+                "Sejak kapan keluhan ini muncul?",
+                "Bagian tubuh mana yang terasa tidak nyaman?",
+                "Apakah ada gejala lain yang menyertai?",
+            ]
+        return {
+            "refined_sentence": generate_recommendation_HOTFIX(text, fallback_sentence),
+            "confidence": confidence,
+            "follow_up": follow_up[:3],
+            "llm_used": False,
+        }
+  
+
     def summarize_session(self, logs: list) -> str:
         if not logs:
             return "Belum ada riwayat percakapan untuk diringkas."

@@ -1,4 +1,6 @@
 ﻿import os
+import asyncio
+import edge_tts
 from app.tts.providers.base import BaseTTSProvider
 from app.tts.providers.sapi import SapiTTSProvider
 
@@ -9,10 +11,10 @@ class EdgeTTSProvider(BaseTTSProvider):
 
     @property
     def display_name(self) -> str:
-        return "Microsoft Edge TTS (gTTS-like)"
+        return "Microsoft Edge TTS (Gratis)"
 
     def get_status(self) -> str:
-        return "Offline" # Edge TTS online service is currently offline/unreachable due to sandbox network lock
+        return "Online"
 
     def get_voices(self) -> list:
         return [
@@ -23,7 +25,28 @@ class EdgeTTSProvider(BaseTTSProvider):
         ]
 
     def synthesize(self, text: str, voice: str, rate: float, pitch: float, output_path: str) -> bool:
-        # Fallback to SAPI because of offline environment
-        print("Edge TTS offline fallback to SAPI")
+        rate_val = int((rate - 1.0) * 100)
+        rate_str = f"{rate_val:+d}%" if rate_val != 0 else "+0%"
+        
+        pitch_val = int((pitch - 1.0) * 100)
+        pitch_str = f"{pitch_val:+d}Hz" if pitch_val != 0 else "+0Hz"
+        
+        async def run_synth():
+            communicate = edge_tts.Communicate(
+                text=text,
+                voice=voice,
+                rate=rate_str,
+                pitch=pitch_str
+            )
+            await communicate.save(output_path)
+            
+        try:
+            asyncio.run(run_synth())
+            if os.path.exists(output_path) and os.path.getsize(output_path) > 0:
+                return True
+        except Exception as e:
+            print(f"Edge TTS online failed ({e}), falling back to SAPI...")
+            
         sapi = SapiTTSProvider()
-        return sapi.synthesize(text, "Ardi" if "id-ID" in voice else "David", rate, pitch, output_path)
+        fallback_voice = "Ardi" if "id-ID" in voice else "David"
+        return sapi.synthesize(text, fallback_voice, rate, pitch, output_path)

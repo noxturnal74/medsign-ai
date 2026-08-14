@@ -1357,6 +1357,251 @@
       "display": "Halo_test",
       "category": "kategori_umum_kata_interaksi",
       "emergency": false
+    },
+    {
+      "id": 193,
+      "slug": "a",
+      "display": "A",
+      "category": "Abjad",
+      "emergency": false
+    },
+    {
+      "id": 194,
+      "slug": "b",
+      "display": "B",
+      "category": "Abjad",
+      "emergency": false
+    },
+    {
+      "id": 195,
+      "slug": "c",
+      "display": "C",
+      "category": "Abjad",
+      "emergency": false
+    },
+    {
+      "id": 196,
+      "slug": "d",
+      "display": "D",
+      "category": "Abjad",
+      "emergency": false
+    },
+    {
+      "id": 197,
+      "slug": "e",
+      "display": "E",
+      "category": "Abjad",
+      "emergency": false
+    },
+    {
+      "id": 198,
+      "slug": "f",
+      "display": "F",
+      "category": "Abjad",
+      "emergency": false
+    },
+    {
+      "id": 199,
+      "slug": "g",
+      "display": "G",
+      "category": "Abjad",
+      "emergency": false
+    },
+    {
+      "id": 200,
+      "slug": "h",
+      "display": "H",
+      "category": "Abjad",
+      "emergency": false
+    },
+    {
+      "id": 201,
+      "slug": "i",
+      "display": "I",
+      "category": "Abjad",
+      "emergency": false
+    },
+    {
+      "id": 202,
+      "slug": "j",
+      "display": "J",
+      "category": "Abjad",
+      "emergency": false
+    },
+    {
+      "id": 203,
+      "slug": "k",
+      "display": "K",
+      "category": "Abjad",
+      "emergency": false
+    },
+    {
+      "id": 204,
+      "slug": "l",
+      "display": "L",
+      "category": "Abjad",
+      "emergency": false
+    },
+    {
+      "id": 205,
+      "slug": "m",
+      "display": "M",
+      "category": "Abjad",
+      "emergency": false
+    },
+    {
+      "id": 206,
+      "slug": "n",
+      "display": "N",
+      "category": "Abjad",
+      "emergency": false
+    },
+    {
+      "id": 207,
+      "slug": "o",
+      "display": "O",
+      "category": "Abjad",
+      "emergency": false
+    },
+    {
+      "id": 208,
+      "slug": "p",
+      "display": "P",
+      "category": "Abjad",
+      "emergency": false
+    },
+    {
+      "id": 209,
+      "slug": "q",
+      "display": "Q",
+      "category": "Abjad",
+      "emergency": false
+    },
+    {
+      "id": 210,
+      "slug": "r",
+      "display": "R",
+      "category": "Abjad",
+      "emergency": false
+    },
+    {
+      "id": 211,
+      "slug": "s",
+      "display": "S",
+      "category": "Abjad",
+      "emergency": false
+    },
+    {
+      "id": 212,
+      "slug": "t",
+      "display": "T",
+      "category": "Abjad",
+      "emergency": false
+    },
+    {
+      "id": 213,
+      "slug": "u",
+      "display": "U",
+      "category": "Abjad",
+      "emergency": false
+    },
+    {
+      "id": 214,
+      "slug": "v",
+      "display": "V",
+      "category": "Abjad",
+      "emergency": false
+    },
+    {
+      "id": 215,
+      "slug": "w",
+      "display": "W",
+      "category": "Abjad",
+      "emergency": false
+    },
+    {
+      "id": 216,
+      "slug": "x",
+      "display": "X",
+      "category": "Abjad",
+      "emergency": false
+    },
+    {
+      "id": 217,
+      "slug": "y",
+      "display": "Y",
+      "category": "Abjad",
+      "emergency": false
+    },
+    {
+      "id": 218,
+      "slug": "z",
+      "display": "Z",
+      "category": "Abjad",
+      "emergency": false
+    },
+    {
+      "id": 219,
+      "slug": "1",
+      "display": "1",
+      "category": "Angka",
+      "emergency": false
+    },
+    {
+      "id": 220,
+      "slug": "2",
+      "display": "2",
+      "category": "Angka",
+      "emergency": false
+    },
+    {
+      "id": 221,
+      "slug": "3",
+      "display": "3",
+      "category": "Angka",
+      "emergency": false
+    },
+    {
+      "id": 222,
+      "slug": "4",
+      "display": "4",
+      "category": "Angka",
+      "emergency": false
+    },
+    {
+      "id": 223,
+      "slug": "5",
+      "display": "5",
+      "category": "Angka",
+      "emergency": false
+    },
+    {
+      "id": 224,
+      "slug": "6",
+      "display": "6",
+      "category": "Angka",
+      "emergency": false
+    },
+    {
+      "id": 225,
+      "slug": "7",
+      "display": "7",
+      "category": "Angka",
+      "emergency": false
+    },
+    {
+      "id": 226,
+      "slug": "8",
+      "display": "8",
+      "category": "Angka",
+      "emergency": false
+    },
+    {
+      "id": 227,
+      "slug": "9",
+      "display": "9",
+      "category": "Angka",
+      "emergency": false
     }
   ]
 }

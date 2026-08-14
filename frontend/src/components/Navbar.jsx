@@ -1,172 +1,385 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../context/AppContextObject';
-import { ExternalLink, Home, Info, Stethoscope, User, Volume2, VolumeX, Database, BookOpen, ChevronDown, Video, Menu as MenuIcon, X } from 'lucide-react';
-
-const MARKETING_SITE_URL =
-  import.meta.env.VITE_MARKETING_SITE_URL ||
-  'https://medsign-ai.vercel.app/';
+import {
+  Home, Info, Stethoscope, User, Volume2, VolumeX,
+  Database, BookOpen, Video, FileText, MessageSquare,
+  Menu as MenuIcon, X, ExternalLink,
+} from 'lucide-react';
 
 const navItems = [
-  { id: 'home', label: 'Home', icon: Home },
-  { id: 'patient', label: 'Pasien', icon: User },
-  { id: 'doctor', label: 'Dokter', icon: Stethoscope },
-  { id: 'data-collection', label: 'Dataset', icon: Database },
-  { id: 'motion', label: 'Motion', icon: Video },
-  { id: 'manual', label: 'Panduan', icon: BookOpen },
-  { id: 'about', label: 'Tentang', icon: Info }
+  { id: 'home',          label: 'Beranda',           icon: Home },
+  { id: 'about',         label: 'Tentang',           icon: Info },
+  { id: 'manual',        label: 'Panduan',           icon: BookOpen },
+  { id: 'services',      label: 'Layanan',            icon: Stethoscope },
+  { id: 'articles_page', label: 'Artikel',            icon: FileText },
+  { id: 'contact',       label: 'Kontak',             icon: MessageSquare },
+  { id: 'patient',       label: 'Pasien',             icon: User },
+  { id: 'doctor',        label: 'Dokter',             icon: Stethoscope },
+  { id: 'data-collection', label: 'Dashboard',        icon: Database },
+  { id: 'motion',        label: 'Motion',             icon: Video },
 ];
 
 export const Navbar = ({ currentView, setView }) => {
-  const { ttsEnabled, setTtsEnabled, language, setLanguage, t, setShowFeatureModal } = useContext(AppContext);
+  const { ttsEnabled, setTtsEnabled, t, setShowFeatureModal, currentUser, logout } =
+    useContext(AppContext);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled]     = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      if (currentView === 'home') {
+        const heading = document.getElementById('pilih-modul-heading');
+        if (heading) {
+          const rect = heading.getBoundingClientRect();
+          // Navbar height is around 60px; make opaque when heading reaches the top
+          setScrolled(rect.top <= 64);
+        } else {
+          setScrolled(window.scrollY > 8);
+        }
+      } else {
+        // Always opaque on non-home pages
+        setScrolled(true);
+      }
+    };
+    
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [currentView]);
+
+  useEffect(() => { setMobileOpen(false); }, [currentView]);
+
+  const filteredNavItems = navItems.filter(item => {
+    if (currentUser?.role === 'admin')
+      return ['home','about','manual','services','articles_page','data-collection','motion','patient','doctor','contact'].includes(item.id);
+    if (currentUser?.role === 'doctor')
+      return ['home','about','manual','services','articles_page','patient','doctor','contact'].includes(item.id);
+    if (currentUser?.role === 'patient')
+      return ['home','about','manual','services','articles_page','patient','contact'].includes(item.id);
+    // Guest or other roles
+    return ['home','about','manual','services','articles_page','patient','doctor','contact'].includes(item.id);
+  });
 
   return (
-    <nav className="sticky top-0 z-50 px-2 pt-2 md:px-6">
-      <div className="glass-panel mx-auto flex max-w-7xl items-center justify-between gap-1.5 rounded-xl px-2 py-1 md:py-2 md:px-4">
-        <button
-          className="group flex min-w-0 items-center gap-2 rounded-2xl px-1.5 py-0.5 text-left transition-transform hover:-translate-y-0.5"
-          onClick={() => setView('home')}
-        >
-          <span className="flex h-7 w-7 md:h-10 md:w-10 shrink-0 items-center justify-center rounded-lg border border-white/70 bg-white/75 p-1 shadow-md shadow-sky-500/10 backdrop-blur-xl">
-            <img
-              src="/assets/medsign-mark.png"
-              alt="Logo MedSign"
-              className="h-full w-full object-contain"
-            />
-          </span>
-          <div className="hidden sm:block">
-            <span className="block text-sm md:text-base font-extrabold leading-tight text-slate-950">MedSign AI</span>
-            <span className="block truncate text-[10px] font-semibold text-slate-550">BISINDO medical assistant</span>
-          </div>
-        </button>
+    <>
+      <nav style={{
+        position: 'fixed',
+        top: 0,
+        zIndex: 100,
+        width: '100%',
+        padding: '10px 16px',
+        background: scrolled
+          ? 'rgba(255,255,255,0.96)'
+          : 'rgba(255,255,255,0.88)',
+        borderBottom: `1px solid ${scrolled ? 'rgba(15,23,42,0.09)' : 'rgba(15,23,42,0.06)'}`,
+        boxShadow: scrolled
+          ? '0 4px 24px rgba(15,23,42,0.08)'
+          : '0 1px 0 rgba(255,255,255,0.9)',
+        backdropFilter: 'blur(20px) saturate(1.8)',
+        WebkitBackdropFilter: 'blur(20px) saturate(1.8)',
+        transition: 'background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease',
+      }}>
+        <div style={{
+          maxWidth: 1400,
+          margin: '0 auto',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 8,
+        }}>
 
-        {/* Hamburger Menu for Mobile */}
-        <button
-          className="lg:hidden p-1.5 md:p-2.5 rounded-lg border border-white/60 bg-white/45 text-slate-700 hover:bg-white hover:text-slate-950 transition-all shadow-sm active:scale-[0.97]"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label="Toggle menu"
-        >
-          {mobileOpen ? <X size={18} /> : <MenuIcon size={18} />}
-        </button>
+          {/* ── Brand ── */}
+          <button
+            onClick={() => setView('home')}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 10,
+              background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+              flexShrink: 0,
+            }}
+          >
+            <span style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              width: 36, height: 36, borderRadius: 10, overflow: 'hidden',
+              background: 'rgba(255,255,255,0.95)',
+              border: '1px solid rgba(14,165,233,0.2)',
+              boxShadow: '0 2px 8px rgba(14,165,233,0.12)',
+            }}>
+              <img
+                src="/assets/medsign-mark.png"
+                alt="Logo MedSign AI"
+                style={{ width: 26, height: 26, objectFit: 'contain' }}
+                onError={e => { e.currentTarget.style.display = 'none'; }}
+              />
+            </span>
+            <div className="brand-text">
+              <span style={{ display: 'block', fontSize: 14, fontWeight: 800, color: '#0f172a', lineHeight: 1.2 }}>
+                MedSign AI
+              </span>
+              <span style={{ display: 'block', fontSize: 9, fontWeight: 700, color: '#64748b', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+                BISINDO Medical
+              </span>
+            </div>
+          </button>
 
-        <div className="hidden lg:flex min-w-0 flex-1 items-center justify-end gap-2">
-          <div className="flex min-w-0 items-center gap-1 rounded-2xl bg-white/40 p-1 backdrop-blur-xl">
-            {navItems.map(item => {
-              const Icon = item.icon;
+          {/* ── Desktop nav pill ── */}
+          <div className="desktop-nav" style={{
+            display: 'flex', alignItems: 'center', gap: 2,
+            background: scrolled ? 'rgba(15,23,42,0.04)' : 'rgba(255,255,255,0.5)',
+            padding: '4px 5px', borderRadius: 14,
+            border: scrolled ? '1px solid rgba(15,23,42,0.06)' : '1px solid rgba(255,255,255,0.3)',
+            flex: 1, justifyContent: 'center',
+            maxWidth: 700, margin: '0 auto',
+            backdropFilter: scrolled ? 'none' : 'blur(8px)',
+            transition: 'background 0.3s ease, border-color 0.3s ease',
+          }}>
+            {filteredNavItems.map(item => {
+              const Icon  = item.icon;
               const active = currentView === item.id;
               return (
                 <button
                   key={item.id}
                   onClick={() => setView(item.id)}
-                  className={`inline-flex shrink-0 items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-bold transition-all lg:px-3 ${
-                    active
-                      ? 'bg-white text-sky-700 shadow-sm shadow-sky-900/10'
-                      : 'text-slate-600 hover:bg-white/60 hover:text-slate-950'
-                  }`}
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 5,
+                    padding: '6px 11px', borderRadius: 10, border: 'none',
+                    cursor: 'pointer', fontSize: 11.5,
+                    fontWeight: active ? 700 : 600,
+                    background: active ? 'rgba(14,165,233,0.1)' : 'transparent',
+                    color: active ? '#0284c7' : '#475569',
+                    boxShadow: active ? 'inset 0 0 0 1px rgba(14,165,233,0.22)' : 'none',
+                    transition: 'background 0.15s, color 0.15s',
+                    whiteSpace: 'nowrap',
+                  }}
+                  onMouseEnter={e => {
+                    if (!active) {
+                      e.currentTarget.style.background = 'rgba(15,23,42,0.05)';
+                      e.currentTarget.style.color = '#0f172a';
+                    }
+                  }}
+                  onMouseLeave={e => {
+                    if (!active) {
+                      e.currentTarget.style.background = 'transparent';
+                      e.currentTarget.style.color = '#475569';
+                    }
+                  }}
                 >
-                  <Icon size={15} />
-                  <span className="hidden md:inline">{t(item.id)}</span>
+                  <Icon size={13} strokeWidth={1.8} />
+                  <span className="nav-label">
+                    {item.id === 'data-collection' ? 'Dashboard' : t(item.id) || item.label}
+                  </span>
                 </button>
               );
             })}
           </div>
 
-          <button
-            onClick={() => setTtsEnabled(!ttsEnabled)}
-            className={`glass-button rounded-2xl px-3 py-2 text-xs font-bold ${
-              ttsEnabled ? 'text-emerald-700' : 'text-rose-700'
-            }`}
-            title={ttsEnabled ? t('voiceInactive') : t('voiceActive')}
-          >
-            {ttsEnabled ? <Volume2 size={17} /> : <VolumeX size={17} />}
-            <span className="hidden lg:inline">{ttsEnabled ? t('voiceActive') : t('voiceInactive')}</span>
-          </button>
+          {/* ── Right controls ── */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
 
-          <div className="hidden relative shrink-0 select-none">
-            <select
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
-              className="glass-button rounded-2xl px-3 py-2 text-xs font-bold appearance-none pr-8 cursor-pointer text-slate-700 bg-white/40 border-white/70 shadow-sm"
+            {/* TTS toggle */}
+            <button
+              onClick={() => setTtsEnabled(!ttsEnabled)}
+              title={ttsEnabled ? 'Matikan suara' : 'Aktifkan suara'}
+              style={{
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                padding: '7px 10px', borderRadius: 10, cursor: 'pointer',
+                border: `1px solid ${ttsEnabled ? 'rgba(16,185,129,0.25)' : 'rgba(239,68,68,0.25)'}`,
+                background: ttsEnabled ? 'rgba(16,185,129,0.07)' : 'rgba(239,68,68,0.06)',
+                color: ttsEnabled ? '#059669' : '#dc2626',
+                transition: 'all 0.2s',
+              }}
             >
-              <option value="id" className="bg-white text-slate-800">🇮🇩 ID</option>
-              <option value="en" className="bg-white text-slate-800">🇬🇧 EN</option>
-              <option value="ms" className="bg-white text-slate-800">🇲🇾 MS</option>
-              <option value="th" className="bg-white text-slate-800">🇹🇭 TH</option>
-              <option value="vi" className="bg-white text-slate-800">🇻🇳 VI</option>
-              <option value="tl" className="bg-white text-slate-800">🇵🇭 TL</option>
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-500">
-              <ChevronDown size={10} />
-            </div>
-          </div>
+              {ttsEnabled ? <Volume2 size={15} /> : <VolumeX size={15} />}
+            </button>
 
-          <button
-            onClick={() => setShowFeatureModal(true)}
-            className="glass-button rounded-2xl px-3 py-2 text-xs font-bold text-sky-700"
-            title="Buka perbandingan fitur Desktop vs Phone"
-          >
-            <ExternalLink size={16} />
-            <span className="hidden lg:inline">Fitur Desktop/Phone</span>
-          </button>
-        </div>
-      </div>
+            {/* Layout modal */}
+            <button
+              onClick={() => setShowFeatureModal(true)}
+              title="Pilih tampilan"
+              className="hide-mobile"
+              style={{
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                padding: '7px 10px', borderRadius: 10, cursor: 'pointer',
+                border: '1px solid rgba(15,23,42,0.1)',
+                background: 'rgba(15,23,42,0.04)',
+                color: '#64748b',
+                transition: 'all 0.2s',
+              }}
+            >
+              <ExternalLink size={14} />
+            </button>
 
-      {/* Mobile Menu Overlay */}
-      {mobileOpen && (
-        <div className="lg:hidden absolute top-[72px] left-3 right-3 z-50 rounded-3xl border border-white/60 bg-white/95 p-4 flex flex-col gap-2 shadow-xl animate-slide-up backdrop-blur-xl text-slate-800">
-          {navItems.map(item => {
-            const Icon = item.icon;
-            const active = currentView === item.id;
-            return (
+            {/* Auth CTA */}
+            {!currentUser ? (
               <button
-                key={item.id}
-                onClick={() => {
-                  setView(item.id);
-                  setMobileOpen(false);
+                onClick={() => setView('login')}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 6,
+                  padding: '7px 14px', borderRadius: 10, border: 'none',
+                  background: 'linear-gradient(135deg,#0ea5e9,#0d9488)',
+                  color: '#fff', fontWeight: 800, fontSize: 11,
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 14px rgba(14,165,233,0.35)',
+                  transition: 'box-shadow 0.2s, transform 0.15s',
                 }}
-                className={`flex items-center gap-3 rounded-xl px-4 py-3 text-xs font-bold transition-all ${
-                  active
-                    ? 'bg-sky-500/10 text-sky-700 shadow-sm border border-sky-300/30'
-                    : 'text-slate-600 hover:bg-white/60 hover:text-slate-950'
-                }`}
+                onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 6px 20px rgba(14,165,233,0.5)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+                onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 4px 14px rgba(14,165,233,0.35)'; e.currentTarget.style.transform = ''; }}
               >
-                <Icon size={15} />
-                <span>{t(item.id)}</span>
+                <User size={14} />
+                <span className="hide-mobile">Masuk</span>
               </button>
-            );
-          })}
-          
-          <hr className="border-slate-100 my-1" />
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{
+                  fontSize: 10, fontWeight: 700, color: '#64748b',
+                  background: 'rgba(15,23,42,0.05)',
+                  padding: '4px 9px', borderRadius: 8,
+                  border: '1px solid rgba(15,23,42,0.08)',
+                }} className="hide-mobile">
+                  {currentUser.role?.toUpperCase()}
+                </span>
+                <button
+                  onClick={() => { logout(); setView('home'); }}
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 5,
+                    padding: '7px 12px', borderRadius: 10,
+                    border: '1px solid rgba(239,68,68,0.2)',
+                    background: 'rgba(239,68,68,0.05)',
+                    color: '#dc2626', fontWeight: 700, fontSize: 11,
+                    cursor: 'pointer', transition: 'all 0.2s',
+                  }}
+                >
+                  <X size={13} />
+                  <span className="hide-mobile">Keluar</span>
+                </button>
+              </div>
+            )}
 
-          {/* Voice active & Language switch on mobile */}
-          <div className="flex items-center justify-between gap-3 px-3 py-1.5">
-            <span className="text-[10px] font-bold uppercase text-slate-400">Settings</span>
-            <div className="flex items-center gap-2">
+            {/* Mobile hamburger */}
+            <button
+              onClick={() => setMobileOpen(v => !v)}
+              className="show-mobile"
+              aria-label="Toggle menu"
+              style={{
+                display: 'none', alignItems: 'center', justifyContent: 'center',
+                padding: '7px 10px', borderRadius: 10,
+                border: '1px solid rgba(15,23,42,0.1)',
+                background: 'rgba(15,23,42,0.04)',
+                color: '#334155', cursor: 'pointer',
+              }}
+            >
+              {mobileOpen ? <X size={16} /> : <MenuIcon size={16} />}
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* ── Mobile dropdown ── */}
+      {mobileOpen && (
+        <>
+          <div
+            className="mobile-menu-overlay"
+            style={{ position: 'fixed', inset: 0, zIndex: 90, background: 'rgba(15,23,42,0.2)', backdropFilter: 'blur(3px)' }}
+            onClick={() => setMobileOpen(false)}
+          />
+          <div
+            className="mobile-menu-dropdown"
+            style={{
+            position: 'fixed', top: 64, left: 12, right: 12,
+            zIndex: 95, borderRadius: 20, overflow: 'hidden',
+            background: 'rgba(255,255,255,0.98)',
+            backdropFilter: 'blur(24px)',
+            border: '1px solid rgba(15,23,42,0.08)',
+            boxShadow: '0 20px 60px rgba(15,23,42,0.16)',
+            padding: '8px',
+          }}>
+            {filteredNavItems.map(item => {
+              const Icon   = item.icon;
+              const active = currentView === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => { setView(item.id); setMobileOpen(false); }}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 10,
+                    width: '100%', padding: '11px 14px', borderRadius: 12,
+                    border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 600,
+                    background: active ? 'rgba(14,165,233,0.09)' : 'transparent',
+                    color: active ? '#0284c7' : '#334155',
+                    textAlign: 'left', transition: 'background 0.15s',
+                  }}
+                >
+                  <Icon size={16} strokeWidth={1.8} />
+                  {item.id === 'data-collection' ? 'Dashboard' : t(item.id) || item.label}
+                </button>
+              );
+            })}
+
+            <hr style={{ margin: '6px 4px', border: 'none', borderTop: '1px solid rgba(15,23,42,0.06)' }} />
+
+            <div style={{ display: 'flex', gap: 6, padding: '4px 4px 2px' }}>
               <button
                 onClick={() => setTtsEnabled(!ttsEnabled)}
-                className={`flex h-9 w-9 items-center justify-center rounded-xl border border-white/60 bg-white/40 text-xs font-bold ${
-                  ttsEnabled ? 'text-emerald-700' : 'text-rose-700'
-                }`}
-                title={ttsEnabled ? t('voiceInactive') : t('voiceActive')}
+                style={{
+                  flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                  padding: '9px', borderRadius: 12, fontSize: 11, fontWeight: 700, cursor: 'pointer',
+                  border: '1px solid rgba(15,23,42,0.08)',
+                  background: 'rgba(15,23,42,0.03)',
+                  color: ttsEnabled ? '#059669' : '#dc2626',
+                }}
               >
-                {ttsEnabled ? <Volume2 size={15} /> : <VolumeX size={15} />}
+                {ttsEnabled ? <Volume2 size={14} /> : <VolumeX size={14} />}
+                {ttsEnabled ? 'Suara Aktif' : 'Suara Mati'}
               </button>
-              <select
-                value={language}
-                onChange={(e) => setLanguage(e.target.value)}
-                className="hidden appearance-none pr-8 pl-3 py-1.5 text-xs font-bold rounded-xl bg-white/40 border border-white/70 text-slate-700 cursor-pointer shadow-sm w-[110px]"
-              >
-                <option value="id">🇮🇩 ID</option>
-                <option value="en">🇬🇧 EN</option>
-                <option value="ms">🇲🇾 MS</option>
-                <option value="th">🇹🇭 TH</option>
-                <option value="vi">🇻🇳 VI</option>
-                <option value="tl">🇵🇭 TL</option>
-              </select>
+              {!currentUser ? (
+                <button
+                  onClick={() => { setView('login'); setMobileOpen(false); }}
+                  style={{
+                    flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                    padding: '9px', borderRadius: 12, border: 'none',
+                    background: 'linear-gradient(135deg,#0ea5e9,#0d9488)',
+                    color: '#fff', fontSize: 11, fontWeight: 800, cursor: 'pointer',
+                    boxShadow: '0 4px 14px rgba(14,165,233,0.3)',
+                  }}
+                >
+                  <User size={14} /> Masuk
+                </button>
+              ) : (
+                <button
+                  onClick={() => { logout(); setView('home'); setMobileOpen(false); }}
+                  style={{
+                    flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                    padding: '9px', borderRadius: 12,
+                    border: '1px solid rgba(239,68,68,0.2)',
+                    background: 'rgba(239,68,68,0.05)',
+                    color: '#dc2626', fontSize: 11, fontWeight: 700, cursor: 'pointer',
+                  }}
+                >
+                  <X size={14} /> Keluar
+                </button>
+              )}
             </div>
           </div>
-        </div>
+        </>
       )}
-    </nav>
+
+      {/* ── Responsive CSS ── */}
+      <style>{`
+        .desktop-nav  { display: none !important; }
+        .hide-mobile  { display: none !important; }
+        .show-mobile  { display: inline-flex !important; }
+        .brand-text   { display: none; }
+        .nav-label    { display: none; }
+
+        @media (min-width: 640px) {
+          .brand-text { display: block; }
+        }
+        @media (min-width: 1024px) {
+          .desktop-nav { display: flex !important; }
+          .hide-mobile { display: inline-flex !important; }
+          .show-mobile { display: none !important; }
+          .nav-label   { display: inline !important; }
+        }
+      `}</style>
+    </>
   );
 };

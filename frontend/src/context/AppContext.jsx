@@ -8,7 +8,14 @@ export const AppProvider = ({ children }) => {
   const [ttsEnabled, setTtsEnabled] = useState(true);
   const [vocabList, setVocabList] = useState(vocabulary);
   const [language, setLanguageState] = useState('id');
-  const [sessionLog, setSessionLog] = useState([]);
+  const [sessionLog, setSessionLog] = useState(() => {
+    try {
+      const saved = localStorage.getItem('medsign_guest_log');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
   const [sentence, setSentence] = useState([]);
   const [lastDetected, setLastDetected] = useState(null);
   const [cameraActive, setCameraActive] = useState(false);
@@ -25,6 +32,7 @@ export const AppProvider = ({ children }) => {
   });
   const [wordRecommendations, setWordRecommendations] = useState([]);
   const [generatedSentence, setGeneratedSentence] = useState("");
+  const [nlgResult, setNlgResult] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showFeatureModal, setShowFeatureModal] = useState(false);
   const [toast, setToast] = useState(null);
@@ -56,6 +64,11 @@ export const AppProvider = ({ children }) => {
     }, 3200);
     return () => clearTimeout(timer);
   }, [toast]);
+  const [currentUser, setCurrentUser] = useState(() => {
+    const saved = localStorage.getItem('medsign_user');
+    return saved ? JSON.parse(saved) : null;
+  });
+
   const [layoutMode, setLayoutModeState] = useState(() => {
     return localStorage.getItem('medsign_layout_mode') || 'desktop';
   });
@@ -75,6 +88,51 @@ export const AppProvider = ({ children }) => {
   const lastSentenceLengthRef = useRef(0);
 
   // --- CALLBACKS & HELPERS ---
+  const login = async (emailOrNik, password, role) => {
+    try {
+      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const endpoint = role === 'admin' ? '/auth/admin/login' : role === 'doctor' ? '/auth/doctor/login' : '/auth/patient/login';
+      
+      const body = role === 'patient' 
+        ? { nik: emailOrNik, password } 
+        : { email: emailOrNik, password };
+        
+      const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1${endpoint}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        const userObj = {
+          user_id: data.user_id,
+          emailOrNik,
+          role: data.role || role,
+          token: data.token,
+          must_change_password: data.must_change_password
+        };
+        setCurrentUser(userObj);
+        localStorage.setItem('medsign_user', JSON.stringify(userObj));
+        showToast("Login berhasil!", "success");
+        return { success: true, user: userObj };
+      } else {
+        const err = await response.json();
+        showToast(err.detail || "Login gagal", "error");
+        return { success: false, error: err.detail };
+      }
+    } catch (err) {
+      showToast("Koneksi gagal", "error");
+      return { success: false, error: "Koneksi gagal" };
+    }
+  };
+
+  const logout = () => {
+    setCurrentUser(null);
+    localStorage.removeItem('medsign_user');
+    showToast("Berhasil logout", "success");
+  };
+
   const setLanguage = (lang) => {
     setLanguageState(lang);
     localStorage.setItem('medsign_lang', lang);
@@ -132,8 +190,11 @@ export const AppProvider = ({ children }) => {
   }, []);
 
   const getSentenceSuggestions = useCallback((words) => {
+    // Guard: kata tunggal saja, bukan kalimat yang sudah masuk dari refine
     if (!words || words.length === 0) return [];
-    const lowerWords = words.map(w => w.toLowerCase());
+    const shortWords = words.filter(w => w.split(' ').length <= 2); // tolak kata yg sudah frasa panjang
+    if (shortWords.length === 0) return [];
+    const lowerWords = shortWords.map(w => w.toLowerCase());
     const suggestions = [];
 
     if (lowerWords.includes('sakit') && lowerWords.includes('dada')) {
@@ -152,11 +213,10 @@ export const AppProvider = ({ children }) => {
       suggestions.push("Saya merasa pusing kepala.");
       suggestions.push("Kepala saya terasa pening.");
     }
-    
-    if (suggestions.length === 0 && words.length > 0) {
-      const joined = words.join(' ');
-      suggestions.push(`Saya merasakan ${joined}.`);
-      suggestions.push(`Keluhan saya adalah ${words.join(', ')}.`);
+
+    // fallback hanya jika tidak ada kata kalimat — dan hanya dari kata pendek
+    if (suggestions.length === 0 && shortWords.length <= 4) {
+      suggestions.push(`Keluhan saya: ${shortWords.join(', ')}.`);
     }
 
     return Array.from(new Set(suggestions)).slice(0, 3);
@@ -299,24 +359,59 @@ export const AppProvider = ({ children }) => {
     setSpelledText("");
   }, []);
 
-  const addLogEntry = useCallback((entry) => {
+  const addLogEntry = useCallback(async (entry, activeSessionId = null) => {
+    const timestampStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     const newEntry = {
       id: Math.random().toString(36).substr(2, 9),
-      timestamp: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+      timestamp: timestampStr,
       ...entry,
     };
+    
     setSessionLog((prev) => [newEntry, ...prev]);
 
-    if (entry.role === 'doctor') {
-      speak(entry.text);
-    } else if (entry.role === 'patient') {
+    if (!currentUser) {
+      // Save to local storage for Guest
+      try {
+        const currentLogs = JSON.parse(localStorage.getItem('medsign_guest_log') || '[]');
+        const updatedLogs = [newEntry, ...currentLogs];
+        localStorage.setItem('medsign_guest_log', JSON.stringify(updatedLogs));
+      } catch (e) {
+        console.error(e);
+      }
+    } else if (activeSessionId) {
+      // Save to database for logged in user session
+      try {
+        const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+        await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/session/log`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${currentUser.token}`
+          },
+          body: JSON.stringify({
+            session_id: activeSessionId,
+            role: entry.role,
+            text: entry.text,
+            confidence: entry.confidence || 1.0,
+            timestamp: timestampStr
+          })
+        });
+      } catch (e) {
+        console.error("Gagal menyimpan log ke database:", e);
+      }
+    }
+
+    if (entry.role === 'doctor' || entry.role === 'patient') {
       speak(entry.text);
     }
-  }, [speak]);
+  }, [speak, currentUser]);
 
   const clearLog = useCallback(() => {
     setSessionLog([]);
-  }, []);
+    if (!currentUser) {
+      localStorage.removeItem('medsign_guest_log');
+    }
+  }, [currentUser]);
 
   const appendWordRecommendation = useCallback((word) => {
     setSentence(prev => {
@@ -401,6 +496,7 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     if (sentence.length === 0) {
       setGeneratedSentence("");
+      setNlgResult(null);
       lastSentenceLengthRef.current = 0;
       return;
     }
@@ -418,39 +514,47 @@ export const AppProvider = ({ children }) => {
       setIsGenerating(true);
       try {
         const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
-        const response = await fetch(
-          `${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/nlg/generate-sentence`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ words: sentence })
-          }
-        );
+        const base = apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl;
+        const rawText = sentence.join(' ');
+
+        // Coba /nlg/refine-sentence (LLM) dulu
+        const response = await fetch(`${base}/api/v1/nlg/refine-sentence`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: rawText }),
+        });
         if (response.ok) {
           const data = await response.json();
-          const finalSentence = data.sentence;
-          setGeneratedSentence(finalSentence);
-
-          addLogEntry({
-            role: 'patient',
-            text: finalSentence,
-            confidence: 1.0,
-            isNlg: true
+          // ponytail: tidak auto-log — pasien harus review/edit dulu sebelum kirim
+          setNlgResult(data);
+          setGeneratedSentence(data.refined_sentence);
+        } else {
+          // fallback ke generate-sentence jika refine gagal
+          const fb = await fetch(`${base}/api/v1/nlg/generate-sentence`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ words: sentence }),
           });
+          if (fb.ok) {
+            const fbData = await fb.json();
+            setGeneratedSentence(fbData.sentence);
+            setNlgResult({ refined_sentence: fbData.sentence, confidence: 'medium', follow_up: [], llm_used: false, original: rawText });
+          }
         }
       } catch (err) {
         console.error("Gagal generate kalimat NLG:", err);
+        setNlgResult({ error: true });
       } finally {
         setIsGenerating(false);
       }
-    }, 2500);
+    }, 1200);
 
     return () => {
       if (sentenceTimerRef.current) {
         clearTimeout(sentenceTimerRef.current);
       }
     };
-  }, [sentence, addLogEntry]);
+  }, [sentence]);
 
   return (
     <AppContext.Provider
@@ -502,8 +606,15 @@ export const AppProvider = ({ children }) => {
         setLayoutMode,
         toast,
         setToast,
+        currentUser,
+        setCurrentUser,
+        login,
+        logout,
         appendWordRecommendation,
         generatedSentence,
+        setGeneratedSentence,
+        nlgResult,
+        setNlgResult,
         isGenerating,
         isTtsPaused,
         pauseTts,

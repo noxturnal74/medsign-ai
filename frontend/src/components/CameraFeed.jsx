@@ -85,6 +85,8 @@ export const CameraFeed = () => {
 
 
   const lastAppendedWordRef = React.useRef(null);
+  const holdTimerRef = React.useRef(null);
+  const currentPendingWordRef = React.useRef(null);
   const [isFullScreenCam, setIsFullScreenCam] = React.useState(false);
 
 
