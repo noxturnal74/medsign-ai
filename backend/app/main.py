@@ -37,6 +37,36 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Simple IP-based rate limiter middleware to prevent DDoS / request spam
+from fastapi import Request
+from fastapi.responses import JSONResponse
+
+client_request_history = {}
+RATE_LIMIT_WINDOW = 60  # 1 minute
+RATE_LIMIT_MAX_REQUESTS = 180  # Max 180 requests per minute per IP
+
+@app.middleware("http")
+async def rate_limiting_middleware(request: Request, call_next):
+    client_ip = request.client.host if request.client else "unknown"
+    now = time.time()
+    
+    if client_ip not in client_request_history:
+        client_request_history[client_ip] = []
+        
+    # Filter requests within the 1-minute window
+    history = [t for t in client_request_history[client_ip] if now - t < RATE_LIMIT_WINDOW]
+    client_request_history[client_ip] = history
+    
+    if len(history) >= RATE_LIMIT_MAX_REQUESTS:
+        return JSONResponse(
+            status_code=429,
+            content={"detail": "Terlalu banyak permintaan (DDoS Protection). Silakan coba lagi nanti."}
+        )
+        
+    client_request_history[client_ip].append(now)
+    response = await call_next(request)
+    return response
+
 # Shared Adapter Service Singleton
 slt_service = SLTAdapterService()
 
