@@ -1,10 +1,32 @@
-﻿import uuid
+from fastapi.responses import StreamingResponse
+import io
+import csv
+import uuid
 import secrets
 from typing import Optional, List
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Response
 from pydantic import BaseModel, Field
 from datetime import datetime
+import json
 from app.db import (
+    db_get_all_facilities,
+    db_get_facility_by_id,
+    db_create_facility,
+    db_update_facility,
+    db_delete_facility,
+    db_create_facility_admin,
+    db_update_facility_admin,
+    db_get_all_admins,
+    db_get_admin_by_id,
+    db_get_all_audit_logs,
+    db_get_setting,
+    db_set_setting,
+    db_get_facility_audit_logs,
+    db_create_incident,
+    db_update_incident,
+    db_get_all_incidents,
+    db_create_backup_log,
+    db_get_all_backup_logs,
     db_get_all_instagram_posts,
     db_create_instagram_post,
     db_update_instagram_post,
@@ -21,6 +43,16 @@ from app.db import (
     db_create_review,
     db_update_review,
     db_delete_review,
+    db_get_all_video_tutorials,
+    db_create_video_tutorial,
+    db_update_video_tutorial,
+    db_delete_video_tutorial,
+    db_get_all_brand_pkm,
+    db_create_brand_pkm,
+    db_update_brand_pkm,
+    db_delete_brand_pkm,
+    db_get_dashboard_moduls,
+    db_save_dashboard_moduls,
     db_get_patient_by_no_rm,
     db_get_all_patients,
     db_create_patient,
@@ -53,6 +85,7 @@ class PatientCreateRequest(BaseModel):
     nik: str = Field(..., min_length=8, max_length=16)
     name: str
     date_of_birth: str
+    facility_id: Optional[str] = None
 
 class PatientCreateResponse(BaseModel):
     id: str
@@ -67,6 +100,9 @@ class PatientUpdateRequest(BaseModel):
     name: str
     date_of_birth: str
     password: Optional[str] = None
+    facility_id: Optional[str] = None
+    verification_status: Optional[str] = None
+    is_active: Optional[int] = None
 
 class PatientResponse(BaseModel):
     id: str
@@ -82,12 +118,16 @@ class DoctorCreateRequest(BaseModel):
     email: str
     password: str
     specialization: Optional[str] = None
+    facility_id: Optional[str] = None
 
 class DoctorUpdateRequest(BaseModel):
     name: str
     email: str
     password: Optional[str] = None
     specialization: Optional[str] = None
+    facility_id: Optional[str] = None
+    status: Optional[str] = None
+    is_active: Optional[int] = None
 
 class DoctorResponse(BaseModel):
     id: str
@@ -116,15 +156,18 @@ class ResetPasswordResponse(BaseModel):
 
 @router.get("/admin/patients", response_model=List[PatientResponse])
 def get_all_patients_admin(current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "admin":
+    role = current_user["role"]
+    if role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya admin yang dapat melihat seluruh daftar pasien")
     rows = db_get_all_patients()
+    if role == "admin":
+        rows = [r for r in rows if r.get("facility_id") == current_user["facility_id"]]
     res = []
     for r in rows:
         res.append(PatientResponse(
             id=r["id"],
             no_rm=r["no_rm"],
-            nik=decrypt_nik(r["nik_encrypted"]), # Unmasked for admin!
+            nik=decrypt_nik(r["nik_encrypted"]),
             name=r["name"],
             date_of_birth=r["date_of_birth"],
             created_by=r["created_by"],
@@ -135,7 +178,7 @@ def get_all_patients_admin(current_user: dict = Depends(get_current_user)):
 @router.post("/admin/patients", response_model=PatientCreateResponse)
 def register_patient(request: PatientCreateRequest, current_user: dict = Depends(get_current_user)):
     role = current_user["role"]
-    if role not in ["admin", "doctor"]:
+    if role not in ["admin", "doctor", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya admin dan dokter yang dapat mendaftarkan pasien")
         
     if db_get_patient_by_no_rm(request.no_rm):
@@ -153,6 +196,8 @@ def register_patient(request: PatientCreateRequest, current_user: dict = Depends
     patient_id = str(uuid.uuid4())
     encrypted_nik = encrypt_nik(request.nik)
     
+    fac_id = current_user.get("facility_id") if role in ["admin", "doctor"] else request.facility_id
+    
     success = db_create_patient(
         patient_id=patient_id,
         no_rm=request.no_rm,
@@ -160,7 +205,10 @@ def register_patient(request: PatientCreateRequest, current_user: dict = Depends
         password_hash=hashed_pass,
         name=request.name,
         date_of_birth=request.date_of_birth,
-        created_by=current_user["user_id"]
+        created_by=current_user["user_id"],
+        facility_id=fac_id,
+        verification_status="APPROVED" if role == "super_admin" else "PENDING",
+        is_active=1 if role == "super_admin" else 0
     )
     
     if not success:
@@ -170,7 +218,7 @@ def register_patient(request: PatientCreateRequest, current_user: dict = Depends
         link_id = str(uuid.uuid4())
         db_create_doctor_patient_link(link_id, current_user["user_id"], patient_id)
         
-    write_audit_log(current_user["user_id"], role, "POST /api/v1/admin/patients", patient_id)
+    write_audit_log(current_user["user_id"], role, "POST /api/v1/admin/patients", patient_id, facility_id=fac_id)
     
     return PatientCreateResponse(
         id=patient_id,
@@ -182,23 +230,36 @@ def register_patient(request: PatientCreateRequest, current_user: dict = Depends
 
 @router.put("/admin/patients/{patient_id}")
 def update_patient_endpoint(patient_id: str, request: PatientUpdateRequest, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "admin":
+    role = current_user["role"]
+    if role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya admin yang dapat mengedit data pasien")
         
     patient = db_get_patient_by_id(patient_id)
     if not patient:
         raise HTTPException(status_code=404, detail="Pasien tidak ditemukan")
         
+    if role == "admin" and patient.get("facility_id") != current_user["facility_id"]:
+        raise HTTPException(status_code=403, detail="Akses ditolak: pasien bukan bagian dari faskes Anda")
+        
     hashed_pass = hash_password(request.password) if request.password else None
     encrypted_nik = encrypt_nik(request.nik)
     
+    # Audit status transitions
+    prev_status = patient.get("verification_status")
+    new_status = request.verification_status
+    if new_status and prev_status != new_status:
+        write_audit_log(current_user["user_id"], role, f"Status Transition: {prev_status} -> {new_status}", patient_id, facility_id=patient.get("facility_id"))
+        
     success = db_update_patient(
         patient_id=patient_id,
         no_rm=request.no_rm,
         nik_encrypted=encrypted_nik,
         password_hash=hashed_pass,
         name=request.name,
-        date_of_birth=request.date_of_birth
+        date_of_birth=request.date_of_birth,
+        facility_id=request.facility_id,
+        verification_status=request.verification_status,
+        is_active=request.is_active
     )
     
     if not success:
@@ -209,11 +270,16 @@ def update_patient_endpoint(patient_id: str, request: PatientUpdateRequest, curr
 
 @router.delete("/admin/patients/{patient_id}")
 def delete_patient_endpoint(patient_id: str, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "admin":
+    role = current_user["role"]
+    if role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya admin yang dapat menghapus data pasien")
         
-    if not db_get_patient_by_id(patient_id):
+    patient = db_get_patient_by_id(patient_id)
+    if not patient:
         raise HTTPException(status_code=404, detail="Pasien tidak ditemukan")
+        
+    if role == "admin" and patient.get("facility_id") != current_user["facility_id"]:
+        raise HTTPException(status_code=403, detail="Akses ditolak")
         
     success = db_delete_patient(patient_id)
     if not success:
@@ -227,9 +293,12 @@ def delete_patient_endpoint(patient_id: str, current_user: dict = Depends(get_cu
 
 @router.get("/admin/doctors", response_model=List[DoctorResponse])
 def get_all_doctors_admin(current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "admin":
+    role = current_user["role"]
+    if role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya admin yang dapat mengakses daftar dokter")
     rows = db_get_all_doctors()
+    if role == "admin":
+        rows = [r for r in rows if r.get("facility_id") == current_user["facility_id"]]
     return [
         DoctorResponse(
             id=r["id"],
@@ -242,18 +311,22 @@ def get_all_doctors_admin(current_user: dict = Depends(get_current_user)):
 
 @router.post("/admin/doctors", response_model=DoctorResponse)
 def register_doctor(request: DoctorCreateRequest, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "admin":
+    role = current_user["role"]
+    if role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya admin yang dapat mendaftarkan dokter baru")
         
     hashed = hash_password(request.password)
     doc_id = str(uuid.uuid4())
+    
+    fac_id = current_user.get("facility_id") if role == "admin" else request.facility_id
     
     success = db_create_doctor(
         doc_id=doc_id,
         name=request.name,
         email=request.email,
         password_hash=hashed,
-        specialization=request.specialization
+        specialization=request.specialization,
+        facility_id=fac_id
     )
     
     if not success:
@@ -272,14 +345,28 @@ def register_doctor(request: DoctorCreateRequest, current_user: dict = Depends(g
 
 @router.put("/admin/doctors/{doctor_id}")
 def update_doctor_endpoint(doctor_id: str, request: DoctorUpdateRequest, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "admin":
+    role = current_user["role"]
+    if role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya admin yang dapat mengedit data dokter")
         
-    if not db_get_doctor_by_id(doctor_id):
+    doctor = db_get_doctor_by_id(doctor_id)
+    if not doctor:
         raise HTTPException(status_code=404, detail="Dokter tidak ditemukan")
         
+    if role == "admin" and doctor.get("facility_id") != current_user["facility_id"]:
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+        
     hashed = hash_password(request.password) if request.password else None
-    success = db_update_doctor(doctor_id, request.name, request.email, hashed, request.specialization)
+    success = db_update_doctor(
+        doctor_id=doctor_id,
+        name=request.name,
+        email=request.email,
+        password_hash=hashed,
+        specialization=request.specialization,
+        facility_id=request.facility_id,
+        status=request.status,
+        is_active=request.is_active
+    )
     
     if not success:
         raise HTTPException(status_code=500, detail="Gagal memperbarui data dokter")
@@ -289,11 +376,16 @@ def update_doctor_endpoint(doctor_id: str, request: DoctorUpdateRequest, current
 
 @router.delete("/admin/doctors/{doctor_id}")
 def delete_doctor_endpoint(doctor_id: str, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "admin":
+    role = current_user["role"]
+    if role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya admin yang dapat menghapus data dokter")
         
-    if not db_get_doctor_by_id(doctor_id):
+    doctor = db_get_doctor_by_id(doctor_id)
+    if not doctor:
         raise HTTPException(status_code=404, detail="Dokter tidak ditemukan")
+        
+    if role == "admin" and doctor.get("facility_id") != current_user["facility_id"]:
+        raise HTTPException(status_code=403, detail="Akses ditolak")
         
     success = db_delete_doctor(doctor_id)
     if not success:
@@ -307,9 +399,14 @@ def delete_doctor_endpoint(doctor_id: str, current_user: dict = Depends(get_curr
 
 @router.get("/admin/doctor-patient-assignments", response_model=List[AssignmentResponse])
 def get_assignments_admin(current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "admin":
+    role = current_user["role"]
+    if role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya admin yang dapat mengakses daftar hubungan dokter-pasien")
     rows = db_get_all_assignments()
+    if role == "admin":
+        fac_id = current_user["facility_id"]
+        doc_ids = {d["id"] for d in db_get_all_doctors() if d.get("facility_id") == fac_id}
+        rows = [r for r in rows if r.get("doctor_id") in doc_ids]
     return [
         AssignmentResponse(
             id=r["id"],
@@ -321,14 +418,19 @@ def get_assignments_admin(current_user: dict = Depends(get_current_user)):
 
 @router.post("/admin/doctor-patient-assignment")
 def assign_doctor_patient(request: AssignmentRequest, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "admin":
+    role = current_user["role"]
+    if role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya admin yang dapat mengelola hubungan dokter-pasien")
         
-    if not db_get_doctor_by_id(request.doctor_id):
-        raise HTTPException(status_code=400, detail="ID Dokter tidak valid")
+    doc = db_get_doctor_by_id(request.doctor_id)
+    pat = db_get_patient_by_id(request.patient_id)
+    if not doc or not pat:
+        raise HTTPException(status_code=404, detail="Dokter atau pasien tidak ditemukan")
         
-    if not db_get_patient_by_id(request.patient_id):
-        raise HTTPException(status_code=400, detail="ID Pasien tidak valid")
+    if role == "admin":
+        fac_id = current_user["facility_id"]
+        if doc.get("facility_id") != fac_id or pat.get("facility_id") != fac_id:
+            raise HTTPException(status_code=403, detail="Akses ditolak: dokter atau pasien berada di luar faskes Anda")
         
     if db_check_doctor_patient_link(request.doctor_id, request.patient_id):
         return {"message": "Dokter dan pasien sudah terhubung"}
@@ -370,11 +472,16 @@ def remove_doctor_patient_assignment(request: AssignmentRequest, current_user: d
 
 @router.post("/admin/patients/{id}/reset-password", response_model=ResetPasswordResponse)
 def reset_patient_password(id: str, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "admin":
+    role = current_user["role"]
+    if role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya admin yang dapat mereset password pasien")
         
-    if not db_get_patient_by_id(id):
+    patient = db_get_patient_by_id(id)
+    if not patient:
         raise HTTPException(status_code=404, detail="Pasien tidak ditemukan")
+        
+    if role == "admin" and patient.get("facility_id") != current_user["facility_id"]:
+        raise HTTPException(status_code=403, detail="Akses ditolak")
         
     temp_pass = secrets.token_hex(6)
     hashed_pass = hash_password(temp_pass)
@@ -403,6 +510,7 @@ class ArticleCreateRequest(BaseModel):
     excerpt: Optional[str] = None
     category: Optional[str] = "Edukasi BISINDO"
     status: Optional[str] = "published"
+    ref_url: Optional[str] = None
 
 class ArticleUpdateRequest(BaseModel):
     title: str
@@ -412,6 +520,7 @@ class ArticleUpdateRequest(BaseModel):
     excerpt: Optional[str] = None
     category: Optional[str] = "Edukasi BISINDO"
     status: Optional[str] = "published"
+    ref_url: Optional[str] = None
 
 class ArticleResponse(BaseModel):
     id: str
@@ -423,6 +532,7 @@ class ArticleResponse(BaseModel):
     category: Optional[str] = None
     author: str
     status: str
+    ref_url: Optional[str] = None
     published_at: Optional[str] = None
     created_at: str
     updated_at: str
@@ -506,7 +616,84 @@ class MitraResponse(BaseModel):
     created_at: str
 
 
-# ?? ENDPOINTS ??
+# ═══ VIDEO TUTORIAL DTO ═══
+
+class VideoTutorialCreateRequest(BaseModel):
+    title: str
+    description: Optional[str] = None
+    video_url: str
+    thumbnail: Optional[str] = None
+    duration: Optional[str] = None
+    display_order: Optional[int] = 0
+
+class VideoTutorialUpdateRequest(BaseModel):
+    title: str
+    description: Optional[str] = None
+    video_url: str
+    thumbnail: Optional[str] = None
+    duration: Optional[str] = None
+    is_active: Optional[int] = 1
+    display_order: Optional[int] = 0
+
+class VideoTutorialResponse(BaseModel):
+    id: str
+    title: str
+    description: Optional[str] = None
+    video_url: str
+    thumbnail: Optional[str] = None
+    duration: Optional[str] = None
+    is_active: int
+    display_order: int
+    created_at: str
+    updated_at: str
+
+
+# ═══ BRAND PKM DTO ═══
+
+class BrandPkmCreateRequest(BaseModel):
+    name: str
+    logo: Optional[str] = None
+    description: Optional[str] = None
+    website_url: Optional[str] = None
+    category: Optional[str] = "program"
+    display_order: Optional[int] = 0
+
+class BrandPkmUpdateRequest(BaseModel):
+    name: str
+    logo: Optional[str] = None
+    description: Optional[str] = None
+    website_url: Optional[str] = None
+    category: Optional[str] = "program"
+    is_active: Optional[int] = 1
+    display_order: Optional[int] = 0
+
+class BrandPkmResponse(BaseModel):
+    id: str
+    name: str
+    logo: Optional[str] = None
+    description: Optional[str] = None
+    website_url: Optional[str] = None
+    category: Optional[str] = None
+    is_active: int
+    display_order: int
+    created_at: str
+    updated_at: str
+
+
+# ═══ DASHBOARD MODUL DTO ═══
+
+class DashboardModulItem(BaseModel):
+    id: str
+    title: str
+    description: Optional[str] = None
+    icon: Optional[str] = None
+    link: Optional[str] = None
+    color: Optional[str] = "sky"
+    is_active: bool = True
+    display_order: int = 0
+
+class DashboardModulListRequest(BaseModel):
+    items: List[DashboardModulItem]
 
 # 1. ARTICLES ENDPOINTS
 @router.get("/articles", response_model=List[ArticleResponse])
@@ -523,6 +710,7 @@ def get_articles_endpoint():
             category=r["category"],
             author=r["author"],
             status=r["status"],
+            ref_url=r.get("ref_url"),
             published_at=r["published_at"],
             created_at=r["created_at"],
             updated_at=r["updated_at"]
@@ -543,7 +731,8 @@ def create_article_endpoint(request: ArticleCreateRequest, current_user: dict = 
         request.excerpt,
         request.category,
         "Admin",
-        request.status
+        request.status,
+        request.ref_url
     )
     if not success:
         raise HTTPException(status_code=500, detail="Gagal membuat artikel")
@@ -560,6 +749,7 @@ def create_article_endpoint(request: ArticleCreateRequest, current_user: dict = 
         category=request.category,
         author="Admin",
         status=request.status,
+        ref_url=request.ref_url,
         published_at=now if request.status == "published" else None,
         created_at=now,
         updated_at=now
@@ -578,7 +768,8 @@ def update_article_endpoint(article_id: str, request: ArticleUpdateRequest, curr
         request.excerpt,
         request.category,
         "Admin",
-        request.status
+        request.status,
+        request.ref_url
     )
     if not success:
         raise HTTPException(status_code=500, detail="Gagal mengedit artikel")
@@ -766,3 +957,811 @@ def delete_mitra_endpoint(mitra_id: str, current_user: dict = Depends(get_curren
         raise HTTPException(status_code=500, detail="Gagal menghapus data mitra")
     write_audit_log(current_user["user_id"], "admin", f"DELETE /api/v1/admin/mitra/{mitra_id}")
     return {"message": "Data mitra berhasil dihapus"}
+
+
+
+class SuperAdminOverviewResponse(BaseModel):
+    total_facilities: int
+    active_facilities: int
+    total_admins: int
+    active_doctors: int
+    total_patients: int
+    pending_verifications: int
+    active_consultations: int
+    completed_consultations: int
+    security_events: int
+    system_errors: int
+
+class FacilityOverviewItem(BaseModel):
+    id: str
+    facility_code: str
+    name: str
+    type: str
+    address: Optional[str] = None
+    city: Optional[str] = None
+    province: Optional[str] = None
+    status: str
+    admin_name: Optional[str] = None
+    doctor_count: int
+    patient_count: int
+    active_sessions: int
+
+class FacilityCreateRequest(BaseModel):
+    facility_code: str
+    name: str
+    type: str
+    address: Optional[str] = None
+    city: Optional[str] = None
+    province: Optional[str] = None
+    postal_code: Optional[str] = None
+    phone: Optional[str] = None
+    email: Optional[str] = None
+    website: Optional[str] = None
+    registration_number: Optional[str] = None
+
+class AdminCreateRequest(BaseModel):
+    name: str
+    email: str
+    username: str
+    password: str
+    facility_id: str
+    phone: Optional[str] = None
+
+class AdminUpdateRequest(BaseModel):
+    name: str
+    email: str
+    username: str
+    phone: Optional[str] = None
+    status: str
+
+class AdminResponse(BaseModel):
+    id: str
+    name: str
+    email: str
+    username: Optional[str] = None
+    facility_id: Optional[str] = None
+    facility_name: Optional[str] = None
+    phone: Optional[str] = None
+    status: str
+    created_at: str
+
+
+class IncidentCreateRequest(BaseModel):
+    title: str
+    description: Optional[str] = None
+    severity: str
+
+class IncidentUpdateRequest(BaseModel):
+    status: str
+    resolution_details: Optional[str] = None
+
+class IncidentResponse(BaseModel):
+    id: str
+    title: str
+    description: Optional[str] = None
+    severity: str
+    status: str
+    assigned_investigator: Optional[str] = None
+    resolution_details: Optional[str] = None
+    created_at: str
+    resolved_at: Optional[str] = None
+
+class BackupResponse(BaseModel):
+    id: str
+    backup_name: str
+    backup_path: str
+    status: str
+    integrity_checked: int
+    created_at: str
+
+
+class SystemSettingRequest(BaseModel):
+    key: str
+    value: str
+
+class ToggleStatusRequest(BaseModel):
+    role: str
+    user_id: str
+    is_active: int
+
+@router.post('/admin/users/toggle-status')
+def toggle_user_active_status(request: ToggleStatusRequest, current_user: dict = Depends(get_current_user)):
+    role = current_user["role"]
+    if role not in ['admin', 'super_admin']:
+        raise HTTPException(status_code=403, detail='Hanya admin yang dapat mengelola status aktif/nonaktif user')
+        
+    if request.role == 'doctor':
+        target = db_get_doctor_by_id(request.user_id)
+    else:
+        target = db_get_patient_by_id(request.user_id)
+        
+    if not target:
+        raise HTTPException(status_code=404, detail="User tidak ditemukan")
+        
+    if role == 'admin' and target.get("facility_id") != current_user["facility_id"]:
+        raise HTTPException(status_code=403, detail="Akses ditolak: user bukan bagian dari faskes Anda")
+    from app.db import db_set_user_active_status
+    success = db_set_user_active_status(request.role, request.user_id, request.is_active)
+    if not success:
+        raise HTTPException(status_code=500, detail='Gagal memperbarui status aktif/nonaktif')
+    write_audit_log(current_user['user_id'], 'admin', f'POST /api/v1/admin/users/toggle-status ({request.role} {request.user_id} active={request.is_active})')
+    return {'message': 'Status aktif/nonaktif user berhasil diperbarui'}
+
+
+@router.post("/admin/patients/{patient_id}/approve")
+def approve_patient_registration(patient_id: str, current_user: dict = Depends(get_current_user)):
+    role = current_user["role"]
+    if role not in ["admin", "super_admin"]:
+        raise HTTPException(status_code=403, detail="Hanya admin yang dapat menyetujui registrasi pasien")
+        
+    patient = db_get_patient_by_id(patient_id)
+    if not patient:
+        raise HTTPException(status_code=404, detail="Pasien tidak ditemukan")
+        
+    if role == "admin" and patient.get("facility_id") != current_user["facility_id"]:
+        raise HTTPException(status_code=403, detail="Akses ditolak: pasien bukan bagian dari faskes Anda")
+        
+    # Generate unique RM number if needed or use existing
+    no_rm = patient["no_rm"]
+    if no_rm.startswith("RM") and len(no_rm) > 10:
+        # RM was RM + NIK; let's keep it or update it if desired.
+        pass
+        
+    success = db_update_patient(
+        patient_id=patient_id,
+        no_rm=patient["no_rm"],
+        nik_encrypted=patient["nik_encrypted"],
+        password_hash=None,
+        name=patient["name"],
+        date_of_birth=patient["date_of_birth"],
+        verification_status="APPROVED",
+        is_active=1
+    )
+    if not success:
+        raise HTTPException(status_code=500, detail="Gagal menyetujui registrasi pasien")
+        
+    write_audit_log(current_user["user_id"], role, "PATIENT_CREATED (Registration approved and activated)", patient_id, facility_id=patient.get("facility_id"))
+    return {"message": "Registrasi pasien berhasil disetujui dan diaktifkan"}
+
+@router.post("/admin/patients/{patient_id}/reject")
+def reject_patient_registration(patient_id: str, current_user: dict = Depends(get_current_user)):
+    role = current_user["role"]
+    if role not in ["admin", "super_admin"]:
+        raise HTTPException(status_code=403, detail="Hanya admin yang dapat menolak registrasi pasien")
+        
+    patient = db_get_patient_by_id(patient_id)
+    if not patient:
+        raise HTTPException(status_code=404, detail="Pasien tidak ditemukan")
+        
+    if role == "admin" and patient.get("facility_id") != current_user["facility_id"]:
+        raise HTTPException(status_code=403, detail="Akses ditolak: pasien bukan bagian dari faskes Anda")
+        
+    success = db_update_patient(
+        patient_id=patient_id,
+        no_rm=patient["no_rm"],
+        nik_encrypted=patient["nik_encrypted"],
+        password_hash=None,
+        name=patient["name"],
+        date_of_birth=patient["date_of_birth"],
+        verification_status="REJECTED",
+        is_active=0
+    )
+    if not success:
+        raise HTTPException(status_code=500, detail="Gagal menolak registrasi pasien")
+        
+    write_audit_log(current_user["user_id"], role, "KTP_REJECTED (Registration rejected)", patient_id, facility_id=patient.get("facility_id"))
+    return {"message": "Registrasi pasien ditolak"}
+
+
+@router.get("/superadmin/overview", response_model=SuperAdminOverviewResponse)
+def get_superadmin_overview(current_user: dict = Depends(get_current_user)):
+    if current_user["role"] != "super_admin":
+        raise HTTPException(status_code=403, detail="Akses ditolak: Hanya Super Admin yang dapat mengakses overview global")
+        
+    facs = db_get_all_facilities()
+    total_facs = len(facs)
+    active_facs = len([f for f in facs if f.get("status") == "active"])
+    
+    admins = db_get_all_admins()
+    total_admins = len(admins)
+    
+    doctors = db_get_all_doctors()
+    active_docs = len([d for d in doctors if d.get("is_active", 1) == 1])
+    
+    patients = db_get_all_patients()
+    total_patients = len(patients)
+    pending_verif = len([p for p in patients if p.get("verification_status") not in ["APPROVED", "REJECTED"]])
+    
+    # We can connect to SQLite directly to count sessions status and security logs
+    from app.db import get_db_connection
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute("SELECT COUNT(*) FROM sessions WHERE status = 'ongoing'")
+    active_consultations = cursor.fetchone()[0]
+    
+    cursor.execute("SELECT COUNT(*) FROM sessions WHERE status = 'completed'")
+    completed_consultations = cursor.fetchone()[0]
+    
+    cursor.execute("SELECT COUNT(*) FROM audit_logs WHERE action LIKE '%fail%' OR action LIKE '%lockout%' OR action LIKE '%unauthorized%'")
+    security_events = cursor.fetchone()[0]
+    
+    cursor.execute("SELECT COUNT(*) FROM audit_logs WHERE success = 0")
+    system_errors = cursor.fetchone()[0]
+    
+    conn.close()
+    
+    return SuperAdminOverviewResponse(
+        total_facilities=total_facs,
+        active_facilities=active_facs,
+        total_admins=total_admins,
+        active_doctors=active_docs,
+        total_patients=total_patients,
+        pending_verifications=pending_verif,
+        active_consultations=active_consultations,
+        completed_consultations=completed_consultations,
+        security_events=security_events,
+        system_errors=system_errors
+    )
+
+@router.get("/superadmin/facilities-overview", response_model=List[FacilityOverviewItem])
+def get_superadmin_facilities_overview(current_user: dict = Depends(get_current_user)):
+    if current_user["role"] != "super_admin":
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+        
+    facs = db_get_all_facilities()
+    doctors = db_get_all_doctors()
+    patients = db_get_all_patients()
+    admins = db_get_all_admins()
+    
+    from app.db import get_db_connection
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT facility_id, COUNT(*) FROM sessions WHERE status='ongoing' GROUP BY facility_id")
+    active_sessions_map = dict(cursor.fetchall())
+    conn.close()
+    
+    res = []
+    for f in facs:
+        fac_id = f["id"]
+        # Find admin assigned
+        fac_admin = next((a for a in admins if a.get("facility_id") == fac_id), None)
+        admin_name = fac_admin["name"] if fac_admin else "Belum ditugaskan"
+        
+        doc_count = len([d for d in doctors if d.get("facility_id") == fac_id])
+        pat_count = len([p for p in patients if p.get("facility_id") == fac_id])
+        
+        active_sess = active_sessions_map.get(fac_id, 0)
+        
+        res.append(FacilityOverviewItem(
+            id=fac_id,
+            facility_code=f["facility_code"],
+            name=f["name"],
+            type=f["type"],
+            address=f.get("address"),
+            city=f.get("city"),
+            province=f.get("province"),
+            status=f.get("status", "active"),
+            admin_name=admin_name,
+            doctor_count=doc_count,
+            patient_count=pat_count,
+            active_sessions=active_sess
+        ))
+    return res
+
+@router.post("/superadmin/facilities")
+def create_facility_endpoint(req: FacilityCreateRequest, current_user: dict = Depends(get_current_user)):
+    if current_user["role"] != "super_admin":
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+        
+    fac_id = str(uuid.uuid4())
+    success = db_create_facility(
+        fac_id=fac_id,
+        code=req.facility_code,
+        name=req.name,
+        ftype=req.type,
+        address=req.address,
+        city=req.city,
+        province=req.province,
+        postal_code=req.postal_code,
+        phone=req.phone,
+        email=req.email,
+        website=req.website,
+        registration_number=req.registration_number
+    )
+    if not success:
+        raise HTTPException(status_code=500, detail="Gagal membuat fasilitas")
+        
+    write_audit_log(current_user["user_id"], "super_admin", f"FACILITY_CREATED (Name: {req.name})", target_id=fac_id, target_type="facility")
+    return {"message": "Fasilitas berhasil dibuat", "id": fac_id}
+
+@router.put("/superadmin/facilities/{id}")
+def update_facility_endpoint(id: str, req: FacilityCreateRequest, current_user: dict = Depends(get_current_user)):
+    if current_user["role"] != "super_admin":
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+        
+    fac = db_get_facility_by_id(id)
+    if not fac:
+        raise HTTPException(status_code=404, detail="Fasilitas tidak ditemukan")
+        
+    success = db_update_facility(
+        fac_id=id,
+        name=req.name,
+        ftype=req.type,
+        address=req.address,
+        city=req.city,
+        province=req.province,
+        postal_code=req.postal_code,
+        phone=req.phone,
+        email=req.email,
+        website=req.website,
+        registration_number=req.registration_number,
+        status="active"
+    )
+    if not success:
+        raise HTTPException(status_code=500, detail="Gagal memperbarui fasilitas")
+        
+    write_audit_log(current_user["user_id"], "super_admin", f"FACILITY_UPDATED (Name: {req.name})", target_id=id, target_type="facility")
+    return {"message": "Fasilitas berhasil diperbarui"}
+
+@router.delete("/superadmin/facilities/{id}")
+def delete_facility_endpoint(id: str, current_user: dict = Depends(get_current_user)):
+    if current_user["role"] != "super_admin":
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+        
+    if not db_get_facility_by_id(id):
+        raise HTTPException(status_code=404, detail="Fasilitas tidak ditemukan")
+        
+    success = db_delete_facility(id)
+    if not success:
+        raise HTTPException(status_code=500, detail="Gagal menghapus fasilitas")
+        
+    write_audit_log(current_user["user_id"], "super_admin", f"FACILITY_DELETED (ID: {id})", target_id=id, target_type="facility")
+    return {"message": "Fasilitas berhasil dihapus"}
+
+@router.get("/superadmin/admins", response_model=List[AdminResponse])
+def get_superadmin_admins(current_user: dict = Depends(get_current_user)):
+    if current_user["role"] != "super_admin":
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+        
+    admins = db_get_all_admins()
+    facs = db_get_all_facilities()
+    facs_map = {f["id"]: f["name"] for f in facs}
+    
+    res = []
+    for a in admins:
+        # Skip super admin itself
+        if a["email"] == "administrator":
+            continue
+        fac_name = facs_map.get(a.get("facility_id"), "Belum ditugaskan")
+        res.append(AdminResponse(
+            id=a["id"],
+            name=a["name"],
+            email=a["email"],
+            username=a.get("username"),
+            facility_id=a.get("facility_id"),
+            facility_name=fac_name,
+            phone=a.get("phone"),
+            status=a.get("status", "active"),
+            created_at=a.get("created_at", "")
+        ))
+    return res
+
+@router.post("/superadmin/admins")
+def create_facility_admin_endpoint(req: AdminCreateRequest, current_user: dict = Depends(get_current_user)):
+    if current_user["role"] != "super_admin":
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+        
+    hashed = hash_password(req.password)
+    admin_id = str(uuid.uuid4())
+    success = db_create_facility_admin(
+        admin_id=admin_id,
+        name=req.name,
+        email=req.email,
+        username=req.username,
+        password_hash=hashed,
+        facility_id=req.facility_id,
+        phone=req.phone
+    )
+    if not success:
+        raise HTTPException(status_code=500, detail="Gagal membuat admin fasilitas")
+        
+    write_audit_log(current_user["user_id"], "super_admin", f"ADMIN_CREATED (Admin: {req.username} for fac: {req.facility_id})", target_id=admin_id, target_type="admin")
+    return {"message": "Admin fasilitas berhasil dibuat", "id": admin_id}
+
+@router.put("/superadmin/admins/{id}")
+def update_facility_admin_endpoint(id: str, req: AdminUpdateRequest, current_user: dict = Depends(get_current_user)):
+    if current_user["role"] != "super_admin":
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+        
+    admin = db_get_admin_by_id(id)
+    if not admin:
+        raise HTTPException(status_code=404, detail="Admin tidak ditemukan")
+        
+    success = db_update_facility_admin(
+        admin_id=id,
+        name=req.name,
+        email=req.email,
+        username=req.username,
+        phone=req.phone,
+        status=req.status
+    )
+    if not success:
+        raise HTTPException(status_code=500, detail="Gagal memperbarui admin")
+        
+    write_audit_log(current_user["user_id"], "super_admin", f"ADMIN_UPDATED (Admin: {req.username})", target_id=id, target_type="admin")
+    return {"message": "Admin fasilitas berhasil diperbarui"}
+
+@router.get("/superadmin/audit-logs")
+def get_superadmin_audit_logs(
+    facility_id: Optional[str] = None,
+    actor_role: Optional[str] = None,
+    event_type: Optional[str] = None,
+    export_csv: bool = False,
+    current_user: dict = Depends(get_current_user)
+):
+    role = current_user["role"]
+    if role not in ["super_admin", "admin"]:
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+        
+    # If role is admin, automatically enforce facility filter
+    if role == "admin":
+        facility_id = current_user["facility_id"]
+        logs = db_get_facility_audit_logs(facility_id)
+    else:
+        # Super admin can fetch all
+        if facility_id:
+            logs = db_get_facility_audit_logs(facility_id)
+        else:
+            logs = db_get_all_audit_logs()
+            
+    # Apply code-level filters for role and type
+    if actor_role:
+        logs = [l for l in logs if l.get("actor_role") == actor_role]
+    if event_type:
+        logs = [l for l in logs if l.get("event_type") == event_type]
+        
+    if export_csv:
+        # Export as CSV download
+        output = io.StringIO()
+        writer = csv.writer(output)
+        writer.writerow(["ID", "Timestamp", "Actor ID", "Actor Role", "Action", "Target ID", "Facility ID", "Success"])
+        for l in logs:
+            writer.writerow([
+                l.get("id"),
+                l.get("created_at"),
+                l.get("actor_id"),
+                l.get("actor_role"),
+                l.get("action"),
+                l.get("target_id") or l.get("target_patient_id") or "",
+                l.get("facility_id") or "",
+                l.get("success")
+            ])
+        output.seek(0)
+        return StreamingResponse(
+            io.BytesIO(output.getvalue().encode('utf-8')),
+            media_type="text/csv",
+            headers={"Content-Disposition": "attachment; filename=audit_logs.csv"}
+        )
+        
+    return logs
+
+
+@router.post("/superadmin/incidents")
+def create_incident_endpoint(req: IncidentCreateRequest, current_user: dict = Depends(get_current_user)):
+    if current_user["role"] != "super_admin":
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+        
+    inc_id = str(uuid.uuid4())
+    success = db_create_incident(
+        inc_id=inc_id,
+        title=req.title,
+        desc=req.description,
+        severity=req.severity,
+        status="open"
+    )
+    if not success:
+        raise HTTPException(status_code=500, detail="Gagal membuat insiden keamanan")
+        
+    write_audit_log(current_user["user_id"], "super_admin", f"SECURITY_INCIDENT_CREATED (Inc: {inc_id})", target_id=inc_id, target_type="incident")
+    return {"message": "Insiden keamanan berhasil dilaporkan", "id": inc_id}
+
+@router.put("/superadmin/incidents/{id}")
+def update_incident_endpoint(id: str, req: IncidentUpdateRequest, current_user: dict = Depends(get_current_user)):
+    if current_user["role"] != "super_admin":
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+        
+    success = db_update_incident(
+        inc_id=id,
+        status=req.status,
+        details=req.resolution_details
+    )
+    if not success:
+        raise HTTPException(status_code=500, detail="Gagal memperbarui insiden")
+        
+    write_audit_log(current_user["user_id"], "super_admin", f"SECURITY_INCIDENT_UPDATED (Inc: {id} status: {req.status})", target_id=id, target_type="incident")
+    return {"message": "Insiden keamanan berhasil diperbarui"}
+
+@router.get("/superadmin/incidents", response_model=List[IncidentResponse])
+def get_incidents_endpoint(current_user: dict = Depends(get_current_user)):
+    if current_user["role"] != "super_admin":
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+    incidents = db_get_all_incidents()
+    return [IncidentResponse(**dict(i)) for i in incidents]
+
+@router.post("/superadmin/backups")
+def create_backup_endpoint(current_user: dict = Depends(get_current_user)):
+    if current_user["role"] != "super_admin":
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+        
+    import shutil
+    import time
+    
+    timestamp = int(time.time())
+    db_file = "backend/medsign.db"
+    backup_dir = "backend/backups"
+    os.makedirs(backup_dir, exist_ok=True)
+    
+    backup_name = f"medsign_backup_{timestamp}.db"
+    backup_path = f"{backup_dir}/{backup_name}"
+    
+    try:
+        shutil.copy2(db_file, backup_path)
+        b_id = str(uuid.uuid4())
+        db_create_backup_log(b_id, backup_name, backup_path, "success")
+        
+        write_audit_log(current_user["user_id"], "super_admin", f"SYSTEM_BACKUP_CREATED (File: {backup_name})", target_id=b_id, target_type="backup")
+        return {"message": "Backup database berhasil diselesaikan", "backup_name": backup_name}
+    except Exception as e:
+        b_id = str(uuid.uuid4())
+        db_create_backup_log(b_id, backup_name, backup_path, "failed")
+        raise HTTPException(status_code=500, detail=f"Gagal melakukan backup database: {str(e)}")
+
+@router.get("/superadmin/backups", response_model=List[BackupResponse])
+def get_backup_logs_endpoint(current_user: dict = Depends(get_current_user)):
+    if current_user["role"] != "super_admin":
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+    logs = db_get_all_backup_logs()
+    return [BackupResponse(**dict(l)) for l in logs]
+
+
+@router.get("/superadmin/settings")
+def get_superadmin_settings(current_user: dict = Depends(get_current_user)):
+    if current_user["role"] != "super_admin":
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+        
+    order = db_get_setting("homepage_section_order") or "dashboard_modul,mitra,reviews,instagram,articles,brand_pkm,video_tutorial"
+    split_enabled = db_get_setting("split_screen_enabled") or "0"
+    return {"homepage_section_order": order, "split_screen_enabled": split_enabled}
+
+@router.post("/superadmin/settings")
+def update_superadmin_settings(req: SystemSettingRequest, current_user: dict = Depends(get_current_user)):
+    if current_user["role"] != "super_admin":
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+        
+    success = db_set_setting(req.key, req.value)
+    if not success:
+        raise HTTPException(status_code=500, detail="Gagal menyimpan konfigurasi")
+        
+    write_audit_log(current_user["user_id"], "super_admin", f"SYSTEM_SETTING_CHANGED ({req.key}={req.value})", target_id=req.key, target_type="setting")
+    return {"message": "Konfigurasi sistem berhasil disimpan"}
+
+@router.get("/homepage/layout")
+def get_homepage_layout():
+    # Public endpoint to read the section order
+    order = db_get_setting("homepage_section_order") or "dashboard_modul,mitra,reviews,instagram,articles,brand_pkm,video_tutorial"
+    split_enabled = db_get_setting("split_screen_enabled") or "0"
+    return {"homepage_section_order": order, "split_screen_enabled": split_enabled}
+
+
+# ═══════════════════════════════════════════════════════════════════
+#  VIDEO TUTORIAL CRUD
+# ═══════════════════════════════════════════════════════════════════
+
+@router.get("/admin/video-tutorials", response_model=List[VideoTutorialResponse])
+def get_video_tutorials(current_user: dict = Depends(get_current_user)):
+    if current_user["role"] not in ["admin", "super_admin"]:
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+    return [VideoTutorialResponse(**r) for r in db_get_all_video_tutorials()]
+
+@router.post("/admin/video-tutorials", response_model=VideoTutorialResponse)
+def create_video_tutorial(req: VideoTutorialCreateRequest, current_user: dict = Depends(get_current_user)):
+    if current_user["role"] not in ["admin", "super_admin"]:
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+    item_id = str(uuid.uuid4())
+    ok = db_create_video_tutorial(item_id, req.title, req.description or "", req.video_url, req.thumbnail or "", req.duration or "", req.display_order or 0)
+    if not ok:
+        raise HTTPException(status_code=500, detail="Gagal membuat video tutorial")
+    items = db_get_all_video_tutorials()
+    created = next((i for i in items if i["id"] == item_id), None)
+    return VideoTutorialResponse(**created) if created else VideoTutorialResponse(id=item_id, **req.model_dump(), is_active=1, display_order=req.display_order or 0, created_at="", updated_at="")
+
+@router.put("/admin/video-tutorials/{item_id}")
+def update_video_tutorial(item_id: str, req: VideoTutorialUpdateRequest, current_user: dict = Depends(get_current_user)):
+    if current_user["role"] not in ["admin", "super_admin"]:
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+    ok = db_update_video_tutorial(item_id, req.title, req.description or "", req.video_url, req.thumbnail or "", req.duration or "", req.is_active or 1, req.display_order or 0)
+    if not ok:
+        raise HTTPException(status_code=500, detail="Gagal mengupdate video tutorial")
+    return {"message": "Video tutorial berhasil diperbarui"}
+
+@router.delete("/admin/video-tutorials/{item_id}")
+def delete_video_tutorial(item_id: str, current_user: dict = Depends(get_current_user)):
+    if current_user["role"] not in ["admin", "super_admin"]:
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+    ok = db_delete_video_tutorial(item_id)
+    if not ok:
+        raise HTTPException(status_code=500, detail="Gagal menghapus video tutorial")
+    return {"message": "Video tutorial berhasil dihapus"}
+
+
+# ═══════════════════════════════════════════════════════════════════
+#  BRAND PKM CRUD
+# ═══════════════════════════════════════════════════════════════════
+
+@router.get("/admin/brand-pkm", response_model=List[BrandPkmResponse])
+def get_brand_pkm(current_user: dict = Depends(get_current_user)):
+    if current_user["role"] not in ["admin", "super_admin"]:
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+    return [BrandPkmResponse(**r) for r in db_get_all_brand_pkm()]
+
+@router.post("/admin/brand-pkm", response_model=BrandPkmResponse)
+def create_brand_pkm(req: BrandPkmCreateRequest, current_user: dict = Depends(get_current_user)):
+    if current_user["role"] not in ["admin", "super_admin"]:
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+    item_id = str(uuid.uuid4())
+    ok = db_create_brand_pkm(item_id, req.name, req.logo or "", req.description or "", req.website_url or "", req.category or "program", req.display_order or 0)
+    if not ok:
+        raise HTTPException(status_code=500, detail="Gagal membuat brand PKM")
+    items = db_get_all_brand_pkm()
+    created = next((i for i in items if i["id"] == item_id), None)
+    return BrandPkmResponse(**created) if created else BrandPkmResponse(id=item_id, **req.model_dump(), is_active=1, display_order=req.display_order or 0, created_at="", updated_at="")
+
+@router.put("/admin/brand-pkm/{item_id}")
+def update_brand_pkm(item_id: str, req: BrandPkmUpdateRequest, current_user: dict = Depends(get_current_user)):
+    if current_user["role"] not in ["admin", "super_admin"]:
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+    ok = db_update_brand_pkm(item_id, req.name, req.logo or "", req.description or "", req.website_url or "", req.category or "program", req.is_active or 1, req.display_order or 0)
+    if not ok:
+        raise HTTPException(status_code=500, detail="Gagal mengupdate brand PKM")
+    return {"message": "Brand PKM berhasil diperbarui"}
+
+@router.delete("/admin/brand-pkm/{item_id}")
+def delete_brand_pkm(item_id: str, current_user: dict = Depends(get_current_user)):
+    if current_user["role"] not in ["admin", "super_admin"]:
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+    ok = db_delete_brand_pkm(item_id)
+    if not ok:
+        raise HTTPException(status_code=500, detail="Gagal menghapus brand PKM")
+    return {"message": "Brand PKM berhasil dihapus"}
+
+
+# ═══════════════════════════════════════════════════════════════════
+#  DASHBOARD MODUL CRUD (stored in system_settings as JSON)
+# ═══════════════════════════════════════════════════════════════════
+
+@router.get("/admin/dashboard-moduls")
+def get_dashboard_moduls():
+    return {"items": db_get_dashboard_moduls()}
+
+@router.post("/admin/dashboard-moduls")
+def save_dashboard_moduls(req: DashboardModulListRequest, current_user: dict = Depends(get_current_user)):
+    if current_user["role"] not in ["admin", "super_admin"]:
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+    items = [item.model_dump() for item in req.items]
+    ok = db_save_dashboard_moduls(items)
+    if not ok:
+        raise HTTPException(status_code=500, detail="Gagal menyimpan modul dashboard")
+    return {"message": "Modul dashboard berhasil disimpan", "items": items}
+
+
+# ════════════════════════════════════════════════════════════════════════
+#  MANAJEMEN GRANT FITUR ML / DATASET PER USER
+#  Super Admin dapat memberikan/ mencabut akses fitur berikut ke Admin & Dokter:
+#    - record_dataset    : Rekam Dataset
+#    - balance_checker   : Balance Checker
+#    - ai_augmentation   : AI Augmentation
+#    - train_model       : Training Model
+# ════════════════════════════════════════════════════════════════════════
+
+GRANT_KEYS = ["record_dataset", "balance_checker", "ai_augmentation", "train_model"]
+GRANT_LABELS = {
+    "record_dataset": "Rekam Dataset",
+    "balance_checker": "Balance Checker",
+    "ai_augmentation": "AI Augmentation",
+    "train_model": "Training Model",
+}
+
+
+class UserGrantsRequest(BaseModel):
+    user_id: str
+    grants: dict
+
+
+def _default_grants_for_role(role: str) -> dict:
+    # Super admin selalu mendapatkan seluruh fitur.
+    if role == "super_admin":
+        return {k: True for k in GRANT_KEYS}
+    return {k: False for k in GRANT_KEYS}
+
+
+def _load_grants_store() -> dict:
+    raw = db_get_setting("user_feature_grants")
+    if not raw:
+        return {}
+    try:
+        data = json.loads(raw)
+        return data if isinstance(data, dict) else {}
+    except Exception:
+        return {}
+
+
+def _save_grants_store(store: dict) -> bool:
+    return db_set_setting("user_feature_grants", json.dumps(store))
+
+
+@router.get("/superadmin/grants")
+def get_superadmin_grants(current_user: dict = Depends(get_current_user)):
+    if current_user["role"] != "super_admin":
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+
+    store = _load_grants_store()
+    result = []
+
+    def _role_of(acc: dict) -> str:
+        if acc.get("email") == "administrator" or acc.get("username") == "administrator":
+            return "super_admin"
+        return "admin"
+
+    for a in db_get_all_admins():
+        role = _role_of(a)
+        g = store.get(str(a["id"]), _default_grants_for_role(role))
+        result.append({
+            "user_id": str(a["id"]),
+            "name": a.get("name"),
+            "email": a.get("email"),
+            "role": role,
+            "facility_name": a.get("facility_name"),
+            "grants": g,
+        })
+
+    for d in db_get_all_doctors():
+        role = "doctor"
+        g = store.get(str(d["id"]), _default_grants_for_role(role))
+        result.append({
+            "user_id": str(d["id"]),
+            "name": d.get("name"),
+            "email": d.get("email"),
+            "role": role,
+            "facility_name": d.get("facility_name"),
+            "grants": g,
+        })
+
+    return {"users": result}
+
+
+@router.post("/superadmin/grants")
+def update_superadmin_grants(req: UserGrantsRequest, current_user: dict = Depends(get_current_user)):
+    if current_user["role"] != "super_admin":
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+
+    clean = {k: bool(req.grants.get(k, False)) for k in GRANT_KEYS}
+    store = _load_grants_store()
+    store[str(req.user_id)] = clean
+    if not _save_grants_store(store):
+        raise HTTPException(status_code=500, detail="Gagal menyimpan grant fitur")
+
+    write_audit_log(
+        current_user["user_id"], "super_admin",
+        f"USER_GRANTS_UPDATED (user={req.user_id})",
+        target_id=req.user_id, target_type="user"
+    )
+    return {"message": "Grant fitur berhasil diperbarui", "grants": clean}
+
+
+@router.get("/user/grants")
+def get_user_grants(current_user: dict = Depends(get_current_user)):
+    role = current_user.get("role")
+    store = _load_grants_store()
+    g = store.get(str(current_user["user_id"]), _default_grants_for_role(role))
+    return {"user_id": current_user["user_id"], "role": role, "grants": g}

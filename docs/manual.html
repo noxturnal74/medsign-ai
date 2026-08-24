@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Buku Panduan MedSign AI</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 25mm 20mm 25mm 20mm;
+    }
+    @page no-margins {
+      margin: 0;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      color: #2d3f4e;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+      background-color: #ffffff;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    
+    .page {
+      page-break-after: always;
+      position: relative;
+      background-image: url('file:///C:/Users/Albert%20Saputra/Downloads/2%20(1).png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      display: flex;
+      flex-direction: column;
+      height: 247mm; /* Total printable height (297 - 50) to prevent overflow */
+      justify-content: space-between;
+    }
+    
+    .cover-page {
+      page: no-margins;
+      background-image: url('file:///C:/Users/Albert%20Saputra/Downloads/1%20(1).png');
+      background-size: cover;
+      background-position: center;
+      height: 297mm;
+      width: 210mm;
+      padding: 30mm 20mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+      text-align: center;
+      page-break-after: always;
+    }
+    
+    .back-cover-page {
+      page: no-margins;
+      background-image: url('file:///C:/Users/Albert%20Saputra/Downloads/2%20(1).png');
+      background-size: cover;
+      background-position: center;
+      height: 297mm;
+      width: 210mm;
+      padding: 30mm 20mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      color: #0f172a;
+      text-align: center;
+      page-break-after: avoid;
+    }
+    
+    .cover-header {
+      width: 100%;
+    }
+    
+    .cover-title {
+      font-size: 32px;
+      font-weight: 900;
+      margin: 15mm 0 2mm 0;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      color: #ffffff;
+    }
+    
+    .cover-subtitle {
+      font-size: 13px;
+      font-weight: 600;
+      color: #f1f5f9;
+      max-width: 160mm;
+      margin: 0 auto;
+      line-height: 1.5;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+    
+    .cover-mascot {
+      width: 50mm;
+      height: 50mm;
+      margin: 10mm 0;
+      border-radius: 50%;
+      border: 4px solid rgba(255,255,255,0.85);
+      background-color: white;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      padding: 3px;
+      object-fit: contain;
+    }
+    
+    .cover-info {
+      background: rgba(5, 61, 103, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 5mm 8mm;
+      max-width: 150mm;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+    
+    .cover-info p {
+      margin: 1.5mm 0;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #ffffff;
+    }
+    
+    .cover-info span {
+      color: #24a3d8;
+    }
+    
+    .cover-logos {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 5mm;
+      margin-top: 5mm;
+      background: rgba(255,255,255,0.95);
+      padding: 3mm 6mm;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .cover-logo-img {
+      height: 8mm;
+      max-width: 25mm;
+      object-fit: contain;
+    }
+    
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #053d67;
+      padding-bottom: 2mm;
+      margin-bottom: 4mm;
+    }
+    
+    .page-header-title {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #053d67;
+    }
+    
+    .page-header-app {
+      font-size: 10px;
+      font-weight: 800;
+      color: #24a3d8;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    
+    .page-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+    
+    .page-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(45, 63, 78, 0.15);
+      padding-top: 2mm;
+      margin-top: 4mm;
+      font-size: 9px;
+      font-weight: 700;
+      color: #2d3f4e;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    h1, h2, h3 {
+      color: #053d67;
+      margin-top: 0;
+      margin-bottom: 3mm;
+    }
+    
+    h1 {
+      font-size: 18px;
+      font-weight: 900;
+      border-left: 4px solid #24a3d8;
+      padding-left: 3mm;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    
+    h2 {
+      font-size: 13px;
+      font-weight: 800;
+      color: #2e5799;
+      text-transform: uppercase;
+      border-bottom: 1px dashed rgba(46, 87, 153, 0.3);
+      padding-bottom: 1mm;
+      margin-top: 1mm;
+    }
+    
+    p {
+      font-size: 11px;
+      font-weight: 500;
+      margin: 0 0 2.5mm 0;
+      text-align: justify;
+      color: #2d3f4e;
+    }
+    
+    .highlight-box {
+      background: rgba(36, 163, 216, 0.07);
+      border-left: 4px solid #24a3d8;
+      border-radius: 4px 12px 12px 4px;
+      padding: 2.5mm 3.5mm;
+      margin-bottom: 3mm;
+    }
+    
+    .highlight-box p {
+      margin: 0;
+      font-size: 10px;
+      font-weight: 600;
+      color: #053d67;
+    }
+    
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4mm;
+      margin-bottom: 3mm;
+    }
+    
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3mm;
+      margin-bottom: 3mm;
+    }
+    
+    .screenshot-container {
+      border: 1px solid rgba(5, 61, 103, 0.15);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+      background-color: white;
+      margin-bottom: 2mm;
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .screenshot-img {
+      width: 100%;
+      max-height: 180px; /* Restrict height to prevent layout breaks */
+      object-fit: contain;
+      background-color: #f8fafc;
+      border-bottom: 1px solid rgba(5, 61, 103, 0.08);
+      display: block;
+      margin: 0 auto;
+    }
+    
+    .screenshot-caption {
+      font-size: 8.5px;
+      font-weight: 700;
+      text-align: center;
+      padding: 1.5mm;
+      background-color: #f8fafc;
+      color: #2d3f4e;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    ol, ul {
+      margin: 0 0 2.5mm 0;
+      padding-left: 5mm;
+    }
+    
+    li {
+      font-size: 10.5px;
+      font-weight: 500;
+      margin-bottom: 1mm;
+      color: #2d3f4e;
+    }
+    
+    li strong {
+      color: #053d67;
+    }
+    
+    .toc-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5mm;
+      margin-top: 3mm;
+    }
+    
+    .toc-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #053d67;
+      text-decoration: none;
+      border-bottom: 1px dotted rgba(5, 61, 103, 0.2);
+      padding-bottom: 0.5mm;
+    }
+    
+    .toc-item span {
+      background-color: transparent;
+      padding-right: 2mm;
+    }
+    
+    .toc-page {
+      color: #24a3d8;
+      font-weight: 800;
+      padding-left: 2mm;
+    }
+    
+    .feature-card {
+      background: white;
+      border: 1px solid rgba(5, 61, 103, 0.08);
+      border-radius: 10px;
+      padding: 3mm;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.01);
+    }
+    
+    .feature-card h4 {
+      margin: 0 0 1mm 0;
+      font-size: 10.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #053d67;
+    }
+    
+    .feature-card p {
+      margin: 0;
+      font-size: 9.5px;
+      line-height: 1.4;
+      text-align: left;
+    }
+    
+  </style>
+</head>
+<body>
+
+  <!-- ================= PAGE 1: COVER ================= -->
+  <div class="cover-page">
+    <div class="cover-header">
+      <div style="font-size: 11px; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; color: #38bdf8;">
+        PKM Riset Eksakta (PKM-RE) 2026
+      </div>
+    </div>
+    
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1;">
+      <img src="file:///D:/PKM/medsign-ai/frontend/public/assets/logo-medsign-source.png" alt="Mascot" class="cover-mascot" onerror="this.src='file:///D:/PKM/medsign-ai/frontend/public/assets/logo-pkm-full.png'">
+      <h1 class="cover-title">Buku Panduan Pengguna</h1>
+      <p class="cover-subtitle">Sistem Translasi Bahasa Isyarat BISINDO Berbasis AI untuk Menjembatani Komunikasi Medis antara Pasien Tunarungu dan Tenaga Kesehatan</p>
+    </div>
+    
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 4mm; width: 100%;">
+      <div class="cover-info">
+        <p>Aplikasi: <span>MedSign AI (v1.0.0)</span></p>
+        <p>Sasaran: <span>Pasien Tunarungu &amp; Tenaga Kesehatan</span></p>
+        <p>Pengembang: <span>Tim PKM-RE Universitas Ma Chung</span></p>
+      </div>
+      
+      <div class="cover-logos">
+        <img src="file:///D:/PKM/medsign-ai/frontend/public/assets/logo-kemdikbudristek.png" class="cover-logo-img" alt="Logo Kemdikbud">
+        <img src="file:///D:/PKM/medsign-ai/frontend/public/assets/logo-diktisaintek.png" class="cover-logo-img" alt="Logo Diktisaintek">
+        <img src="file:///D:/PKM/medsign-ai/frontend/public/assets/logo-pkm-full.png" class="cover-logo-img" alt="Logo PKM">
+        <img src="file:///D:/PKM/medsign-ai/frontend/public/assets/logo-simbelmawa.png" class="cover-logo-img" alt="Logo Simbelmawa">
+        <img src="file:///D:/PKM/medsign-ai/frontend/public/assets/logo-umc.png" class="cover-logo-img" alt="Logo UMC">
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PAGE 2: TOC & BACKGROUND ================= -->
+  <div class="page">
+    <div class="page-header">
+      <span class="page-header-title">Daftar Isi &amp; Latar Belakang</span>
+      <span class="page-header-app">MedSign AI</span>
+    </div>
+    <div class="page-content">
+      <h1>Daftar Isi Buku Panduan</h1>
+      <div class="toc-list" style="margin-bottom: 6mm;">
+        <a class="toc-item"><span>1. Pendahuluan &amp; Alur Kerja Sistem</span><span class="toc-page">Halaman 3</span></a>
+        <a class="toc-item"><span>2. Akses Website &amp; Login Multi-User</span><span class="toc-page">Halaman 4</span></a>
+        <a class="toc-item"><span>3. Portal Pasien (Translasi &amp; Text-to-Speech)</span><span class="toc-page">Halaman 5</span></a>
+        <a class="toc-item"><span>4. Portal Dokter (Respon Cepat &amp; Speech-to-Text)</span><span class="toc-page">Halaman 6</span></a>
+        <a class="toc-item"><span>5. AI SOAP Clinical Notetaker</span><span class="toc-page">Halaman 7</span></a>
+        <a class="toc-item"><span>6. Data Collection &amp; Model Training Dashboard</span><span class="toc-page">Halaman 8</span></a>
+        <a class="toc-item"><span>7. Panduan Antarmuka Mobile / Ponsel</span><span class="toc-page">Halaman 9</span></a>
+        <a class="toc-item"><span>8. Penutup &amp; Kontak Dukungan</span><span class="toc-page">Halaman 10</span></a>
+      </div>
+      
+      <h1>Latar Belakang Proyek</h1>
+      <p>
+        Hambatan komunikasi klinis antara pasien tunarungu dan dokter di rumah sakit atau klinik seringkali memicu miskomunikasi fatal yang berdampak pada kesalahan diagnosis, ketidakpatuhan obat, dan kecemasan psikologis. Ketergantungan pada penerjemah bahasa isyarat manusia (JBI) masih sangat tinggi, padahal ketersediaannya sangat terbatas dan terkendala kerahasiaan medis.
+      </p>
+      <div class="highlight-box">
+        <p>
+          MedSign AI hadir sebagai sistem pionir penerjemah bahasa isyarat BISINDO medis berbasis AI yang terintegrasi secara asinkron dengan modul clinical notetaker berbasis AI NLG untuk merangkum transkrip konsultasi otomatis ke standar medis SOAP secara instan.
+        </p>
+      </div>
+      <p>
+        Melalui platform MedSign AI, pasien tunarungu dapat mengekspresikan keluhan mereka menggunakan bahasa isyarat alami BISINDO yang langsung dikonversi menjadi teks dan suara oleh sistem, sedangkan dokter dapat merespons dengan presets medis terstruktur atau berbicara langsung yang divalidasi ke dalam teks sederhana (simplified speech) bagi pasien.
+      </p>
+    </div>
+    <div class="page-footer">
+      <span>Daftar Isi &amp; Latar Belakang</span>
+      <span>Halaman 2</span>
+    </div>
+  </div>
+
+  <!-- ================= PAGE 3: INTRODUCTION & WORKFLOW ================= -->
+  <div class="page">
+    <div class="page-header">
+      <span class="page-header-title">Pengenalan &amp; Alur Sistem</span>
+      <span class="page-header-app">MedSign AI</span>
+    </div>
+    <div class="page-content">
+      <h1>Pendahuluan MedSign AI</h1>
+      <p>
+        MedSign AI mengintegrasikan teknologi computer vision (MediaPipe Hands) di sisi klien dengan deep learning (TensorFlow Lite) di backend FastAPI untuk mewujudkan deteksi dan interpretasi gerakan isyarat medis yang presisi. Dengan latensi yang sangat rendah, platform ini mendukung komunikasi medis yang asinkron namun terasa real-time bagi kedua belah pihak.
+      </p>
+      
+      <h2>Alur Kerja Sistem MedSign AI</h2>
+      <p>
+        Alur translasi dirancang dengan cermat dari kamera pengguna hingga visualisasi teks ke lawan bicara:
+      </p>
+      
+      <div class="grid-2">
+        <div class="feature-card">
+          <h4>1. Landmarks Extraction</h4>
+          <p>MediaPipe Hands berjalan langsung di browser mendeteksi 21 koordinat sendi tangan (total 63 koordinat 3D float) pada frame video 30 FPS. Beban pemrosesan gambar dipikul oleh GPU klien, sehingga backend bebas dari tugas pemrosesan video yang berat.</p>
+        </div>
+        <div class="feature-card">
+          <h4>2. WebSocket Streaming</h4>
+          <p>Koordinat landmark yang terekstrak dikirimkan secara kontinu melalui protokol WebSocket yang efisien ke server FastAPI backend pada port 8000, meminimalkan latensi komunikasi.</p>
+        </div>
+      </div>
+      
+      <div class="grid-2">
+        <div class="feature-card">
+          <h4>3. ML TFLite Inference</h4>
+          <p>Backend mengumpulkan deretan landmark tersebut ke dalam sequence sepanjang 30 frame. Model TFLite (LSTM/GRU) melakukan klasifikasi gerakan isyarat medis sesuai label MVP di labels.json, menghasilkan probabilitas prediksi.</p>
+        </div>
+        <div class="feature-card">
+          <h4>4. NLG &amp; TTS Synthesizer</h4>
+          <p>Hasil kata isyarat digabungkan, lalu AI NLG merangkai kata tersebut menjadi kalimat medis yang mengalir. Modul Text-to-Speech (TTS) kemudian menyuarakan kalimat tersebut secara natural menggunakan pustaka Edge-TTS.</p>
+        </div>
+      </div>
+      
+      <div class="screenshot-container">
+        <img src="file:///D:/PKM/medsign-ai/docs/screenshots/home.png" class="screenshot-img" alt="Tampilan Beranda">
+        <div class="screenshot-caption">Gambar 1. Halaman Beranda Utama MedSign AI dengan Modul-Modul Utama</div>
+      </div>
+    </div>
+    <div class="page-footer">
+      <span>Pendahuluan &amp; Alur Sistem</span>
+      <span>Halaman 3</span>
+    </div>
+  </div>
+
+  <!-- ================= PAGE 4: ACCESS & LOGIN ================= -->
+  <div class="page">
+    <div class="page-header">
+      <span class="page-header-title">Cara Akses &amp; Autentikasi</span>
+      <span class="page-header-app">MedSign AI</span>
+    </div>
+    <div class="page-content">
+      <h1>Cara Mengakses Website</h1>
+      <p>
+        Dalam lingkungan operasional lokal prototype, MedSign AI berjalan pada dua port server:
+      </p>
+      <ul>
+        <li><strong>Frontend (React / Vite):</strong> diakses melalui alamat peramban <code>http://localhost:3001</code></li>
+        <li><strong>Backend (FastAPI):</strong> berjalan pada port <code>http://localhost:8000</code></li>
+      </ul>
+      <p>
+        Pastikan peranti Anda terhubung dengan kamera web (webcam) yang aktif dan browser yang digunakan memiliki izin akses kamera yang sesuai.
+      </p>
+      
+      <h2>Autentikasi Multi-User</h2>
+      <p>
+        Sistem membagi portal akses ke dalam 3 role pengguna utama demi menjaga keamanan data pasien:
+      </p>
+      
+      <div class="grid-3">
+        <div class="feature-card" style="border-top: 3px solid #053d67;">
+          <h4>1. Akun Pasien</h4>
+          <p>Mengakses portal translasi isyarat. Menggunakan NIK 16 digit sebagai username. Pasien dapat melihat rekam medis SOAP hasil konsultasi mereka sendiri di tab histori.</p>
+        </div>
+        <div class="feature-card" style="border-top: 3px solid #24a3d8;">
+          <h4>2. Akun Dokter</h4>
+          <p>Mengakses portal konsultasi medis, mengaktifkan fitur Speech-to-Text, mengirim diagnosis, serta menyunting/menyimpan ringkasan medis SOAP pasien.</p>
+        </div>
+        <div class="feature-card" style="border-top: 3px solid #2e5799;">
+          <h4>3. Akun Admin</h4>
+          <p>Mengakses dasbor utama, modul perekaman landmark isyarat baru, pengelolaan dataset (balance checker), dan melatih model klinis secara asinkron.</p>
+        </div>
+      </div>
+      
+      <div class="screenshot-container">
+        <img src="file:///D:/PKM/medsign-ai/docs/screenshots/login.png" class="screenshot-img" alt="Halaman Login">
+        <div class="screenshot-caption">Gambar 2. Halaman Login Terintegrasi untuk Pasien, Dokter, dan Admin</div>
+      </div>
+    </div>
+    <div class="page-footer">
+      <span>Akses &amp; Autentikasi</span>
+      <span>Halaman 4</span>
+    </div>
+  </div>
+
+  <!-- ================= PAGE 5: PATIENT VIEW ================= -->
+  <div class="page">
+    <div class="page-header">
+      <span class="page-header-title">Portal Pasien</span>
+      <span class="page-header-app">MedSign AI</span>
+    </div>
+    <div class="page-content">
+      <h1>Portal Pasien: Translasi BISINDO &amp; TTS</h1>
+      <p>
+        Portal Pasien dirancang dengan antarmuka yang ramah disabilitas. Modul utama terbagi menjadi kamera di sisi kiri dan panel respons di sisi kanan:
+      </p>
+      
+      <h2>1. Persetujuan &amp; Proteksi Privasi Kamera</h2>
+      <p>
+        Sebelum mengaktifkan kamera input, pasien akan diberikan pop-up modal berisi <strong>Persetujuan &amp; Privasi Kamera</strong>. Pasien wajib menyetujui ketentuan bahwa video diproses secara lokal di browser, tidak disimpan di server mana pun, dan data pemrosesan gambar langsung terhapus permanen saat sesi berakhir.
+      </p>
+      
+      <h2>2. Ketik &amp; Bersuara (Text-to-Speech)</h2>
+      <p>
+        Untuk melengkapi bahasa isyarat, pasien disediakan area mengetik keluhan kustom. Pesan yang diketik dapat langsung disuarakan menggunakan tombol <strong>Ucapkan (TTS)</strong> untuk didengar dokter atau dikirim langsung ke log percakapan.
+      </p>
+
+      <h2>3. Panduan Kosakata Medis</h2>
+      <p>
+        Pasien dapat menekan tombol <strong>Panduan &amp; Pintasan Kosakata Medis</strong> untuk menampilkan daftar kosakata isyarat yang didukung. Fitur ini dirancang hanya sebagai tombol toggle untuk referensi visual, sementara fokus utama komunikasi pasien tetap pada input ketikan (TTS) dan gerakan isyarat.
+      </p>
+      
+      <div class="grid-2">
+        <div class="screenshot-container">
+          <img src="file:///D:/PKM/medsign-ai/docs/screenshots/patient_consent.png" class="screenshot-img" alt="Consent Modal">
+          <div class="screenshot-caption">Gambar 3. Modal Ketentuan &amp; Perizinan Privasi Kamera Pasien</div>
+        </div>
+        <div class="screenshot-container">
+          <img src="file:///D:/PKM/medsign-ai/docs/screenshots/patient.png" class="screenshot-img" alt="Patient Workspace">
+          <div class="screenshot-caption">Gambar 4. Workspace Translasi Pasien dengan Hasil Deteksi Real-Time</div>
+        </div>
+      </div>
+    </div>
+    <div class="page-footer">
+      <span>Portal Pasien</span>
+      <span>Halaman 5</span>
+    </div>
+  </div>
+
+  <!-- ================= PAGE 6: DOCTOR VIEW ================= -->
+  <div class="page">
+    <div class="page-header">
+      <span class="page-header-title">Portal Dokter</span>
+      <span class="page-header-app">MedSign AI</span>
+    </div>
+    <div class="page-content">
+      <h1>Portal Dokter: Respon Medis &amp; STT</h1>
+      <p>
+        Portal Dokter berfokus pada efisiensi interaksi klinis. Setelah dokter memilih pasien dan mengklik <strong>Mulai Konsultasi</strong>, dokter diarahkan ke ruang konsultasi aktif:
+      </p>
+      
+      <h2>1. Kategori Respon Cepat Medis (Preset)</h2>
+      <p>
+        Dokter disediakan tombol respon cepat medis yang dikelompokkan dalam kategori terstruktur (Salam, Pemeriksaan, Obat, Riwayat Penyakit, Instruksi, Penutupan) untuk mempercepat komunikasi dokter.
+      </p>
+      
+      <h2>2. Fitur Speech-to-Text (STT) Dokter</h2>
+      <p>
+        Dokter dapat menggunakan fitur perekaman suara (STT) untuk merespons pasien dengan lebih cepat. 
+      </p>
+      <div class="highlight-box">
+        <p>
+          Dokter dapat mengalihkan mode input ke tab <strong>Speech-to-Text (STT)</strong>. Di sini, dokter dapat menyalakan/mematikan mikrofon dengan tombol mic. Suara dokter yang terekam akan otomatis disederhanakan oleh modul AI NLG agar menjadi instruksi ringkas yang mudah dibaca oleh pasien tunarungu.
+        </p>
+      </div>
+      
+      <h2>3. Fitur Ketik Kustom</h2>
+      <p>
+        Terdapat tab <strong>Ketik Manual</strong> yang memungkinkan dokter mengetik diagnosis atau pertanyaan klinis secara langsung melalui keyboard konvensional, memberikan keleluasaan penuh dalam bertukar informasi.
+      </p>
+      
+      <div class="screenshot-container">
+        <img src="file:///D:/PKM/medsign-ai/docs/screenshots/doctor.png" class="screenshot-img" alt="Doctor Consultation Workspace">
+        <div class="screenshot-caption">Gambar 5. Panel Konsultasi Dokter dengan Fitur STT Toggle &amp; Ketik Manual</div>
+      </div>
+    </div>
+    <div class="page-footer">
+      <span>Portal Dokter</span>
+      <span>Halaman 6</span>
+    </div>
+  </div>
+
+  <!-- ================= PAGE 7: AI SOAP CLINICAL NOTETAKER ================= -->
+  <div class="page">
+    <div class="page-header">
+      <span class="page-header-title">AI Clinical Notetaker</span>
+      <span class="page-header-app">MedSign AI</span>
+    </div>
+    <div class="page-content">
+      <h1>AI SOAP Writer &amp; Histori Sesi</h1>
+      <p>
+        Salah satu fitur klinis tercanggih pada MedSign AI adalah pencatatan rekam medis otomatis berbasis kecerdasan buatan. Rangkuman ini membebaskan dokter dari tugas administratif penulisan catatan medis manual:
+      </p>
+      
+      <h2>1. AI SOAP Writer</h2>
+      <p>
+        Modul <strong>AI Clinical Notetaker (SOAP)</strong> mendengarkan dan menganalisis transkrip percakapan asinkron antara dokter dan pasien sepanjang sesi konsultasi. AI NLG memproses transkrip ini dan menyusun catatan SOAP terstandar:
+      </p>
+      <ul>
+        <li><strong>Subjective (S):</strong> Keluhan utama pasien, gejala yang dirasakan, dan riwayat kesehatan yang diceritakan pasien.</li>
+        <li><strong>Objective (O):</strong> Hasil pemeriksaan fisik dokter (seperti tensi, suhu tubuh) yang dikomunikasikan dalam chat.</li>
+        <li><strong>Assessment (A):</strong> Diagnosis klinis sementara atau analisis kondisi medis pasien.</li>
+        <li><strong>Plan (P):</strong> Terapi obat yang diberikan, rujukan, pemeriksaan penunjang, atau edukasi kepatuhan pasien.</li>
+      </ul>
+      
+      <h2>2. Sunting &amp; Simpan Rekam Medis</h2>
+      <p>
+        Hasil catatan SOAP yang digenerate AI disajikan dalam text area yang interaktif. Dokter dapat langsung menyunting, menambah informasi kritis, lalu mengklik tombol <strong>Simpan Catatan Medis (SOAP)</strong>.
+      </p>
+      
+      <h2>3. Histori Konsultasi Pasien</h2>
+      <p>
+        Semua sesi yang disimpan akan masuk ke basis data riwayat pasien. Pasien dapat melihat riwayat ringkasan konsultasi SOAP mereka di dashboard mereka sendiri.
+      </p>
+      
+      <div class="screenshot-container">
+        <img src="file:///D:/PKM/medsign-ai/docs/screenshots/manual.png" class="screenshot-img" alt="AI Clinical Notetaker">
+        <div class="screenshot-caption">Gambar 6. Panel AI Clinical Notetaker &amp; Pengelolaan Rangkuman SOAP Medis</div>
+      </div>
+    </div>
+    <div class="page-footer">
+      <span>AI SOAP Clinical Notetaker</span>
+      <span>Halaman 7</span>
+    </div>
+  </div>
+
+  <!-- ================= PAGE 8: DATA COLLECTION & TRAINING ================= -->
+  <div class="page">
+    <div class="page-header">
+      <span class="page-header-title">Data &amp; Pelatihan Model</span>
+      <span class="page-header-app">MedSign AI</span>
+    </div>
+    <div class="page-content">
+      <h1>Dasbor Data &amp; Pelatihan Model</h1>
+      <p>
+        Bagi administrator dan peneliti, MedSign AI menyediakan workspace lengkap untuk memperbarui kosakata dan melatih ulang model deteksi gerakan (inference engine):
+      </p>
+      
+      <div class="grid-2">
+        <div class="feature-card">
+          <h4>1. Perekaman Landmark</h4>
+          <p>Merekam landmarks tangan baru dengan parameter Signer ID dan Iteration. Kamera menangkap koordinat landmark sebanyak 30 frame untuk membentuk 1 sampel gerakan isyarat medis.</p>
+        </div>
+        <div class="feature-card">
+          <h4>2. Augmentasi Data (Transformer AI)</h4>
+          <p>Melakukan duplikasi dataset secara cerdas menggunakan model NumPy Self-Attention Transformer Encoder, random rotation, mirror, scaling, jitter, dan shift temporal untuk melipatgandakan data latih.</p>
+        </div>
+      </div>
+      
+      <div class="grid-2">
+        <div class="feature-card">
+          <h4>3. Balance Checker &amp; Hapus Masal</h4>
+          <p>Menampilkan grafik sebaran jumlah sampel per label (MVP minimal 30 sampel). Dasbor dilengkapi fitur kelola file untuk mencentang dan menghapus secara masal sampel yang cacat/invalid.</p>
+        </div>
+        <div class="feature-card">
+          <h4>4. Pelatihan Model Klinis</h4>
+          <p>Pelatihan asinkron untuk model klasifikasi isyarat berbasis LSTM atau GRU. Setelah selesai, model TFLite baru disimpan dan di-auto-reload oleh backend tanpa memerlukan restart server.</p>
+        </div>
+      </div>
+      
+      <div class="screenshot-container">
+        <img src="file:///D:/PKM/medsign-ai/docs/screenshots/data_collection.png" class="screenshot-img" alt="Data Collection &amp; Training">
+        <div class="screenshot-caption">Gambar 7. Dasbor Pengelolaan Dataset, Augmentasi Data, dan Pelatihan Model ML</div>
+      </div>
+    </div>
+    <div class="page-footer">
+      <span>Data &amp; Pelatihan Model</span>
+      <span>Halaman 8</span>
+    </div>
+  </div>
+
+  <!-- ================= PAGE 9: MOBILE VIEW ================= -->
+  <div class="page">
+    <div class="page-header">
+      <span class="page-header-title">Antarmuka Ponsel (Mobile)</span>
+      <span class="page-header-app">MedSign AI</span>
+    </div>
+    <div class="page-content">
+      <h1>Optimasi Antarmuka Mobile / Ponsel</h1>
+      <p>
+        MedSign AI dirancang secara responsif agar berjalan optimal pada gawai ponsel pintar (smartphone) untuk mendukung fleksibilitas konsultasi di ranjang pasien atau saat mobilitas tinggi:
+      </p>
+      
+      <h2>1. Tata Letak Fleksibel &amp; Menu Hamburger</h2>
+      <p>
+        Pada layar dengan lebar di bawah 768px, sidebar navigasi dikolaps secara otomatis ke dalam menu hamburger melayang. Tab konfigurasi di dasbor data collection dikonversi menjadi barisan geser horizontal (overflow-x-auto) yang ramah sentuhan jari.
+      </p>
+      
+      <h2>2. Mode Kamera Layar Penuh (Full Screen Cam)</h2>
+      <p>
+        Pasien dapat memperbesar tampilan kamera penerjemah isyarat ke layar penuh ponsel. Pada mode ini, antarmuka menyediakan overlay melayang yang menampilkan instruksi teks dokter di bagian atas, dan hasil translasi BISINDO real-time beserta confidence level di bagian bawah layar.
+      </p>
+      
+      <div class="grid-3" style="margin-top: 2mm; gap: 3mm;">
+        <div class="screenshot-container" style="margin-bottom: 0;">
+          <img src="file:///D:/PKM/medsign-ai/docs/screenshots/mobile_home.png" class="screenshot-img" alt="Mobile Home" style="max-height: 140px; object-fit: contain; background: #0f172a; padding: 2px;">
+          <div class="screenshot-caption">Mobile Home</div>
+        </div>
+        <div class="screenshot-container" style="margin-bottom: 0;">
+          <img src="file:///D:/PKM/medsign-ai/docs/screenshots/mobile_patient.png" class="screenshot-img" alt="Mobile Patient" style="max-height: 140px; object-fit: contain; background: #0f172a; padding: 2px;">
+          <div class="screenshot-caption">Mobile Patient</div>
+        </div>
+        <div class="screenshot-container" style="margin-bottom: 0;">
+          <img src="file:///D:/PKM/medsign-ai/docs/screenshots/mobile_doctor.png" class="screenshot-img" alt="Mobile Doctor" style="max-height: 140px; object-fit: contain; background: #0f172a; padding: 2px;">
+          <div class="screenshot-caption">Mobile Doctor</div>
+        </div>
+      </div>
+    </div>
+    <div class="page-footer">
+      <span>Antarmuka Ponsel (Mobile)</span>
+      <span>Halaman 9</span>
+    </div>
+  </div>
+
+  <!-- ================= PAGE 10: BACK COVER ================= -->
+  <div class="back-cover-page">
+    <div style="width: 100%; text-align: center;">
+      <div style="font-size: 11px; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; color: #0284c7; margin-bottom: 2mm;">
+        MedSign AI — BISINDO Medical Translation
+      </div>
+      <div style="width: 30mm; height: 1px; background: #0284c7; margin: 0 auto 5mm auto;"></div>
+    </div>
+    
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; max-width: 150mm;">
+      <img src="file:///D:/PKM/medsign-ai/frontend/public/assets/logo-medsign-source.png" alt="Mascot" style="width: 35mm; height: 35mm; margin-bottom: 5mm; border-radius: 50%; border: 3px solid #053d67; background: white; padding: 2px;" onerror="this.src='file:///D:/PKM/medsign-ai/frontend/public/assets/logo-pkm-full.png'">
+      <h2 style="font-size: 24px; font-weight: 900; color: #053d67; margin-bottom: 2mm; border: none; padding: 0;">MedSign AI</h2>
+      <p style="text-align: center; font-size: 12px; font-weight: 600; color: #2d3f4e; line-height: 1.6;">
+        "Menghubungkan Isyarat, Menyelamatkan Jiwa"<br>
+        Menjembatani keterbatasan bahasa isyarat medis secara inklusif, mandiri, dan menjaga kerahasiaan penuh rekam medis pasien.
+      </p>
+    </div>
+    
+    <div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 4mm;">
+      <div style="font-size: 10px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.05em; line-height: 1.4;">
+        Didukung dan Dikembangkan oleh:<br>
+        <span style="color: #053d67; font-weight: 800;">Tim Program Kreativitas Mahasiswa Riset Eksakta (PKM-RE)</span><br>
+        <span style="color: #2e5799; font-weight: 800;">Universitas Ma Chung, Malang, Jawa Timur</span>
+      </div>
+      
+      <div style="font-size: 9px; font-weight: 700; color: #94a3b8; margin-top: 5mm; border-top: 1px solid rgba(0,0,0,0.06); width: 100%; padding-top: 4mm;">
+        &copy; 2026 MedSign AI. Hak Cipta Dilindungi Undang-Undang.
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

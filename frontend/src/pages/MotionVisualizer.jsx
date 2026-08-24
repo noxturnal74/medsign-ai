@@ -3,7 +3,7 @@ import { AppContext } from '../context/AppContextObject';
 import { ArrowLeft, Play, Pause, Download, Video, Award, Clock, Activity, Sliders, CheckCircle2 } from 'lucide-react';
 
 export const MotionVisualizer = ({ setView }) => {
-  const { t, vocabulary } = useContext(AppContext);
+  const { t, vocabulary, showToast } = useContext(AppContext);
   const [duration, setDuration] = useState(30); // Default 30s
   const [isAnimating, setIsAnimating] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
@@ -378,7 +378,7 @@ export const MotionVisualizer = ({ setView }) => {
           if (prev >= 100) {
             setIsExporting(false);
             clearInterval(interval);
-            alert(`Ekspor Video HAKI MedSign selesai! (${duration} detik, resolusi 1920x1080, format MP4).`);
+            showToast(`Ekspor Video HAKI MedSign selesai! (${duration} detik, resolusi 1920x1080, format MP4).`, "success");
             return 100;
           }
           return prev + 5;

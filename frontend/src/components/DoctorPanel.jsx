@@ -76,7 +76,7 @@ const PRESET_CATEGORIES = {
 
 export const DoctorPanel = ({ activeSessionId }) => {
 
-  const { addLogEntry } = useContext(AppContext);
+  const { addLogEntry, showToast } = useContext(AppContext);
 
   const [customMsg, setCustomMsg] = useState("");
 
@@ -142,7 +142,7 @@ export const DoctorPanel = ({ activeSessionId }) => {
 
       if (!SpeechRecognition) {
 
-        alert("Browser Anda tidak mendukung Web Speech API untuk Speech-to-Text.");
+        showToast("Browser Anda tidak mendukung Web Speech API untuk Speech-to-Text.", "error");
 
         return;
 
@@ -236,74 +236,54 @@ export const DoctorPanel = ({ activeSessionId }) => {
 
 
 
-      {/* Custom Chat & Voice Input */}
-
-      <form onSubmit={handleSendCustom} className="flex flex-col gap-2 border-b border-slate-100 pb-4">
-
+      <form onSubmit={handleSendCustom} className="flex flex-col gap-2.5 border-b border-slate-100 pb-5">
         <label className="text-[10px] font-black text-slate-500 uppercase tracking-wider block">
-
-          Kirim Pesan / Diagnosis Kustom (Menghasilkan Suara TTS)
-
+          Pesan Kustom Dokter (Ketik atau Bicara)
         </label>
-
-        <div className="flex gap-2">
-
+        <div className="flex gap-2 items-center">
           <input
-
             type="text"
-
             value={customMsg}
-
             onChange={(e) => setCustomMsg(e.target.value)}
-
-            placeholder="Ketik atau gunakan suara untuk merekam pesan..."
-
-            className="glass-input flex-1 rounded-xl px-3 py-2 text-xs font-semibold border border-slate-200 bg-white"
-
+            placeholder={isRecording ? "Mendengarkan suara Anda..." : "Ketik pesan medis Anda di sini..."}
+            className="flex-1 rounded-xl border border-slate-200 bg-white/60 px-4 py-2.5 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500"
+            disabled={isRecording}
           />
-
+          
+          {/* Mic Button to Toggle Speech-to-Text */}
           <button
-
             type="button"
-
             onClick={toggleVoiceRecording}
-
-            className={`glass-button rounded-xl px-3 py-2 text-xs font-bold flex items-center justify-center border transition-all ${
-
+            title={isRecording ? "Matikan Perekaman Suara" : "Aktifkan Perekaman Suara (Speech-to-Text)"}
+            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border transition-all ${
               isRecording 
-
-                ? 'border-red-300 bg-red-500/10 text-red-600 animate-pulse'
-
-                : 'border-slate-200 hover:bg-slate-50 text-slate-700'
-
+                ? 'bg-red-500 border-red-400 text-white animate-pulse' 
+                : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
             }`}
-
-            title={isRecording ? "Stop Recording" : "Record Voice"}
-
           >
-
-            {isRecording ? <MicOff size={14} /> : <Mic size={14} />}
-
-            <span className="hidden sm:inline ml-1.5">{isRecording ? "Merekam..." : "Record"}</span>
-
+            {isRecording ? <MicOff size={16} /> : <Mic size={16} />}
           </button>
 
           <button
-
             type="submit"
-
-            className="glass-button glass-button-primary rounded-xl px-4 py-2 text-xs font-bold flex items-center gap-1.5"
-
+            disabled={!customMsg.trim() && !isRecording}
+            className={`py-2.5 px-5 rounded-xl text-white font-black text-[11px] uppercase tracking-wider shadow-sm transition-all flex items-center gap-1.5 ${
+              customMsg.trim() 
+                ? 'bg-[#053D67] hover:bg-[#2e5799] active:scale-95' 
+                : 'bg-slate-350 cursor-not-allowed opacity-60'
+            }`}
           >
-
             <Send size={12} />
-
             Kirim
-
           </button>
-
         </div>
 
+        {isRecording && (
+          <span className="text-[9px] font-black text-red-500 uppercase tracking-wider animate-pulse flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0" />
+            Sedang mendengarkan suara Anda (Speech-to-Text aktif)... 
+          </span>
+        )}
       </form>
 
 

@@ -1,9 +1,31 @@
 ﻿import React, { useState, useContext, useEffect } from 'react';
 import { AppContext } from '../context/AppContextObject';
 import { User, Stethoscope, Shield, Eye, EyeOff } from 'lucide-react';
+import { AccessibilityPopup } from '../components/AccessibilityPopup';
 
 export const Login = ({ setView, onLoginSuccess }) => {
   const { login, currentUser, showToast, setCurrentUser } = useContext(AppContext);
+  const [showAccessibilityPopup, setShowAccessibilityPopup] = useState(false);
+
+  useEffect(() => {
+    const hasSeen = localStorage.getItem("medsign_accessibility_intro_seen");
+    if (!hasSeen && !currentUser) {
+      const timer = setTimeout(() => {
+        setShowAccessibilityPopup(true);
+      }, 1200);
+      return () => clearTimeout(timer);
+    }
+  }, [currentUser]);
+
+  const handleCloseAccessibility = () => {
+    setShowAccessibilityPopup(false);
+  };
+
+  const handleLearnMoreAccessibility = () => {
+    localStorage.setItem("medsign_accessibility_intro_seen", "SEEN");
+    setShowAccessibilityPopup(false);
+    setView("manual");
+  };
   const [role, setRole] = useState('doctor'); // 'doctor' | 'patient' | 'admin'
   const [emailOrNik, setEmailOrNik] = useState('');
   const [password, setPassword] = useState('');
@@ -32,6 +54,8 @@ export const Login = ({ setView, onLoginSuccess }) => {
     if (savedRedirect) {
       setView(savedRedirect);
       localStorage.removeItem('medsign_redirect_view');
+    } else if (userRole === 'super_admin') {
+      setView('super_admin');
     } else if (userRole === 'admin' || userRole === 'doctor') {
       setView('data-collection');
     } else {
@@ -219,16 +243,7 @@ export const Login = ({ setView, onLoginSuccess }) => {
             Dokter
           </button>
           
-          <button
-            type="button"
-            onClick={() => { setRole('patient'); setEmailOrNik(''); setPassword(''); }}
-            className={`flex-1 flex items-center justify-center gap-1.5 rounded-xl py-2 text-xs font-black transition-all ${
-              role === 'patient' ? 'bg-white text-sky-700 shadow-sm' : 'text-slate-500 hover:text-slate-950'
-            }`}
-          >
-            <User size={13} />
-            Pasien
-          </button>
+
 
           <button
             type="button"
@@ -246,7 +261,7 @@ export const Login = ({ setView, onLoginSuccess }) => {
         <form onSubmit={handleLogin} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
             <label className="text-[10px] font-black text-slate-400 uppercase tracking-wide">
-              {role === 'patient' ? "NIK (Nomor KTP - 16 Digit)" : (role === 'admin' ? "Username" : "Email Pengguna")}
+              {role === 'admin' ? "Username Admin" : "Email Dokter"}
             </label>
             <div className="relative">
               <input
@@ -264,7 +279,7 @@ export const Login = ({ setView, onLoginSuccess }) => {
                   }
                 }}
                 className="w-full rounded-2xl border border-slate-200 bg-white/60 px-4 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
-                placeholder={role === 'patient' ? "Contoh: 3271010000000000" : (role === 'admin' ? "Contoh: admin" : "dokter@medsign.com")}
+                placeholder={role === 'admin' ? "Contoh: administrator" : "dokter@medsign.com"}
                 required
               />
             </div>

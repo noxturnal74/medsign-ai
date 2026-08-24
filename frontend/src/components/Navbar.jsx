@@ -3,7 +3,7 @@ import { AppContext } from '../context/AppContextObject';
 import {
   Home, Info, Stethoscope, User, Volume2, VolumeX,
   Database, BookOpen, Video, FileText, MessageSquare,
-  Menu as MenuIcon, X, ExternalLink,
+  Menu as MenuIcon, X, ExternalLink, Shield, Columns,
 } from 'lucide-react';
 
 const navItems = [
@@ -17,13 +17,31 @@ const navItems = [
   { id: 'doctor',        label: 'Dokter',             icon: Stethoscope },
   { id: 'data-collection', label: 'Dashboard',        icon: Database },
   { id: 'motion',        label: 'Motion',             icon: Video },
+  { id: 'super_admin',   label: 'Super Admin',        icon: Shield },
+  { id: 'split',         label: 'Split View',         icon: Columns },
 ];
 
 export const Navbar = ({ currentView, setView }) => {
-  const { ttsEnabled, setTtsEnabled, t, setShowFeatureModal, currentUser, logout } =
+  const { ttsEnabled, setTtsEnabled, t, setShowFeatureModal, currentUser, logout, hasGrant } =
     useContext(AppContext);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled]     = useState(false);
+  const [splitEnabled, setSplitEnabled] = useState(false);
+
+  useEffect(() => {
+    const fetchLayout = async () => {
+      try {
+        const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+        const cleanUrl = apiBaseUrl.replace(/\/$/, '');
+        const res = await fetch(`${cleanUrl}/api/v1/homepage/layout`);
+        if (res.ok) {
+          const data = await res.json();
+          setSplitEnabled(data.split_screen_enabled === "1");
+        }
+      } catch (e) {}
+    };
+    fetchLayout();
+  }, []);
 
   useEffect(() => {
     const onScroll = () => {
@@ -49,15 +67,28 @@ export const Navbar = ({ currentView, setView }) => {
 
   useEffect(() => { setMobileOpen(false); }, [currentView]);
 
+  const mlGrantKeys = ['record_dataset', 'balance_checker', 'ai_augmentation', 'train_model'];
+  const hasMlAccess = currentUser?.role === 'super_admin' || mlGrantKeys.some(k => hasGrant(k));
+
   const filteredNavItems = navItems.filter(item => {
+    if (currentUser?.role === 'super_admin') {
+      const base = ['home', 'about', 'manual', 'super_admin'];
+      if (splitEnabled) base.push('split');
+      return base.includes(item.id);
+    }
     if (currentUser?.role === 'admin')
-      return ['home','about','manual','services','articles_page','data-collection','motion','patient','doctor','contact'].includes(item.id);
-    if (currentUser?.role === 'doctor')
-      return ['home','about','manual','services','articles_page','patient','doctor','contact'].includes(item.id);
+      return ['home','about','manual','services','articles_page', ...(hasMlAccess ? ['data-collection'] : []),'motion','patient','doctor','contact'].includes(item.id);
+    if (currentUser?.role === 'doctor') {
+      const base = ['home','about','manual','services','articles_page','patient','doctor','contact', ...(hasMlAccess ? ['data-collection'] : [])];
+      if (splitEnabled) base.push('split');
+      return base.includes(item.id);
+    }
     if (currentUser?.role === 'patient')
       return ['home','about','manual','services','articles_page','patient','contact'].includes(item.id);
     // Guest or other roles
-    return ['home','about','manual','services','articles_page','patient','doctor','contact'].includes(item.id);
+    const base = ['home','about','manual','services','articles_page','patient','doctor','contact'];
+    if (splitEnabled) base.push('split');
+    return base.includes(item.id);
   });
 
   return (
@@ -127,8 +158,8 @@ export const Navbar = ({ currentView, setView }) => {
             background: scrolled ? 'rgba(15,23,42,0.04)' : 'rgba(255,255,255,0.5)',
             padding: '4px 5px', borderRadius: 14,
             border: scrolled ? '1px solid rgba(15,23,42,0.06)' : '1px solid rgba(255,255,255,0.3)',
-            flex: 1, justifyContent: 'center',
-            maxWidth: 700, margin: '0 auto',
+            justifyContent: 'center',
+            margin: '0 auto',
             backdropFilter: scrolled ? 'none' : 'blur(8px)',
             transition: 'background 0.3s ease, border-color 0.3s ease',
           }}>
@@ -373,7 +404,7 @@ export const Navbar = ({ currentView, setView }) => {
         @media (min-width: 640px) {
           .brand-text { display: block; }
         }
-        @media (min-width: 1024px) {
+        @media (min-width: 1340px) {
           .desktop-nav { display: flex !important; }
           .hide-mobile { display: inline-flex !important; }
           .show-mobile { display: none !important; }

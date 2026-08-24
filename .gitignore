@@ -40,6 +40,9 @@ Thumbs.db
 .env.production
 .env.development
 
+# Database (local dev only)
+backend/medsign.db
+
 # Local ML artifacts and datasets
 backend/data/*
 !backend/data/raw_videos/
@@ -65,3 +68,12 @@ backend/training/visualization/
 # Local scripts
 patch_augmentation_tab.py
 medsign-ai/.obsidian/
+
+# Demo Credentials
+credentials.txt
+
+# Generated frames (large binary assets)
+frontend/public/Homepage/ezgif-frame-*.png
+
+# Manual screenshots (large binary assets)
+manual_screenshots/

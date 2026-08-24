@@ -209,3 +209,77 @@ Harap lakukan inisialisasi repositori Git dan dorong kode Anda ke GitHub dengan 
 
 ## 8. Pernyataan Batasan (Disclaimer Medis)
 > ⚠️ **PENTING:** MedSign AI dirancang khusus sebagai alat bantu terjemahan isyarat BISINDO klinis dan asisten komunikasi interaktif dua arah. Sistem ini adalah produk purwarupa (prototype) akademis dan bukan merupakan alat diagnosis medis mandiri, pengganti praktisi kesehatan profesional, maupun pengganti penilaian medis klinis berlisensi.
+
+---
+
+## 9. Comprehensive System Operations & Telemedicine Architecture Guide
+
+### Project Overview
+MedSign is a secure healthcare management and telemedicine platform customized for the Indonesian healthcare landscape. It enables clinical deaf-mute accessibility through deep learning hand landmark translation and robust telemedicine consultations.
+
+### Telemedicine Architecture
+- **Frontend Layer:** Built using React 18 + Vite (configured to run on port `3001` via `vite.config.js`). It operates via state-based routing inside `App.jsx` instead of React Router.
+- **Backend Layer:** FastAPI Python 3.11 running on port `8000`. Employs WebSockets (`/api/v1/stream`) for hand landmark translation and custom routers for telemedicine operations.
+- **Database Layer:** SQLite database containing normalized schemas for facilities, users (admins, doctors, patients), consents, sessions, session logs, and medical records.
+
+### Roles & RBAC Matrix
+The system enforces strict role-based access control (RBAC) boundaries checkable server-side on every API route:
+1. **SUPER_ADMIN (administrator):** Has global overview of all facilities, administrative audit logs, and can manage facilities and faskes admins.
+2. **ADMIN (Facility Admin):** Manages doctors, patients, assignments, and audit logs belonging *only* to their own facility (enforced via `facility_id` database queries). Mismatched queries return `403 Forbidden`.
+3. **DOCTOR:** Views assigned patients, conducts clinical sessions, uses persistent Speech-to-Text transcription, and writes official electronic medical records (RME).
+4. **PATIENT:** Accesses own profile (NIK masked: `************1234`), consents tracking, and own consultation history.
+
+### Environment Variables
+Setup `.env` in the `backend/` folder:
+```env
+OPENAI_API_KEY=sk-your-key-here
+OPENAI_MODEL=gpt-4o-mini
+SUPABASE_URL=
+SUPABASE_KEY=
+```
+
+### Database Setup, Migration & Seed Data
+- Migrations are built into `app/db.py` under the `init_db()` function. When the server launches, it automatically checks, alters, and creates the required tables.
+- Seeding inserts 3 mock facilities (RS Islam Jakarta, Klinik Sentosa Malang, Medika Center Surabaya), 3 facility admins, 5 doctors, and 10 patients with random credentials.
+
+### Demo Credentials
+On startup, a `credentials.txt` file is written to the root folder with all generated passwords. Passwords are hashed in the database using PBKDF2-SHA256.
+- **Super Admin:** Username `administrator` / Password `TahutekumEnak123!@#`
+- **Admin RSI:** Username `adminrsi` / Password `rsipalingtop`
+- **Doctor RSI:** Email `bitapargazen@gmail.com` / Password `bitaganteng123`
+- **Patient RSI:** NIK `390572816403` / Password `glennperkasa123`
+
+### Identity Verification (KTP & NIK Workflow)
+1. **Request:** Patient registers NIK and details (`POST /api/v1/patient/verify/ktp`).
+2. **Biometric Consent:** Patient must explicitly agree to biometric terms (`POST /api/v1/patient/consent` with type `BIOMETRIC_VERIFICATION`).
+3. **Face Verification:** Patient captures selfie photo (`POST /api/v1/patient/verify/face`).
+4. **Admin Approval:** Facility Admin reviews verification status and approves or rejects (`POST /api/v1/admin/patients/{id}/approve`). Accounts are only active and able to log in after approval.
+
+### File Storage Security
+All sensitive documents (such as KTP images or face photos) are kept in private directories. URLs to these assets are not public, and access requires backend session authorization checks.
+
+### Speech-to-Text (STT) Setup
+Telemedicine consult session utilizes persistent browser-native Speech-to-Text. The microphone must be started explicitly by the doctor (no auto-record). The transcription is editable, and the mic button remains repeatable indefinitely.
+
+### Secure Audit Logging & Security Controls
+- Audit records log event types (such as `CONSENT_ACCEPTED`, `KTP_VERIFIED`, `MEDICAL_RECORD_CREATED`) with user IP, browser agent, success flag, and facility context.
+- Rate-limiting blocks brute-force login attempts (locking accounts after 5 failures for 60 seconds with `429 Too Many Requests`).
+- Passwords are hashed, sensitive data is encrypted/masked, and SQL Injection/XSS mitigations are active.
+
+### Compliance Notes (Indonesian Law)
+- **UU No. 27/2022 (UU PDP):** Biometric and health data require explicit patient consent before processing.
+- **Permenkes No. 24/2022:** Electronic Medical catatans (RME) are structurally stored in `medical_records` table and isolated per healthcare facility.
+- **UU No. 17/2023:** Guarantees patient confidentiality. Identifiers like NIK are masked in standard views.
+
+### Testing
+To run the automated security, rate limiting, and cross-facility isolation test suite:
+```bash
+python -m unittest backend/tests/test_auth_rls.py
+```
+
+### Deployment
+Frontend can be compiled to production HTML/JS:
+```bash
+cd frontend && npm run build
+```
+FastAPI backend can be containerized using `backend/Dockerfile`.

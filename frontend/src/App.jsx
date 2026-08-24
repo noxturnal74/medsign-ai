@@ -14,6 +14,7 @@ import { Layout } from './components/Layout';
 import { Home } from './pages/Home';
 import { PatientView } from './pages/PatientView';
 import { DoctorView } from './pages/DoctorView';
+import { SuperAdminView } from './pages/SuperAdminView';
 import { About } from './pages/About';
 import { DataCollection } from './pages/DataCollection';
 import { UserManual } from './pages/UserManual';
@@ -21,9 +22,12 @@ import { MotionVisualizer } from './pages/MotionVisualizer';
 import { ErrorBoundary } from './components/ErrorBoundary';
 
 function AppContent() {
-  const { currentUser } = useContext(AppContext);
+  const { currentUser, hasGrant } = useContext(AppContext);
   const getInitialView = () => {
     const path = window.location.pathname;
+    if (path === '/login') {
+      return 'login';
+    }
     if (path === '/data-collection' || path.startsWith('/data-collection/')) {
       return 'data-collection';
     }
@@ -35,6 +39,12 @@ function AppContent() {
     }
     if (path === '/doctor' || path === '/consultation') {
       return 'doctor';
+    }
+    if (path === '/super_admin' || path === '/superadmin') {
+      return 'super_admin';
+    }
+    if (path === '/split') {
+      return 'split';
     }
     if (path === '/history' || path === '/settings') {
       return 'data-collection';
@@ -58,7 +68,7 @@ function AppContent() {
   };
 
   const [view, setView] = useState(getInitialView);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
 
   // Initialize Lenis smooth scrolling
@@ -129,6 +139,12 @@ function AppContent() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    const timer = setTimeout(() => {
+      if (window.lenis) {
+        window.lenis.resize();
+      }
+    }, 100);
+    return () => clearTimeout(timer);
   }, [view]);
 
   if (loading) {
@@ -224,12 +240,27 @@ function AppContent() {
       {view === 'login' && <Login setView={handleSetView} />}
       {view === 'patient' && <PatientView setView={handleSetView} />}
       {view === 'doctor' && <DoctorView setView={handleSetView} />}
+      {view === 'super_admin' && <SuperAdminView setView={handleSetView} />}
+      {view === 'split' && (
+        <div className="flex flex-col lg:flex-row w-full min-h-[calc(100vh-57px)] gap-4 p-4 bg-slate-100/50">
+          <div className="flex-1 bg-white rounded-3xl p-6 border border-slate-200 shadow-sm overflow-hidden h-[calc(100vh-90px)] overflow-y-auto pr-2 scrollbar-thin">
+            <PatientView setView={handleSetView} isSplit={true} />
+          </div>
+          <div className="flex-1 bg-white rounded-3xl p-6 border border-slate-200 shadow-sm overflow-hidden h-[calc(100vh-90px)] overflow-y-auto pr-2 scrollbar-thin">
+            <DoctorView setView={handleSetView} isSplit={true} />
+          </div>
+        </div>
+      )}
       {view === 'about' && <About setView={handleSetView} />}
       {view === 'services' && <Services setView={handleSetView} />}
       {view === 'contact' && <Contact setView={handleSetView} />}
       {view === 'articles_page' && <ArticlesPage setView={handleSetView} />}
 
-      {view === 'data-collection' && <DataCollection setView={handleSetView} />}
+      {view === 'data-collection' && (() => {
+        const mlKeys = ['record_dataset', 'balance_checker', 'ai_augmentation', 'train_model'];
+        const allowed = !currentUser || currentUser.role === 'super_admin' || mlKeys.some(k => hasGrant(k));
+        return allowed ? <DataCollection setView={handleSetView} /> : <Home setView={handleSetView} />;
+      })()}
       {view === 'manual' && <UserManual setView={handleSetView} />}
       {view === 'motion' && <MotionVisualizer setView={handleSetView} />}
     </Layout>

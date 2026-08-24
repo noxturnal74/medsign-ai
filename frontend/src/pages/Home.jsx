@@ -166,6 +166,7 @@ export const Home = ({ setView }) => {
   const scopeRef = useRef(null);
   const [activeStage, setActiveStage] = React.useState(0);
   const [reviews, setReviews]               = React.useState([]);
+  const [sectionOrder, setSectionOrder] = React.useState(["dashboard_modul", "mitra", "reviews", "instagram", "articles", "brand_pkm", "video_tutorial"]);
   const [articles, setArticles]             = React.useState([]);
   const [instagramPosts, setInstagramPosts] = React.useState([]);
   const [dynamicMitra, setDynamicMitra]     = React.useState([]);
@@ -180,16 +181,20 @@ export const Home = ({ setView }) => {
       try {
         const base = (localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
         const safe = (p) => fetch(`${base}${p}`).then(r => r.ok ? r.json() : []).catch(() => []);
-        const [rev, art, ig, mit] = await Promise.all([
+        const [rev, art, ig, mit, lay] = await Promise.all([
           safe('/api/v1/reviews'),
           safe('/api/v1/articles'),
           safe('/api/v1/instagram-posts'),
           safe('/api/v1/mitra'),
+          safe('/api/v1/homepage/layout'),
         ]);
         setReviews(rev);
         setArticles(art);
         setInstagramPosts(ig);
         setDynamicMitra(mit);
+        if (lay && lay.homepage_section_order) {
+          setSectionOrder(lay.homepage_section_order.split(","));
+        }
       } catch (err) {
         console.error('Gagal memuat data live:', err);
       }
@@ -224,320 +229,282 @@ export const Home = ({ setView }) => {
       {/* ════════════════════════════════════════════════════
           KONTEN UTAMA — background putih/slate ringan
       ════════════════════════════════════════════════════ */}
-      <div className="relative z-30 bg-slate-50 -mt-[100vh]">
-
-        {/* ── DASHBOARD MODUL ─────────────────────────────── */}
-        <section className="px-4 pt-4 pb-8 md:px-10 lg:px-16" data-reveal>
-          <div className="mx-auto max-w-7xl">
-            <h2 id="pilih-modul-heading" className="text-2xl font-black text-slate-900 mb-8">Pilih Modul MedSign AI</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {filteredDashboardItems.map((item, index) => {
-                const Icon = item.icon;
-                return (
-                  <div
-                    key={item.title}
-                    onClick={() => setView(item.id)}
-                    data-reveal
-                    style={{ transitionDelay: `${index * 55}ms` }}
-                    className="group p-7 rounded-[28px] bg-white border border-slate-200 hover:border-sky-300 hover:shadow-xl hover:shadow-sky-500/8 hover:-translate-y-1 active:scale-[0.98] transition-all cursor-pointer"
-                  >
-                    <div className="h-11 w-11 rounded-2xl bg-sky-50 border border-sky-100 text-sky-600 flex items-center justify-center mb-5">
-                      <Icon size={20} />
+      <div className="relative z-30 bg-slate-50 -mt-[40vh]">
+        {sectionOrder.map((sectionKey) => {
+          switch (sectionKey.trim()) {
+            case "dashboard_modul":
+              return (
+                <section key="dashboard_modul" className="px-4 pt-4 pb-8 md:px-10 lg:px-16" data-reveal>
+                  <div className="mx-auto max-w-7xl">
+                    <h2 id="pilih-modul-heading" className="text-2xl font-black text-slate-900 mb-8">Pilih Modul MedSign AI</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                      {filteredDashboardItems.map((item, index) => {
+                        const Icon = item.icon;
+                        return (
+                          <div
+                            key={item.title}
+                            onClick={() => setView(item.id)}
+                            data-reveal
+                            style={{ transitionDelay: `${index * 55}ms` }}
+                            className="group p-7 rounded-[28px] bg-white border border-slate-200 hover:border-sky-300 hover:shadow-xl hover:shadow-sky-500/8 hover:-translate-y-1 active:scale-[0.98] transition-all cursor-pointer"
+                          >
+                            <div className="h-11 w-11 rounded-2xl bg-sky-50 border border-sky-100 text-sky-600 flex items-center justify-center mb-5">
+                              <Icon size={20} />
+                            </div>
+                            <h3 className="text-base font-black text-slate-900 mb-2">{item.title}</h3>
+                            <p className="text-[12px] font-medium text-slate-500 leading-relaxed mb-4">{item.desc}</p>
+                            <span className="text-[11px] font-black text-sky-600 uppercase flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
+                              Buka Modul <ArrowRight size={12} />
+                            </span>
+                          </div>
+                        );
+                      })}
                     </div>
-                    <h3 className="text-base font-black text-slate-900 mb-2">{item.title}</h3>
-                    <p className="text-[12px] font-medium text-slate-500 leading-relaxed mb-4">{item.desc}</p>
-                    <span className="text-[11px] font-black text-sky-600 uppercase flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
-                      Buka Modul <ArrowRight size={12} />
-                    </span>
                   </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* ── EKOSISTEM & MITRA ───────────────────────────── */}
-        <section className="px-4 py-12 md:px-10 lg:px-16 bg-white" data-reveal>
-          <div className="mx-auto max-w-7xl">
-            <div className="flex flex-col gap-2 mb-8">
-              <span className="text-[10px] font-black uppercase text-sky-600 tracking-wider">Mitra MedSign</span>
-              <h2 className="text-2xl font-black text-slate-900">Ekosistem & Mitra</h2>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-              {mitraList.map((m, i) => (
-                <div key={i} data-reveal style={{ transitionDelay: `${i * 50}ms` }}>
-                  <LogoCell src={m.src} name={m.name} />
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ── ULASAN PENGGUNA ─────────────────────────────── */}
-        {reviews.length > 0 && (
-          <section className="px-4 py-12 md:px-10 lg:px-16" data-reveal>
-            <div className="mx-auto max-w-7xl">
-              <h2 className="text-2xl font-black text-slate-900 mb-8">Ulasan Pengguna & Teman Tuli</h2>
-              <div className="grid gap-5 md:grid-cols-2">
-                {reviews.map((rev, idx) => (
-                  <div
-                    key={rev.id || idx}
-                    data-reveal
-                    style={{ transitionDelay: `${idx * 60}ms` }}
-                    className="p-6 rounded-[24px] bg-white border border-slate-200 flex flex-col justify-between gap-4"
-                  >
-                    <div className="flex flex-col gap-3">
-                      <div className="flex items-center gap-1 text-amber-400">
-                        {Array.from({ length: rev.rating || 5 }).map((_, i) => (
-                          <Star key={i} size={13} fill="currentColor" />
-                        ))}
-                      </div>
-                      <p className="text-sm font-medium leading-relaxed text-slate-700 italic">
-                        "{rev.content}"
+                </section>
+              );
+            case "mitra":
+              return (
+                <section key="mitra" className="px-4 py-12 md:px-10 lg:px-16 bg-white" data-reveal>
+                  <div className="mx-auto max-w-7xl">
+                    <div className="flex flex-col gap-2 mb-8">
+                      <span className="text-[10px] font-black uppercase text-sky-600 tracking-wider">Mitra MedSign</span>
+                      <h2 className="text-2xl font-black text-slate-900">Ekosistem & Mitra</h2>
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                      {mitraList.map((m, i) => (
+                        <div key={i} data-reveal style={{ transitionDelay: `${i * 50}ms` }}>
+                          <LogoCell src={m.src} name={m.name} />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </section>
+              );
+            case "reviews":
+              return reviews.length > 0 && (
+                <section key="reviews" className="px-4 py-12 md:px-10 lg:px-16" data-reveal>
+                  <div className="mx-auto max-w-7xl">
+                    <h2 className="text-2xl font-black text-slate-900 mb-8">Ulasan Pengguna & Teman Tuli</h2>
+                    <div className="grid gap-5 md:grid-cols-2">
+                      {reviews.map((rev, idx) => (
+                        <div
+                          key={rev.id || idx}
+                          data-reveal
+                          style={{ transitionDelay: `${idx * 60}ms` }}
+                          className="p-6 rounded-[24px] bg-white border border-slate-200 flex flex-col justify-between gap-4"
+                        >
+                          <div className="flex flex-col gap-3">
+                            <div className="flex items-center gap-1 text-amber-400">
+                              {Array.from({ length: rev.rating || 5 }).map((_, i) => (
+                                <Star key={i} size={13} fill="currentColor" />
+                              ))}
+                            </div>
+                            <p className="text-sm font-medium leading-relaxed text-slate-700 italic">
+                              "{rev.content}"
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-3 border-t border-slate-100 pt-3">
+                            {rev.avatar ? (
+                              <img 
+                                src={rev.avatar} 
+                                alt={rev.name} 
+                                className="h-9 w-9 rounded-full object-cover shrink-0 border border-slate-200"
+                                onError={(e) => {
+                                  e.currentTarget.onerror = null;
+                                  e.currentTarget.style.display = 'none';
+                                  const fallback = e.currentTarget.nextSibling;
+                                  if (fallback) fallback.style.display = 'flex';
+                                }}
+                              />
+                            ) : null}
+                            <div 
+                              style={{ display: rev.avatar ? 'none' : 'flex' }}
+                              className="h-9 w-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 font-black text-xs shrink-0"
+                            >
+                              {rev.name[0]}
+                            </div>
+                            <div>
+                              <span className="block text-xs font-black text-slate-900">{rev.name}</span>
+                              <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">{rev.role}</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </section>
+              );
+            case "instagram":
+              return instagramPosts.length > 0 && (
+                <section key="instagram" className="px-4 py-12 bg-white md:px-10 lg:px-16" data-reveal>
+                  <div className="mx-auto max-w-7xl">
+                    <h2 className="text-2xl font-black text-slate-900 mb-8">Konten Terbaru Instagram</h2>
+                    <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                      {instagramPosts.slice(0, 4).map((post) => (
+                        <InstagramPostCard key={post.id} post={post} />
+                      ))}
+                    </div>
+                  </div>
+                </section>
+              );
+            case "articles":
+              return (
+                <section key="articles" className="px-4 py-12 md:px-10 lg:px-16" data-reveal>
+                  <div className="mx-auto max-w-7xl">
+                    <div className="flex items-center justify-between mb-8">
+                      <h2 className="text-2xl font-black text-slate-900">Artikel Terkini</h2>
+                      <a
+                        href={MARKETING_SITE_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] font-black text-sky-600 uppercase tracking-wider flex items-center gap-1.5 px-4 py-2 rounded-full border border-sky-200 bg-sky-50 hover:bg-sky-100 transition-colors"
+                      >
+                        Lihat Semua <ExternalLink size={11} />
+                      </a>
+                    </div>
+                    <div className="grid gap-6 md:grid-cols-3">
+                      {articles.length > 0 ? (
+                        articles.map((art, idx) => (
+                          <div key={art.id || idx} data-reveal style={{ transitionDelay: `${idx * 60}ms` }}>
+                            <ArticleCard art={art} />
+                          </div>
+                        ))
+                      ) : (
+                        [0, 1, 2].map(i => (
+                          <div key={i} className="rounded-[24px] overflow-hidden bg-white border border-slate-200">
+                            <ImgPlaceholder aspectClass="aspect-video" />
+                            <div className="p-5 flex flex-col gap-3">
+                              <div className="h-2 bg-slate-200 rounded-full w-1/3" />
+                              <div className="h-4 bg-slate-200 rounded-full w-4/5" />
+                              <div className="h-3 bg-slate-100 rounded-full w-full" />
+                              <div className="h-3 bg-slate-100 rounded-full w-3/4" />
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                </section>
+              );
+            case "brand_pkm":
+              return (
+                <section key="brand_pkm" className="px-4 py-12 bg-white md:px-10 lg:px-16" data-reveal>
+                  <div className="mx-auto max-w-7xl rounded-[28px] border border-slate-200 bg-slate-50 p-8 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                    <div>
+                      <p className="text-[10px] font-black uppercase text-sky-600 tracking-wider mb-2">Brand & Program</p>
+                      <h2 className="text-2xl font-black text-slate-900 mb-2">MedSign AI dalam program PKM-KC</h2>
+                      <p className="text-sm font-medium leading-relaxed text-slate-600 max-w-xl">
+                        Logo MedSign dipakai sebagai identitas produk, sementara logo PKM diposisikan sebagai identitas program akademik pendukung.
                       </p>
                     </div>
-                    <div className="flex items-center gap-3 border-t border-slate-100 pt-3">
-                      {rev.avatar ? (
-                        <img 
-                          src={rev.avatar} 
-                          alt={rev.name} 
-                          className="h-9 w-9 rounded-full object-cover shrink-0 border border-slate-200"
+                    <div className="flex flex-wrap items-center gap-4 shrink-0">
+                      <div className="rounded-2xl border border-white bg-white p-4 shadow-sm">
+                        <img src="/assets/medsign-logo.png" alt="Logo MedSign" className="h-12 w-auto object-contain object-left" />
+                      </div>
+                      <div className="rounded-2xl border border-white bg-white p-4 shadow-sm">
+                        <img src="/assets/pkm-logo.png" alt="Logo PKM" className="h-12 w-auto object-contain" />
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              );
+            case "video_tutorial":
+              return (
+                <section key="video_tutorial" className="px-4 pb-16 pt-4 md:px-10 lg:px-16">
+                  <div className="mx-auto max-w-7xl grid gap-5 lg:grid-cols-2">
+                    {/* Video Tutorial Panel */}
+                    <div className="rounded-[28px] p-6 flex flex-col gap-5 bg-white border border-slate-200 shadow-sm">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-[10px] font-bold text-sky-700 uppercase tracking-widest">Panduan Penggunaan</p>
+                          <h2 className="text-xl font-black text-slate-900 leading-tight mt-1">Video Tutorial MedSign AI</h2>
+                        </div>
+                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 text-sky-600 border border-sky-100">
+                          <Activity size={20} className="animate-pulse" />
+                        </div>
+                      </div>
+
+                      <div className="relative rounded-2xl overflow-hidden bg-slate-950 aspect-video shadow-inner border border-slate-200">
+                        <video
+                          src="/public/videos/medsign-accessibility-intro.mp4"
+                          controls
+                          muted
+                          playsInline
+                          aria-label="Video tutorial MedSign AI"
+                          className="w-full h-full object-cover"
                           onError={(e) => {
-                            e.currentTarget.onerror = null;
-                            e.currentTarget.style.display = 'none';
-                            const fallback = e.currentTarget.nextSibling;
-                            if (fallback) fallback.style.display = 'flex';
+                            e.currentTarget.style.display = "none";
+                            const parent = e.currentTarget.parentElement;
+                            if (parent) {
+                              const placeholder = document.createElement("div");
+                              placeholder.className = "w-full h-full flex flex-col items-center justify-center p-6 text-center text-slate-400 gap-2 bg-slate-100";
+                              placeholder.innerHTML = `
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-sky-500 animate-pulse"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg>
+                                <span class="text-xs font-black uppercase text-slate-800 tracking-wider">Demo Video Tutorial</span>
+                                <span class="text-[10px] text-slate-500 max-w-xs font-semibold leading-relaxed">Video panduan penggunaan faskes inklusif sedang dikembangkan.</span>
+                              `;
+                              parent.appendChild(placeholder);
+                            }
                           }}
                         />
-                      ) : null}
-                      <div 
-                        style={{ display: rev.avatar ? 'none' : 'flex' }}
-                        className="h-9 w-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 font-black text-xs shrink-0"
-                      >
-                        {rev.name[0]}
                       </div>
-                      <div>
-                        <span className="block text-xs font-black text-slate-900">{rev.name}</span>
-                        <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">{rev.role}</span>
+
+                      <div className="flex flex-col gap-1 text-[10px] font-semibold text-slate-500 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-100">
+                        <span className="text-[9px] font-black uppercase text-slate-400">Deskripsi Panduan</span>
+                        <span>Simak bagaimana asisten komunikasi medis tunarungu bekerja dalam menjembatani pemeriksaan medis sehari-hari. Mulai dari pengambilan kamera input, pemrosesan model BISINDO, keluaran teks verbal, hingga pelafalan suara verbal dokter.</span>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
 
-        {/* ── INSTAGRAM FEED ──────────────────────────────── */}
-        {instagramPosts.length > 0 && (
-          <section className="px-4 py-12 bg-white md:px-10 lg:px-16" data-reveal>
-            <div className="mx-auto max-w-7xl">
-              <h2 className="text-2xl font-black text-slate-900 mb-8">Konten Terbaru Instagram</h2>
-              <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                {instagramPosts.map((post) => (
-                  <InstagramPostCard key={post.id} post={post} />
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* ── ARTIKEL TERKINI ─────────────────────────────── */}
-        <section className="px-4 py-12 md:px-10 lg:px-16" data-reveal>
-          <div className="mx-auto max-w-7xl">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-black text-slate-900">Artikel Terkini</h2>
-              <a
-                href={MARKETING_SITE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[11px] font-black text-sky-600 uppercase tracking-wider flex items-center gap-1.5 px-4 py-2 rounded-full border border-sky-200 bg-sky-50 hover:bg-sky-100 transition-colors"
-              >
-                Lihat Semua <ExternalLink size={11} />
-              </a>
-            </div>
-            <div className="grid gap-6 md:grid-cols-3">
-              {articles.length > 0 ? (
-                articles.map((art, idx) => (
-                  <div key={art.id || idx} data-reveal style={{ transitionDelay: `${idx * 60}ms` }}>
-                    <ArticleCard art={art} />
-                  </div>
-                ))
-              ) : (
-                // Skeleton placeholder: 3 abu-abu cards saat data belum ada
-                [0, 1, 2].map(i => (
-                  <div key={i} className="rounded-[24px] overflow-hidden bg-white border border-slate-200">
-                    <ImgPlaceholder aspectClass="aspect-video" />
-                    <div className="p-5 flex flex-col gap-3">
-                      <div className="h-2 bg-slate-200 rounded-full w-1/3" />
-                      <div className="h-4 bg-slate-200 rounded-full w-4/5" />
-                      <div className="h-3 bg-slate-100 rounded-full w-full" />
-                      <div className="h-3 bg-slate-100 rounded-full w-3/4" />
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-        </section>
-
-        {/* ── BRAND PKM-KC ────────────────────────────────── */}
-        <section className="px-4 py-12 bg-white md:px-10 lg:px-16" data-reveal>
-          <div className="mx-auto max-w-7xl rounded-[28px] border border-slate-200 bg-slate-50 p-8 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-            <div>
-              <p className="text-[10px] font-black uppercase text-sky-600 tracking-wider mb-2">Brand & Program</p>
-              <h2 className="text-2xl font-black text-slate-900 mb-2">MedSign AI dalam program PKM-KC</h2>
-              <p className="text-sm font-medium leading-relaxed text-slate-600 max-w-xl">
-                Logo MedSign dipakai sebagai identitas produk, sementara logo PKM diposisikan sebagai identitas program akademik pendukung.
-              </p>
-            </div>
-            <div className="flex flex-wrap items-center gap-4 shrink-0">
-              <div className="rounded-2xl border border-white bg-white p-4 shadow-sm">
-                <img src="/assets/medsign-logo.png" alt="Logo MedSign" className="h-12 w-auto object-contain object-left" />
-              </div>
-              <div className="rounded-2xl border border-white bg-white p-4 shadow-sm">
-                <img src="/assets/pkm-logo.png" alt="Logo PKM" className="h-12 w-auto object-contain" />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── COMMUNICATION LOOP ──────────────────────────── */}
-        <section className="px-4 pb-16 pt-4 md:px-10 lg:px-16">
-          <div className="mx-auto max-w-7xl grid gap-5 lg:grid-cols-2">
-
-            {/* Dark panel */}
-            <div
-              className="rounded-[28px] p-8 flex flex-col gap-6"
-              style={{ background: 'linear-gradient(145deg,#0f172a,#0c1b2d)', border: '1px solid rgba(255,255,255,0.08)' }}
-              data-reveal
-            >
-              <style>{`
-                @keyframes flowDash { 0% { stroke-dashoffset:500; } 100% { stroke-dashoffset:0; } }
-                .animate-flow-dash { animation: flowDash 6s linear infinite; }
-                .glow-active-card { box-shadow: 0 0 25px rgba(56,189,248,0.14); }
-              `}</style>
-
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-[10px] font-bold text-sky-400 uppercase tracking-widest">Communication loop</p>
-                  <h2 className="text-2xl font-black text-white leading-tight mt-1">Pasien ke dokter dalam satu layar</h2>
-                </div>
-                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-500/10 text-sky-400">
-                  <Activity size={20} className="animate-pulse" />
-                </div>
-              </div>
-
-              <div className="relative py-2 select-none">
-                <svg viewBox="0 0 520 170" className="h-auto w-full" role="img" aria-label="Alur kamera, model, teks, dan suara">
-                  <defs>
-                    <linearGradient id="flowGradient" x1="0" x2="1" y1="0" y2="0">
-                      <stop offset="0" stopColor="#38bdf8" />
-                      <stop offset="0.5" stopColor="#2dd4bf" />
-                      <stop offset="1" stopColor="#f472b6" />
-                    </linearGradient>
-                    <linearGradient id="activeGradient" x1="0" x2="1" y1="0" y2="0">
-                      <stop offset="0" stopColor="#e0f2fe" />
-                      <stop offset="0.5" stopColor="#ccfbf1" />
-                      <stop offset="1" stopColor="#fce7f3" />
-                    </linearGradient>
-                  </defs>
-                  <path d="M66 86 C 148 20, 206 152, 288 84 S 416 34, 456 92" fill="none" stroke="url(#flowGradient)" strokeWidth="6" strokeLinecap="round" className="opacity-20" />
-                  <path d="M66 86 C 148 20, 206 152, 288 84 S 416 34, 456 92" fill="none" stroke="url(#activeGradient)" strokeWidth="6" strokeLinecap="round" strokeDasharray="80 320" className="animate-flow-dash" />
-                  {[
-                    { label: 'Kamera', x: 66,  y: 86, index: 0, glow: 'rgba(56,189,248,0.4)' },
-                    { label: 'Model',  x: 194, y: 92, index: 1, glow: 'rgba(45,212,191,0.4)' },
-                    { label: 'Teks',   x: 320, y: 82, index: 2, glow: 'rgba(251,191,36,0.4)' },
-                    { label: 'Suara',  x: 456, y: 92, index: 3, glow: 'rgba(244,114,182,0.4)' },
-                  ].map(node => {
-                    const isActive = activeStage === node.index;
-                    return (
-                      <g key={node.label} className="cursor-pointer" onClick={() => setActiveStage(node.index)}>
-                        <circle cx={node.x} cy={node.y} r={isActive ? 32 : 26} fill="transparent" stroke={isActive ? node.glow : 'rgba(255,255,255,0.06)'} strokeWidth={isActive ? 4 : 1} className="transition-all duration-300" />
-                        <circle cx={node.x} cy={node.y} r="22" fill={isActive ? 'rgba(15,23,42,0.95)' : 'rgba(255,255,255,0.08)'} stroke="rgba(255,255,255,0.2)" strokeWidth="1.5" className="transition-all duration-300" />
-                        <text x={node.x} y={node.y + 4} textAnchor="middle" fill={isActive ? '#f8fafc' : '#94a3b8'} fontSize="10" fontWeight="900" className="uppercase tracking-widest select-none">{node.label}</text>
-                      </g>
-                    );
-                  })}
-                </svg>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                {[
-                  { title: 'Kamera', desc: 'Membaca 21 koordinat landmark jari tangan secara real-time.',        tag: 'MediaPipe Input',      activeBg: 'bg-sky-950/30 border-sky-400 text-sky-200' },
-                  { title: 'Model',  desc: 'Model AI GRU/LSTM menerjemahkan koordinat menjadi kata BISINDO.',   tag: 'Neural Net Inference', activeBg: 'bg-teal-950/30 border-teal-400 text-teal-200' },
-                  { title: 'Teks',   desc: 'Hasil terjemahan terkonfirmasi tampil otomatis di layar medis.',    tag: 'Live Transcription',   activeBg: 'bg-amber-950/30 border-amber-400 text-amber-200' },
-                  { title: 'Suara',  desc: 'Asisten melafalkan suara verbal untuk didengar dokter.',           tag: 'Speech Synthesis',     activeBg: 'bg-pink-950/30 border-pink-400 text-pink-200' },
-                ].map((stage, idx) => {
-                  const isActive = activeStage === idx;
-                  return (
-                    <div
-                      key={stage.title}
-                      onClick={() => setActiveStage(idx)}
-                      className={`cursor-pointer rounded-2xl p-4 border transition-all duration-500 flex flex-col justify-between h-[112px] select-none ${
-                        isActive
-                          ? `${stage.activeBg} glow-active-card scale-[1.01] shadow-inner`
-                          : 'border-white/10 bg-slate-950/35 text-slate-400 hover:bg-slate-900/40 hover:border-white/20'
-                      }`}
-                    >
-                      <div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-black uppercase tracking-wider">{stage.title}</span>
-                          <span className="text-[8px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded-md bg-white/5 border border-white/10 text-slate-400">{stage.tag}</span>
+                    {/* Status panel */}
+                    <div className="rounded-[28px] bg-white border border-slate-200 p-8">
+                      <div className="mb-5 flex items-center gap-3">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600">
+                          <BadgeCheck size={24} />
                         </div>
-                        <p className="text-[10px] font-semibold leading-relaxed mt-2.5">{stage.desc}</p>
+                        <div>
+                          <p className="text-xs font-bold text-emerald-700">Status implementasi</p>
+                          <h2 className="text-2xl font-black text-slate-900">UI siap dipakai untuk demo</h2>
+                        </div>
+                      </div>
+
+                      <div className="grid gap-3 mb-6">
+                        {[
+                          'Mode pasien menampilkan kamera, hasil translasi, spelling abjad A-Z & angka 1-9, kosakata, dan log.',
+                          'Mode dokter menyediakan panel respon cepat, TTS, dan timeline konsultasi.',
+                          'Alert darurat tetap aktif untuk sinyal seperti nyeri dada atau bantuan segera.',
+                        ].map(item => (
+                          <div key={item} className="flex gap-3 rounded-2xl bg-slate-50 border border-slate-100 p-3">
+                            <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-emerald-500" />
+                            <p className="text-sm font-medium leading-6 text-slate-600">{item}</p>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="flex flex-col gap-3 sm:flex-row">
+                        <button
+                          onClick={() => setView('patient')}
+                          className="flex-1 inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold text-white transition-all active:scale-95"
+                          style={{ background: 'linear-gradient(135deg,#0ea5e9,#0d9488)', boxShadow: '0 6px 20px rgba(14,165,233,0.3)' }}
+                        >
+                          <Camera size={16} /> Coba Konsultasi
+                        </button>
+                        <button
+                          onClick={() => setView('about')}
+                          className="flex-1 inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-100 transition-all active:scale-95"
+                        >
+                          <FileText size={16} /> Detail Proyek
+                        </button>
                       </div>
                     </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Status panel */}
-            <div className="rounded-[28px] bg-white border border-slate-200 p-8" data-reveal>
-              <div className="mb-5 flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600">
-                  <BadgeCheck size={24} />
-                </div>
-                <div>
-                  <p className="text-xs font-bold text-emerald-700">Status implementasi</p>
-                  <h2 className="text-2xl font-black text-slate-900">UI siap dipakai untuk demo</h2>
-                </div>
-              </div>
-
-              <div className="grid gap-3 mb-6">
-                {[
-                  'Mode pasien menampilkan kamera, hasil translasi, spelling abjad A-Z & angka 1-9, kosakata, dan log.',
-                  'Mode dokter menyediakan panel respon cepat, TTS, dan timeline konsultasi.',
-                  'Alert darurat tetap aktif untuk sinyal seperti nyeri dada atau bantuan segera.',
-                ].map(item => (
-                  <div key={item} className="flex gap-3 rounded-2xl bg-slate-50 border border-slate-100 p-3">
-                    <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-emerald-500" />
-                    <p className="text-sm font-medium leading-6 text-slate-600">{item}</p>
                   </div>
-                ))}
-              </div>
-
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <button
-                  onClick={() => setView('patient')}
-                  className="flex-1 inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 text-sm font-bold text-white transition-all active:scale-95"
-                  style={{ background: 'linear-gradient(135deg,#0ea5e9,#0d9488)', boxShadow: '0 6px 20px rgba(14,165,233,0.3)' }}
-                >
-                  <Gauge size={16} /> {t('tryConsultation') || 'Coba Konsultasi'}
-                </button>
-                <button
-                  onClick={() => setView('about')}
-                  className="flex-1 inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-100 transition-all active:scale-95"
-                >
-                  <FileText size={16} /> {t('viewProjectDetails') || 'Detail Proyek'}
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-      </div>{/* end bg-slate-50 wrapper */}
+                </section>
+              );
+            default:
+              return null;
+          }
+        })}
+      </div>
     </div>
   );
 };

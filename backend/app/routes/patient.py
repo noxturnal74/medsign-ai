@@ -1,8 +1,26 @@
-﻿import uuid
+from datetime import datetime, timedelta
+import os
+import uuid
 from typing import List, Optional
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, Request
 from pydantic import BaseModel
 from app.db import (
+    db_get_doctor_by_id,
+    db_get_patient_timeline,
+    db_create_break_glass_log,
+    db_check_break_glass_active,
+    db_create_export,
+    db_get_export_by_id,
+    db_update_export_status,
+    db_update_patient_accessibility_preference,
+    db_get_patient_medical_records,
+    db_create_consent,
+    db_get_patient_consents,
+    db_update_patient,
+    encrypt_nik,
+    db_create_timeline_event,
+    db_get_patient_medications,
+    db_get_doctor_by_id,
     db_get_patient_by_id,
     db_check_doctor_patient_link,
     db_get_doctor_patients,
@@ -34,6 +52,45 @@ class SessionResponse(BaseModel):
     started_at: str
     ended_at: Optional[str] = None
 
+
+class ConsentCreateRequest(BaseModel):
+    consent_type: str
+    purpose: str
+    version: str
+    consent_text_hash: str
+
+class ConsentResponseData(BaseModel):
+    id: str
+    patient_id: str
+    consent_type: str
+    purpose: Optional[str] = None
+    version: Optional[str] = None
+    accepted_at: str
+    status: str
+
+
+
+class BreakGlassRequest(BaseModel):
+    reason: str
+
+class ExportResponse(BaseModel):
+    export_id: str
+    download_url: str
+    expires_at: str
+
+class AccessibilityPreferenceRequest(BaseModel):
+    preference: str
+
+class KtpVerifyRequest(BaseModel):
+    nik: str
+    name: str
+    date_of_birth: str
+    address: Optional[str] = None
+    gender: Optional[str] = None
+
+class FaceVerifyRequest(BaseModel):
+    photo_b64: Optional[str] = None
+
 # ── ENDPOINTS ──
 
 @router.get("/patients/{patient_id}", response_model=PatientResponse)
@@ -52,11 +109,24 @@ def get_patient_details(patient_id: str, current_user: dict = Depends(get_curren
         nik = mask_nik(decrypt_nik(patient["nik_encrypted"]))
         
     elif role == "doctor":
-        if not db_check_doctor_patient_link(user_id, patient_id):
-            raise HTTPException(status_code=403, detail="Akses ditolak: Pasien tidak terdaftar di relasi dokter-pasien Anda")
+        doctor = db_get_doctor_by_id(user_id)
+        if not doctor:
+            raise HTTPException(status_code=403, detail="Akses ditolak")
+            
+        # Break-Glass or assignment bypasses facility isolation in emergencies!
+        is_break_glass = db_check_break_glass_active(user_id, patient_id)
+        is_assigned = db_check_doctor_patient_link(user_id, patient_id)
+        
+        if not is_assigned and not is_break_glass:
+            raise HTTPException(status_code=403, detail="Akses ditolak: Pasien tidak terdaftar atau memerlukan Break-Glass")
+            
         nik = decrypt_nik(patient["nik_encrypted"])
         
-    else: # admin
+    elif role == "admin":
+        if patient.get("facility_id") != current_user.get("facility_id"):
+            raise HTTPException(status_code=403, detail="Akses ditolak: Pasien berada di fasilitas lain")
+        nik = decrypt_nik(patient["nik_encrypted"])
+    else: # super_admin
         nik = decrypt_nik(patient["nik_encrypted"])
         
     res = PatientResponse(
@@ -98,20 +168,30 @@ def get_doctor_patients_endpoint(current_user: dict = Depends(get_current_user))
 
 @router.get("/doctor/patients/search", response_model=List[PatientResponse])
 def search_patients(q: str, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] not in ["doctor", "admin"]:
+    role = current_user["role"]
+    if role not in ["doctor", "admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya dokter dan admin yang dapat mencari pasien")
         
     rows = db_get_all_patients()
+    doctor = db_get_doctor_by_id(current_user["user_id"]) if role == "doctor" else None
     
     res = []
     for r in rows:
+        # Check facility boundaries
+        if role == "doctor":
+            if doctor and r.get("facility_id") != doctor.get("facility_id"):
+                continue
+        elif role == "admin":
+            if r.get("facility_id") != current_user.get("facility_id"):
+                continue
+
         decrypted_nik = decrypt_nik(r["nik_encrypted"])
         query_lower = q.lower()
         if (query_lower in decrypted_nik or 
             query_lower in r["no_rm"].lower() or 
             query_lower in r["name"].lower()):
             
-            if current_user["role"] == "doctor":
+            if role == "doctor":
                 if not db_check_doctor_patient_link(current_user["user_id"], r["id"]):
                     continue # Skip unassigned patient
             
@@ -175,3 +255,280 @@ def get_patient_sessions_endpoint(current_user: dict = Depends(get_current_user)
     write_audit_log(current_user["user_id"], "patient", "GET /api/v1/patient/me/sessions", current_user["user_id"])
     
     return res
+
+
+@router.post("/patient/consent", response_model=ConsentResponseData)
+def create_patient_consent(req: ConsentCreateRequest, request: Request, current_user: dict = Depends(get_current_user)):
+    if current_user["role"] != "patient":
+        raise HTTPException(status_code=403, detail="Hanya pasien yang dapat memberikan persetujuan")
+    
+    consent_id = str(uuid.uuid4())
+    ip_addr = request.client.host if request.client else "unknown"
+    user_agt = request.headers.get("user-agent", "unknown")
+    
+    success = db_create_consent(
+        consent_id=consent_id,
+        patient_id=current_user["user_id"],
+        consent_type=req.consent_type,
+        purpose=req.purpose,
+        version=req.version,
+        ip_address=ip_addr,
+        user_agent=user_agt,
+        consent_text_hash=req.consent_text_hash
+    )
+    if not success:
+        raise HTTPException(status_code=500, detail="Gagal menyimpan persetujuan")
+        
+    write_audit_log(current_user["user_id"], "patient", f"CONSENT_ACCEPTED (Type: {req.consent_type})", current_user["user_id"], event_type="CONSENT_ACCEPTED", ip_address=ip_addr, user_agent=user_agt)
+    
+    # Return response data
+    return ConsentResponseData(
+        id=consent_id,
+        patient_id=current_user["user_id"],
+        consent_type=req.consent_type,
+        purpose=req.purpose,
+        version=req.version,
+        accepted_at=datetime.utcnow().isoformat(),
+        status="accepted"
+    )
+
+@router.get("/patient/consent", response_model=List[ConsentResponseData])
+def get_my_consents(current_user: dict = Depends(get_current_user)):
+    if current_user["role"] != "patient":
+        raise HTTPException(status_code=403, detail="Hanya pasien yang dapat melihat persetujuan mereka")
+    consents = db_get_patient_consents(current_user["user_id"])
+    return [
+        ConsentResponseData(
+            id=c["id"],
+            patient_id=c["patient_id"],
+            consent_type=c["consent_type"],
+            purpose=c.get("purpose"),
+            version=c.get("version"),
+            accepted_at=c.get("accepted_at"),
+            status=c.get("status")
+        ) for c in consents
+    ]
+
+@router.post("/patient/verify/ktp")
+def verify_patient_ktp(req: KtpVerifyRequest, current_user: dict = Depends(get_current_user)):
+    if current_user["role"] != "patient":
+        raise HTTPException(status_code=403, detail="Hanya pasien yang dapat melakukan verifikasi NIK")
+    
+    patient = db_get_patient_by_id(current_user["user_id"])
+    if not patient:
+        raise HTTPException(status_code=404, detail="Pasien tidak ditemukan")
+        
+    # Encrypt the NIK
+    encrypted_nik = encrypt_nik(req.nik)
+    
+    success = db_update_patient(
+        patient_id=current_user["user_id"],
+        no_rm=patient["no_rm"],
+        nik_encrypted=encrypted_nik,
+        password_hash=None,
+        name=req.name,
+        date_of_birth=req.date_of_birth,
+        gender=req.gender,
+        address=req.address,
+        verification_status="KTP_VERIFIED",
+        ktp_verification_status="KTP_VERIFIED"
+    )
+    if not success:
+        raise HTTPException(status_code=500, detail="Gagal menyimpan verifikasi KTP")
+        
+    write_audit_log(current_user["user_id"], "patient", "KTP_VERIFIED (NIK submitted and matched)", current_user["user_id"], event_type="KTP_VERIFIED")
+    return {"message": "Verifikasi KTP berhasil disimpan"}
+
+@router.post("/patient/verify/face")
+def verify_patient_face(req: FaceVerifyRequest, current_user: dict = Depends(get_current_user)):
+    if current_user["role"] != "patient":
+        raise HTTPException(status_code=403, detail="Hanya pasien yang dapat melakukan verifikasi wajah")
+        
+    # Check if patient consented to biometric processing
+    consents = db_get_patient_consents(current_user["user_id"])
+    biometric_consent = any(c["consent_type"] == "BIOMETRIC_VERIFICATION" and c["status"] == "accepted" for c in consents)
+    if not biometric_consent:
+        raise HTTPException(status_code=400, detail="Akses ditolak: Persetujuan pemrosesan biometrik (BIOMETRIC_VERIFICATION) belum disetujui")
+        
+    patient = db_get_patient_by_id(current_user["user_id"])
+    if not patient:
+        raise HTTPException(status_code=404, detail="Pasien tidak ditemukan")
+        
+    success = db_update_patient(
+        patient_id=current_user["user_id"],
+        no_rm=patient["no_rm"],
+        nik_encrypted=patient["nik_encrypted"],
+        password_hash=None,
+        name=patient["name"],
+        date_of_birth=patient["date_of_birth"],
+        verification_status="FACE_VERIFIED",
+        face_verification_status="FACE_VERIFIED"
+    )
+    if not success:
+        raise HTTPException(status_code=500, detail="Gagal menyimpan verifikasi wajah")
+        
+    write_audit_log(current_user["user_id"], "patient", "FACE_VERIFICATION_COMPLETED (Face photo processed)", current_user["user_id"], event_type="FACE_VERIFICATION_COMPLETED")
+    return {"message": "Verifikasi wajah berhasil diproses"}
+
+
+@router.get("/patient/accessibility-preference")
+def get_accessibility_preference(current_user: dict = Depends(get_current_user)):
+    if current_user["role"] != "patient":
+        raise HTTPException(status_code=403, detail="Hanya pasien yang dapat memiliki preferensi aksesibilitas")
+    
+    patient = db_get_patient_by_id(current_user["user_id"])
+    if not patient:
+        raise HTTPException(status_code=404, detail="Pasien tidak ditemukan")
+        
+    return {"preference": patient.get("accessibility_intro_seen") or "NOT_SEEN"}
+
+@router.post("/patient/accessibility-preference")
+def update_accessibility_preference(req: AccessibilityPreferenceRequest, current_user: dict = Depends(get_current_user)):
+    if current_user["role"] != "patient":
+        raise HTTPException(status_code=403, detail="Hanya pasien yang dapat memperbarui preferensi aksesibilitas")
+        
+    success = db_update_patient_accessibility_preference(current_user["user_id"], req.preference)
+    if not success:
+        raise HTTPException(status_code=500, detail="Gagal memperbarui preferensi")
+        
+    # Log audit event
+    write_audit_log(current_user["user_id"], "patient", f"ACCESSIBILITY_SETTING_CHANGED (Status: {req.preference})", current_user["user_id"], event_type="ACCESSIBILITY_SETTING_CHANGED")
+    
+    return {"message": "Preferensi aksesibilitas diperbarui"}
+
+
+@router.get("/patients/{patient_id}/timeline")
+def get_patient_timeline_endpoint(patient_id: str, current_user: dict = Depends(get_current_user)):
+    role = current_user["role"]
+    user_id = current_user["user_id"]
+    
+    patient = db_get_patient_by_id(patient_id)
+    if not patient:
+        raise HTTPException(status_code=404, detail="Pasien tidak ditemukan")
+        
+    if role == "patient" and patient_id != user_id:
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+    elif role == "doctor":
+        # Enforce link or break-glass access
+        if not db_check_doctor_patient_link(user_id, patient_id) and not db_check_break_glass_active(user_id, patient_id):
+            raise HTTPException(status_code=403, detail="Akses ditolak: Anda tidak memiliki akses biasa atau akses Break-Glass")
+    elif role == "admin":
+        if patient.get("facility_id") != current_user.get("facility_id"):
+            raise HTTPException(status_code=403, detail="Akses ditolak")
+            
+    events = db_get_patient_timeline(patient_id)
+    return events
+
+@router.post("/patient/{patient_id}/break-glass")
+def request_break_glass_endpoint(patient_id: str, req: BreakGlassRequest, current_user: dict = Depends(get_current_user)):
+    if current_user["role"] != "doctor":
+        raise HTTPException(status_code=403, detail="Hanya dokter yang dapat mengaktifkan Break-Glass")
+        
+    if not req.reason.strip():
+        raise HTTPException(status_code=400, detail="Alasan Break-Glass harus diisi")
+        
+    patient = db_get_patient_by_id(patient_id)
+    if not patient:
+        raise HTTPException(status_code=404, detail="Pasien tidak ditemukan")
+        
+    bg_id = str(uuid.uuid4())
+    success = db_create_break_glass_log(bg_id, current_user["user_id"], patient_id, req.reason, duration_hours=2)
+    if not success:
+        raise HTTPException(status_code=500, detail="Gagal mengaktifkan Break-Glass")
+        
+    # Write clinical timeline event
+    db_create_timeline_event(
+        str(uuid.uuid4()),
+        patient_id,
+        "VERIFICATION",
+        "Akses Darurat (Break-Glass) Diaktifkan",
+        f"Diaktifkan oleh dr. {current_user['user_id']} dengan alasan: {req.reason}",
+        datetime.utcnow().isoformat(),
+        bg_id
+    )
+        
+    # Trigger security incident if a doctor activates break-glass
+    from app.db import db_create_incident
+    db_create_incident(
+        str(uuid.uuid4()),
+        "Emergency Break-Glass Activated",
+        f"Doctor {current_user['user_id']} bypassed access boundaries to Patient {patient_id}. Reason: {req.reason}",
+        "HIGH",
+        "open"
+    )
+    
+    write_audit_log(current_user["user_id"], "doctor", f"BREAK_GLASS_ACTIVATED (Patient: {patient_id} Reason: {req.reason})", patient_id, event_type="BREAK_GLASS_ACTIVATED")
+    return {"message": "Akses darurat Break-Glass diaktifkan selama 2 jam."}
+
+@router.post("/patient/me/export", response_model=ExportResponse)
+def request_patient_export_endpoint(current_user: dict = Depends(get_current_user)):
+    if current_user["role"] != "patient":
+        raise HTTPException(status_code=403, detail="Hanya pasien yang dapat mengekspor data sendiri")
+        
+    patient_id = current_user["user_id"]
+    patient = db_get_patient_by_id(patient_id)
+    if not patient:
+        raise HTTPException(status_code=404, detail="Pasien tidak ditemukan")
+        
+    # Gather export data
+    timeline = db_get_patient_timeline(patient_id)
+    records = db_get_patient_medical_records(patient_id)
+    meds = db_get_patient_medications(patient_id)
+    consents = db_get_patient_consents(patient_id)
+    
+    import json
+    import time
+    
+    export_data = {
+        "profile": {
+            "name": patient["name"],
+            "date_of_birth": patient["date_of_birth"],
+            "no_rm": patient["no_rm"]
+        },
+        "consents": [dict(c) for c in consents],
+        "timeline": [dict(t) for t in timeline],
+        "medical_records": [dict(r) for r in records],
+        "medications": [dict(m) for m in meds]
+    }
+    
+    export_dir = "backend/data/exports"
+    os.makedirs(export_dir, exist_ok=True)
+    
+    export_id = str(uuid.uuid4())
+    filename = f"export_{patient_id}_{int(time.time())}.json"
+    file_path = f"{export_dir}/{filename}"
+    
+    with open(file_path, "w", encoding="utf-8") as f:
+        json.dump(export_data, f, ensure_ascii=False, indent=2)
+        
+    db_create_export(export_id, patient_id, file_path, expiry_hours=24)
+    
+    expires_str = (datetime.utcnow() + timedelta(hours=24)).isoformat()
+    download_url = f"/api/v1/patient/export/{export_id}"
+    
+    write_audit_log(patient_id, "patient", "DATA_EXPORT_REQUESTED", patient_id, event_type="DATA_EXPORT_REQUESTED")
+    return ExportResponse(export_id=export_id, download_url=download_url, expires_at=expires_str)
+
+@router.get("/patient/export/{export_id}")
+def download_patient_export_endpoint(export_id: str, current_user: dict = Depends(get_current_user)):
+    export_row = db_get_export_by_id(export_id)
+    if not export_row:
+        raise HTTPException(status_code=404, detail="File ekspor tidak ditemukan")
+        
+    if export_row["patient_id"] != current_user["user_id"]:
+        raise HTTPException(status_code=403, detail="Akses ditolak: File ekspor ini bukan milik Anda")
+        
+    # Check expiry
+    expiry = datetime.fromisoformat(export_row["expires_at"])
+    if datetime.utcnow() > expiry:
+        db_update_export_status(export_id, "expired")
+        raise HTTPException(status_code=400, detail="Link ekspor sudah kedaluwarsa (berlaku 24 jam)")
+        
+    if not os.path.exists(export_row["file_path"]):
+        raise HTTPException(status_code=404, detail="File fisik sudah dihapus dari server")
+        
+    # Return file response
+    from fastapi.responses import FileResponse
+    db_update_export_status(export_id, "downloaded")
+    write_audit_log(current_user["user_id"], "patient", "DATA_EXPORT_DOWNLOADED", current_user["user_id"], event_type="DATA_EXPORT_DOWNLOADED")
+    return FileResponse(export_row["file_path"], media_type="application/json", filename=os.path.basename(export_row["file_path"]))

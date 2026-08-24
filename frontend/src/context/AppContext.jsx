@@ -8,14 +8,7 @@ export const AppProvider = ({ children }) => {
   const [ttsEnabled, setTtsEnabled] = useState(true);
   const [vocabList, setVocabList] = useState(vocabulary);
   const [language, setLanguageState] = useState('id');
-  const [sessionLog, setSessionLog] = useState(() => {
-    try {
-      const saved = localStorage.getItem('medsign_guest_log');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
+  const [sessionLog, setSessionLog] = useState([]);
   const [sentence, setSentence] = useState([]);
   const [lastDetected, setLastDetected] = useState(null);
   const [cameraActive, setCameraActive] = useState(false);
@@ -69,6 +62,111 @@ export const AppProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : null;
   });
 
+  // Permission grants for ML/dataset features (rekam dataset, balance checker,
+  // AI augmentation, training model). Super admin always has everything.
+  const [grants, setGrants] = useState(() => {
+    const saved = localStorage.getItem('medsign_grants');
+    return saved ? JSON.parse(saved) : null;
+  });
+
+  const loadGrants = useCallback(async () => {
+    if (!currentUser) {
+      setGrants(null);
+      localStorage.removeItem('medsign_grants');
+      return;
+    }
+    const role = currentUser.role;
+    if (role !== 'super_admin' && role !== 'admin' && role !== 'doctor') {
+      setGrants(null);
+      localStorage.removeItem('medsign_grants');
+      return;
+    }
+    try {
+      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const base = apiBaseUrl.replace(/\/$/, '');
+      const res = await fetch(`${base}/api/v1/user/grants`, {
+        headers: { 'Authorization': `Bearer ${currentUser.token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setGrants(data.grants);
+        localStorage.setItem('medsign_grants', JSON.stringify(data.grants));
+      }
+    } catch (err) {
+      console.error("Gagal memuat grant fitur:", err);
+    }
+  }, [currentUser]);
+
+  // Reload grants whenever the logged-in user changes
+  useEffect(() => {
+    loadGrants();
+  }, [loadGrants]);
+
+  const hasGrant = useCallback((feature) => {
+    if (!currentUser) return false;
+    if (currentUser.role === 'super_admin') return true;
+    if (!grants) return false;
+    return !!grants[feature];
+  }, [currentUser, grants]);
+
+  const [activePatient, setActivePatient] = useState(null);
+  const [activeSessionId, setActiveSessionId] = useState(null);
+
+
+
+  // Poll active session for logged-in patients
+  useEffect(() => {
+    if (!currentUser || currentUser.role !== 'patient') return;
+    
+    const checkActiveSession = async () => {
+      try {
+        const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+        const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/patient/me/sessions`, {
+          headers: { 'Authorization': `Bearer ${currentUser.token}` }
+        });
+        if (response.ok) {
+          const sessions = await response.json();
+          const active = sessions.find(s => !s.ended_at);
+          if (active && active.id !== activeSessionId) {
+            setActiveSessionId(active.id);
+          } else if (!active && activeSessionId) {
+            setActiveSessionId(null);
+          }
+        }
+      } catch (err) {
+        console.error("Gagal memeriksa sesi aktif pasien:", err);
+      }
+    };
+    
+    checkActiveSession();
+    const interval = setInterval(checkActiveSession, 4000);
+    return () => clearInterval(interval);
+  }, [currentUser, activeSessionId]);
+
+  // Poll chat logs for active sessions (both doctor and patient)
+  useEffect(() => {
+    if (!currentUser || !activeSessionId) return;
+    
+    const pollLogs = async () => {
+      try {
+        const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+        const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/sessions/${activeSessionId}/logs`, {
+          headers: { 'Authorization': `Bearer ${currentUser.token}` }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setSessionLog(data);
+        }
+      } catch (err) {
+        console.error("Gagal sinkronisasi log:", err);
+      }
+    };
+    
+    pollLogs();
+    const interval = setInterval(pollLogs, 2500);
+    return () => clearInterval(interval);
+  }, [currentUser, activeSessionId]);
+
   const [layoutMode, setLayoutModeState] = useState(() => {
     return localStorage.getItem('medsign_layout_mode') || 'desktop';
   });
@@ -82,6 +180,80 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     document.documentElement.classList.toggle('phone-mode', layoutMode === 'phone');
   }, [layoutMode]);
+
+  const [viewMode, setViewModeState] = useState(() => {
+    return localStorage.getItem('medsign_view_mode') || 'normal';
+  });
+
+  const setViewMode = (mode) => {
+    setViewModeState(mode);
+    localStorage.setItem('medsign_view_mode', mode);
+  };
+
+  const syncChannelRef = useRef(null);
+  const isSyncingRef = useRef(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.BroadcastChannel) {
+      const channel = new BroadcastChannel('medsign_sync_channel');
+      syncChannelRef.current = channel;
+
+      channel.onmessage = (event) => {
+        const { type, data } = event.data;
+        isSyncingRef.current = true;
+        
+        if (type === 'SYNC_SESSION_LOG') {
+          setSessionLog(data);
+        } else if (type === 'SYNC_SENTENCE') {
+          setSentence(data);
+        } else if (type === 'SYNC_GENERATED_SENTENCE') {
+          setGeneratedSentence(data);
+        } else if (type === 'SYNC_ACTIVE_PATIENT') {
+          setActivePatient(data);
+        } else if (type === 'SYNC_SESSION_ID') {
+          setActiveSessionId(data);
+        }
+
+        setTimeout(() => {
+          isSyncingRef.current = false;
+        }, 50);
+      };
+
+      return () => {
+        channel.close();
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isSyncingRef.current && syncChannelRef.current) {
+      syncChannelRef.current.postMessage({ type: 'SYNC_SESSION_LOG', data: sessionLog });
+    }
+  }, [sessionLog]);
+
+  useEffect(() => {
+    if (!isSyncingRef.current && syncChannelRef.current) {
+      syncChannelRef.current.postMessage({ type: 'SYNC_SENTENCE', data: sentence });
+    }
+  }, [sentence]);
+
+  useEffect(() => {
+    if (!isSyncingRef.current && syncChannelRef.current) {
+      syncChannelRef.current.postMessage({ type: 'SYNC_GENERATED_SENTENCE', data: generatedSentence });
+    }
+  }, [generatedSentence]);
+
+  useEffect(() => {
+    if (!isSyncingRef.current && syncChannelRef.current) {
+      syncChannelRef.current.postMessage({ type: 'SYNC_ACTIVE_PATIENT', data: activePatient });
+    }
+  }, [activePatient]);
+
+  useEffect(() => {
+    if (!isSyncingRef.current && syncChannelRef.current) {
+      syncChannelRef.current.postMessage({ type: 'SYNC_SESSION_ID', data: activeSessionId });
+    }
+  }, [activeSessionId]);
 
   // --- REFS ---
   const sentenceTimerRef = useRef(null);
@@ -369,16 +541,7 @@ export const AppProvider = ({ children }) => {
     
     setSessionLog((prev) => [newEntry, ...prev]);
 
-    if (!currentUser) {
-      // Save to local storage for Guest
-      try {
-        const currentLogs = JSON.parse(localStorage.getItem('medsign_guest_log') || '[]');
-        const updatedLogs = [newEntry, ...currentLogs];
-        localStorage.setItem('medsign_guest_log', JSON.stringify(updatedLogs));
-      } catch (e) {
-        console.error(e);
-      }
-    } else if (activeSessionId) {
+    if (currentUser && activeSessionId) {
       // Save to database for logged in user session
       try {
         const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
@@ -408,10 +571,7 @@ export const AppProvider = ({ children }) => {
 
   const clearLog = useCallback(() => {
     setSessionLog([]);
-    if (!currentUser) {
-      localStorage.removeItem('medsign_guest_log');
-    }
-  }, [currentUser]);
+  }, []);
 
   const appendWordRecommendation = useCallback((word) => {
     setSentence(prev => {
@@ -604,9 +764,18 @@ export const AppProvider = ({ children }) => {
         setShowFeatureModal,
         layoutMode,
         setLayoutMode,
+        viewMode,
+        setViewMode,
         toast,
         setToast,
+        showToast,
         currentUser,
+        grants,
+        hasGrant,
+        activePatient,
+        setActivePatient,
+        activeSessionId,
+        setActiveSessionId,
         setCurrentUser,
         login,
         logout,

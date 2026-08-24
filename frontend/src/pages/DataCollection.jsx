@@ -101,7 +101,7 @@ const ALPHABET_LIST = [
 
 
 
-export const DataCollection = ({ setView }) => {
+export const DataCollection = ({ setView, initialTab }) => {
 
   const downloadHeatmapAsFile = (format) => {
     // Printable view generation helper
@@ -136,7 +136,17 @@ export const DataCollection = ({ setView }) => {
   };
 
 
-  const { vocabulary, refreshVocabulary, serverState, currentUser } = useContext(AppContext);
+  const { vocabulary, refreshVocabulary, serverState, currentUser, showToast } = useContext(AppContext);
+  const alert = (msg, type = "info") => {
+    if (!showToast) {
+      window.alert(msg);
+      return;
+    }
+    const msgLower = (msg || "").toString().toLowerCase();
+    const isError = msgLower.includes("gagal") || msgLower.includes("error") || msgLower.includes("kesalahan") || msgLower.includes("harus") || msgLower.includes("pilih minimal") || msgLower.includes("minimal 5");
+    const isSuccess = msgLower.includes("berhasil") || msgLower.includes("selesai") || msgLower.includes("sukses") || msgLower.includes("langkah");
+    showToast(msg, isSuccess ? "success" : (isError ? "error" : type));
+  };
 
   const [activeTab, setActiveTab] = useState(() => {
 
@@ -260,12 +270,47 @@ export const DataCollection = ({ setView }) => {
 
   // --- ADMIN CONTENT MANAGEMENT STATES ---
   const [adminArticles, setAdminArticles] = useState([]);
+  const [adminDoctors, setAdminDoctors] = useState([]);
+  const [adminPatients, setAdminPatients] = useState([]);
+  const [searchUserQuery, setSearchUserQuery] = useState("");
+  const [activeUserSubtab, setActiveUserSubtab] = useState("doctor"); // "doctor" | "patient"
+  const [newUserRole, setNewUserRole] = useState("doctor"); // "doctor" | "patient"
+  
+  // User Edit states
+  const [editingUserObj, setEditingUserObj] = useState(null);
+  const [showEditUserModal, setShowEditUserModal] = useState(false);
+  const [editUserRole, setEditUserRole] = useState("doctor");
+  const [editUserName, setEditUserName] = useState("");
+  const [editUserEmailOrNik, setEditUserEmailOrNik] = useState("");
+  const [editUserNoRm, setEditUserNoRm] = useState("");
+  const [editUserDob, setEditUserDob] = useState("");
+  const [editUserSpec, setEditUserSpec] = useState("");
+  const [editUserVerifStatus, setEditUserVerifStatus] = useState("PENDING");
+  const [editUserIsActive, setEditUserIsActive] = useState(1);
+
+  // User Filter states
+  const [filterUserActive, setFilterUserActive] = useState("all"); // "all" | "active" | "inactive"
+  const [filterPatientVerif, setFilterPatientVerif] = useState("all"); // "all" | APPROVED, PENDING etc.
+  
+  // Doctor create fields
+  const [newDoctorName, setNewDoctorName] = useState("");
+  const [newDoctorEmail, setNewDoctorEmail] = useState("");
+  const [newDoctorPassword, setNewDoctorPassword] = useState("");
+  const [newDoctorSpec, setNewDoctorSpec] = useState("");
+  
+  // Patient create fields
+  const [newPatientNoRm, setNewPatientNoRm] = useState("");
+  const [newPatientNik, setNewPatientNik] = useState("");
+  const [newPatientName, setNewPatientName] = useState("");
+  const [newPatientDob, setNewPatientDob] = useState("");
+
   const [newArticleTitle, setNewArticleTitle] = useState("");
   const [newArticleSlug, setNewArticleSlug] = useState("");
   const [newArticleCover, setNewArticleCover] = useState("");
   const [newArticleExcerpt, setNewArticleExcerpt] = useState("");
   const [newArticleCategory, setNewArticleCategory] = useState("Edukasi BISINDO");
   const [newArticleStatus, setNewArticleStatus] = useState("published");
+  const [newArticleRefUrl, setNewArticleRefUrl] = useState("");
   const [newArticleContent, setNewArticleContent] = useState("");
   const [editingArticle, setEditingArticle] = useState(null);
 
@@ -389,6 +434,149 @@ export const DataCollection = ({ setView }) => {
   };
 
   // Fetch helpers
+  const fetchAdminDoctors = async () => {
+    try {
+      const res = await fetch(`${apiUrl}/api/v1/admin/doctors`, {
+        headers: { 'Authorization': `Bearer ${currentUser?.token}` }
+      });
+      if (res.ok) setAdminDoctors(await res.json());
+    } catch (e) { console.error(e); }
+  };
+
+  const fetchAdminPatients = async () => {
+    try {
+      const res = await fetch(`${apiUrl}/api/v1/admin/patients`, {
+        headers: { 'Authorization': `Bearer ${currentUser?.token}` }
+      });
+      if (res.ok) setAdminPatients(await res.json());
+    } catch (e) { console.error(e); }
+  };
+
+  const handleToggleUserActive = async (role, userId, currentStatus) => {
+    try {
+      const nextStatus = currentStatus ? 0 : 1;
+      const res = await fetch(`${apiUrl}/api/v1/admin/users/toggle-status`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${currentUser?.token}`
+        },
+        body: JSON.stringify({ role, user_id: userId, is_active: nextStatus })
+      });
+      if (res.ok) {
+        alert("Status user berhasil diubah!");
+        if (role === "doctor") fetchAdminDoctors();
+        else fetchAdminPatients();
+      } else {
+        const err = await res.json();
+        alert(`Gagal: ${err.detail}`);
+      }
+    } catch (e) {
+      alert("Gagal koneksi");
+    }
+  };
+
+  const handleResetPatientPassword = async (patientId) => {
+    if (!confirm("Apakah Anda yakin ingin mereset password pasien ini?")) return;
+    try {
+      const res = await fetch(`${apiUrl}/api/v1/admin/patients/${patientId}/reset-password`, {
+        method: "POST",
+        headers: { "Authorization": `Bearer ${currentUser?.token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        alert(`Password baru pasien (sementara): ${data.temporary_password}`);
+      }
+    } catch (e) {
+      alert("Gagal koneksi");
+    }
+  };
+
+  const handleCreateDoctor = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(`${apiUrl}/api/v1/admin/doctors`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${currentUser?.token}`
+        },
+        body: JSON.stringify({
+          name: newDoctorName,
+          email: newDoctorEmail,
+          password: newDoctorPassword,
+          specialization: newDoctorSpec
+        })
+      });
+      if (res.ok) {
+        alert("Dokter berhasil didaftarkan!");
+        setNewDoctorName("");
+        setNewDoctorEmail("");
+        setNewDoctorPassword("");
+        setNewDoctorSpec("");
+        fetchAdminDoctors();
+      } else {
+        const err = await res.json();
+        alert(err.detail || "Gagal membuat dokter");
+      }
+    } catch (e) {
+      alert("Kesalahan koneksi");
+    }
+  };
+
+  const handleCreatePatient = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(`${apiUrl}/api/v1/admin/patients`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${currentUser?.token}`
+        },
+        body: JSON.stringify({
+          no_rm: newPatientNoRm,
+          nik: newPatientNik,
+          name: newPatientName,
+          date_of_birth: newPatientDob
+        })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        alert(`Pasien berhasil dibuat! Password Sementara: ${data.temporary_password}`);
+        setNewPatientNoRm("");
+        setNewPatientNik("");
+        setNewPatientName("");
+        setNewPatientDob("");
+        fetchAdminPatients();
+      } else {
+        const err = await res.json();
+        alert(err.detail || "Gagal mendaftarkan pasien");
+      }
+    } catch (e) {
+      alert("Kesalahan koneksi");
+    }
+  };
+
+  const handleDeleteUser = async (role, userId) => {
+    if (!confirm(`Apakah Anda yakin ingin menghapus ${role} ini?`)) return;
+    try {
+      const url = role === "doctor"
+        ? `${apiUrl}/api/v1/admin/doctors/${userId}`
+        : `${apiUrl}/api/v1/admin/patients/${userId}`;
+      const res = await fetch(url, {
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${currentUser?.token}` }
+      });
+      if (res.ok) {
+        alert("User berhasil dihapus!");
+        if (role === "doctor") fetchAdminDoctors();
+        else fetchAdminPatients();
+      }
+    } catch (e) {
+      alert("Gagal koneksi");
+    }
+  };
+
   const fetchAdminArticles = async () => {
     try {
       const res = await fetch(`${apiUrl}/api/v1/articles`);
@@ -444,6 +632,8 @@ export const DataCollection = ({ setView }) => {
       fetchAdminInstagramPosts();
       fetchAdminMitra();
       fetchAdminReviews();
+      fetchAdminDoctors();
+      fetchAdminPatients();
     }
   }, [currentUser]);
 
@@ -461,7 +651,8 @@ export const DataCollection = ({ setView }) => {
         excerpt: newArticleExcerpt || null,
         category: newArticleCategory || "Edukasi BISINDO",
         author: currentUser.name || "Admin",
-        status: newArticleStatus
+        status: newArticleStatus,
+        ref_url: newArticleRefUrl || null
       };
       const res = await fetch(`${apiUrl}/api/v1/admin/articles`, {
         method: 'POST',
@@ -477,6 +668,7 @@ export const DataCollection = ({ setView }) => {
         setNewArticleCover('');
         setNewArticleExcerpt('');
         setNewArticleContent('');
+        setNewArticleRefUrl('');
         fetchAdminArticles();
         alert('Artikel berhasil dibuat!');
       } else {
@@ -7568,13 +7760,24 @@ export const DataCollection = ({ setView }) => {
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label className="text-[10px] font-bold text-slate-505 uppercase tracking-wider">Excerpt (Ringkasan Preview)</label>
+                <label className="text-[10px] font-bold text-slate-555 uppercase tracking-wider">Excerpt (Ringkasan Preview)</label>
                 <input
                   type="text"
                   placeholder="Tulis ringkasan singkat artikel..."
                   value={editingArticle ? (editingArticle.excerpt || "") : newArticleExcerpt}
                   onChange={(e) => editingArticle ? setEditingArticle({...editingArticle, excerpt: e.target.value}) : setNewArticleExcerpt(e.target.value)}
-                  className="glass-input rounded-xl px-3 py-2 text-xs font-semibold shadow-inner"
+                  className="glass-input rounded-xl px-3 py-2 text-xs font-semibold shadow-inner bg-white border border-slate-200"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-slate-555 uppercase tracking-wider">Tautan Rujukan Artikel (Link Website)</label>
+                <input
+                  type="text"
+                  placeholder="Contoh: https://radarmalang.jawapos.com/..."
+                  value={editingArticle ? (editingArticle.ref_url || "") : newArticleRefUrl}
+                  onChange={(e) => editingArticle ? setEditingArticle({...editingArticle, ref_url: e.target.value}) : setNewArticleRefUrl(e.target.value)}
+                  className="glass-input rounded-xl px-3 py-2 text-xs font-semibold shadow-inner bg-white border border-slate-200"
                 />
               </div>
 
@@ -7835,6 +8038,277 @@ export const DataCollection = ({ setView }) => {
     );
   };
 
+  const renderUsersCrud = () => {
+    const filteredDoctors = adminDoctors.filter(d => {
+      const matchesSearch = !searchUserQuery || 
+        d.name.toLowerCase().includes(searchUserQuery.toLowerCase()) || 
+        d.email.toLowerCase().includes(searchUserQuery.toLowerCase());
+      
+      const matchesActive = filterUserActive === "all" ||
+        (filterUserActive === "active" && d.is_active) ||
+        (filterUserActive === "inactive" && !d.is_active);
+        
+      return matchesSearch && matchesActive;
+    });
+
+    const filteredPatients = adminPatients.filter(p => {
+      const matchesSearch = !searchUserQuery || 
+        p.name.toLowerCase().includes(searchUserQuery.toLowerCase()) || 
+        p.no_rm.toLowerCase().includes(searchUserQuery.toLowerCase()) ||
+        p.nik.toLowerCase().includes(searchUserQuery.toLowerCase());
+      
+      const matchesActive = filterUserActive === "all" ||
+        (filterUserActive === "active" && p.is_active) ||
+        (filterUserActive === "inactive" && !p.is_active);
+        
+      const matchesVerif = filterPatientVerif === "all" ||
+        p.verification_status === filterPatientVerif;
+        
+      return matchesSearch && matchesActive && matchesVerif;
+    });
+
+    return (
+      <div className="flex flex-col gap-6 animate-slide-up text-slate-800">
+        {/* Subtabs to toggle between Doctors & Patients */}
+        <div className="flex items-center gap-2 border-b border-slate-100 pb-2">
+          <button
+            onClick={() => setActiveUserSubtab("doctor")}
+            className={`px-4 py-2 text-xs font-black uppercase tracking-wider rounded-xl transition-all ${
+              activeUserSubtab === "doctor" ? "bg-sky-600 text-white shadow" : "text-slate-500 hover:bg-slate-100"
+            }`}
+          >
+            Dokter ({adminDoctors.length})
+          </button>
+          <button
+            onClick={() => setActiveUserSubtab("patient")}
+            className={`px-4 py-2 text-xs font-black uppercase tracking-wider rounded-xl transition-all ${
+              activeUserSubtab === "patient" ? "bg-sky-600 text-white shadow" : "text-slate-500 hover:bg-slate-100"
+            }`}
+          >
+            Pasien ({adminPatients.length})
+          </button>
+        </div>
+
+        <div className="grid gap-6 lg:grid-cols-[1.2fr_1.8fr]">
+          {/* Left Form: Add Doctor or Patient */}
+          <div className="glass-panel rounded-[32px] p-6 flex flex-col gap-4 shadow-xl border border-white/60 h-fit">
+            <h3 className="text-sm font-black text-slate-950 uppercase tracking-wide">
+              {activeUserSubtab === "doctor" ? "Tambah Dokter Baru" : "Daftarkan Pasien"}
+            </h3>
+            
+            {activeUserSubtab === "doctor" ? (
+              <form onSubmit={handleCreateDoctor} className="flex flex-col gap-3">
+                <div className="flex flex-col gap-1">
+                  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Nama Lengkap</label>
+                  <input
+                    type="text" required placeholder="dr. Jane Doe"
+                    value={newDoctorName} onChange={e => setNewDoctorName(e.target.value)}
+                    className="glass-input rounded-xl px-3 py-2 text-xs font-semibold"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Email Pengguna</label>
+                  <input
+                    type="email" required placeholder="doctor@medsign.com"
+                    value={newDoctorEmail} onChange={e => setNewDoctorEmail(e.target.value)}
+                    className="glass-input rounded-xl px-3 py-2 text-xs font-semibold"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Kata Sandi</label>
+                  <input
+                    type="password" required placeholder="Min. 6 karakter"
+                    value={newDoctorPassword} onChange={e => setNewDoctorPassword(e.target.value)}
+                    className="glass-input rounded-xl px-3 py-2 text-xs font-semibold"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Spesialisasi</label>
+                  <input
+                    type="text" placeholder="Contoh: Umum / Anak / Jantung"
+                    value={newDoctorSpec} onChange={e => setNewDoctorSpec(e.target.value)}
+                    className="glass-input rounded-xl px-3 py-2 text-xs font-semibold"
+                  />
+                </div>
+                <button type="submit" className="py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-black text-[10px] uppercase tracking-wider">
+                  Daftarkan Dokter
+                </button>
+              </form>
+            ) : (
+              <form onSubmit={handleCreatePatient} className="flex flex-col gap-3">
+                <div className="flex flex-col gap-1">
+                  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">No Rekam Medis (No RM)</label>
+                  <input
+                    type="text" required placeholder="RM390572816403"
+                    value={newPatientNoRm} onChange={e => setNewPatientNoRm(e.target.value)}
+                    className="glass-input rounded-xl px-3 py-2 text-xs font-semibold"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">NIK (16 Digit)</label>
+                  <input
+                    type="text" required placeholder="3271010000000000" maxLength="16"
+                    value={newPatientNik} onChange={e => {
+                      const val = e.target.value;
+                      if (/^\d*$/.test(val) && val.length <= 16) setNewPatientNik(val);
+                    }}
+                    className="glass-input rounded-xl px-3 py-2 text-xs font-semibold"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Nama Pasien</label>
+                  <input
+                    type="text" required placeholder="Nama Lengkap Pasien"
+                    value={newPatientName} onChange={e => setNewPatientName(e.target.value)}
+                    className="glass-input rounded-xl px-3 py-2 text-xs font-semibold"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Tanggal Lahir</label>
+                  <input
+                    type="date" required
+                    value={newPatientDob} onChange={e => setNewPatientDob(e.target.value)}
+                    className="glass-input rounded-xl px-3 py-2 text-xs font-semibold"
+                  />
+                </div>
+                <button type="submit" className="py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-black text-[10px] uppercase tracking-wider">
+                  Daftarkan Pasien
+                </button>
+              </form>
+            )}
+          </div>
+
+          {/* Right List Column */}
+          <div className="glass-panel rounded-[32px] p-6 flex flex-col gap-4 shadow-xl border border-white/60">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+              <span className="text-sm font-black text-slate-950 uppercase tracking-wide">
+                List {activeUserSubtab === "doctor" ? "Dokter MedSign" : "Pasien MedSign"}
+              </span>
+              <input
+                type="text" placeholder="Cari user..."
+                value={searchUserQuery} onChange={e => setSearchUserQuery(e.target.value)}
+                className="glass-input rounded-xl px-3 py-1 text-[11px] font-semibold max-w-xs"
+              />
+            </div>
+
+            <div className="flex flex-col gap-3 overflow-y-auto max-h-[500px] pr-1">
+              {activeUserSubtab === "doctor" ? (
+                filteredDoctors.length === 0 ? (
+                  <p className="text-xs font-semibold text-slate-400 py-6 text-center">Belum ada dokter terdaftar.</p>
+                ) : (
+                  filteredDoctors.map(doc => (
+                    <div key={doc.id} className="surface-panel rounded-2xl p-4 border border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white/40">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h4 className="text-xs font-black text-slate-900">{doc.name}</h4>
+                          <span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded ${
+                            !doc.is_active ? "bg-rose-500/10 text-rose-700" : "bg-emerald-500/10 text-emerald-700"
+                          }`}>
+                            {!doc.is_active ? "Nonaktif" : "Aktif"}
+                          </span>
+                        </div>
+                        <p className="text-[10px] font-semibold text-slate-400 mt-1">{doc.email} | Spesialis: {doc.specialization || "Umum"}</p>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => {
+                            setEditingUserObj(doc);
+                            setEditUserName(doc.name);
+                            setEditUserEmailOrNik(doc.email);
+                            setEditUserSpec(doc.specialization || "");
+                            setEditUserIsActive(doc.is_active);
+                            setEditUserRole("doctor");
+                            setShowEditUserModal(true);
+                          }}
+                          className="px-3 py-1.5 rounded-xl bg-sky-100 hover:bg-sky-200 text-sky-700 font-bold text-[9px] uppercase tracking-wider border border-sky-200/50"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleToggleUserActive("doctor", doc.id, doc.is_active)}
+                          className={`px-3 py-1.5 rounded-xl font-bold text-[9px] uppercase tracking-wider transition-all ${
+                            !doc.is_active ? "bg-emerald-600 text-white" : "bg-rose-600 text-white"
+                          }`}
+                        >
+                          {!doc.is_active ? "Aktifkan" : "Matikan"}
+                        </button>
+                        <button
+                          onClick={() => handleDeleteUser("doctor", doc.id)}
+                          className="px-3 py-1.5 rounded-xl bg-slate-900/10 hover:bg-rose-500 hover:text-white text-slate-500 font-bold text-[9px] uppercase tracking-wider"
+                        >
+                          Hapus
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )
+              ) : (
+                filteredPatients.length === 0 ? (
+                  <p className="text-xs font-semibold text-slate-400 py-6 text-center">Belum ada pasien terdaftar.</p>
+                ) : (
+                  filteredPatients.map(pat => (
+                    <div key={pat.id} className="surface-panel rounded-2xl p-4 border border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white/40">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h4 className="text-xs font-black text-slate-900">{pat.name}</h4>
+                          <span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded ${
+                            !pat.is_active ? "bg-rose-500/10 text-rose-700" : "bg-emerald-500/10 text-emerald-700"
+                          }`}>
+                            {!pat.is_active ? "Nonaktif" : "Aktif"}
+                          </span>
+                        </div>
+                        <p className="text-[10px] font-semibold text-slate-400 mt-1">RM: {pat.no_rm} | NIK: {pat.nik} | Lahir: {pat.date_of_birth}</p>
+                      </div>
+
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          onClick={() => {
+                            setEditingUserObj(pat);
+                            setEditUserName(pat.name);
+                            setEditUserEmailOrNik(pat.nik);
+                            setEditUserNoRm(pat.no_rm);
+                            setEditUserDob(pat.date_of_birth);
+                            setEditUserVerifStatus(pat.verification_status);
+                            setEditUserIsActive(pat.is_active);
+                            setEditUserRole("patient");
+                            setShowEditUserModal(true);
+                          }}
+                          className="px-3 py-1.5 rounded-xl bg-sky-100 hover:bg-sky-200 text-sky-700 font-bold text-[9px] uppercase tracking-wider border border-sky-200/50"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleToggleUserActive("patient", pat.id, pat.is_active)}
+                          className={`px-3 py-1.5 rounded-xl font-bold text-[9px] uppercase tracking-wider transition-all ${
+                            !pat.is_active ? "bg-emerald-600 text-white" : "bg-rose-600 text-white"
+                          }`}
+                        >
+                          {!pat.is_active ? "Aktifkan" : "Matikan"}
+                        </button>
+                        <button
+                          onClick={() => handleResetPatientPassword(pat.id)}
+                          className="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-[9px] uppercase tracking-wider"
+                        >
+                          Reset Pass
+                        </button>
+                        <button
+                          onClick={() => handleDeleteUser("patient", pat.id)}
+                          className="px-3 py-1.5 rounded-xl bg-slate-900/10 hover:bg-rose-500 hover:text-white text-slate-500 font-bold text-[9px] uppercase tracking-wider"
+                        >
+                          Hapus
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
   const renderMitraCrud = () => {
     return (
       <div className="grid gap-6 lg:grid-cols-[1fr_1.5fr] animate-slide-up text-slate-800">
@@ -9370,49 +9844,64 @@ export const DataCollection = ({ setView }) => {
 
             </button>
 
-            <button
-              onClick={() => handleTabChange("articles")}
-              className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all ${
-                activeTab === "articles"
-                  ? "bg-white text-sky-700 shadow-sm border border-slate-200/20"
-                  : "text-slate-500 hover:text-slate-950"
-              }`}
-            >
-              Kelola Artikel
-            </button>
+            {currentUser?.role === "super_admin" && (
+              <>
+                <button
+                  onClick={() => handleTabChange("articles")}
+                  className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all ${
+                    activeTab === "articles"
+                      ? "bg-white text-sky-700 shadow-sm border border-slate-200/20"
+                      : "text-slate-500 hover:text-slate-950"
+                  }`}
+                >
+                  Kelola Artikel
+                </button>
 
-            <button
-              onClick={() => handleTabChange("instagram")}
-              className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all ${
-                activeTab === "instagram"
-                  ? "bg-white text-sky-700 shadow-sm border border-slate-200/20"
-                  : "text-slate-500 hover:text-slate-950"
-              }`}
-            >
-              Kelola Instagram
-            </button>
+                <button
+                  onClick={() => handleTabChange("instagram")}
+                  className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all ${
+                    activeTab === "instagram"
+                      ? "bg-white text-sky-700 shadow-sm border border-slate-200/20"
+                      : "text-slate-500 hover:text-slate-950"
+                  }`}
+                >
+                  Kelola Instagram
+                </button>
 
-            <button
-              onClick={() => handleTabChange("reviews")}
-              className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all ${
-                activeTab === "reviews"
-                  ? "bg-white text-sky-700 shadow-sm border border-slate-200/20"
-                  : "text-slate-500 hover:text-slate-950"
-              }`}
-            >
-              Kelola Ulasan
-            </button>
+                <button
+                  onClick={() => handleTabChange("reviews")}
+                  className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all ${
+                    activeTab === "reviews"
+                      ? "bg-white text-sky-700 shadow-sm border border-slate-200/20"
+                      : "text-slate-500 hover:text-slate-950"
+                  }`}
+                >
+                  Kelola Ulasan
+                </button>
 
-            <button
-              onClick={() => handleTabChange("mitra")}
-              className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all ${
-                activeTab === "mitra"
-                  ? "bg-white text-sky-700 shadow-sm border border-slate-200/20"
-                  : "text-slate-500 hover:text-slate-950"
-              }`}
-            >
-              Kelola Mitra
-            </button>
+                <button
+                  onClick={() => handleTabChange("mitra")}
+                  className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all ${
+                    activeTab === "mitra"
+                      ? "bg-white text-sky-700 shadow-sm border border-slate-200/20"
+                      : "text-slate-500 hover:text-slate-950"
+                  }`}
+                >
+                  Kelola Mitra
+                </button>
+
+                <button
+                  onClick={() => handleTabChange("users")}
+                  className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all ${
+                    activeTab === "users"
+                      ? "bg-white text-sky-700 shadow-sm border border-slate-200/20"
+                      : "text-slate-500 hover:text-slate-950"
+                  }`}
+                >
+                  Kelola User
+                </button>
+              </>
+            )}
 
           </div>
 
@@ -9458,7 +9947,7 @@ export const DataCollection = ({ setView }) => {
 
                           ? "Kelola Ulasan Pengguna"
 
-                          : "Kelola Mitra & Kemitraan"}
+                          : activeTab === "users" ? "Kelola User (Dokter & Pasien)" : "Kelola Mitra & Kemitraan"}
 
           </h2>
 
@@ -9599,6 +10088,137 @@ export const DataCollection = ({ setView }) => {
       >
         {renderMitraCrud()}
       </div>
+
+      <div
+        style={{
+          display:
+            !isSessionActive && activeTab === "users" ? "block" : "none",
+        }}
+      >
+        {renderUsersCrud()}
+      </div>
+
+      {/* Edit User Modal (Doctor & Patient CRUD) */}
+      {showEditUserModal && editingUserObj && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[999] flex items-center justify-center p-4 text-slate-800">
+          <form 
+            onSubmit={editUserRole === "doctor" ? handleUpdateDoctor : handleUpdatePatient} 
+            className="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full border border-white/20 shadow-2xl flex flex-col gap-4 animate-scale-up"
+          >
+            <h3 className="text-sm font-black text-slate-900 uppercase tracking-wide border-b border-slate-100 pb-2">
+              Edit Data {editUserRole === "doctor" ? "Dokter" : "Pasien"}
+            </h3>
+
+            <div className="flex flex-col gap-1">
+              <label className="text-[9px] font-bold text-slate-400 uppercase">Nama Lengkap</label>
+              <input 
+                type="text" 
+                value={editUserName} 
+                onChange={(e) => setEditUserName(e.target.value)} 
+                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white"
+                required
+              />
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="text-[9px] font-bold text-slate-400 uppercase">
+                {editUserRole === "doctor" ? "Email Pengguna" : "NIK Pasien (16 Digit)"}
+              </label>
+              <input 
+                type="text" 
+                value={editUserEmailOrNik} 
+                onChange={(e) => setEditUserEmailOrNik(e.target.value)} 
+                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white"
+                required
+              />
+            </div>
+
+            {editUserRole === "patient" && (
+              <>
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[9px] font-bold text-slate-400 uppercase">Nomor RM</label>
+                    <input 
+                      type="text" 
+                      value={editUserNoRm} 
+                      onChange={(e) => setEditUserNoRm(e.target.value)} 
+                      className="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white"
+                      required
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <label className="text-[9px] font-bold text-slate-400 uppercase">Tanggal Lahir</label>
+                    <input 
+                      type="date" 
+                      value={editUserDob} 
+                      onChange={(e) => setEditUserDob(e.target.value)} 
+                      className="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-[9px] font-bold text-slate-400 uppercase">Status Verifikasi</label>
+                  <select 
+                    value={editUserVerifStatus} 
+                    onChange={(e) => setEditUserVerifStatus(e.target.value)} 
+                    className="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white"
+                  >
+                    <option value="PENDING">PENDING</option>
+                    <option value="IN_REVIEW">IN REVIEW</option>
+                    <option value="KTP_VERIFIED">KTP VERIFIED</option>
+                    <option value="FACE_VERIFIED">FACE VERIFIED</option>
+                    <option value="APPROVED">APPROVED</option>
+                    <option value="REJECTED">REJECTED</option>
+                  </select>
+                </div>
+              </>
+            )}
+
+            {editUserRole === "doctor" && (
+              <div className="flex flex-col gap-1">
+                <label className="text-[9px] font-bold text-slate-400 uppercase">Spesialisasi</label>
+                <input 
+                  type="text" 
+                  value={editUserSpec} 
+                  onChange={(e) => setEditUserSpec(e.target.value)} 
+                  className="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white"
+                  placeholder="Contoh: Umum"
+                />
+              </div>
+            )}
+
+            <div className="flex flex-col gap-1">
+              <label className="text-[9px] font-bold text-slate-400 uppercase">Status Aktif</label>
+              <select 
+                value={editUserIsActive} 
+                onChange={(e) => setEditUserIsActive(Number(e.target.value))} 
+                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white"
+              >
+                <option value={1}>Aktif (1)</option>
+                <option value={0}>Nonaktif (0)</option>
+              </select>
+            </div>
+
+            <div className="flex items-center justify-end gap-2 border-t border-slate-100 pt-4 mt-2">
+              <button 
+                type="button" 
+                onClick={() => setShowEditUserModal(false)} 
+                className="px-4 py-2 text-xs font-bold text-slate-500 hover:bg-slate-100 rounded-xl transition-all"
+              >
+                Batal
+              </button>
+              <button 
+                type="submit" 
+                className="px-4 py-2 text-xs font-black uppercase tracking-wider bg-sky-600 text-white hover:bg-sky-700 rounded-xl transition-all shadow"
+              >
+                Simpan Perubahan
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
 
       {/* Heatmap Zoom Modal */}
       {showHeatmapZoom && (

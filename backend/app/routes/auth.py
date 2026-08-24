@@ -1,4 +1,4 @@
-﻿import hmac
+import hmac
 import hashlib
 import base64
 import json
@@ -119,14 +119,19 @@ def doctor_login(request: DoctorAdminLoginRequest, response: Response):
         record_failure(request.email)
         raise HTTPException(status_code=401, detail="Email atau password salah")
         
+    if doctor.get("is_active", 1) == 0:
+        raise HTTPException(status_code=403, detail="Akun dokter dinonaktifkan oleh administrator")
+        record_failure(request.email)
+        raise HTTPException(status_code=401, detail="Email atau password salah")
+        
     record_success(request.email)
     
     access_token = create_jwt_token(
-        {"user_id": doctor["id"], "email": doctor["email"], "role": "doctor"},
+        {"user_id": doctor["id"], "email": doctor["email"], "role": "doctor", "facility_id": doctor.get("facility_id")},
         ACCESS_TOKEN_EXPIRE_MINUTES * 60
     )
     refresh_token = create_jwt_token(
-        {"user_id": doctor["id"], "email": doctor["email"], "role": "doctor"},
+        {"user_id": doctor["id"], "email": doctor["email"], "role": "doctor", "facility_id": doctor.get("facility_id")},
         REFRESH_TOKEN_EXPIRE_DAYS * 24 * 3600
     )
     
@@ -158,12 +163,13 @@ def admin_login(request: DoctorAdminLoginRequest, response: Response):
         
     record_success(request.email)
     
+    role = "super_admin" if (admin["email"] == "administrator" or admin.get("username") == "administrator") else "admin"
     access_token = create_jwt_token(
-        {"user_id": admin["id"], "email": admin["email"], "role": "admin"},
+        {"user_id": admin["id"], "email": admin["email"], "role": role, "facility_id": admin.get("facility_id")},
         ACCESS_TOKEN_EXPIRE_MINUTES * 60
     )
     refresh_token = create_jwt_token(
-        {"user_id": admin["id"], "email": admin["email"], "role": "admin"},
+        {"user_id": admin["id"], "email": admin["email"], "role": role, "facility_id": admin.get("facility_id")},
         REFRESH_TOKEN_EXPIRE_DAYS * 24 * 3600
     )
     
@@ -176,10 +182,16 @@ def admin_login(request: DoctorAdminLoginRequest, response: Response):
         max_age=REFRESH_TOKEN_EXPIRE_DAYS * 24 * 3600
     )
     
-    return LoginResponse(token=access_token, role="admin", user_id=admin["id"])
+    return LoginResponse(token=access_token, role=role, user_id=admin["id"])
 
 @router.post("/auth/patient/login", response_model=LoginResponse)
 def patient_login(request: PatientLoginRequest, response: Response):
+    raise HTTPException(
+        status_code=403,
+        detail="Akses masuk (login) untuk pasien tidak diizinkan di sistem ini."
+    )
+    # The rest of the function remains unreachable but preserved for structure
+
     lockout_time = check_lockout(request.nik, is_patient=True)
     if lockout_time > 0.0:
         raise HTTPException(
@@ -193,14 +205,17 @@ def patient_login(request: PatientLoginRequest, response: Response):
         record_failure(request.nik)
         raise HTTPException(status_code=401, detail="NIK atau password salah")
         
+    if patient.get("is_active", 1) == 0 or patient.get("verification_status", "PENDING") != "APPROVED":
+        raise HTTPException(status_code=403, detail="Akun pasien belum aktif atau disetujui oleh administrator. Status saat ini: " + patient.get("verification_status", "PENDING"))
+        
     record_success(request.nik)
     
     access_token = create_jwt_token(
-        {"user_id": patient["id"], "nik": request.nik, "role": "patient"},
+        {"user_id": patient["id"], "nik": request.nik, "role": "patient", "facility_id": patient.get("facility_id")},
         ACCESS_TOKEN_EXPIRE_MINUTES * 60
     )
     refresh_token = create_jwt_token(
-        {"user_id": patient["id"], "nik": request.nik, "role": "patient"},
+        {"user_id": patient["id"], "nik": request.nik, "role": "patient", "facility_id": patient.get("facility_id")},
         REFRESH_TOKEN_EXPIRE_DAYS * 24 * 3600
     )
     
@@ -245,7 +260,7 @@ def refresh(request: Request, response: Response):
     if not payload:
         raise HTTPException(status_code=401, detail="Refresh token invalid or expired")
         
-    new_payload = {"user_id": payload["user_id"], "role": payload["role"]}
+    new_payload = {"user_id": payload["user_id"], "role": payload["role"], "facility_id": payload.get("facility_id")}
     if "email" in payload:
         new_payload["email"] = payload["email"]
     elif "nik" in payload:
