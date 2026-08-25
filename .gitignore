@@ -60,6 +60,9 @@ backend/data/invalid_samples/*
 !backend/data/metadata/README_DATASET.md
 backend/models/*
 !backend/models/.gitkeep
+!backend/models/*.tflite
+!backend/models/*.h5
+!backend/models/*_labels.json
 backend/training/visualization/
 
 # Local Vercel metadata

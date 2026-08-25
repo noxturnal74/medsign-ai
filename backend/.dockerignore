@@ -1,0 +1,11 @@
+venv/
+__pycache__/
+*.pyc
+.env
+medsign.db
+data/landmarks/*
+data/raw_videos/*
+backups/*
+reports/*.md
+tests/
+training/visualization/

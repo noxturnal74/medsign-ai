@@ -232,9 +232,10 @@ if __name__ == "__main__":
     # tersedia di worker yang baru di-spawn, sehingga model tidak bisa dimuat
     # dan training subprocess gagal dengan "TensorFlow belum tersedia".
     # Solusi: matikan reload. Restart manual server jika ada perubahan kode.
+    import os as _os
     uvicorn.run(
         "app.main:app",
         host="0.0.0.0",
-        port=8000,
+        port=int(_os.getenv("PORT", "8000")),
         reload=False,
     )
