@@ -1,10 +1,20 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { AppContext } from '../context/AppContextObject';
 import {
   Home, Info, Stethoscope, User, Volume2, VolumeX,
   Database, BookOpen, Video, FileText, MessageSquare,
   Menu as MenuIcon, X, ExternalLink, Shield, Columns,
+  MoreVertical, UserCog, Moon, Sun, Loader2, Camera, KeyRound, Check,
 } from 'lucide-react';
+
+const API_BASE = () => (localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
+
+const menuItemStyle = {
+  display: 'flex', alignItems: 'center', gap: 8, width: '100%',
+  padding: '9px 10px', borderRadius: 12, border: 'none',
+  background: 'transparent', color: '#334155', fontWeight: 700, fontSize: 11.5,
+  cursor: 'pointer', textAlign: 'left', transition: 'background 0.15s',
+};
 
 const navItems = [
   { id: 'home',          label: 'Beranda',           icon: Home },
@@ -27,6 +37,34 @@ export const Navbar = ({ currentView, setView }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled]     = useState(false);
   const [splitEnabled, setSplitEnabled] = useState(false);
+
+  // ── Menu titik-3 (akun) + dark mode ──
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
+  const [darkMode, setDarkMode] = useState(() => localStorage.getItem('medsign_dark') === '1');
+  const [accountModal, setAccountModal] = useState(false);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', darkMode);
+    localStorage.setItem('medsign_dark', darkMode ? '1' : '0');
+  }, [darkMode]);
+
+  useEffect(() => {
+    const onClickAway = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
+    };
+    document.addEventListener('mousedown', onClickAway);
+    return () => document.removeEventListener('mousedown', onClickAway);
+  }, []);
+
+  const openMyProfile = () => {
+    setMenuOpen(false);
+    if (currentUser?.role === 'doctor') {
+      window.dispatchEvent(new CustomEvent('medsign:open-profile'));
+    } else {
+      setAccountModal(true);
+    }
+  };
 
   useEffect(() => {
     const fetchLayout = async () => {
@@ -77,7 +115,7 @@ export const Navbar = ({ currentView, setView }) => {
       return base.includes(item.id);
     }
     if (currentUser?.role === 'admin')
-      return ['home','about','manual','services','articles_page', ...(hasMlAccess ? ['data-collection'] : []),'motion','patient','doctor','contact'].includes(item.id);
+      return ['home','about','manual','services','articles_page','data-collection','motion','patient','doctor','contact'].includes(item.id);
     if (currentUser?.role === 'doctor') {
       const base = ['home','about','manual','services','articles_page','patient','doctor','contact', ...(hasMlAccess ? ['data-collection'] : [])];
       if (splitEnabled) base.push('split');
@@ -268,6 +306,89 @@ export const Navbar = ({ currentView, setView }) => {
                 }} className="hide-mobile">
                   {currentUser.role?.toUpperCase()}
                 </span>
+
+                {/* Titik-3: Profil / Setting / Preferensi / Dark mode */}
+                {['admin', 'doctor', 'super_admin'].includes(currentUser.role) && (
+                  <div ref={menuRef} style={{ position: 'relative' }}>
+                    <button
+                      onClick={() => setMenuOpen(v => !v)}
+                      title="Menu akun"
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                        padding: '7px 8px', borderRadius: 10, cursor: 'pointer',
+                        border: `1px solid ${menuOpen ? 'rgba(14,165,233,0.35)' : 'rgba(15,23,42,0.1)'}`,
+                        background: menuOpen ? 'rgba(14,165,233,0.08)' : 'rgba(15,23,42,0.04)',
+                        color: menuOpen ? '#0284c7' : '#64748b',
+                        transition: 'all 0.2s',
+                      }}
+                    >
+                      <MoreVertical size={15} />
+                    </button>
+
+                    {menuOpen && (
+                      <div
+                        style={{
+                          position: 'absolute', top: 'calc(100% + 8px)', right: 0, zIndex: 200,
+                          width: 240, background: '#fff', borderRadius: 18,
+                          border: '1px solid rgba(15,23,42,0.08)',
+                          boxShadow: '0 18px 50px rgba(15,23,42,0.18)',
+                          overflow: 'hidden', padding: 6,
+                        }}
+                      >
+                        <div style={{ padding: '8px 10px 10px', borderBottom: '1px solid rgba(15,23,42,0.06)' }}>
+                          <span style={{ display: 'block', fontSize: 11, fontWeight: 800, color: '#0f172a', wordBreak: 'break-all' }}>
+                            {currentUser.emailOrNik || currentUser.role}
+                          </span>
+                          <span style={{ display: 'inline-block', marginTop: 5, fontSize: 8, fontWeight: 800, letterSpacing: '0.08em', color: '#0369a1', background: 'rgba(14,165,233,0.1)', padding: '3px 7px', borderRadius: 99, textTransform: 'uppercase' }}>
+                            {currentUser.role}
+                          </span>
+                        </div>
+
+                        <button
+                          onClick={openMyProfile}
+                          style={menuItemStyle}
+                          onMouseEnter={e => e.currentTarget.style.background = 'rgba(15,23,42,0.05)'}
+                          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                        >
+                          <UserCog size={14} /> Profil Saya
+                        </button>
+
+                        <button
+                          onClick={() => { setMenuOpen(false); setShowFeatureModal(true); }}
+                          style={menuItemStyle}
+                          onMouseEnter={e => e.currentTarget.style.background = 'rgba(15,23,42,0.05)'}
+                          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                        >
+                          <ExternalLink size={14} /> Pengaturan Tampilan
+                        </button>
+
+                        <div
+                          style={{ ...menuItemStyle, cursor: 'default', justifyContent: 'space-between' }}
+                        >
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                            {darkMode ? <Moon size={14} /> : <Sun size={14} />} Mode Gelap
+                          </span>
+                          <button
+                            onClick={() => setDarkMode(v => !v)}
+                            aria-label="Toggle dark mode"
+                            style={{
+                              width: 36, height: 20, borderRadius: 99, border: 'none', cursor: 'pointer',
+                              background: darkMode ? '#0284c7' : '#cbd5e1',
+                              position: 'relative', transition: 'background 0.2s', flexShrink: 0,
+                            }}
+                          >
+                            <span style={{
+                              position: 'absolute', top: 2, left: darkMode ? 18 : 2,
+                              width: 16, height: 16, borderRadius: 99, background: '#fff',
+                              boxShadow: '0 1px 3px rgba(0,0,0,0.25)', transition: 'left 0.2s',
+                            }} />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 <button
                   onClick={() => { logout(); setView('home'); }}
                   style={{
@@ -393,6 +514,14 @@ export const Navbar = ({ currentView, setView }) => {
         </>
       )}
 
+      {/* ── Modal Profil Admin/Super Admin ── */}
+      {accountModal && (
+        <AccountModal
+          currentUser={currentUser}
+          onClose={() => setAccountModal(false)}
+        />
+      )}
+
       {/* ── Responsive CSS ── */}
       <style>{`
         .desktop-nav  { display: none !important; }
@@ -410,7 +539,135 @@ export const Navbar = ({ currentView, setView }) => {
           .show-mobile { display: none !important; }
           .nav-label   { display: inline !important; }
         }
-      `}</style>
+      `}      </style>
     </>
+  );
+};
+
+/* ── Modal Profil Admin / Super Admin ── */
+const AccountModal = ({ currentUser, onClose }) => {
+  const [data, setData] = useState(null);
+  const [form, setForm] = useState({ name: '', phone: '', profile_photo: '' });
+  const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    const fetchMe = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(`${API_BASE()}/api/v1/admin/me`, {
+          headers: { Authorization: `Bearer ${currentUser?.token}` }
+        });
+        if (res.ok) {
+          const d = await res.json();
+          setData(d);
+          setForm({ name: d.name || '', phone: d.phone || '', profile_photo: d.profile_photo || '' });
+        }
+      } catch (e) {}
+      setLoading(false);
+    };
+    fetchMe();
+  }, []);
+
+  const handlePhoto = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => setForm(p => ({ ...p, profile_photo: reader.result }));
+    reader.readAsDataURL(file);
+  };
+
+  const save = async () => {
+    if (password && password !== confirm) return;
+    setSaving(true);
+    try {
+      const body = { ...form };
+      if (password) body.password = password;
+      const res = await fetch(`${API_BASE()}/api/v1/admin/me`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${currentUser?.token}` },
+        body: JSON.stringify(body)
+      });
+      if (res.ok) onClose();
+    } catch (e) {}
+    setSaving(false);
+  };
+
+  const inputCls = 'w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-400/40 disabled:bg-slate-50 disabled:text-slate-400';
+
+  return (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4 animate-fade-in" onClick={onClose}>
+      <div className="bg-white rounded-[28px] shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto p-6 flex flex-col gap-4 text-slate-800 animate-scale-up" onClick={e => e.stopPropagation()}>
+        <div className="flex items-center justify-between">
+          <h3 className="text-sm font-black text-slate-950 uppercase tracking-wide">Profil Saya</h3>
+          <button onClick={onClose} className="p-1.5 rounded-xl hover:bg-slate-100 text-slate-400"><X size={16} /></button>
+        </div>
+
+        {loading ? (
+          <div className="py-10 text-center text-xs text-slate-400"><Loader2 size={20} className="animate-spin mx-auto mb-2" />Memuat profil…</div>
+        ) : !data ? (
+          <div className="py-10 text-center text-xs font-semibold text-slate-400">
+            Gagal memuat profil — restart server backend lalu coba lagi.
+          </div>
+        ) : (
+          <>
+            <div className="flex items-center gap-4">
+              <label className="relative group cursor-pointer shrink-0" title="Upload foto">
+                {form.profile_photo ? (
+                  <img src={form.profile_photo} alt="" className="h-16 w-16 rounded-2xl object-cover border-2 border-sky-500/30 bg-white" />
+                ) : (
+                  <div className="h-16 w-16 rounded-2xl bg-sky-500/10 border border-sky-200/50 flex items-center justify-center text-sky-600"><Shield size={26} /></div>
+                )}
+                <span className="absolute inset-0 rounded-2xl bg-slate-950/50 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center text-white">
+                  <Camera size={16} />
+                </span>
+                <input type="file" accept="image/*" className="hidden" onChange={handlePhoto} />
+              </label>
+              <div className="min-w-0">
+                <p className="text-sm font-black text-slate-900 truncate">{form.name || data.username || '—'}</p>
+                <p className="text-[11px] font-semibold text-slate-500 truncate">{data.email}</p>
+                {data.facility_name && (
+                  <span className="inline-block mt-1 text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-sky-500/10 text-sky-700 border border-sky-200/50">
+                    {data.facility_name}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="text-[9px] font-bold uppercase text-slate-400">Nama Lengkap</label>
+              <input autoComplete="off" className={inputCls} value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))} />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-[9px] font-bold uppercase text-slate-400">No. Telepon</label>
+              <input autoComplete="off" className={inputCls} value={form.phone} onChange={e => setForm(p => ({ ...p, phone: e.target.value }))} placeholder="08xxxxxxxxxx" />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex flex-col gap-1">
+                <label className="text-[9px] font-bold uppercase text-slate-400">Password Baru</label>
+                <input type="password" autoComplete="new-password" className={inputCls} value={password} onChange={e => setPassword(e.target.value)} placeholder="Opsional" />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-[9px] font-bold uppercase text-slate-400">Konfirmasi</label>
+                <input type="password" autoComplete="new-password" className={inputCls} value={confirm} onChange={e => setConfirm(e.target.value)} />
+              </div>
+            </div>
+            {password && password !== confirm && (
+              <p className="text-[10px] font-bold text-rose-600">Konfirmasi password tidak cocok.</p>
+            )}
+
+            <button
+              onClick={save}
+              disabled={saving || (password && password !== confirm)}
+              className="mt-1 inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 text-xs font-black uppercase tracking-wider text-white bg-[#053D67] hover:opacity-90 active:scale-95 transition-all shadow-md disabled:opacity-40"
+            >
+              {saving ? <Loader2 size={14} className="animate-spin" /> : <Check size={14} />} Simpan Perubahan
+            </button>
+          </>
+        )}
+      </div>
+    </div>
   );
 };

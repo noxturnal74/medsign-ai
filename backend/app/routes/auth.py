@@ -21,7 +21,10 @@ from app.db import (
 )
 from app.rate_limiter import check_lockout, record_failure, record_success
 
-SECRET_KEY = "medsign_clinical_secret_key"
+import os as _os
+SECRET_KEY = _os.getenv("MEDSIGN_JWT_SECRET", "medsign_clinical_secret_key")
+if SECRET_KEY == "medsign_clinical_secret_key":
+    print("[SECURITY WARNING] MEDSIGN_JWT_SECRET tidak diset — memakai default dev. Set env ini di produksi!")
 ACCESS_TOKEN_EXPIRE_MINUTES = 10080  # 7 days for local prototype demo
 REFRESH_TOKEN_EXPIRE_DAYS = 7
 

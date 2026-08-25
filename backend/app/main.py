@@ -28,10 +28,15 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Configure CORS
+# Configure CORS — eksplisit, jangan wildcard bersama credentials
+import os as _os
+_ALLOWED_ORIGINS = [o.strip() for o in _os.getenv(
+    "MEDSIGN_CORS_ORIGINS",
+    "http://localhost:3001,http://127.0.0.1:3001,https://medsign-ai.vercel.app"
+).split(",") if o.strip()]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # Allow all for demo purposes
+    allow_origins=_ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

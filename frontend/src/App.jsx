@@ -1,6 +1,7 @@
 import { Services } from './pages/Services';
 import { Contact } from './pages/Contact';
 import { ArticlesPage } from './pages/ArticlesPage';
+import { ReviewsPage } from './pages/ReviewsPage';
 import React, { useEffect, useState, useContext } from 'react';
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
@@ -58,6 +59,9 @@ function AppContent() {
     if (path === '/articles_page') {
       return 'articles_page';
     }
+    if (path === '/reviews_page' || path === '/reviews') {
+      return 'reviews_page';
+    }
     if (path === '/about') {
       return 'about';
     }
@@ -74,9 +78,12 @@ function AppContent() {
   // Initialize Lenis smooth scrolling
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      lerp: 0.09,              // makin kecil = makin butter/halus
+      wheelMultiplier: 1,
+      touchMultiplier: 1.6,
       smoothWheel: true,
+      syncTouch: false,        // biarkan native di layar sentuh (lebih responsif)
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     });
 
     window.lenis = lenis;
@@ -121,6 +128,12 @@ function AppContent() {
       return;
     }
     setView(newView);
+    // Reset scroll halus ke atas saat pindah halaman
+    if (window.lenis) {
+      window.lenis.scrollTo(0, { immediate: true });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    }
     if (newView === 'data-collection') {
       window.history.pushState({}, '', '/data-collection');
     } else {
@@ -255,10 +268,10 @@ function AppContent() {
       {view === 'services' && <Services setView={handleSetView} />}
       {view === 'contact' && <Contact setView={handleSetView} />}
       {view === 'articles_page' && <ArticlesPage setView={handleSetView} />}
+      {view === 'reviews_page' && <ReviewsPage setView={handleSetView} />}
 
       {view === 'data-collection' && (() => {
-        const mlKeys = ['record_dataset', 'balance_checker', 'ai_augmentation', 'train_model'];
-        const allowed = !currentUser || currentUser.role === 'super_admin' || mlKeys.some(k => hasGrant(k));
+        const allowed = !currentUser || ['super_admin', 'admin'].includes(currentUser.role) || hasGrant('record_dataset') || hasGrant('balance_checker') || hasGrant('ai_augmentation') || hasGrant('train_model');
         return allowed ? <DataCollection setView={handleSetView} /> : <Home setView={handleSetView} />;
       })()}
       {view === 'manual' && <UserManual setView={handleSetView} />}

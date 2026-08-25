@@ -10,10 +10,20 @@ from pathlib import Path
 from typing import List
 
 import numpy as np
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel, Field
 
+from app.routes.auth import get_current_user
+
 router = APIRouter()
+
+
+def require_ml_user(current_user: dict = Depends(get_current_user)) -> dict:
+    """Gate untuk endpoint berbahaya (training, upload model, delete dataset).
+    Hanya super_admin / admin / doctor yang diizinkan."""
+    if current_user.get("role") not in ["super_admin", "admin", "doctor"]:
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+    return current_user
 
 class SaveSampleRequest(BaseModel):
     label: str = Field(..., description="Slug label yang direkam")
@@ -23,7 +33,7 @@ class SaveSampleRequest(BaseModel):
     frames: List[List[float]] = Field(..., description="Sequence berisi tepat 30 frame data landmark, masing-masing 63 float")
 
 @router.post("/save-sample")
-def save_sample(request: SaveSampleRequest):
+def save_sample(request: SaveSampleRequest, _: dict = Depends(require_ml_user)):
     # Validasi signer_id format (lowercase and underscore only)
     if not re.match(r"^[a-z0-9_]+$", request.signer_id):
         raise HTTPException(
@@ -149,7 +159,7 @@ def get_dataset_samples(label: str):
     return samples
 
 @router.post("/dataset/samples/delete")
-def delete_dataset_sample(request: DeleteSampleRequest):
+def delete_dataset_sample(request: DeleteSampleRequest, _: dict = Depends(require_ml_user)):
     if not re.match(r"^[a-z0-9_-]+$", request.label):
         raise HTTPException(status_code=400, detail="Label tidak valid")
     if not re.match(r"^[a-z0-9_]+$", request.signer):
@@ -182,7 +192,7 @@ class BulkDeleteSamplesRequest(BaseModel):
     samples: List[BulkDeleteSampleItem]
 
 @router.post("/dataset/samples/delete-bulk")
-def delete_dataset_samples_bulk(request: BulkDeleteSamplesRequest):
+def delete_dataset_samples_bulk(request: BulkDeleteSamplesRequest, _: dict = Depends(require_ml_user)):
     if not re.match(r"^[a-z0-9_-]+$", request.label):
         raise HTTPException(status_code=400, detail="Label tidak valid")
     for item in request.samples:
@@ -347,7 +357,7 @@ class FinalizeModelRequest(BaseModel):
 
 
 @router.post("/dataset/train/finalize")
-def finalize_model(request: FinalizeModelRequest):
+def finalize_model(request: FinalizeModelRequest, _: dict = Depends(require_ml_user)):
     if request.model_type not in ["clinical", "alphabet"]:
         raise HTTPException(status_code=400, detail="model_type harus 'clinical' atau 'alphabet'")
     if request.action not in ["replace", "save_new"]:
@@ -464,7 +474,7 @@ def finalize_model(request: FinalizeModelRequest):
     raise HTTPException(status_code=400, detail="Aksi atau tipe model tidak valid.")
 
 @router.post("/dataset/train")
-def train_dataset(request: TrainRequest):
+def train_dataset(request: TrainRequest, _: dict = Depends(require_ml_user)):
     if request.architecture not in ["gru", "lstm"]:
         raise HTTPException(status_code=400, detail="Architecture harus 'gru' atau 'lstm'")
     if not (1 <= request.epochs <= 1000):
@@ -557,7 +567,8 @@ import io
 @router.post("/dataset/model/upload")
 async def upload_model_file(
     model_type: str = Form(..., description="Tipe model: 'clinical' atau 'alphabet'"),
-    file: UploadFile = File(...)
+    file: UploadFile = File(...),
+    _: dict = Depends(require_ml_user)
 ):
     if model_type not in ["clinical", "alphabet"]:
         raise HTTPException(status_code=400, detail="model_type harus 'clinical' atau 'alphabet'")
@@ -609,7 +620,7 @@ async def upload_model_file(
 
 
 @router.post("/dataset/model/auto-fix")
-def auto_fix_models():
+def auto_fix_models(_: dict = Depends(require_ml_user)):
     backend_dir = Path(__file__).resolve().parents[2]
     models_dir = backend_dir / "models"
     
@@ -697,7 +708,8 @@ async def upload_dataset_sample(
     label: str = Form(...),
     signer_id: str = Form(...),
     session_id: str = Form("uploaded"),
-    take_index: int = Form(1)
+    take_index: int = Form(1),
+    _: dict = Depends(require_ml_user)
 ):
     if not re.match(r"^[a-z0-9_-]+$", label):
         raise HTTPException(
@@ -842,7 +854,7 @@ def preview_augmentation(request: AugmentPreviewRequest):
         raise HTTPException(status_code=500, detail=f"Gagal melakukan preview: {str(e)}")
 
 @router.post("/dataset/augment/generate")
-def generate_augmentation(request: AugmentGenerateRequest):
+def generate_augmentation(request: AugmentGenerateRequest, _: dict = Depends(require_ml_user)):
     backend_dir = Path(__file__).resolve().parents[2]
     landmarks_dir = backend_dir / "data" / "landmarks"
     
@@ -971,7 +983,7 @@ def generate_augmentation(request: AugmentGenerateRequest):
         raise HTTPException(status_code=500, detail=f"Gagal melakukan proses augmentasi: {str(e)}")
 
 @router.post("/dataset/augment/delete")
-def delete_generated_augmentation():
+def delete_generated_augmentation(_: dict = Depends(require_ml_user)):
     backend_dir = Path(__file__).resolve().parents[2]
     landmarks_dir = backend_dir / "data" / "landmarks"
     
@@ -1089,7 +1101,7 @@ def list_available_models():
     return models_list
 
 @router.post("/dataset/models/select")
-def select_active_model(request: ModelSelectRequest):
+def select_active_model(request: ModelSelectRequest, _: dict = Depends(require_ml_user)):
     try:
         from app.services.slt_adapter import SLTAdapterService
         service = SLTAdapterService()
@@ -1099,7 +1111,7 @@ def select_active_model(request: ModelSelectRequest):
         raise HTTPException(status_code=500, detail=f"Gagal memuat model: {str(e)}")
 
 @router.post("/dataset/models/reset")
-def reset_active_model():
+def reset_active_model(_: dict = Depends(require_ml_user)):
     try:
         from app.services.slt_adapter import SLTAdapterService
         service = SLTAdapterService()

@@ -53,6 +53,9 @@ from app.db import (
     db_delete_brand_pkm,
     db_get_dashboard_moduls,
     db_save_dashboard_moduls,
+    db_update_admin_profile,
+    db_get_all_sessions,
+    hash_password,
     db_get_patient_by_no_rm,
     db_get_all_patients,
     db_create_patient,
@@ -1549,9 +1552,45 @@ def update_superadmin_settings(req: SystemSettingRequest, current_user: dict = D
 @router.get("/homepage/layout")
 def get_homepage_layout():
     # Public endpoint to read the section order
-    order = db_get_setting("homepage_section_order") or "dashboard_modul,mitra,reviews,instagram,articles,brand_pkm,video_tutorial"
+    raw = db_get_setting("homepage_section_order") or "mitra,reviews,instagram,articles,brand_pkm,video_tutorial"
+    # dashboard_modul sudah dihapus dari homepage — bersihkan dari setting lama
+    sections = [s.strip() for s in raw.split(",") if s.strip() and s.strip() != "dashboard_modul"]
+    order = ",".join(sections) if sections else "mitra,reviews,instagram,articles,brand_pkm,video_tutorial"
     split_enabled = db_get_setting("split_screen_enabled") or "0"
     return {"homepage_section_order": order, "split_screen_enabled": split_enabled}
+
+
+# ═══ DOKUMENTASI TIM (galeri About) — disimpan di system_settings ═══
+
+class TeamGalleryItem(BaseModel):
+    id: str
+    title: str
+    caption: Optional[str] = None
+    image_url: str
+    display_order: int = 0
+
+class TeamGalleryListRequest(BaseModel):
+    items: List[TeamGalleryItem]
+
+@router.get("/about/team-gallery")
+def get_team_gallery():
+    raw = db_get_setting("team_gallery")
+    if not raw:
+        return {"items": []}
+    try:
+        data = json.loads(raw)
+        return {"items": data if isinstance(data, list) else []}
+    except Exception:
+        return {"items": []}
+
+@router.post("/admin/team-gallery")
+def save_team_gallery(req: TeamGalleryListRequest, current_user: dict = Depends(get_current_user)):
+    if current_user["role"] not in ["admin", "super_admin"]:
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+    items = [i.model_dump() for i in req.items]
+    if not db_set_setting("team_gallery", json.dumps(items)):
+        raise HTTPException(status_code=500, detail="Gagal menyimpan galeri dokumentasi tim")
+    return {"message": "Dokumentasi tim berhasil disimpan", "items": items}
 
 
 # ═══════════════════════════════════════════════════════════════════
@@ -1653,6 +1692,233 @@ def save_dashboard_moduls(req: DashboardModulListRequest, current_user: dict = D
     if not ok:
         raise HTTPException(status_code=500, detail="Gagal menyimpan modul dashboard")
     return {"message": "Modul dashboard berhasil disimpan", "items": items}
+
+
+# ═══════════════════════════════════════════════════════════════════
+#  DASHBOARD ADMIN FASKES: OVERVIEW & LAPORAN (PDF/Excel/Word/CSV)
+# ═══════════════════════════════════════════════════════════════════
+
+def _scoped_facility_stats(current_user: dict) -> dict:
+    """Kumpulkan statistik: admin = faskes sendiri, super_admin = global."""
+    role = current_user["role"]
+    fac_id = current_user.get("facility_id") if role == "admin" else None
+
+    doctors = db_get_all_doctors()
+    if fac_id:
+        doctors = [d for d in doctors if d.get("facility_id") == fac_id]
+    patients = db_get_all_patients()
+    if fac_id:
+        patients = [p for p in patients if p.get("facility_id") == fac_id]
+    sessions = db_get_all_sessions()
+    if fac_id:
+        pid_set = {p["id"] for p in patients}
+        sessions = [s for s in sessions if s.get("patient_id") in pid_set]
+
+    facility_name = None
+    if fac_id:
+        fac = db_get_facility_by_id(fac_id)
+        facility_name = fac.get("name") if fac else None
+    elif role == "super_admin":
+        facility_name = "Semua Fasilitas (Global)"
+
+    # Sesi 7 hari terakhir (Sen..Min)
+    from datetime import datetime as _dt, timedelta as _td
+    today = _dt.utcnow().date()
+    week_days = [today - _td(days=i) for i in range(6, -1, -1)]
+    day_names = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"]
+    weekly = []
+    for d in week_days:
+        count = sum(1 for s in sessions if (s.get("started_at") or "")[:10] == d.isoformat())
+        weekly.append({"day": day_names[d.weekday()], "date": d.isoformat(), "sessions": count})
+
+    return {
+        "facility_id": fac_id,
+        "facility_name": facility_name,
+        "total_doctors": len(doctors),
+        "active_doctors": len([d for d in doctors if d.get("is_active", 1)]),
+        "total_patients": len(patients),
+        "pending_verifications": len([p for p in patients if (p.get("verification_status") or "").upper() in ("PENDING", "IN_REVIEW")]),
+        "approved_patients": len([p for p in patients if (p.get("verification_status") or "").upper() == "APPROVED"]),
+        "active_consultations": len([s for s in sessions if s.get("status") == "ongoing"]),
+        "completed_consultations": len([s for s in sessions if s.get("status") == "completed"]),
+        "weekly_sessions": weekly,
+        "_doctors": doctors,
+        "_patients": patients,
+        "_sessions": sessions,
+    }
+
+class AdminOverviewResponse(BaseModel):
+    facility_id: Optional[str] = None
+    facility_name: Optional[str] = None
+    total_doctors: int
+    active_doctors: int
+    total_patients: int
+    pending_verifications: int
+    approved_patients: int
+    active_consultations: int
+    completed_consultations: int
+    weekly_sessions: List[dict]
+
+@router.get("/admin/overview", response_model=AdminOverviewResponse)
+def get_admin_overview(current_user: dict = Depends(get_current_user)):
+    if current_user["role"] not in ["admin", "super_admin"]:
+        raise HTTPException(status_code=403, detail="Hanya admin yang dapat mengakses overview")
+    stats = _scoped_facility_stats(current_user)
+    stats.pop("_doctors"); stats.pop("_patients"); stats.pop("_sessions")
+    return AdminOverviewResponse(**stats)
+
+@router.get("/admin/report")
+def download_admin_report(format: str = "pdf", current_user: dict = Depends(get_current_user)):
+    if current_user["role"] not in ["admin", "super_admin"]:
+        raise HTTPException(status_code=403, detail="Hanya admin yang dapat mengunduh laporan")
+
+    fmt = (format or "pdf").lower()
+    if fmt not in ("pdf", "xlsx", "xls", "doc", "csv"):
+        raise HTTPException(status_code=400, detail="format harus pdf | xlsx | xls | doc | csv")
+
+    from datetime import datetime as _dt
+    stats = _scoped_facility_stats(current_user)
+    now_str = _dt.now().strftime("%d/%m/%Y %H:%M")
+    stamp = _dt.now().strftime("%Y%m%d_%H%M%S")
+    title = "Laporan MedSign AI"
+    subtitle = f"{stats['facility_name'] or 'Global'} — {now_str}"
+
+    doctors = stats["_doctors"]; patients = stats["_patients"]; sessions = stats["_sessions"]
+    summary_rows = [
+        ("Total Dokter", stats["total_doctors"]),
+        ("Dokter Aktif", stats["active_doctors"]),
+        ("Total Pasien", stats["total_patients"]),
+        ("Pasien Terverifikasi (APPROVED)", stats["approved_patients"]),
+        ("Menunggu Verifikasi", stats["pending_verifications"]),
+        ("Konsultasi Berlangsung", stats["active_consultations"]),
+        ("Konsultasi Selesai", stats["completed_consultations"]),
+    ]
+    weekly = stats["weekly_sessions"]
+
+    if fmt == "csv":
+        import csv as _csv, io as _io
+        buf = _io.StringIO()
+        w = _csv.writer(buf)
+        w.writerow([title, subtitle])
+        w.writerow([])
+        w.writerow(["Ringkasan", "Nilai"])
+        for k, v in summary_rows:
+            w.writerow([k, v])
+        w.writerow([])
+        w.writerow(["Hari", "Tanggal", "Jumlah Sesi"])
+        for d in weekly:
+            w.writerow([d["day"], d["date"], d["sessions"]])
+        w.writerow([])
+        w.writerow(["Daftar Pasien", "No. RM", "Status Verifikasi"])
+        for p in patients:
+            w.writerow([p.get("name"), p.get("no_rm"), p.get("verification_status")])
+        buf.seek(0)
+        return Response(
+            content=buf.getvalue().encode("utf-8-sig"),
+            media_type="text/csv",
+            headers={"Content-Disposition": f'attachment; filename="laporan_medsign_{stamp}.csv"'}
+        )
+
+    if fmt in ("xls", "xlsx"):
+        # SpreadsheetML — dibuka native oleh Excel
+        import io as _io
+        def esc(v): return str(v if v is not None else "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        rows_xml = []
+        rows_xml.append('<Row><Cell ss:StyleID="h"><Data ss:Type="String">' + esc(title) + '</Data></Cell></Row>')
+        rows_xml.append('<Row><Cell><Data ss:Type="String">' + esc(subtitle) + '</Data></Cell></Row>')
+        rows_xml.append('<Row></Row>')
+        rows_xml.append('<Row><Cell ss:StyleID="h"><Data ss:Type="String">Ringkasan</Data></Cell><Cell ss:StyleID="h"><Data ss:Type="String">Nilai</Data></Cell></Row>')
+        for k, v in summary_rows:
+            rows_xml.append(f'<Row><Cell><Data ss:Type="String">{esc(k)}</Data></Cell><Cell><Data ss:Type="Number">{int(v)}</Data></Cell></Row>')
+        rows_xml.append('<Row></Row>')
+        rows_xml.append('<Row><Cell ss:StyleID="h"><Data ss:Type="String">Hari</Data></Cell><Cell ss:StyleID="h"><Data ss:Type="String">Tanggal</Data></Cell><Cell ss:StyleID="h"><Data ss:Type="String">Sesi</Data></Cell></Row>')
+        for d in weekly:
+            rows_xml.append(f'<Row><Cell><Data ss:Type="String">{esc(d["day"])}</Data></Cell><Cell><Data ss:Type="String">{esc(d["date"])}</Data></Cell><Cell><Data ss:Type="Number">{d["sessions"]}</Data></Cell></Row>')
+        rows_xml.append('<Row></Row>')
+        rows_xml.append('<Row><Cell ss:StyleID="h"><Data ss:Type="String">Pasien</Data></Cell><Cell ss:StyleID="h"><Data ss:Type="String">No. RM</Data></Cell><Cell ss:StyleID="h"><Data ss:Type="String">Verifikasi</Data></Cell></Row>')
+        for p in patients:
+            rows_xml.append(f'<Row><Cell><Data ss:Type="String">{esc(p.get("name"))}</Data></Cell><Cell><Data ss:Type="String">{esc(p.get("no_rm"))}</Data></Cell><Cell><Data ss:Type="String">{esc(p.get("verification_status"))}</Data></Cell></Row>')
+
+        xml = f'''<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
+ <Styles><Style ss:ID="h"><Font ss:Bold="1"/></Style></Styles>
+ <Worksheet ss:Name="Laporan"><Table>{''.join(rows_xml)}</Table></Worksheet>
+</Workbook>'''
+        return Response(
+            content=xml.encode("utf-8"),
+            media_type="application/vnd.ms-excel",
+            headers={"Content-Disposition": f'attachment; filename="laporan_medsign_{stamp}.xls"'}
+        )
+
+    if fmt == "doc":
+        def esc(v): return str(v if v is not None else "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        summary_html = "".join(f"<tr><td>{esc(k)}</td><td><b>{int(v)}</b></td></tr>" for k, v in summary_rows)
+        weekly_html = "".join(f"<tr><td>{esc(d['day'])}</td><td>{esc(d['date'])}</td><td>{d['sessions']}</td></tr>" for d in weekly)
+        patients_html = "".join(f"<tr><td>{esc(p.get('name'))}</td><td>{esc(p.get('no_rm'))}</td><td>{esc(p.get('verification_status'))}</td></tr>" for p in patients)
+        html = f'''<html xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>{esc(title)}</title></head>
+<body style="font-family:Calibri,Arial,sans-serif">
+<h1 style="color:#053D67">{esc(title)}</h1>
+<p>{esc(subtitle)}</p>
+<h2>Ringkasan</h2><table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse">{summary_html}</table>
+<h2>Sesi 7 Hari Terakhir</h2><table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse"><tr><th>Hari</th><th>Tanggal</th><th>Sesi</th></tr>{weekly_html}</table>
+<h2>Daftar Pasien ({len(patients)})</h2><table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse"><tr><th>Nama</th><th>No. RM</th><th>Verifikasi</th></tr>{patients_html}</table>
+</body></html>'''
+        return Response(
+            content=html.encode("utf-8"),
+            media_type="application/msword",
+            headers={"Content-Disposition": f'attachment; filename="laporan_medsign_{stamp}.doc"'}
+        )
+
+    # PDF — reportlab
+    import io as _io
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib import colors
+    from reportlab.lib.styles import getSampleStyleSheet
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+
+    buf = _io.BytesIO()
+    doc = SimpleDocTemplate(buf, pagesize=A4, title=title)
+    styles = getSampleStyleSheet()
+    els = [
+        Paragraph(f"<b>{title}</b>", styles["Title"]),
+        Paragraph(subtitle, styles["Normal"]),
+        Spacer(1, 14),
+        Paragraph("<b>Ringkasan</b>", styles["Heading2"]),
+    ]
+    summary_table = Table([[k, str(v)] for k, v in summary_rows], colWidths=[300, 150])
+    summary_table.setStyle(TableStyle([
+        ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#e0f2fe")),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+    ]))
+    els.append(summary_table)
+    els += [Spacer(1, 12), Paragraph("<b>Sesi 7 Hari Terakhir</b>", styles["Heading2"])]
+    weekly_table = Table([["Hari", "Tanggal", "Sesi"]] + [[d["day"], d["date"], str(d["sessions"])] for d in weekly], colWidths=[150, 150, 150])
+    weekly_table.setStyle(TableStyle([
+        ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#e0f2fe")),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+    ]))
+    els.append(weekly_table)
+    els += [Spacer(1, 12), Paragraph(f"<b>Daftar Pasien ({len(patients)})</b>", styles["Heading2"])]
+    patient_rows = [["Nama", "No. RM", "Verifikasi"]] + [
+        [str(p.get("name") or ""), str(p.get("no_rm") or ""), str(p.get("verification_status") or "")] for p in patients[:200]
+    ]
+    patient_table = Table(patient_rows, colWidths=[220, 130, 100])
+    patient_table.setStyle(TableStyle([
+        ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#e0f2fe")),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, -1), 8),
+    ]))
+    els.append(patient_table)
+    doc.build(els)
+    pdf_bytes = buf.getvalue()
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="laporan_medsign_{stamp}.pdf"'}
+    )
 
 
 # ════════════════════════════════════════════════════════════════════════
@@ -1765,3 +2031,80 @@ def get_user_grants(current_user: dict = Depends(get_current_user)):
     store = _load_grants_store()
     g = store.get(str(current_user["user_id"]), _default_grants_for_role(role))
     return {"user_id": current_user["user_id"], "role": role, "grants": g}
+
+
+# ── Profil Mandiri Admin ──
+
+class AdminMeResponse(BaseModel):
+    id: str
+    name: Optional[str] = None
+    email: Optional[str] = None
+    username: Optional[str] = None
+    phone: Optional[str] = None
+    profile_photo: Optional[str] = None
+    facility_id: Optional[str] = None
+    facility_name: Optional[str] = None
+    role: str = "admin"
+
+class AdminMeUpdateRequest(BaseModel):
+    name: Optional[str] = None
+    phone: Optional[str] = None
+    profile_photo: Optional[str] = None
+    password: Optional[str] = None
+
+def _admin_me_payload(admin: dict) -> AdminMeResponse:
+    facility_name = None
+    if admin.get("facility_id"):
+        fac = db_get_facility_by_id(admin["facility_id"])
+        if fac:
+            facility_name = fac.get("name")
+    role = "super_admin" if (admin.get("email") == "administrator" or admin.get("username") == "administrator") else "admin"
+    return AdminMeResponse(
+        id=str(admin.get("id")),
+        name=admin.get("name"),
+        email=admin.get("email"),
+        username=admin.get("username"),
+        phone=admin.get("phone"),
+        profile_photo=admin.get("profile_photo"),
+        facility_id=admin.get("facility_id"),
+        facility_name=facility_name,
+        role=role,
+    )
+
+@router.get("/admin/me", response_model=AdminMeResponse)
+def get_admin_me(current_user: dict = Depends(get_current_user)):
+    if current_user["role"] not in ["admin", "super_admin"]:
+        raise HTTPException(status_code=403, detail="Hanya admin yang dapat mengakses profil ini")
+    admin = db_get_admin_by_id(current_user["user_id"])
+    if not admin:
+        raise HTTPException(status_code=404, detail="Profil admin tidak ditemukan")
+    return _admin_me_payload(admin)
+
+@router.put("/admin/me", response_model=AdminMeResponse)
+def update_admin_me(req: AdminMeUpdateRequest, current_user: dict = Depends(get_current_user)):
+    if current_user["role"] not in ["admin", "super_admin"]:
+        raise HTTPException(status_code=403, detail="Hanya admin yang dapat memperbarui profil ini")
+    admin = db_get_admin_by_id(current_user["user_id"])
+    if not admin:
+        raise HTTPException(status_code=404, detail="Profil admin tidak ditemukan")
+
+    new_hash = hash_password(req.password) if req.password else None
+    if req.password and len(req.password) < 6:
+        raise HTTPException(status_code=400, detail="Password minimal 6 karakter")
+
+    ok = db_update_admin_profile(
+        admin_id=str(admin["id"]),
+        name=req.name if req.name is not None else None,
+        phone=req.phone if req.phone is not None else None,
+        profile_photo=req.profile_photo if req.profile_photo is not None else None,
+        password_hash=new_hash,
+    )
+    if not ok:
+        raise HTTPException(status_code=500, detail="Gagal memperbarui profil")
+
+    if req.password:
+        write_audit_log(current_user["user_id"], current_user["role"], "ADMIN_SELF_UPDATE (password changed)", event_type="SECURITY")
+    else:
+        write_audit_log(current_user["user_id"], current_user["role"], "ADMIN_SELF_UPDATE (profile)")
+
+    return _admin_me_payload(db_get_admin_by_id(current_user["user_id"]))

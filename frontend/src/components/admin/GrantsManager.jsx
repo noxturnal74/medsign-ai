@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { KeyRound, ShieldCheck, Save, RefreshCw, Building2, Stethoscope, UserCog } from 'lucide-react';
+import { KeyRound, ShieldCheck, Save, RefreshCw, Building2, Stethoscope, UserCog, Search } from 'lucide-react';
 
 const GRANT_DEFS = [
   { key: 'record_dataset',   label: 'Rekam Dataset',    desc: 'Merekam & mengelola sampel landmark BISINDO.' },
@@ -29,6 +29,9 @@ export const GrantsManager = ({ apiBaseUrl, token, showToast }) => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [savingId, setSavingId] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [roleFilter, setRoleFilter] = useState('all'); // 'all' | 'admin' | 'doctor'
+  const [grantFilter, setGrantFilter] = useState('all'); // 'all' | per grant key (hanya yang aktif)
 
   const fetchGrants = async () => {
     setLoading(true);
@@ -77,7 +80,19 @@ export const GrantsManager = ({ apiBaseUrl, token, showToast }) => {
   };
 
   // Super admin is excluded (always has everything)
-  const manageable = users.filter(u => u.role !== 'super_admin');
+  const manageable = users.filter(u => {
+    if (u.role === 'super_admin') return false;
+    if (roleFilter !== 'all' && u.role !== roleFilter) return false;
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      const match = (u.name || '').toLowerCase().includes(q)
+        || (u.email || '').toLowerCase().includes(q)
+        || (u.facility_name || '').toLowerCase().includes(q);
+      if (!match) return false;
+    }
+    if (grantFilter !== 'all' && !u.grants[grantFilter]) return false;
+    return true;
+  });
 
   return (
     <div className="flex flex-col gap-5 animate-slide-up">
@@ -96,10 +111,53 @@ export const GrantsManager = ({ apiBaseUrl, token, showToast }) => {
         </button>
       </div>
 
+      {/* Search & Filter Bar */}
+      <div className="flex flex-col sm:flex-row gap-3">
+        <div className="relative flex-1">
+          <Search size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Cari nama, email, atau faskes..."
+            className="w-full rounded-2xl border border-slate-200 bg-white pl-11 pr-4 py-2.5 text-xs font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400/40 focus:border-sky-400 shadow-sm"
+          />
+        </div>
+        <select
+          value={roleFilter}
+          onChange={(e) => setRoleFilter(e.target.value)}
+          className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 cursor-pointer focus:outline-none focus:ring-2 focus:ring-sky-400/40 shadow-sm"
+        >
+          <option value="all">Semua Peran</option>
+          <option value="admin">Admin Faskes</option>
+          <option value="doctor">Dokter</option>
+        </select>
+        <select
+          value={grantFilter}
+          onChange={(e) => setGrantFilter(e.target.value)}
+          className="rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 cursor-pointer focus:outline-none focus:ring-2 focus:ring-sky-400/40 shadow-sm"
+        >
+          <option value="all">Semua Grant</option>
+          {GRANT_DEFS.map(g => (
+            <option key={g.key} value={g.key}>Punya: {g.label}</option>
+          ))}
+        </select>
+      </div>
+
+      {!loading && (
+        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+          Menampilkan {manageable.length} dari {users.filter(u => u.role !== 'super_admin').length} pengguna
+        </p>
+      )}
+
       {loading ? (
         <div className="text-center py-10 text-slate-400 text-xs font-semibold">Memuat daftar pengguna…</div>
       ) : manageable.length === 0 ? (
-        <div className="text-center py-10 text-slate-400 text-xs font-semibold">Tidak ada Admin/Dokter untuk dikelola.</div>
+        <div className="text-center py-10 text-slate-400 text-xs font-semibold">
+          {users.filter(u => u.role !== 'super_admin').length === 0
+            ? 'Tidak ada Admin/Dokter untuk dikelola.'
+            : 'Tidak ada pengguna yang cocok dengan pencarian/filter.'}
+        </div>
       ) : (
         <div className="grid gap-4 lg:grid-cols-2">
           {manageable.map(u => {

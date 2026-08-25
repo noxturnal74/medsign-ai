@@ -406,7 +406,7 @@ export const PatientView = ({ setView, isSplit = false }) => {
       const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
       const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/models/select`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${currentUser?.token}` },
         body: JSON.stringify({ model_name: modelName })
       });
       if (response.ok) {
@@ -443,7 +443,7 @@ export const PatientView = ({ setView, isSplit = false }) => {
 
   return (
     <>
-      <div className="flex w-full flex-col gap-6 animate-slide-up">
+      <div className="flex w-full flex-col gap-6 animate-slide-up px-4 md:px-8 lg:px-12">
         {!isSplit && (
           <div className="glass-panel flex flex-col md:flex-row items-center justify-between rounded-3xl p-4 gap-4 shadow-sm border border-white/60">
           <div className="flex items-center gap-4">

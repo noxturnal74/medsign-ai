@@ -4,15 +4,19 @@ import { DataCollection } from './DataCollection';
 import {
   Shield, Building, Users, FileText, Settings, Plus, Trash2, Edit2, CheckCircle,
   XCircle, Download, Search, AlertCircle, RefreshCw, Key, Layout as LayoutIcon,
-  HelpCircle, UserCheck, ShieldAlert, Database as DbIcon, LogOut, LayoutGrid, KeyRound
+  HelpCircle, UserCheck, ShieldAlert, Database as DbIcon, LogOut, LayoutGrid, KeyRound,
+  BrainCircuit, Menu, X
 } from 'lucide-react';
 import { AdminAnalytics } from '../components/admin/AdminAnalytics';
 import { GrantsManager } from '../components/admin/GrantsManager';
 import { HomepageManager } from '../components/admin/HomepageManager';
+import { TeamGalleryManager } from '../components/admin/TeamGalleryManager';
+import { ReportDownloader } from '../components/admin/ReportDownloader';
 
 export const SuperAdminView = ({ setView }) => {
   const { currentUser, showToast, logout } = useContext(AppContext);
   const [activeTab, setActiveTab] = useState("dashboard"); // "dashboard" | "facilities" | "admins" | "audit_logs" | "incidents" | "backups"
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [overview, setOverview] = useState(null);
   const [facilities, setFacilities] = useState([]);
   const [admins, setAdmins] = useState([]);
@@ -445,19 +449,36 @@ export const SuperAdminView = ({ setView }) => {
   };
 
   return (
-    <div className="flex min-h-[calc(100vh-57px)] w-full bg-slate-50 text-slate-800 select-none overflow-hidden font-sans">
+    <div className="flex min-h-[calc(100vh-57px)] w-full bg-slate-50 text-slate-800 select-none overflow-hidden font-sans relative">
+      {/* Mobile sidebar backdrop */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[90] lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar Navigation */}
-      <aside className="w-64 bg-slate-900 text-slate-300 flex flex-col shrink-0 justify-between border-r border-slate-800 shadow-xl">
-        <div className="flex flex-col">
+      <aside className={`fixed lg:static inset-y-0 left-0 top-[57px] lg:top-auto z-[100] w-64 max-w-[80vw] bg-slate-900 text-slate-300 flex-col shrink-0 justify-between border-r border-slate-800 shadow-xl transition-transform duration-300 ease-out ${sidebarOpen ? 'flex translate-x-0' : 'hidden -translate-x-full'} lg:flex lg:translate-x-0`}>
+        <div className="flex flex-col overflow-y-auto">
           {/* Sidebar Brand header */}
-          <div className="flex items-center gap-3.5 p-6 border-b border-slate-800 bg-slate-950/40">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-500/10 text-sky-400 border border-sky-500/20 shadow-inner">
-              <Shield size={20} strokeWidth={2.5} />
+          <div className="flex items-center justify-between gap-3.5 p-6 border-b border-slate-800 bg-slate-950/40">
+            <div className="flex items-center gap-3.5">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-500/10 text-sky-400 border border-sky-500/20 shadow-inner">
+                <Shield size={20} strokeWidth={2.5} />
+              </div>
+              <div>
+                <h2 className="text-sm font-black uppercase text-white tracking-wide leading-none">MedSign AI</h2>
+                <span className="text-[10px] font-bold text-slate-550 block mt-1">Super Admin Portal</span>
+              </div>
             </div>
-            <div>
-              <h2 className="text-sm font-black uppercase text-white tracking-wide leading-none">MedSign AI</h2>
-              <span className="text-[10px] font-bold text-slate-550 block mt-1">Super Admin Portal</span>
-            </div>
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="lg:hidden p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all"
+              title="Tutup menu"
+            >
+              <X size={16} />
+            </button>
           </div>
 
           {/* Navigation Links */}
@@ -469,7 +490,8 @@ export const SuperAdminView = ({ setView }) => {
               { id: "audit_logs", label: "Sistem Audit Logs", icon: FileText },
               { id: "incidents", label: "Insiden Keamanan", icon: ShieldAlert },
               { id: "backups", label: "Database Backups", icon: DbIcon },
-              { id: "models", label: "Kelola Model & ML", icon: Settings },
+              { id: "models", label: "Model & ML", icon: Settings },
+              { id: "dataset", label: "Dataset & Training", icon: BrainCircuit },
               { id: "homepage_content", label: "Kelola Konten", icon: LayoutGrid },
               { id: "grants", label: "Grant & Akses", icon: KeyRound }
             ].map(item => {
@@ -478,10 +500,10 @@ export const SuperAdminView = ({ setView }) => {
               return (
                 <button
                   key={item.id}
-                  onClick={() => setActiveTab(item.id)}
+                  onClick={() => { setActiveTab(item.id); setSidebarOpen(false); }}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-xs font-black transition-all ${
-                    active 
-                      ? "bg-sky-600 text-white shadow-md shadow-sky-900/10 scale-[1.02]" 
+                    active
+                      ? "bg-sky-600 text-white shadow-md shadow-sky-900/10 scale-[1.02]"
                       : "text-slate-400 hover:bg-slate-800/60 hover:text-slate-200"
                   }`}
                 >
@@ -505,14 +527,23 @@ export const SuperAdminView = ({ setView }) => {
       </aside>
 
       {/* Main Content Pane */}
-      <main className="flex-grow flex flex-col min-w-0 overflow-y-auto h-[calc(100vh-57px)] pr-2 scrollbar-thin" data-lenis-prevent>
+      <main className="flex-grow flex flex-col min-w-0 overflow-y-auto h-[calc(100vh-57px)] pr-2 sm:pr-4 lg:pr-2 scrollbar-thin" data-lenis-prevent>
         {/* Top Header bar */}
-        <header className="flex items-center justify-between p-6 border-b border-slate-200/80 bg-white/80 backdrop-blur-md sticky top-0 z-20 shadow-sm">
-          <div>
-            <span className="text-[10px] font-black text-sky-700 uppercase tracking-widest">Keamanan Global</span>
-            <h1 className="text-xl font-black text-slate-950 leading-none mt-1">
+        <header className="flex items-center justify-between gap-3 p-4 sm:p-6 border-b border-slate-200/80 bg-white/80 backdrop-blur-md sticky top-0 z-20 shadow-sm">
+          <div className="flex items-center gap-3 min-w-0">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="lg:hidden p-2.5 rounded-2xl border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 transition-all shadow-sm shrink-0"
+              title="Buka menu navigasi"
+            >
+              <Menu size={16} />
+            </button>
+            <div className="min-w-0">
+              <span className="text-[10px] font-black text-sky-700 uppercase tracking-widest">Keamanan Global</span>
+              <h1 className="text-base sm:text-xl font-black text-slate-950 leading-none mt-1 truncate">
                 {activeTab === "dashboard" ? "Dashboard Ringkasan Utama" : activeTab === "dataset" ? "Dataset & Training Panel" : activeTab === "articles" ? "Kelola Artikel Homepage" : activeTab === "instagram" ? "Kelola Instagram Feed" : activeTab === "reviews" ? "Kelola Ulasan Pengguna" : activeTab === "mitra" ? "Kelola Mitra Kerja" : activeTab === "users" ? "Kelola User System" : activeTab === "facilities" ? "Manajemen Fasilitas Kesehatan" : activeTab === "admins" ? "Manajemen Administrator Faskes" : activeTab === "audit_logs" ? "Sistem Audit Logs & Laporan" : activeTab === "incidents" ? "Keamanan - Insiden Terdeteksi" : "models" === activeTab ? "Manajemen Model & ML Global" : activeTab === "homepage_content" ? "Kelola Konten Homepage" : activeTab === "grants" ? "Manajemen Grant & Akses" : "Manajemen Database Backups"}
-            </h1>
+              </h1>
+            </div>
           </div>
 
           <div className="flex items-center gap-3">
@@ -532,7 +563,7 @@ export const SuperAdminView = ({ setView }) => {
           {activeTab === "dataset" && (
             <div className="flex flex-col gap-6 animate-slide-up">
               <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm" data-lenis-prevent>
-                <DataCollection setView={setView} />
+                <DataCollection setView={setView} embedded />
               </div>
             </div>
           )}
@@ -540,7 +571,7 @@ export const SuperAdminView = ({ setView }) => {
           {activeTab === "articles" && (
             <div className="flex flex-col gap-6 animate-slide-up">
               <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm" data-lenis-prevent>
-                <DataCollection setView={setView} initialTab="articles" />
+                <DataCollection setView={setView} initialTab="articles" embedded />
               </div>
             </div>
           )}
@@ -548,7 +579,7 @@ export const SuperAdminView = ({ setView }) => {
           {activeTab === "instagram" && (
             <div className="flex flex-col gap-6 animate-slide-up">
               <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm" data-lenis-prevent>
-                <DataCollection setView={setView} initialTab="instagram" />
+                <DataCollection setView={setView} initialTab="instagram" embedded />
               </div>
             </div>
           )}
@@ -556,7 +587,7 @@ export const SuperAdminView = ({ setView }) => {
           {activeTab === "reviews" && (
             <div className="flex flex-col gap-6 animate-slide-up">
               <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm" data-lenis-prevent>
-                <DataCollection setView={setView} initialTab="reviews" />
+                <DataCollection setView={setView} initialTab="reviews" embedded />
               </div>
             </div>
           )}
@@ -564,7 +595,7 @@ export const SuperAdminView = ({ setView }) => {
           {activeTab === "mitra" && (
             <div className="flex flex-col gap-6 animate-slide-up">
               <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm" data-lenis-prevent>
-                <DataCollection setView={setView} initialTab="mitra" />
+                <DataCollection setView={setView} initialTab="mitra" embedded />
               </div>
             </div>
           )}
@@ -572,7 +603,7 @@ export const SuperAdminView = ({ setView }) => {
           {activeTab === "users" && (
             <div className="flex flex-col gap-6 animate-slide-up">
               <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm" data-lenis-prevent>
-                <DataCollection setView={setView} initialTab="users" />
+                <DataCollection setView={setView} initialTab="users" embedded />
               </div>
             </div>
           )}
@@ -617,6 +648,17 @@ export const SuperAdminView = ({ setView }) => {
 
               {/* Visual Analytics Grid (interactive, timeframe-filtered) */}
               {overview && <AdminAnalytics overview={overview} />}
+
+              {/* Unduh Laporan (PDF / Excel / Word / CSV) */}
+              <div className="bg-white rounded-[28px] p-5 border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-xs font-black text-slate-900 uppercase tracking-wide">Laporan Sistem Global</h3>
+                  <p className="text-[10px] font-semibold text-slate-400 mt-0.5">
+                    Ringkasan faskes, pengguna, dan sesi konsultasi — siap diunduh.
+                  </p>
+                </div>
+                <ReportDownloader token={currentUser?.token} showToast={showToast} />
+              </div>
 
               {/* Faskes overview table list */}
               <div className="bg-white rounded-[28px] p-6 border border-slate-200 shadow-sm flex flex-col gap-4">
@@ -681,6 +723,8 @@ export const SuperAdminView = ({ setView }) => {
                   </select>
                 </div>
               </div>
+
+              <TeamGalleryManager token={currentUser?.token} showToast={showToast} />
             </div>
           )}
 

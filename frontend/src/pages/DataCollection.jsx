@@ -16,6 +16,9 @@ import React, {
 
 import { AppContext } from "../context/AppContextObject";
 
+import { AdminAnalytics } from "../components/admin/AdminAnalytics";
+import { ReportDownloader } from "../components/admin/ReportDownloader";
+
 import { useWebcam } from "../hooks/useWebcam";
 
 import { useMediaPipe } from "../hooks/useMediaPipe";
@@ -101,7 +104,7 @@ const ALPHABET_LIST = [
 
 
 
-export const DataCollection = ({ setView, initialTab }) => {
+export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
   const downloadHeatmapAsFile = (format) => {
     // Printable view generation helper
@@ -136,7 +139,14 @@ export const DataCollection = ({ setView, initialTab }) => {
   };
 
 
-  const { vocabulary, refreshVocabulary, serverState, currentUser, showToast } = useContext(AppContext);
+  const { vocabulary, refreshVocabulary, serverState, currentUser, showToast, hasGrant } = useContext(AppContext);
+
+  // Grant-gating fitur ML: hanya tampil jika user punya minimal 1 grant
+  // (super admin selalu punya akses penuh). Tab Kelola User tetap terbuka
+  // untuk admin karena CRUD pasien/dokter tidak memerlukan grant ML.
+  const mlTabs = ["record", "balance", "augmentation", "training"];
+  const mlAllowed = !currentUser || currentUser.role === "super_admin" ||
+    ["record_dataset", "balance_checker", "ai_augmentation", "train_model"].some(k => hasGrant && hasGrant(k));
   const alert = (msg, type = "info") => {
     if (!showToast) {
       window.alert(msg);
@@ -149,6 +159,13 @@ export const DataCollection = ({ setView, initialTab }) => {
   };
 
   const [activeTab, setActiveTab] = useState(() => {
+
+    if (initialTab && ["record", "balance", "augmentation", "training", "articles", "instagram", "reviews", "mitra", "users"].includes(initialTab)) {
+      return initialTab;
+    }
+
+    // Admin faskes membuka Dashboard → tampil Ringkasan dulu
+    if (!initialTab && currentUser?.role === "admin") return "overview";
 
     const path = window.location.pathname;
 
@@ -167,14 +184,16 @@ export const DataCollection = ({ setView, initialTab }) => {
 
     setActiveTab(tab);
 
-    if (tab === "record") {
+    if (!embedded) {
+      if (tab === "record") {
 
-      window.history.pushState({}, "", "/data-collection");
+        window.history.pushState({}, "", "/data-collection");
 
-    } else {
+      } else {
 
-      window.history.pushState({}, "", `/data-collection/${tab}`);
+        window.history.pushState({}, "", `/data-collection/${tab}`);
 
+      }
     }
 
   };
@@ -184,6 +203,8 @@ export const DataCollection = ({ setView, initialTab }) => {
   // Sync back button
 
   useEffect(() => {
+
+    if (embedded) return undefined;
 
     const handlePopState = () => {
 
@@ -203,6 +224,14 @@ export const DataCollection = ({ setView, initialTab }) => {
     return () => window.removeEventListener("popstate", handlePopState);
 
   }, []);
+
+
+  // Jika user tidak punya grant untuk tab ML yang sedang aktif, paksa ke tab Kelola User
+  useEffect(() => {
+    if (!mlAllowed && mlTabs.includes(activeTab)) {
+      setActiveTab("users");
+    }
+  }, [mlAllowed, activeTab]);
 
 
 
@@ -243,6 +272,22 @@ export const DataCollection = ({ setView, initialTab }) => {
       "http://localhost:8000",
 
   );
+
+  // ── Dashboard Ringkasan Admin (statistik faskes + laporan) ──
+  const [adminOverview, setAdminOverview] = useState(null);
+
+  useEffect(() => {
+    const fetchAdminOverview = async () => {
+      if (!['admin', 'super_admin'].includes(currentUser?.role) || !currentUser?.token) return;
+      try {
+        const res = await fetch(`${apiUrl.replace(/\/$/, '')}/api/v1/admin/overview`, {
+          headers: { Authorization: `Bearer ${currentUser.token}` }
+        });
+        if (res.ok) setAdminOverview(await res.json());
+      } catch (e) { console.error("Gagal memuat overview admin:", e); }
+    };
+    fetchAdminOverview();
+  }, [currentUser?.role, currentUser?.token]);
 
   const [connectionTestResult, setConnectionTestResult] = useState(null);
 
@@ -1143,7 +1188,7 @@ export const DataCollection = ({ setView, initialTab }) => {
         `${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/augment/preview`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${currentUser?.token}` },
           body: JSON.stringify({ label, techniques: augmentTechniques })
         }
       );
@@ -1177,7 +1222,7 @@ export const DataCollection = ({ setView, initialTab }) => {
         `${apiBaseUrl.endsWith("/") ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/augment/generate`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${currentUser?.token}` },
           body: JSON.stringify({
             model_type: balanceModelType,
             selection: augmentSelection,
@@ -2180,7 +2225,7 @@ export const DataCollection = ({ setView, initialTab }) => {
 
           method: "POST",
 
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${currentUser?.token}` },
 
           body: JSON.stringify({
 
@@ -2520,7 +2565,7 @@ export const DataCollection = ({ setView, initialTab }) => {
 
           method: "POST",
 
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${currentUser?.token}` },
 
           body: JSON.stringify({
 
@@ -2946,7 +2991,7 @@ export const DataCollection = ({ setView, initialTab }) => {
 
             method: "POST",
 
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${currentUser?.token}` },
 
             body: JSON.stringify({
 
@@ -3179,6 +3224,87 @@ export const DataCollection = ({ setView, initialTab }) => {
 
 
   // --- RENDER SUB-COMPONENTS ---
+
+
+
+  // Dashboard Ringkasan untuk Admin Faskes (statistik + grafik + laporan)
+  const renderAdminOverview = () => {
+    const o = adminOverview;
+    const cards = [
+      { label: "Total Dokter", value: o?.total_doctors ?? "-", sub: `${o?.active_doctors ?? 0} aktif`, color: "sky" },
+      { label: "Total Pasien", value: o?.total_patients ?? "-", sub: `${o?.approved_patients ?? 0} terverifikasi`, color: "emerald" },
+      { label: "Menunggu Verifikasi", value: o?.pending_verifications ?? "-", sub: "perlu ditinjau admin", color: "amber" },
+      { label: "Konsultasi Selesai", value: o?.completed_consultations ?? "-", sub: `${o?.active_consultations ?? 0} berlangsung`, color: "rose" },
+    ];
+    const toneMap = {
+      sky: "text-sky-600 bg-sky-50",
+      emerald: "text-emerald-600 bg-emerald-50",
+      amber: "text-amber-600 bg-amber-50",
+      rose: "text-rose-600 bg-rose-50",
+    };
+
+    return (
+      <div className="flex flex-col gap-6 animate-slide-up">
+        <div className="glass-panel rounded-3xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <span className="text-[10px] font-black uppercase text-sky-700 tracking-widest">Dashboard Faskes</span>
+            <h2 className="text-lg font-black text-slate-950 tracking-tight">
+              {o?.facility_name || "Ringkasan Fasilitas"}
+            </h2>
+          </div>
+          <ReportDownloader token={currentUser?.token} showToast={alert} />
+        </div>
+
+        {!o ? (
+          <div className="glass-panel rounded-3xl p-12 text-center text-xs font-semibold text-slate-400">
+            Memuat statistik faskes… (pastikan server backend aktif)
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              {cards.map(c => (
+                <div key={c.label} className="bg-white rounded-3xl border border-slate-200 shadow-sm p-5 flex flex-col gap-1.5">
+                  <span className={`inline-flex w-fit px-2.5 py-1 rounded-full text-[8px] font-black uppercase tracking-wider ${toneMap[c.color]}`}>
+                    {c.label}
+                  </span>
+                  <span className="text-2xl font-black text-slate-950 tracking-tight">{c.value}</span>
+                  <span className="text-[10px] font-bold text-slate-400">{c.sub}</span>
+                </div>
+              ))}
+            </div>
+
+            <AdminAnalytics
+              overview={{ active_doctors: o.total_doctors, total_patients: o.total_patients }}
+              weeklyData={o.weekly_sessions}
+              title={`Analitik Sesi — ${o.facility_name || "Faskes"}`}
+              subtitle="Volume konsultasi 7 hari terakhir dan distribusi pengguna faskes."
+              showControls={false}
+            />
+
+            <div className="glass-panel rounded-3xl p-5 flex flex-col gap-3">
+              <h3 className="text-xs font-black text-slate-900 uppercase tracking-wide">Aksi Cepat</h3>
+              <div className="grid gap-3 sm:grid-cols-3">
+                {[
+                  { label: "Kelola Pasien & Dokter", tab: "users", desc: "CRUD, verifikasi, reset password" },
+                  { label: "Rekam Dataset", tab: "record", desc: "Ambil sampel isyarat baru" },
+                  { label: "Balance Checker", tab: "balance", desc: "Keseimbangan dataset per label" },
+                ].map(a => (
+                  <button
+                    key={a.tab}
+                    onClick={() => handleTabChange(a.tab)}
+                    className="text-left rounded-2xl border border-slate-200 bg-white hover:border-sky-300 hover:shadow-md transition-all p-4 active:scale-[0.98]"
+                  >
+                    <span className="block text-xs font-black text-slate-900">{a.label}</span>
+                    <span className="block text-[10px] font-semibold text-slate-400 mt-0.5">{a.desc}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+    );
+  };
 
 
 
@@ -5212,7 +5338,7 @@ export const DataCollection = ({ setView, initialTab }) => {
 
           method: "POST",
 
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${currentUser?.token}` },
 
           body: JSON.stringify({
 
@@ -5448,7 +5574,7 @@ export const DataCollection = ({ setView, initialTab }) => {
 
             method: "POST",
 
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${currentUser?.token}` },
 
             body: JSON.stringify({
 
@@ -5512,7 +5638,7 @@ export const DataCollection = ({ setView, initialTab }) => {
 
             method: "POST",
 
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${currentUser?.token}` },
 
             body: JSON.stringify({
 
@@ -8685,7 +8811,7 @@ export const DataCollection = ({ setView, initialTab }) => {
 
             method: "POST",
 
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${currentUser?.token}` },
 
             body: JSON.stringify({
 
@@ -8833,7 +8959,7 @@ export const DataCollection = ({ setView, initialTab }) => {
 
             method: "POST",
 
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${currentUser?.token}` },
 
             body: JSON.stringify({
 
@@ -9764,6 +9890,29 @@ export const DataCollection = ({ setView, initialTab }) => {
 
           <div className="flex items-center gap-1 rounded-2xl bg-slate-900/10 p-1.5 backdrop-blur-xl border border-white/50 shadow-sm shrink-0 select-none max-w-full overflow-x-auto scrollbar-none">
 
+            {['admin', 'super_admin'].includes(currentUser?.role) && (
+              <button
+
+                onClick={() => handleTabChange("overview")}
+
+                className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all ${
+
+                  activeTab === "overview"
+
+                    ? "bg-white text-sky-700 shadow-sm border border-slate-200/20"
+
+                    : "text-slate-500 hover:text-slate-950"
+
+                }`}
+
+              >
+
+                Ringkasan
+
+              </button>
+            )}
+
+            {(!currentUser || currentUser.role === "super_admin" || (hasGrant && hasGrant("record_dataset"))) && (
             <button
 
               onClick={() => handleTabChange("record")}
@@ -9783,7 +9932,11 @@ export const DataCollection = ({ setView, initialTab }) => {
               Rekam Dataset
 
             </button>
+            )}
 
+            {mlAllowed && (<>
+
+            {(!currentUser || currentUser.role === "super_admin" || (hasGrant && hasGrant("balance_checker"))) && (
             <button
 
               onClick={() => handleTabChange("balance")}
@@ -9803,7 +9956,9 @@ export const DataCollection = ({ setView, initialTab }) => {
               Balance Checker
 
             </button>
+            )}
 
+            {(!currentUser || currentUser.role === "super_admin" || (hasGrant && hasGrant("ai_augmentation"))) && (
             <button
 
               onClick={() => handleTabChange("augmentation")}
@@ -9823,7 +9978,9 @@ export const DataCollection = ({ setView, initialTab }) => {
               AI Augmentation
 
             </button>
+            )}
 
+            {(!currentUser || currentUser.role === "super_admin" || (hasGrant && hasGrant("train_model"))) && (
             <button
 
               onClick={() => handleTabChange("training")}
@@ -9843,8 +10000,11 @@ export const DataCollection = ({ setView, initialTab }) => {
               Training Model
 
             </button>
+            )}
 
-            {currentUser?.role === "super_admin" && (
+            </>)}
+
+            {(currentUser?.role === "super_admin" || currentUser?.role === "admin") && (
               <>
                 <button
                   onClick={() => handleTabChange("articles")}
@@ -9919,7 +10079,11 @@ export const DataCollection = ({ setView, initialTab }) => {
 
           <h2 className="text-lg font-black text-slate-950 tracking-tight">
 
-            {activeTab === "record"
+            {activeTab === "overview"
+
+              ? "Dashboard Ringkasan Faskes"
+
+              : activeTab === "record"
 
               ? "Ambil Data Dataset"
 
@@ -9986,6 +10150,22 @@ export const DataCollection = ({ setView, initialTab }) => {
       <div style={{ display: isSessionActive ? "block" : "none" }}>
 
         {renderLiveRecordView()}
+
+      </div>
+
+      <div
+
+        style={{
+
+          display:
+
+            !isSessionActive && activeTab === "overview" ? "block" : "none",
+
+        }}
+
+      >
+
+        {renderAdminOverview()}
 
       </div>
 

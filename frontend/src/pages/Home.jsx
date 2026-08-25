@@ -5,33 +5,20 @@ import {
   Activity,
   ArrowRight,
   BadgeCheck,
-  BrainCircuit,
   Camera,
   CheckCircle2,
-  Database,
   ExternalLink,
   FileText,
-  Gauge,
-  HeartPulse,
-  ScanLine,
-  Stethoscope,
-  User,
-  Video,
-  Volume2,
   Star,
 } from 'lucide-react';
 
 const MARKETING_SITE_URL =
   import.meta.env.VITE_MARKETING_SITE_URL || 'https://medsign-ai.vercel.app/';
 
-const dashboardItems = [
-  { id: 'motion',          title: 'Motion Visualizer', desc: 'Visualisasi 3D neon trajektori isyarat BISINDO secara real-time.',        icon: Video },
-  { id: 'patient',         title: 'Translate BISINDO', desc: 'Penerjemahan isyarat BISINDO pasien ke teks verbal medis.',               icon: ScanLine },
-  { id: 'doctor',          title: 'Consultation',      desc: 'Sistem komunikasi dua arah dokter-pasien dengan preset respon.',         icon: HeartPulse },
-  { id: 'patient',         title: 'Patient Mode',      desc: 'Layar khusus pasien tunarungu dengan input kamera terintegrasi.',        icon: User },
-  { id: 'doctor',          title: 'Doctor Mode',       desc: 'Layar khusus dokter untuk input teks, voice record, dan preset.',       icon: Stethoscope },
-  { id: 'data-collection', title: 'History & Dataset', desc: 'Histori perekaman sampel dan manajemen antrean sesi.',                   icon: Database },
-];
+const YOUTUBE_TUTORIAL_URL =
+  import.meta.env.VITE_YOUTUBE_TUTORIAL_URL || 'https://www.youtube.com/@medsignai';
+
+const DEFAULT_SECTION_ORDER = ['mitra', 'reviews', 'instagram', 'articles', 'brand_pkm', 'video_tutorial'];
 
 const institutionLogos = [
   { name: 'Kemdikbudristek',        src: '/assets/logo-kemdikbudristek.png' },
@@ -156,17 +143,10 @@ const ArticleCard = ({ art }) => {
 export const Home = ({ setView }) => {
   const { t, currentUser } = useContext(AppContext);
 
-  const filteredDashboardItems = dashboardItems.filter(item => {
-    if (item.id === 'motion' || item.id === 'data-collection') {
-      return currentUser && currentUser.role === 'admin';
-    }
-    return true;
-  });
-
   const scopeRef = useRef(null);
   const [activeStage, setActiveStage] = React.useState(0);
   const [reviews, setReviews]               = React.useState([]);
-  const [sectionOrder, setSectionOrder] = React.useState(["dashboard_modul", "mitra", "reviews", "instagram", "articles", "brand_pkm", "video_tutorial"]);
+  const [sectionOrder, setSectionOrder] = React.useState(DEFAULT_SECTION_ORDER);
   const [articles, setArticles]             = React.useState([]);
   const [instagramPosts, setInstagramPosts] = React.useState([]);
   const [dynamicMitra, setDynamicMitra]     = React.useState([]);
@@ -193,7 +173,9 @@ export const Home = ({ setView }) => {
         setInstagramPosts(ig);
         setDynamicMitra(mit);
         if (lay && lay.homepage_section_order) {
-          setSectionOrder(lay.homepage_section_order.split(","));
+          const parsed = lay.homepage_section_order.split(",").map(s => s.trim()).filter(Boolean);
+          const cleaned = parsed.filter(k => k !== 'dashboard_modul');
+          setSectionOrder(cleaned.length > 0 ? cleaned : DEFAULT_SECTION_ORDER);
         }
       } catch (err) {
         console.error('Gagal memuat data live:', err);
@@ -227,45 +209,14 @@ export const Home = ({ setView }) => {
 
 
       {/* ════════════════════════════════════════════════════
-          KONTEN UTAMA — background putih/slate ringan
+          KONTEN UTAMA — background putih full halaman
       ════════════════════════════════════════════════════ */}
-      <div className="relative z-30 bg-slate-50 -mt-[40vh]">
+      <div className="relative z-30 w-full bg-white -mt-[40vh]">
         {sectionOrder.map((sectionKey) => {
           switch (sectionKey.trim()) {
-            case "dashboard_modul":
-              return (
-                <section key="dashboard_modul" className="px-4 pt-4 pb-8 md:px-10 lg:px-16" data-reveal>
-                  <div className="mx-auto max-w-7xl">
-                    <h2 id="pilih-modul-heading" className="text-2xl font-black text-slate-900 mb-8">Pilih Modul MedSign AI</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                      {filteredDashboardItems.map((item, index) => {
-                        const Icon = item.icon;
-                        return (
-                          <div
-                            key={item.title}
-                            onClick={() => setView(item.id)}
-                            data-reveal
-                            style={{ transitionDelay: `${index * 55}ms` }}
-                            className="group p-7 rounded-[28px] bg-white border border-slate-200 hover:border-sky-300 hover:shadow-xl hover:shadow-sky-500/8 hover:-translate-y-1 active:scale-[0.98] transition-all cursor-pointer"
-                          >
-                            <div className="h-11 w-11 rounded-2xl bg-sky-50 border border-sky-100 text-sky-600 flex items-center justify-center mb-5">
-                              <Icon size={20} />
-                            </div>
-                            <h3 className="text-base font-black text-slate-900 mb-2">{item.title}</h3>
-                            <p className="text-[12px] font-medium text-slate-500 leading-relaxed mb-4">{item.desc}</p>
-                            <span className="text-[11px] font-black text-sky-600 uppercase flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
-                              Buka Modul <ArrowRight size={12} />
-                            </span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </section>
-              );
             case "mitra":
               return (
-                <section key="mitra" className="px-4 py-12 md:px-10 lg:px-16 bg-white" data-reveal>
+                <section key="mitra" className="px-4 py-12 md:px-10 lg:px-16" data-reveal>
                   <div className="mx-auto max-w-7xl">
                     <div className="flex flex-col gap-2 mb-8">
                       <span className="text-[10px] font-black uppercase text-sky-600 tracking-wider">Mitra MedSign</span>
@@ -285,9 +236,19 @@ export const Home = ({ setView }) => {
               return reviews.length > 0 && (
                 <section key="reviews" className="px-4 py-12 md:px-10 lg:px-16" data-reveal>
                   <div className="mx-auto max-w-7xl">
-                    <h2 className="text-2xl font-black text-slate-900 mb-8">Ulasan Pengguna & Teman Tuli</h2>
+                    <div className="flex items-center justify-between mb-8">
+                      <h2 className="text-2xl font-black text-slate-900">Ulasan Pengguna & Teman Tuli</h2>
+                      {reviews.length > 4 && (
+                        <button
+                          onClick={() => setView('reviews_page')}
+                          className="text-[11px] font-black text-sky-600 uppercase tracking-wider flex items-center gap-1.5 px-4 py-2 rounded-full border border-sky-200 bg-sky-50 hover:bg-sky-100 transition-colors"
+                        >
+                          Lihat Semua <ArrowRight size={11} />
+                        </button>
+                      )}
+                    </div>
                     <div className="grid gap-5 md:grid-cols-2">
-                      {reviews.map((rev, idx) => (
+                      {reviews.slice(0, 4).map((rev, idx) => (
                         <div
                           key={rev.id || idx}
                           data-reveal
@@ -337,11 +298,21 @@ export const Home = ({ setView }) => {
               );
             case "instagram":
               return instagramPosts.length > 0 && (
-                <section key="instagram" className="px-4 py-12 bg-white md:px-10 lg:px-16" data-reveal>
+                <section key="instagram" className="px-4 py-12 md:px-10 lg:px-16" data-reveal>
                   <div className="mx-auto max-w-7xl">
-                    <h2 className="text-2xl font-black text-slate-900 mb-8">Konten Terbaru Instagram</h2>
-                    <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                      {instagramPosts.slice(0, 4).map((post) => (
+                    <div className="flex items-center justify-between mb-8">
+                      <h2 className="text-2xl font-black text-slate-900">Konten Terbaru Instagram</h2>
+                      <a
+                        href="https://www.instagram.com/medsign.pkmkc/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[11px] font-black text-pink-600 uppercase tracking-wider flex items-center gap-1.5 px-4 py-2 rounded-full border border-pink-200 bg-pink-50 hover:bg-pink-100 transition-colors"
+                      >
+                        More <ExternalLink size={11} />
+                      </a>
+                    </div>
+                    <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+                      {instagramPosts.slice(0, 3).map((post) => (
                         <InstagramPostCard key={post.id} post={post} />
                       ))}
                     </div>
@@ -354,24 +325,24 @@ export const Home = ({ setView }) => {
                   <div className="mx-auto max-w-7xl">
                     <div className="flex items-center justify-between mb-8">
                       <h2 className="text-2xl font-black text-slate-900">Artikel Terkini</h2>
-                      <a
-                        href={MARKETING_SITE_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[11px] font-black text-sky-600 uppercase tracking-wider flex items-center gap-1.5 px-4 py-2 rounded-full border border-sky-200 bg-sky-50 hover:bg-sky-100 transition-colors"
-                      >
-                        Lihat Semua <ExternalLink size={11} />
-                      </a>
+                      {articles.length > 5 && (
+                        <button
+                          onClick={() => setView('articles_page')}
+                          className="text-[11px] font-black text-sky-600 uppercase tracking-wider flex items-center gap-1.5 px-4 py-2 rounded-full border border-sky-200 bg-sky-50 hover:bg-sky-100 transition-colors"
+                        >
+                          Lihat Semua <ArrowRight size={11} />
+                        </button>
+                      )}
                     </div>
-                    <div className="grid gap-6 md:grid-cols-3">
+                    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
                       {articles.length > 0 ? (
-                        articles.map((art, idx) => (
+                        articles.slice(0, 5).map((art, idx) => (
                           <div key={art.id || idx} data-reveal style={{ transitionDelay: `${idx * 60}ms` }}>
                             <ArticleCard art={art} />
                           </div>
                         ))
                       ) : (
-                        [0, 1, 2].map(i => (
+                        [0, 1, 2, 3, 4].map(i => (
                           <div key={i} className="rounded-[24px] overflow-hidden bg-white border border-slate-200">
                             <ImgPlaceholder aspectClass="aspect-video" />
                             <div className="p-5 flex flex-col gap-3">
@@ -389,7 +360,7 @@ export const Home = ({ setView }) => {
               );
             case "brand_pkm":
               return (
-                <section key="brand_pkm" className="px-4 py-12 bg-white md:px-10 lg:px-16" data-reveal>
+                <section key="brand_pkm" className="px-4 py-12 md:px-10 lg:px-16" data-reveal>
                   <div className="mx-auto max-w-7xl rounded-[28px] border border-slate-200 bg-slate-50 p-8 md:p-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                     <div>
                       <p className="text-[10px] font-black uppercase text-sky-600 tracking-wider mb-2">Brand & Program</p>
@@ -425,30 +396,28 @@ export const Home = ({ setView }) => {
                         </div>
                       </div>
 
-                      <div className="relative rounded-2xl overflow-hidden bg-slate-950 aspect-video shadow-inner border border-slate-200">
-                        <video
-                          src="/public/videos/medsign-accessibility-intro.mp4"
-                          controls
-                          muted
-                          playsInline
-                          aria-label="Video tutorial MedSign AI"
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            e.currentTarget.style.display = "none";
-                            const parent = e.currentTarget.parentElement;
-                            if (parent) {
-                              const placeholder = document.createElement("div");
-                              placeholder.className = "w-full h-full flex flex-col items-center justify-center p-6 text-center text-slate-400 gap-2 bg-slate-100";
-                              placeholder.innerHTML = `
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-sky-500 animate-pulse"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg>
-                                <span class="text-xs font-black uppercase text-slate-800 tracking-wider">Demo Video Tutorial</span>
-                                <span class="text-[10px] text-slate-500 max-w-xs font-semibold leading-relaxed">Video panduan penggunaan faskes inklusif sedang dikembangkan.</span>
-                              `;
-                              parent.appendChild(placeholder);
-                            }
-                          }}
-                        />
-                      </div>
+                      <a
+                        href={YOUTUBE_TUTORIAL_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group relative rounded-2xl overflow-hidden bg-slate-950 aspect-video shadow-inner border border-slate-200 flex items-center justify-center"
+                        aria-label="Tonton video tutorial MedSign AI di YouTube"
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-950 to-sky-950 opacity-90" />
+                        <div className="relative flex flex-col items-center gap-4 text-center px-6">
+                          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-red-600 shadow-xl shadow-red-600/30 group-hover:scale-110 active:scale-95 transition-transform duration-300">
+                            <svg viewBox="0 0 24 24" className="w-7 h-7 text-white ml-1" fill="currentColor">
+                              <path d="M8 5v14l11-7z" />
+                            </svg>
+                          </div>
+                          <div>
+                            <span className="block text-sm font-black text-white">Tonton Tutorial di YouTube</span>
+                            <span className="mt-1 block text-[10px] font-semibold text-slate-400 flex items-center justify-center gap-1.5">
+                              MedSign AI Channel <ExternalLink size={10} />
+                            </span>
+                          </div>
+                        </div>
+                      </a>
 
                       <div className="flex flex-col gap-1 text-[10px] font-semibold text-slate-500 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-100">
                         <span className="text-[9px] font-black uppercase text-slate-400">Deskripsi Panduan</span>

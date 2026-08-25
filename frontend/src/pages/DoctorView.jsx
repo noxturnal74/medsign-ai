@@ -4,21 +4,26 @@ import { DoctorPanel } from '../components/DoctorPanel';
 import { SessionLog } from '../components/SessionLog';
 import { TtsDashboardModal } from '../components/TtsDashboardModal';
 import { AiNotetaker } from '../components/AiNotetaker';
-import { 
-  ArrowLeft, 
-  Stethoscope, 
-  Volume2, 
-  Search, 
-  User, 
-  Activity, 
-  History, 
-  ClipboardList, 
-  Save, 
-  CheckCircle, 
+import {
+  ArrowLeft,
+  Camera,
+  Building2,
+  Stethoscope,
+  Volume2,
+  Search,
+  User,
+  Activity,
+  History,
+  ClipboardList,
+  Save,
+  CheckCircle,
   X,
   FileText,
   MessageSquare,
-  AlertCircle
+  AlertCircle,
+  UserCog,
+  Loader2,
+  KeyRound
 } from 'lucide-react';
 
 export const DoctorView = ({ setView, isSplit = false }) => {
@@ -47,7 +52,107 @@ export const DoctorView = ({ setView, isSplit = false }) => {
   const [assignedPatients, setAssignedPatients] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [doctorTab, setDoctorTab] = useState("consultation"); // "consultation" | "history"
-  
+
+  // Profile / Preferences / Settings panel
+  const [showProfile, setShowProfile] = useState(false);
+  const [profileData, setProfileData] = useState(null);
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [profileSaving, setProfileSaving] = useState(false);
+  const [profileForm, setProfileForm] = useState({ name: "", phone: "", specialty: "", department: "", medical_license: "", image: "", availability: "available" });
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const fetchDoctorProfile = async () => {
+    setProfileLoading(true);
+    try {
+      const apiBase = (localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
+      const res = await fetch(`${apiBase}/api/v1/doctor/me`, {
+        headers: { 'Authorization': `Bearer ${currentUser?.token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setProfileData(data);
+        setProfileForm({
+          name: data.name || "",
+          phone: data.phone || "",
+          specialty: data.specialty || data.specialization || "",
+          department: data.department || "",
+          medical_license: data.medical_license || "",
+          image: data.image || "",
+          availability: data.availability || "available"
+        });
+      } else if (res.status === 404) {
+        showToast("Endpoint profil belum tersedia — restart server backend lalu coba lagi", "error");
+      } else if (res.status === 401) {
+        showToast("Sesi berakhir — silakan login ulang", "error");
+      } else {
+        showToast("Gagal memuat profil", "error");
+      }
+    } catch (e) {
+      showToast("Gagal terhubung ke server", "error");
+    } finally {
+      setProfileLoading(false);
+    }
+  };
+
+  const handleOpenProfile = () => {
+    setShowProfile(true);
+    fetchDoctorProfile();
+  };
+
+  const handleSaveProfile = async () => {
+    if (newPassword && newPassword !== confirmPassword) {
+      showToast("Konfirmasi password tidak cocok", "error");
+      return;
+    }
+    if (newPassword && newPassword.length < 6) {
+      showToast("Password minimal 6 karakter", "error");
+      return;
+    }
+    setProfileSaving(true);
+    try {
+      const apiBase = (localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
+      const body = { ...profileForm };
+      if (newPassword) body.password = newPassword;
+      const res = await fetch(`${apiBase}/api/v1/doctor/me`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${currentUser?.token}` },
+        body: JSON.stringify(body)
+      });
+      if (res.ok) {
+        const updated = await res.json();
+        setProfileData(updated);
+        setNewPassword("");
+        setConfirmPassword("");
+        showToast("Profil berhasil disimpan!", "success");
+      } else {
+        const err = await res.json().catch(() => ({}));
+        showToast(err.detail || "Gagal menyimpan profil", "error");
+      }
+    } catch (e) {
+      showToast("Gagal terhubung ke server", "error");
+    } finally {
+      setProfileSaving(false);
+    }
+  };
+
+  const handleProfileImageChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => setProfileForm(p => ({ ...p, image: reader.result }));
+    reader.readAsDataURL(file);
+  };
+
+  // Buka panel profil saat diminta dari menu titik-3 di Navbar
+  useEffect(() => {
+    const handler = () => {
+      if (currentUser && currentUser.role === 'doctor') handleOpenProfile();
+    };
+    window.addEventListener('medsign:open-profile', handler);
+    return () => window.removeEventListener('medsign:open-profile', handler);
+  }, [currentUser]);
+    
   // History states
   const [patientSessions, setPatientSessions] = useState([]);
   const [selectedPastSession, setSelectedPastSession] = useState(null);
@@ -157,7 +262,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
       return;
     }
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = (localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
       const response = await fetch(`${apiBaseUrl}/api/v1/patient/${patId}/break-glass`, {
         method: "POST",
         headers: {
@@ -368,6 +473,34 @@ export const DoctorView = ({ setView, isSplit = false }) => {
     }
   };
 
+  // ── Histori chat langsung dari kartu pasien (tanpa mulai sesi) ──
+  const [viewingHistoryPatient, setViewingHistoryPatient] = useState(null);
+  const [historyLoading, setHistoryLoading] = useState(false);
+
+  const handleOpenPatientHistory = async (pat) => {
+    setViewingHistoryPatient(pat);
+    setHistoryLoading(true);
+    setSelectedPastSession(null);
+    setSelectedPastSessionLogs([]);
+    try {
+      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/patients/${pat.id}/sessions`, {
+        headers: { 'Authorization': `Bearer ${currentUser?.token}` }
+      });
+      if (response.ok) {
+        setPatientSessions(await response.json());
+      } else {
+        setPatientSessions([]);
+        showToast("Gagal memuat histori sesi", "error");
+      }
+    } catch (err) {
+      setPatientSessions([]);
+      showToast("Gagal terhubung ke server", "error");
+    } finally {
+      setHistoryLoading(false);
+    }
+  };
+
   // ── PARTNER LOGOS FOOTER ──
   const PartnerFooter = () => (
     <div className="w-full flex flex-col items-center gap-3 mt-8 pb-4 animate-slide-up select-none">
@@ -384,6 +517,261 @@ export const DoctorView = ({ setView, isSplit = false }) => {
       </span>
     </div>
   );
+
+  // ── PROFILE / PREFERENCES / SETTINGS PANEL ──
+  if (showProfile && currentUser && currentUser.role !== 'guest') {
+    const inputCls = "w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-400/40 focus:border-sky-400 transition-all placeholder:text-slate-300 disabled:bg-slate-50 disabled:text-slate-400";
+    return (
+      <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 py-2 animate-slide-up">
+        {/* Header */}
+        <div className="glass-panel flex items-center justify-between rounded-3xl p-4 shadow-sm border border-white/60">
+          <button onClick={() => setShowProfile(false)} className="glass-button rounded-2xl px-4 py-2 text-xs font-black">
+            <ArrowLeft size={14} /> Kembali
+          </button>
+          <div className="text-right">
+            <span className="text-[10px] font-bold uppercase text-sky-700">Akun Dokter</span>
+            <h2 className="text-lg font-black text-slate-950">Profil & Pengaturan</h2>
+          </div>
+        </div>
+
+        {profileLoading ? (
+          <div className="glass-panel rounded-3xl p-16 flex flex-col items-center justify-center gap-3 text-slate-400">
+            <Loader2 size={24} className="animate-spin text-sky-500" />
+            <span className="text-xs font-bold">Memuat profil…</span>
+          </div>
+        ) : (
+          <>
+            {/* ── KARTU PROFIL ── */}
+            <div className="glass-panel rounded-3xl p-6 shadow-sm border border-white/60">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5">
+                <div className="shrink-0 relative group">
+                  {profileForm.image ? (
+                    <img src={profileForm.image} alt={profileData?.name} className="h-24 w-24 rounded-3xl object-cover border-2 border-sky-500/30 shadow-md bg-white" />
+                  ) : (
+                    <div className="h-24 w-24 rounded-3xl bg-gradient-to-br from-sky-500/15 to-emerald-500/10 border border-sky-200/60 flex items-center justify-center text-sky-600">
+                      <Stethoscope size={36} />
+                    </div>
+                  )}
+                  <label
+                    className="absolute inset-0 rounded-3xl bg-slate-950/50 opacity-0 group-hover:opacity-100 transition-all cursor-pointer flex flex-col items-center justify-center gap-1 text-white"
+                    title="Upload foto profil"
+                  >
+                    <Camera size={18} />
+                    <span className="text-[8px] font-black uppercase tracking-wider">Upload</span>
+                    <input type="file" accept="image/*" className="hidden" onChange={handleProfileImageChange} />
+                  </label>
+                </div>
+                <div className="text-center sm:text-left flex-1 min-w-0">
+                  <h3 className="text-base font-black text-slate-950 truncate">{profileData?.name || 'Memuat…'}</h3>
+                  <p className="text-xs font-semibold text-slate-500 truncate">{profileData?.email}</p>
+                  <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-2.5">
+                    <span className="text-[9px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-700 border border-emerald-200/50">
+                      {profileForm.availability === 'available' ? 'Tersedia' : profileForm.availability === 'busy' ? 'Sibuk' : 'Off-duty'}
+                    </span>
+                    {profileData?.facility_name && (
+                      <span className="text-[9px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-sky-500/10 text-sky-700 border border-sky-200/50 flex items-center gap-1">
+                        <Building2 size={10} /> {profileData.facility_name}
+                      </span>
+                    )}
+                    <span className="text-[9px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-700 border border-indigo-200/50">
+                      {profileForm.specialty || 'Dokter Umum'}
+                    </span>
+                    {profileForm.department && (
+                      <span className="text-[9px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-violet-500/10 text-violet-700 border border-violet-200/50">
+                        {profileForm.department}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* ── DATA DIRI ── */}
+            <div className="glass-panel rounded-3xl p-6 shadow-sm border border-white/60 flex flex-col gap-4">
+              <h3 className="text-xs font-black text-slate-900 uppercase tracking-wide flex items-center gap-2">
+                <User size={15} className="text-sky-600" /> Data Diri
+              </h3>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[9px] font-black uppercase text-slate-400 tracking-wide">Nama Lengkap</label>
+                  <input autoComplete="off" className={inputCls} value={profileForm.name} onChange={e => setProfileForm(p => ({ ...p, name: e.target.value }))} placeholder="Dr. Nama Lengkap" />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[9px] font-black uppercase text-slate-400 tracking-wide">Email (tidak dapat diubah)</label>
+                  <input autoComplete="off" className={inputCls} value={profileData?.email || ''} disabled />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[9px] font-black uppercase text-slate-400 tracking-wide">No. Telepon</label>
+                  <input autoComplete="off" className={inputCls} value={profileForm.phone} onChange={e => setProfileForm(p => ({ ...p, phone: e.target.value }))} placeholder="08xxxxxxxxxx" />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[9px] font-black uppercase text-slate-400 tracking-wide">Spesialisasi</label>
+                  <input autoComplete="off" className={inputCls} value={profileForm.specialty} onChange={e => setProfileForm(p => ({ ...p, specialty: e.target.value }))} placeholder="Umum / THT / Anak…" />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[9px] font-black uppercase text-slate-400 tracking-wide">Departemen / Poli</label>
+                  <input autoComplete="off" className={inputCls} value={profileForm.department} onChange={e => setProfileForm(p => ({ ...p, department: e.target.value }))} placeholder="Poli Umum" />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[9px] font-black uppercase text-slate-400 tracking-wide">No. STR / Izin Praktik</label>
+                  <input autoComplete="off" className={inputCls} value={profileForm.medical_license} onChange={e => setProfileForm(p => ({ ...p, medical_license: e.target.value }))} placeholder="STR-xxxxxxx" />
+                </div>
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[9px] font-black uppercase text-slate-400 tracking-wide">Foto Profil</label>
+                <div className="flex items-center gap-3">
+                  <label className="cursor-pointer px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-[10px] font-black uppercase tracking-wider text-slate-600 hover:bg-slate-50 transition-all shadow-sm">
+                    Pilih Foto
+                    <input type="file" accept="image/*" className="hidden" onChange={handleProfileImageChange} />
+                  </label>
+                  {profileForm.image && (
+                    <button onClick={() => setProfileForm(p => ({ ...p, image: "" }))} className="text-[10px] font-black uppercase text-rose-600 hover:text-rose-700 transition-all">
+                      Hapus Foto
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* ── PREFERENSI ── */}
+            <div className="glass-panel rounded-3xl p-6 shadow-sm border border-white/60 flex flex-col gap-4">
+              <h3 className="text-xs font-black text-slate-900 uppercase tracking-wide flex items-center gap-2">
+                <Volume2 size={15} className="text-emerald-600" /> Preferensi
+              </h3>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[9px] font-black uppercase text-slate-400 tracking-wide">Status Ketersediaan</label>
+                  <select
+                    value={profileForm.availability}
+                    onChange={e => setProfileForm(p => ({ ...p, availability: e.target.value }))}
+                    className={inputCls + " cursor-pointer"}
+                  >
+                    <option value="available">Tersedia untuk konsultasi</option>
+                    <option value="busy">Sibuk / Tidak tersedia</option>
+                    <option value="off-duty">Luar jadwal (Off-duty)</option>
+                  </select>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[9px] font-black uppercase text-slate-400 tracking-wide">Suara Text-to-Speech</label>
+                  <select
+                    value={selectedVoiceName || ""}
+                    onChange={e => setSelectedVoiceName(e.target.value)}
+                    className={inputCls + " cursor-pointer"}
+                  >
+                    <option value="">Suara bawaan sistem</option>
+                    {availableVoices.map(v => (
+                      <option key={v.name} value={v.name}>{v.name} ({v.lang})</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* ── PENGATURAN KEAMANAN ── */}
+            <div className="glass-panel rounded-3xl p-6 shadow-sm border border-white/60 flex flex-col gap-4">
+              <h3 className="text-xs font-black text-slate-900 uppercase tracking-wide flex items-center gap-2">
+                <KeyRound size={15} className="text-amber-600" /> Pengaturan Keamanan
+              </h3>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[9px] font-black uppercase text-slate-400 tracking-wide">Password Baru (opsional)</label>
+                  <input type="password" autoComplete="new-password" className={inputCls} value={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder="Minimal 6 karakter" />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[9px] font-black uppercase text-slate-400 tracking-wide">Konfirmasi Password</label>
+                  <input type="password" autoComplete="new-password" className={inputCls} value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder="Ulangi password baru" />
+                </div>
+              </div>
+            </div>
+
+            {/* ── SIMPAN ── */}
+            <div className="flex justify-end gap-2 pb-4">
+              <button
+                onClick={() => { setShowProfile(false); setNewPassword(""); setConfirmPassword(""); }}
+                className="px-5 py-3 rounded-2xl border border-slate-200 bg-white text-xs font-black uppercase tracking-wider text-slate-600 hover:bg-slate-50 transition-all active:scale-95 shadow-sm"
+              >
+                Batal
+              </button>
+              <button
+                onClick={handleSaveProfile}
+                disabled={profileSaving}
+                className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-[#053D67] text-white text-xs font-black uppercase tracking-wider hover:opacity-90 transition-all active:scale-95 shadow-md disabled:opacity-50"
+              >
+                {profileSaving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
+                Simpan Perubahan
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+    );
+  }
+
+  // ── MODAL LOG HISTORI SESI (dipakai VIEW B & VIEW C) ──
+  const fmtSessionDate = (d) => {
+    try {
+      const dt = new Date(d);
+      return dt.toLocaleString('id-ID', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    } catch (e) {
+      return (d || '').split('T')[0];
+    }
+  };
+
+  const historyTitleName = viewingHistoryPatient?.name || activePatient?.name || 'Pasien';
+
+  const pastSessionModal = selectedPastSession ? (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+      <div className="bg-white rounded-3xl shadow-xl w-full max-w-md overflow-hidden border border-slate-100 flex flex-col max-h-[80vh] text-slate-800 animate-slide-up">
+        <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+          <div>
+            <h3 className="text-xs font-black text-slate-900 uppercase tracking-wide">Histori Chat — {historyTitleName}</h3>
+            <span className="text-[9px] text-slate-400 font-bold uppercase">{fmtSessionDate(selectedPastSession.started_at)}</span>
+          </div>
+          <button onClick={() => setSelectedPastSession(null)} className="p-1 rounded bg-slate-50 text-slate-400 hover:text-slate-700">
+            <X size={15} />
+          </button>
+        </div>
+
+        <div className="p-4 overflow-y-auto flex-1 flex flex-col gap-3">
+          {/* SOAP Note view */}
+          <div className="bg-slate-50 border border-slate-150 p-3 rounded-2xl flex flex-col gap-2">
+            <span className="text-[9px] font-black text-slate-400 uppercase flex items-center gap-1">
+              <FileText size={12} /> Catatan Medis Dokter
+            </span>
+            <p className="text-[10px] font-semibold text-slate-700 leading-relaxed whitespace-pre-line">
+              {selectedPastSession.summary || "Tidak ada catatan medis SOAP disimpan untuk sesi ini."}
+            </p>
+          </div>
+
+          {/* Chat log view */}
+          <span className="text-[9px] font-black text-slate-400 uppercase flex items-center gap-1 border-t border-slate-100 pt-2">
+            <MessageSquare size={12} /> Transkrip Percakapan Sesi
+          </span>
+
+          <div className="flex flex-col gap-2 max-h-[250px] overflow-y-auto">
+            {selectedPastSessionLogs.length === 0 ? (
+              <span className="text-[9px] text-slate-400 text-center py-4">Sesi ini tidak memiliki log percakapan.</span>
+            ) : (
+              selectedPastSessionLogs.map(log => (
+                <div
+                  key={log.id}
+                  className={`p-2 rounded-xl text-[10px] font-semibold max-w-[85%] ${
+                    log.role === 'doctor'
+                      ? 'bg-sky-500/10 text-sky-850 border border-sky-200/20 align-self-end ml-auto'
+                      : 'bg-emerald-500/10 text-emerald-850 border border-emerald-250/20 align-self-start mr-auto'
+                  }`}
+                >
+                  <span className="font-extrabold uppercase text-[8px] block opacity-60 mb-0.5">{log.role}</span>
+                  {log.text}
+                  {log.confidence && <span className="block text-[8px] text-slate-400 text-right mt-0.5">Conf: {log.confidence}%</span>}
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  ) : null;
 
   // ── VIEW A: GUEST MODE (NO PATIENT SELECT) ──
   if (!currentUser || currentUser.role === 'guest') {
@@ -477,13 +865,22 @@ export const DoctorView = ({ setView, isSplit = false }) => {
         {/* Header */}
         {!isSplit && (
           <div className="glass-panel flex items-center justify-between rounded-3xl p-4 shadow-sm border border-white/60">
-            <button
-              onClick={() => setView('home')}
-              className="glass-button rounded-2xl px-4 py-2 text-xs font-black transition-all"
-            >
-              <ArrowLeft size={14} />
-              Menu Utama
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setView('home')}
+                className="glass-button rounded-2xl px-4 py-2 text-xs font-black transition-all"
+              >
+                <ArrowLeft size={14} />
+                Menu Utama
+              </button>
+              <button
+                onClick={handleOpenProfile}
+                className="flex items-center gap-1.5 rounded-2xl px-4 py-2 text-xs font-black bg-slate-900/5 text-slate-600 hover:bg-slate-900/10 transition-all active:scale-95"
+                title="Profil, preferensi & pengaturan"
+              >
+                <UserCog size={14} /> Profil Saya
+              </button>
+            </div>
             <div className="flex items-center gap-2.5">
               <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-indigo-500/10 text-indigo-650 shrink-0">
                 <Stethoscope size={17} />
@@ -507,32 +904,36 @@ export const DoctorView = ({ setView, isSplit = false }) => {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <input 
-              type="text" 
-              placeholder="NIK KTP (16 Digit)" 
+            <input
+              type="text"
+              placeholder="NIK KTP (16 Digit)"
               value={searchBgNik}
               onChange={(e) => setSearchBgNik(e.target.value)}
               className="rounded-xl border border-slate-200 px-3 py-1.5 text-xs bg-white focus:outline-none"
             />
-            <button 
+            <button
               onClick={async () => {
-                // Find patient ID matching NIK via searching or fetch
+                // Cari ID pasien berdasarkan NIK via endpoint khusus break-glass (tanpa syarat relasi)
+                if (!searchBgNik || searchBgNik.trim().length < 6) {
+                  showToast("Masukkan NIK KTP yang valid!", "error");
+                  return;
+                }
                 try {
-                  const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
-                  // Search all patients to find ID for NIK
-                  const res = await fetch(`${apiBaseUrl}/api/v1/doctor/patients/search?q=${searchBgNik}`, {
+                  const apiBase = (localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
+                  const res = await fetch(`${apiBase}/api/v1/doctor/patients/find-by-nik?nik=${encodeURIComponent(searchBgNik.trim())}`, {
                     headers: { 'Authorization': `Bearer ${currentUser?.token}` }
                   });
                   if (res.ok) {
                     const data = await res.json();
                     if (data && data.length > 0) {
                       handleActivateBreakGlass(data[0].id);
+                      setSearchBgNik("");
                     } else {
-                      // Fallback: Patient is outside faskes. We try to find in sqlite db directly if super admin or search allows.
-                      // For this proto, we can prompt for patient ID
-                      const pId = prompt("Masukkan ID Pasien:");
-                      if (pId) handleActivateBreakGlass(pId);
+                      showToast("Pasien dengan NIK tersebut tidak ditemukan di faskes Anda", "error");
                     }
+                  } else {
+                    const err = await res.json().catch(() => ({}));
+                    showToast(err.detail || "Gagal mencari pasien", "error");
                   }
                 } catch (e) {
                   showToast("Gagal mencari pasien", "error");
@@ -579,16 +980,83 @@ export const DoctorView = ({ setView, isSplit = false }) => {
                       <span>Tanggal Lahir: {pat.date_of_birth}</span>
                     </div>
                   </div>
-                  <button
-                    onClick={() => handleSelectPatient(pat)}
-                    className="w-full py-2 rounded-xl bg-indigo-650 hover:bg-indigo-750 text-white font-black text-[10px] uppercase tracking-wider transition-all"
-                  >
-                    Mulai Sesi Konsultasi
-                  </button>
+                  <div className="flex flex-col gap-2">
+                    <button
+                      onClick={() => handleSelectPatient(pat)}
+                      className="w-full py-2 rounded-xl bg-indigo-650 hover:bg-indigo-750 text-white font-black text-[10px] uppercase tracking-wider transition-all"
+                    >
+                      Mulai Sesi Konsultasi
+                    </button>
+                    <button
+                      onClick={() => handleOpenPatientHistory(pat)}
+                      className="w-full py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 font-black text-[10px] uppercase tracking-wider transition-all flex items-center justify-center gap-1.5"
+                    >
+                      <History size={12} /> Lihat Histori Chat
+                    </button>
+                  </div>
                 </div>
               ))
             )}
           </div>
+
+          {/* ── PANEL HISTORI CHAT PASIEN (dari kartu pasien) ── */}
+          {viewingHistoryPatient && (
+            <div className="glass-panel rounded-3xl p-6 border border-indigo-100 bg-indigo-50/20 shadow-sm flex flex-col gap-4 animate-slide-up">
+              <div className="flex items-center justify-between border-b border-indigo-100 pb-3">
+                <div>
+                  <span className="block text-xs font-black uppercase text-indigo-700 tracking-wide flex items-center gap-1.5">
+                    <History size={14} /> Histori Chat — {viewingHistoryPatient.name}
+                  </span>
+                  <span className="text-[10px] font-semibold text-slate-400 mt-0.5 block">
+                    {viewingHistoryPatient.no_rm} · Pilih sesi untuk melihat transkrip percakapan
+                  </span>
+                </div>
+                <button
+                  onClick={() => { setViewingHistoryPatient(null); setPatientSessions([]); }}
+                  className="p-1.5 rounded-xl bg-white border border-slate-200 text-slate-400 hover:text-slate-700 transition-all"
+                  title="Tutup histori"
+                >
+                  <X size={14} />
+                </button>
+              </div>
+
+              {historyLoading ? (
+                <div className="py-10 text-center text-xs font-semibold text-slate-400">Memuat histori sesi…</div>
+              ) : patientSessions.length === 0 ? (
+                <div className="py-10 text-center text-xs font-semibold text-slate-400">
+                  Belum ada riwayat chat tersimpan untuk {viewingHistoryPatient.name}. Mulai sesi konsultasi — setiap percakapan akan otomatis tersimpan di sini.
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {patientSessions.map(s => (
+                    <div key={s.id} className="bg-white rounded-2xl p-4 border border-slate-150 flex flex-col justify-between gap-3 shadow-sm hover:shadow-md transition-all">
+                      <div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 border border-emerald-200/50">
+                            {s.status === 'active' ? 'Berlangsung' : 'Selesai'}
+                          </span>
+                          <History size={13} className="text-slate-300" />
+                        </div>
+                        <h4 className="text-xs font-black text-slate-900 mt-2 leading-snug">
+                          {s.summary ? s.summary.split("\n")[0].slice(0, 48) : `Konsultasi ${viewingHistoryPatient?.name?.split(" ")[0] || ""}`}
+                        </h4>
+                        <div className="flex flex-col gap-0.5 mt-1.5 text-[10px] font-semibold text-slate-500">
+                          <span>Tanggal konsul: {fmtSessionDate(s.started_at)}</span>
+                          <span className="text-slate-400">Model: {s.model_version}</span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => handleViewPastSessionLogs(s)}
+                        className="w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-[9px] uppercase tracking-wider transition-all active:scale-95"
+                      >
+                        View Detail
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     );
@@ -613,12 +1081,21 @@ export const DoctorView = ({ setView, isSplit = false }) => {
               </div>
             </div>
 
-            <button
-              onClick={handleEndSession}
-              className="rounded-2xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 px-4 py-2 text-xs font-black transition-all shadow-sm border border-rose-200/20 uppercase"
-            >
-              Akhiri Sesi
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleOpenProfile}
+                className="rounded-2xl bg-slate-900/5 hover:bg-slate-900/10 text-slate-600 px-4 py-2 text-xs font-black transition-all shadow-sm uppercase active:scale-95"
+                title="Profil, preferensi & pengaturan"
+              >
+                <UserCog size={14} className="inline mr-1 -mt-0.5" /> Profil
+              </button>
+              <button
+                onClick={handleEndSession}
+                className="rounded-2xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-700 px-4 py-2 text-xs font-black transition-all shadow-sm border border-rose-200/20 uppercase"
+              >
+                Akhiri Sesi
+              </button>
+            </div>
           </div>
         )}
 
@@ -735,7 +1212,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
                     <div>
                       <div className="flex items-center justify-between">
                         <span className="text-[10px] font-black uppercase text-indigo-700 tracking-wider bg-indigo-500/10 px-2.5 py-0.5 rounded">
-                          Selesai
+                          {s.status === 'active' ? 'Berlangsung' : 'Selesai'}
                         </span>
                         <History size={15} className="text-slate-400" />
                       </div>
@@ -743,7 +1220,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
                         Konsultasi Medis
                       </h3>
                       <div className="flex flex-col gap-1 mt-2 text-[10px] font-semibold text-slate-500 leading-relaxed">
-                        <span>Tanggal: {s.started_at.split("T")[0]}</span>
+                        <span>Tanggal: {fmtSessionDate(s.started_at)}</span>
                         <span>Model: {s.model_version}</span>
                       </div>
                     </div>
@@ -751,7 +1228,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
                       onClick={() => handleViewPastSessionLogs(s)}
                       className="w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-750 text-white font-black text-[10px] uppercase tracking-wider transition-all"
                     >
-                      Buka &amp; Lihat Log Chat
+                      Show History Chat
                     </button>
                   </div>
                 ))
@@ -769,60 +1246,8 @@ export const DoctorView = ({ setView, isSplit = false }) => {
         <TtsDashboardModal onClose={() => setShowTtsModal(false)} />
       )}
 
-      {/* Past Session Logs Drawer Modal */}
-      {selectedPastSession && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-3xl shadow-xl w-full max-w-md overflow-hidden border border-slate-100 flex flex-col max-h-[80vh] text-slate-800 animate-slide-up">
-            <div className="p-4 border-b border-slate-100 flex items-center justify-between">
-              <div>
-                <h3 className="text-xs font-black text-slate-900 uppercase tracking-wide">Log Histori Sesi</h3>
-                <span className="text-[9px] text-slate-400 font-bold uppercase">{selectedPastSession.started_at.split("T")[0]}</span>
-              </div>
-              <button onClick={() => setSelectedPastSession(null)} className="p-1 rounded bg-slate-50 text-slate-400 hover:text-slate-700">
-                <X size={15} />
-              </button>
-            </div>
-            
-            <div className="p-4 overflow-y-auto flex-1 flex flex-col gap-3">
-              {/* SOAP Note view */}
-              <div className="bg-slate-50 border border-slate-150 p-3 rounded-2xl flex flex-col gap-2">
-                <span className="text-[9px] font-black text-slate-400 uppercase flex items-center gap-1">
-                  <FileText size={12} /> Catatan Medis Dokter
-                </span>
-                <p className="text-[10px] font-semibold text-slate-700 leading-relaxed whitespace-pre-line">
-                  {selectedPastSession.summary || "Tidak ada catatan medis SOAP disimpan untuk sesi ini."}
-                </p>
-              </div>
-
-              {/* Chat log view */}
-              <span className="text-[9px] font-black text-slate-400 uppercase flex items-center gap-1 border-t border-slate-100 pt-2">
-                <MessageSquare size={12} /> Transkrip Percakapan Sesi
-              </span>
-              
-              <div className="flex flex-col gap-2 max-h-[250px] overflow-y-auto">
-                {selectedPastSessionLogs.length === 0 ? (
-                  <span className="text-[9px] text-slate-400 text-center py-4">Sesi ini tidak memiliki log percakapan.</span>
-                ) : (
-                  selectedPastSessionLogs.map(log => (
-                    <div 
-                      key={log.id} 
-                      className={`p-2 rounded-xl text-[10px] font-semibold max-w-[85%] ${
-                        log.role === 'doctor' 
-                          ? 'bg-sky-500/10 text-sky-850 border border-sky-200/20 align-self-end ml-auto' 
-                          : 'bg-emerald-500/10 text-emerald-850 border border-emerald-250/20 align-self-start mr-auto'
-                      }`}
-                    >
-                      <span className="font-extrabold uppercase text-[8px] block opacity-60 mb-0.5">{log.role}</span>
-                      {log.text}
-                      {log.confidence && <span className="block text-[8px] text-slate-400 text-right mt-0.5">Conf: {log.confidence}%</span>}
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Modal log histori — dipakai VIEW B & VIEW C */}
+      {pastSessionModal}
     </>
   );
 };

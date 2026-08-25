@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react';
 import {
   LayoutGrid, Save, ArrowUp, ArrowDown, Power, EyeOff,
-  Plus, Pencil, Trash2, X, Check, Loader2, GripVertical,
-  Newspaper, Star, Instagram, Building2, Video, Monitor, Globe
+  Plus, Pencil, Trash2, X, Check, Loader2, GripVertical, RotateCcw,
+  Newspaper, Star, Instagram, Building2, Video, Globe
 } from 'lucide-react';
 import { AppContext } from '../../context/AppContextObject';
 
 const API = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
+const DEFAULT_ORDER = ['mitra', 'reviews', 'instagram', 'articles', 'brand_pkm', 'video_tutorial'];
+
 const ALL_MODULES = [
-  { id: 'dashboard_modul', label: 'Dashboard Modul',       icon: <Monitor size={14} />,  color: 'sky',    hint: 'Grid modul utama aplikasi' },
   { id: 'mitra',          label: 'Mitra & Ekosistem',      icon: <Building2 size={14} />, color: 'indigo', hint: 'Logo mitra & ekosistem' },
   { id: 'reviews',        label: 'Ulasan Pengguna',        icon: <Star size={14} />,      color: 'amber',  hint: 'Testimoni pengguna' },
   { id: 'instagram',      label: 'Instagram Feed',         icon: <Instagram size={14} />, color: 'pink',   hint: 'Feed Instagram terbaru' },
@@ -70,28 +71,7 @@ const Field = ({ label, required, children }) => (
 const inputCls = 'w-full rounded-xl border border-slate-200 px-3 py-2.5 text-xs font-semibold text-slate-800 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-sky-400/40 focus:border-sky-400 transition-all placeholder:text-slate-300';
 const selectCls = inputCls + ' appearance-none';
 
-/* ═══ Dashboard Modul Form ═══ */
-const DashboardModulForm = ({ item, onSave, onClose }) => {
-  const [f, setF] = useState(item || { id: crypto.randomUUID(), title: '', description: '', icon: '', link: '', color: 'sky', is_active: true, display_order: 0 });
-  const set = (k, v) => setF(p => ({ ...p, [k]: v }));
-  return (
-    <div className="flex flex-col gap-3">
-      <Field label="Judul" required><input className={inputCls} value={f.title} onChange={e => set('title', e.target.value)} placeholder="Contoh: Translate BISINDO" /></Field>
-      <Field label="Deskripsi"><textarea className={inputCls + ' min-h-[60px] resize-none'} value={f.description || ''} onChange={e => set('description', e.target.value)} placeholder="Deskripsi singkat modul" /></Field>
-      <div className="grid grid-cols-2 gap-3">
-        <Field label="Icon (emoji)"><input className={inputCls} value={f.icon || ''} onChange={e => set('icon', e.target.value)} placeholder="eg. 🤟" /></Field>
-        <Field label="Warna"><select className={selectCls} value={f.color || 'sky'} onChange={e => set('color', e.target.value)}>
-          {['sky','indigo','amber','pink','emerald','violet','rose','slate'].map(c => <option key={c} value={c}>{c}</option>)}
-        </select></Field>
-      </div>
-      <Field label="Link"><input className={inputCls} value={f.link || ''} onChange={e => set('link', e.target.value)} placeholder="/patient" /></Field>
-      <div className="flex justify-end gap-2 pt-2">
-        <button onClick={onClose} className="px-4 py-2 rounded-xl text-[10px] font-bold uppercase text-slate-500 hover:bg-slate-100 transition-all">Batal</button>
-        <button onClick={() => onSave(f)} disabled={!f.title} className="px-5 py-2 rounded-xl bg-[#053D67] text-white text-[10px] font-black uppercase hover:opacity-90 transition-all disabled:opacity-30 flex items-center gap-1.5"><Check size={13} /> Simpan</button>
-      </div>
-    </div>
-  );
-};
+/* ═══ Dashboard Modul Form — DIHAPUS (modul dihilangkan dari homepage) ═══ */
 
 /* ═══ Generic CRUD Table for mitra/video_tutorial/brand_pkm ═══ */
 const GenericCrudTable = ({ data, columns, onEdit, onDelete, loading }) => (
@@ -131,7 +111,9 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
   const { token } = useContext(AppContext);
   const headers = { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' };
 
-  const activeModules = order ? order.split(',').filter(Boolean) : [];
+  const activeModules = order
+    ? order.split(',').map(s => s.trim()).filter(Boolean).filter(id => id !== 'dashboard_modul')
+    : [];
   const inactiveModules = ALL_MODULES.filter(m => !activeModules.includes(m.id)).map(m => m.id);
   const displayModules = [
     ...activeModules.map(id => ({ ...ALL_MODULES.find(m => m.id === id), active: true })),
@@ -139,20 +121,19 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
   ].filter(m => m.id);
 
   /* ── Tab state ── */
-  const [activeTab, setActiveTab] = useState('dashboard_modul');
   const [subTab, setSubTab] = useState('layout'); // 'layout' | module id
 
   /* ── Data per module ── */
-  const [data, setData] = useState({ dashboard_modul: [], mitra: [], reviews: [], instagram: [], articles: [], brand_pkm: [], video_tutorial: [] });
+  const [data, setData] = useState({ mitra: [], reviews: [], instagram: [], articles: [], brand_pkm: [], video_tutorial: [] });
   const [loading, setLoading] = useState({});
   const [modal, setModal] = useState({ open: false, module: null, item: null });
 
   const fetchData = useCallback(async (module) => {
+    if (!module || module === 'layout') return;
     setLoading(p => ({ ...p, [module]: true }));
     try {
       let url;
-      if (module === 'dashboard_modul') url = `${API}/api/v1/admin/dashboard-moduls`;
-      else if (module === 'mitra') url = `${API}/api/v1/mitra`;
+      if (module === 'mitra') url = `${API}/api/v1/mitra`;
       else if (module === 'reviews') url = `${API}/api/v1/reviews`;
       else if (module === 'instagram') url = `${API}/api/v1/instagram-posts`;
       else if (module === 'articles') url = `${API}/api/v1/articles`;
@@ -161,8 +142,7 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
       else return;
       const r = await fetch(url, { headers });
       const json = await r.json();
-      if (module === 'dashboard_modul') setData(p => ({ ...p, [module]: json.items || [] }));
-      else setData(p => ({ ...p, [module]: Array.isArray(json) ? json : [] }));
+      setData(p => ({ ...p, [module]: Array.isArray(json) ? json : [] }));
     } catch (e) { console.error(`Fetch ${module} error:`, e); }
     setLoading(p => ({ ...p, [module]: false }));
   }, [token]);
@@ -173,13 +153,7 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
     if (!window.confirm('Yakin ingin menghapus item ini?')) return;
     try {
       let url;
-      if (module === 'dashboard_modul') {
-        const items = data.dashboard_modul.filter(i => i.id !== id);
-        await fetch(`${API}/api/v1/admin/dashboard-moduls`, { method: 'POST', headers, body: JSON.stringify({ items }) });
-        setData(p => ({ ...p, dashboard_modul: items }));
-        return;
-      }
-      else if (module === 'mitra') url = `${API}/api/v1/admin/mitra/${id}`;
+      if (module === 'mitra') url = `${API}/api/v1/admin/mitra/${id}`;
       else if (module === 'reviews') url = `${API}/api/v1/admin/reviews/${id}`;
       else if (module === 'instagram') url = `${API}/api/v1/admin/instagram-posts/${id}`;
       else if (module === 'articles') url = `${API}/api/v1/admin/articles/${id}`;
@@ -194,15 +168,6 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
   const saveItem = async (module, item) => {
     try {
       const isEdit = !!item.id && data[module].some(i => i.id === item.id);
-      if (module === 'dashboard_modul') {
-        let items;
-        if (isEdit) items = data.dashboard_modul.map(i => i.id === item.id ? item : i);
-        else items = [...data.dashboard_modul, item];
-        await fetch(`${API}/api/v1/admin/dashboard-moduls`, { method: 'POST', headers, body: JSON.stringify({ items }) });
-        setData(p => ({ ...p, dashboard_modul: items }));
-        setModal({ open: false, module: null, item: null });
-        return;
-      }
 
       let url, method;
       if (module === 'mitra') { url = isEdit ? `${API}/api/v1/admin/mitra/${item.id}` : `${API}/api/v1/admin/mitra`; method = isEdit ? 'PUT' : 'POST'; }
@@ -374,15 +339,21 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
 
           <div className="flex flex-col gap-1.5">
             <label className="text-[9px] font-bold text-slate-400 uppercase">Urutan Bagian</label>
-            <input type="text" value={order} readOnly
+            <input type="text" value={activeModules.join(',')} readOnly
               className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-xs text-slate-500 bg-slate-50 font-mono font-bold shadow-inner cursor-not-allowed"
             />
           </div>
 
-          <div className="flex justify-end pt-1">
+          <div className="flex flex-col sm:flex-row justify-end gap-2 pt-1">
+            <button type="button"
+              onClick={() => { setOrder(DEFAULT_ORDER.join(',')); onSave(); }}
+              className="px-5 py-3 bg-white border border-slate-300 text-slate-700 font-black text-xs uppercase tracking-wider hover:bg-slate-100 rounded-2xl transition-all active:scale-95 flex items-center gap-2 justify-center"
+            >
+              <RotateCcw size={14} /> Set ke Default
+            </button>
             <button type="button" onClick={onSave}
-              className="px-6 py-3 bg-[#053D67] text-white font-black text-xs uppercase tracking-wider hover:opacity-90 rounded-2xl transition-all shadow-md active:scale-95 flex items-center gap-2"
-            ><Save size={14} /> Simpan Tata Letak</button>
+              className="px-6 py-3 bg-[#053D67] text-white font-black text-xs uppercase tracking-wider hover:opacity-90 rounded-2xl transition-all shadow-md active:scale-95 flex items-center gap-2 justify-center"
+            ><Save size={14} /> Terapkan Tata Letak</button>
           </div>
         </div>
       )}
@@ -396,7 +367,7 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
 
         return (
           <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
-            <div className="flex items-center justify-between p-5 pb-3">
+            <div className="flex flex-wrap items-center justify-between gap-2 p-5 pb-3">
               <div className="flex items-center gap-2.5">
                 <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-white ${activeColor(mod.color)}`}>{mod.icon}</div>
                 <div>
@@ -404,44 +375,25 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
                   <p className="text-[10px] font-semibold text-slate-400">{mod.hint}</p>
                 </div>
               </div>
-              <button onClick={() => openCreateForm(subTab)}
-                className="px-4 py-2 rounded-xl bg-[#053D67] text-white text-[10px] font-black uppercase tracking-wider hover:opacity-90 transition-all active:scale-95 flex items-center gap-1.5"
-              ><Plus size={13} /> Tambah Baru</button>
+              <div className="flex items-center gap-2">
+                <button onClick={() => fetchData(subTab)}
+                  title="Muat ulang data dari server (set ke tersimpan)"
+                  className="px-4 py-2 rounded-xl bg-white border border-slate-300 text-slate-700 text-[10px] font-black uppercase tracking-wider hover:bg-slate-100 transition-all active:scale-95 flex items-center gap-1.5"
+                ><RotateCcw size={12} /> Set ke Tersimpan</button>
+                <button onClick={() => openCreateForm(subTab)}
+                  className="px-4 py-2 rounded-xl bg-[#053D67] text-white text-[10px] font-black uppercase tracking-wider hover:opacity-90 transition-all active:scale-95 flex items-center gap-1.5"
+                ><Plus size={13} /> Tambah Baru</button>
+              </div>
             </div>
 
-            <div className="px-5 pb-5">
-              {subTab === 'dashboard_modul' ? (
-                /* Dashboard modul: card grid */
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {isLoading && <div className="col-span-full py-8 text-center text-xs text-slate-400"><Loader2 size={18} className="animate-spin mx-auto mb-1" />Memuat...</div>}
-                  {!isLoading && items.length === 0 && <div className="col-span-full py-8 text-center text-xs text-slate-400">Belum ada modul dashboard</div>}
-                  {items.map((item, i) => (
-                    <div key={item.id || i} className={`p-4 rounded-2xl border border-slate-100 bg-gradient-to-br from-${item.color || 'sky'}-50/50 to-white hover:shadow-md transition-all`}>
-                      <div className="flex items-start justify-between mb-2">
-                        <span className="text-xl">{item.icon || '📦'}</span>
-                        <div className="flex items-center gap-1">
-                          <button onClick={() => setModal({ open: true, module: subTab, item })} className="p-1 rounded-lg hover:bg-white/80 text-slate-400 hover:text-sky-600 transition-all"><Pencil size={12} /></button>
-                          <button onClick={() => deleteItem(subTab, item.id)} className="p-1 rounded-lg hover:bg-white/80 text-slate-400 hover:text-rose-600 transition-all"><Trash2 size={12} /></button>
-                        </div>
-                      </div>
-                      <h4 className="text-xs font-black text-slate-900">{item.title}</h4>
-                      <p className="text-[9px] font-semibold text-slate-400 mt-0.5 line-clamp-2">{item.description}</p>
-                      <div className="mt-2 flex items-center gap-2">
-                        <span className={`px-2 py-0.5 rounded-full text-[7px] font-black uppercase bg-${item.color || 'sky'}-100 text-${item.color || 'sky'}-700`}>{item.color || 'sky'}</span>
-                        {item.link && <span className="text-[8px] font-bold text-slate-400 font-mono">{item.link}</span>}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <GenericCrudTable
-                  data={items}
-                  columns={columnsFor(subTab)}
-                  loading={isLoading}
-                  onEdit={(row) => setModal({ open: true, module: subTab, item: row })}
-                  onDelete={(id) => deleteItem(subTab, id)}
-                />
-              )}
+            <div className="px-5 pb-5 overflow-x-auto">
+              <GenericCrudTable
+                data={items}
+                columns={columnsFor(subTab)}
+                loading={isLoading}
+                onEdit={(row) => setModal({ open: true, module: subTab, item: row })}
+                onDelete={(id) => deleteItem(subTab, id)}
+              />
             </div>
           </div>
         );
@@ -449,7 +401,6 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
 
       {/* ── CRUD Modal ── */}
       <Modal open={modal.open} onClose={() => setModal({ open: false, module: null, item: null })} title={modal.item ? `Edit ${ALL_MODULES.find(m => m.id === modal.module)?.label}` : `Tambah ${ALL_MODULES.find(m => m.id === modal.module)?.label}`}>
-        {modal.module === 'dashboard_modul' && <DashboardModulForm item={modal.item} onSave={(f) => saveItem('dashboard_modul', f)} onClose={() => setModal({ open: false })} />}
         {modal.module === 'mitra' && <MitraForm item={modal.item} onSave={(f) => saveItem('mitra', f)} onClose={() => setModal({ open: false })} />}
         {modal.module === 'reviews' && <ReviewForm item={modal.item} onSave={(f) => saveItem('reviews', f)} onClose={() => setModal({ open: false })} />}
         {modal.module === 'instagram' && <InstagramForm item={modal.item} onSave={(f) => saveItem('instagram', f)} onClose={() => setModal({ open: false })} />}

@@ -8,7 +8,7 @@ import { useMediaPipe } from '../hooks/useMediaPipe';
 
 import { useWebSocket } from '../hooks/useWebSocket';
 
-import { AlertTriangle, Camera, CameraOff, RefreshCw, Sparkles, Stethoscope, Maximize2 } from 'lucide-react';
+import { AlertTriangle, Camera, CameraOff, RefreshCw, Sparkles, Stethoscope, Maximize2, CheckCircle2 } from 'lucide-react';
 
 
 
@@ -365,63 +365,7 @@ export const CameraFeed = () => {
         />
 
         {showConsent && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-slate-950/95 px-6 py-4 text-center z-30">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-sky-400/20 bg-sky-500/10 text-sky-300 shadow-lg">
-              <Stethoscope size={20} />
-            </div>
-            <div className="max-w-md">
-              <h3 className="text-sm font-black text-white uppercase tracking-wider">Persetujuan & Privasi Kamera</h3>
-              <p className="mt-2 text-[10.5px] font-semibold leading-relaxed text-slate-355">
-                Aplikasi MedSign AI memerlukan akses kamera untuk mendeteksi koordinat landmark tangan Anda secara real-time. 
-                Kami menjamin privasi Anda:
-              </p>
-            <div className="my-2.5 text-left bg-slate-900/60 p-3 rounded-2xl border border-white/5 flex flex-col gap-1.5 text-[10px] font-semibold text-slate-400">
-                <span className="flex items-start gap-1.5">
-                  <span className="text-sky-400 shrink-0">✔</span>
-                  <span>Video diproses secara lokal di browser Anda dan tidak pernah disimpan.</span>
-                </span>
-                <span className="flex items-start gap-1.5">
-                  <span className="text-sky-400 shrink-0">✔</span>
-                  <span>Tidak ada data video yang direkam atau dikirim ke server.</span>
-                </span>
-                <span className="flex items-start gap-1.5">
-                  <span className="text-sky-400 shrink-0">✔</span>
-                  <span>Semua data pemrosesan gambar langsung dihapus secara permanen saat sesi konsultasi berakhir.</span>
-                </span>
-              </div>
-              <label className="flex items-start gap-2.5 cursor-pointer select-none mt-1 bg-sky-500/10 border border-sky-400/20 rounded-xl px-3 py-2.5">
-                <input
-                  type="checkbox"
-                  checked={consentChecked}
-                  onChange={e => setConsentChecked(e.target.checked)}
-                  className="mt-0.5 h-3.5 w-3.5 accent-sky-400 cursor-pointer shrink-0"
-                />
-                <span className="text-[10px] font-semibold text-slate-300 leading-relaxed">
-                  Saya memberikan izin penggunaan kamera untuk mendeteksi isyarat secara real-time. Saya memahami bahwa video ini hanya dipakai untuk translasi selama sesi berlangsung, tidak akan disimpan di server mana pun, dan semua data video/gambar akan langsung dihapus serta hilang secara permanen setelah sesi berakhir.
-                </span>
-              </label>
-              <p className="text-[9px] font-medium text-slate-500 mt-0.5">
-                Centang kotak di atas untuk melanjutkan.
-              </p>
-            </div>
-              <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => { setShowConsent(false); setConsentChecked(false); }}
-                className="bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-xl px-4 py-2 text-xs font-bold border border-slate-700 transition-all active:scale-95"
-              >
-                Tolak
-              </button>
-              <button
-                type="button"
-                onClick={handleAcceptConsent}
-                disabled={!consentChecked}
-                className={`rounded-xl px-5 py-2 text-xs font-bold shadow-lg transition-all ${consentChecked ? 'bg-sky-600 hover:bg-sky-500 text-white active:scale-95' : 'bg-slate-850 text-slate-600 cursor-not-allowed border border-slate-800'}`}
-              >
-                Setuju &amp; Mulai
-              </button>
-            </div>
-          </div>
+          <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm z-30" />
         )}
 
 
@@ -597,7 +541,71 @@ export const CameraFeed = () => {
         )}
       </div>
 
+      {/* POPUP PERSETUJUAN & PRIVASI — layar penuh, teks besar */}
+      {showConsent && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4 animate-fade-in">
+          <div className="bg-white rounded-[32px] shadow-2xl w-full max-w-xl max-h-[92vh] overflow-y-auto p-7 md:p-9 flex flex-col items-center text-center gap-5 text-slate-800 animate-scale-up">
+            <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-sky-500/10 text-sky-600 shadow-inner">
+              <Stethoscope size={30} />
+            </div>
 
+            <div>
+              <h3 className="text-xl md:text-2xl font-black text-slate-950 tracking-tight">Persetujuan &amp; Privasi Kamera</h3>
+              <p className="mt-2.5 text-sm md:text-[15px] font-semibold leading-relaxed text-slate-600">
+                Aplikasi MedSign AI memerlukan akses kamera untuk mendeteksi koordinat landmark tangan Anda secara real-time.
+                Kami menjamin privasi Anda:
+              </p>
+            </div>
+
+            <div className="w-full text-left bg-slate-50 p-4 rounded-2xl border border-slate-100 flex flex-col gap-2.5">
+              {[
+                'Video diproses secara lokal di browser Anda dan tidak pernah disimpan.',
+                'Tidak ada data video yang direkam atau dikirim ke server.',
+                'Semua data pemrosesan gambar langsung dihapus secara permanen saat sesi konsultasi berakhir.',
+              ].map(item => (
+                <span key={item} className="flex items-start gap-2.5 text-sm font-semibold text-slate-700 leading-relaxed">
+                  <CheckCircle2 size={17} className="text-sky-500 shrink-0 mt-0.5" />
+                  <span>{item}</span>
+                </span>
+              ))}
+            </div>
+
+            <label className="w-full flex items-start gap-3 cursor-pointer select-none bg-sky-500/5 border border-sky-200 rounded-2xl px-4 py-3.5 text-left hover:bg-sky-500/10 transition-colors">
+              <input
+                type="checkbox"
+                checked={consentChecked}
+                onChange={e => setConsentChecked(e.target.checked)}
+                className="mt-1 h-[18px] w-[18px] accent-sky-600 cursor-pointer shrink-0"
+              />
+              <span className="text-sm font-semibold text-slate-700 leading-relaxed">
+                Saya memberikan izin penggunaan kamera untuk mendeteksi isyarat secara real-time. Saya memahami bahwa video ini hanya dipakai untuk translasi selama sesi berlangsung, tidak akan disimpan di server mana pun, dan semua data video/gambar akan langsung dihapus serta hilang secara permanen setelah sesi berakhir.
+              </span>
+            </label>
+
+            <p className="text-xs font-semibold text-slate-400 -mt-2">
+              Centang kotak di atas untuk melanjutkan.
+            </p>
+
+            <div className="flex gap-3 w-full sm:w-auto">
+              <button
+                type="button"
+                onClick={() => { setShowConsent(false); setConsentChecked(false); }}
+                className="flex-1 sm:flex-none bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-2xl px-6 py-3 text-sm font-black border border-slate-200 transition-all active:scale-95"
+              >
+                Tolak
+              </button>
+              <button
+                type="button"
+                onClick={handleAcceptConsent}
+                disabled={!consentChecked}
+                className={`flex-1 sm:flex-none rounded-2xl px-8 py-3 text-sm font-black shadow-lg transition-all ${consentChecked ? 'bg-sky-600 hover:bg-sky-500 text-white active:scale-95 shadow-sky-600/30' : 'bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200'}`}
+              >
+                Setuju &amp; Mulai
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {isActive && (
 

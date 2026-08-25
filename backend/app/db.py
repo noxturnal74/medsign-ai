@@ -491,6 +491,18 @@ def db_clear_tables():
         conn.commit()
         conn.close()
 
+def db_get_all_sessions() -> List[Dict[str, Any]]:
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, patient_id, doctor_id, model_version, status, started_at, ended_at, summary FROM sessions")
+        rows = cursor.fetchall()
+        conn.close()
+        return [dict(r) for r in rows]
+    except Exception as e:
+        print("db_get_all_sessions error:", e)
+        return []
+
 def db_get_patient_sessions(patient_id: str) -> List[Dict[str, Any]]:
     if USE_SUPABASE:
         try:
@@ -504,7 +516,7 @@ def db_get_patient_sessions(patient_id: str) -> List[Dict[str, Any]]:
     else:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT id, patient_id, doctor_id, model_version, status, started_at, ended_at FROM sessions WHERE patient_id = ?", (patient_id,))
+        cursor.execute("SELECT id, patient_id, doctor_id, model_version, status, started_at, ended_at, summary FROM sessions WHERE patient_id = ?", (patient_id,))
         rows = cursor.fetchall()
         conn.close()
         return [dict(r) for r in rows]
@@ -968,7 +980,7 @@ def init_db():
             pass
 
     # Ensure generated passwords exist
-    keys = ["admin_sentosa", "admin_medika", "dr_budi@rsi.com", "dr_siti@sentosa.com", "dr_agus@sentosa.com", "dr_dewi@medika.com", "dr_eko@medika.com", "3171011212850001", "3171022304900002", "3171031405920003", "3171044506880004", "3273011208910005", "3273022509930006", "3273031010940007", "3578011111950008", "3578022202960009", "3578031303970010"]
+    keys = ["admin_sentosa", "admin_medika", "dr_budi@rsi.com", "dr_siti@sentosa.com", "dr_agus@sentosa.com", "dr_dewi@medika.com", "dr_eko@medika.com", "3171011212850001", "3171022304900002", "3171031405920003", "3171044506880004", "3273011208910005", "3273022509930006", "3273031010940007", "3578011111950008", "3578022202960009", "3578031303970010", "3171050501980011", "3171061509970012", "3171072510960013"]
     for k in keys:
         if k not in passwords:
             passwords[k] = secrets.token_urlsafe(8)
@@ -1059,6 +1071,42 @@ def init_db():
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
             """, (str(uuid.uuid4()), "RM" + nik, encrypted_nik, hashed, name, dob, datetime.utcnow().isoformat(), fac_id, status, 1 if status == "APPROVED" else 0))
 
+    # 5b. Seed 3 pasien khusus ter-link ke Dr. Bita Pargazen (bitapargazen@gmail.com)
+    cursor.execute("SELECT id FROM doctors WHERE email = 'bitapargazen@gmail.com'")
+    bita_row = cursor.fetchone()
+    if bita_row:
+        bita_doctor_id = bita_row["id"]
+        bita_patients = [
+            ("3171050501980011", "Sari Wulandari", "1998-05-05", "Perempuan"),
+            ("3171061509970012", "Rizky Ramadhan", "1997-06-15", "Laki-laki"),
+            ("3171072510960013", "Nadia Putri", "1996-07-25", "Perempuan"),
+        ]
+        for nik, name, dob, gender in bita_patients:
+            # Cari pasien berdasarkan NIK (idempoten)
+            cursor.execute("SELECT id, nik_encrypted FROM patients")
+            patient_id = None
+            for row in cursor.fetchall():
+                try:
+                    if decrypt_nik(row["nik_encrypted"]) == nik:
+                        patient_id = row["id"]
+                        break
+                except Exception:
+                    continue
+            if not patient_id:
+                patient_id = str(uuid.uuid4())
+                hashed = hash_password(passwords[nik])
+                cursor.execute("""
+                    INSERT INTO patients (id, no_rm, nik_encrypted, password_hash, name, date_of_birth, created_at, facility_id, gender, verification_status, is_active, must_change_password)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'APPROVED', 1, 0)
+                """, (patient_id, "RM" + nik, encrypt_nik(nik), hashed, name, dob, datetime.utcnow().isoformat(), "fac_rsi", gender))
+            # Pastikan link dokter-pasien ada
+            cursor.execute("SELECT id FROM doctor_patient WHERE doctor_id = ? AND patient_id = ?", (bita_doctor_id, patient_id))
+            if not cursor.fetchone():
+                cursor.execute(
+                    "INSERT INTO doctor_patient (id, doctor_id, patient_id, assigned_at) VALUES (?, ?, ?, ?)",
+                    (str(uuid.uuid4()), bita_doctor_id, patient_id, datetime.utcnow().isoformat())
+                )
+
     # 6. Seed Articles, Reviews, Mitra, IG posts
     cursor.execute("SELECT COUNT(*) FROM articles")
     if cursor.fetchone()[0] == 0:
@@ -1081,6 +1129,20 @@ def init_db():
             ("ig_1", "https://www.instagram.com/p/C-medsign1", "/Homepage/ezgif-frame-001.png", "MedSign AI: Menjembatani komunikasi dokter-pasien tuli. #PKMKC #MaChung", 1)
         ]
         for item in ig_data:
+            cursor.execute("""
+                INSERT INTO instagram_posts (id, post_url, thumbnail_image, caption_short, display_order, is_active, added_at)
+                VALUES (?, ?, ?, ?, ?, 1, ?)
+            """, (item[0], item[1], item[2], item[3], item[4], datetime.utcnow().isoformat()))
+
+    # 6b. Seed 3 post Instagram terbaru @medsign.pkmkc (idempoten per post_url)
+    ig_new_posts = [
+        ("ig_new_1", "https://www.instagram.com/p/Dccj5D-ksGL/", "https://www.instagram.com/p/Dccj5D-ksGL/media/?size=l", "Konten terbaru MedSign AI — edukasi & dokumentasi kegiatan PKM-KC.", 1),
+        ("ig_new_2", "https://www.instagram.com/p/DccjpxGEuzm/", "https://www.instagram.com/p/DccjpxGEuzm/media/?size=l", "Konten terbaru MedSign AI — edukasi & dokumentasi kegiatan PKM-KC.", 2),
+        ("ig_new_3", "https://www.instagram.com/p/DcQqPOHEqKw/", "https://www.instagram.com/p/DcQqPOHEqKw/media/?size=l", "Konten terbaru MedSign AI — edukasi & dokumentasi kegiatan PKM-KC.", 3),
+    ]
+    for item in ig_new_posts:
+        cursor.execute("SELECT id FROM instagram_posts WHERE post_url = ?", (item[1],))
+        if not cursor.fetchone():
             cursor.execute("""
                 INSERT INTO instagram_posts (id, post_url, thumbnail_image, caption_short, display_order, is_active, added_at)
                 VALUES (?, ?, ?, ?, ?, 1, ?)
@@ -1255,6 +1317,27 @@ def db_update_doctor(doctor_id: str, name: str, email: str, password_hash: str, 
         conn.commit()
         conn.close()
         return True
+
+def db_update_admin_profile(admin_id: str, name: str = None, phone: str = None, profile_photo: str = None, password_hash: str = None) -> bool:
+    """Update profil mandiri admin (hanya field yang diberikan, sisanya tetap)."""
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            UPDATE admins SET
+                name = COALESCE(?, name),
+                phone = COALESCE(?, phone),
+                profile_photo = COALESCE(?, profile_photo),
+                password_hash = COALESCE(?, password_hash)
+            WHERE id = ?
+        """, (name, phone, profile_photo, password_hash, admin_id))
+        conn.commit()
+        conn.close()
+        return True
+    except Exception as e:
+        print("db_update_admin_profile error:", e)
+        return False
+
 def db_delete_doctor(doctor_id: str) -> bool:
     if USE_SUPABASE:
         try:

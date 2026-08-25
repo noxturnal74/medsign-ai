@@ -15,6 +15,7 @@ from app.db import (
     db_get_doctor_by_id,
     db_get_patient_by_id,
     db_check_doctor_patient_link,
+    db_check_break_glass_active,
     db_create_session,
     db_get_session_by_id,
     db_end_session,
@@ -106,21 +107,35 @@ class LogEntryData(BaseModel):
 def create_session(request: SessionCreateRequest, current_user: dict = Depends(get_current_user)):
     if current_user["role"] != "doctor":
         raise HTTPException(status_code=403, detail="Hanya dokter yang dapat memulai sesi konsultasi")
-        
+
     patient = db_get_patient_by_id(request.patient_id)
     if not patient:
         raise HTTPException(status_code=400, detail="Pasien tidak ditemukan")
-        
-    if not db_check_doctor_patient_link(current_user["user_id"], request.patient_id):
-        raise HTTPException(status_code=403, detail="Akses ditolak: Pasien ini tidak terdaftar di relasi Anda")
-        
+
+    # Akses diizinkan jika: (1) ter-link relasi, (2) break-glass aktif,
+    # atau (3) satu faskes dengan dokter tersebut.
+    is_linked = db_check_doctor_patient_link(current_user["user_id"], request.patient_id)
+    if not is_linked:
+        is_break_glass = db_check_break_glass_active(current_user["user_id"], request.patient_id)
+        doctor = db_get_doctor_by_id(current_user["user_id"]) or {}
+        same_facility = bool(
+            doctor.get("facility_id")
+            and patient.get("facility_id")
+            and doctor["facility_id"] == patient["facility_id"]
+        )
+        if not is_break_glass and not same_facility:
+            raise HTTPException(
+                status_code=403,
+                detail="Akses ditolak: Pasien tidak di relasi Anda. Gunakan Akses Darurat (Break-Glass) bila gawat darurat."
+            )
+
     session_id = str(uuid.uuid4())
     started_at = datetime.utcnow().isoformat()
-    
+
     success = db_create_session(session_id, request.patient_id, current_user["user_id"], request.model_version, started_at)
     if not success:
         raise HTTPException(status_code=500, detail="Gagal memulai sesi konsultasi")
-        
+
     write_audit_log(current_user["user_id"], "doctor", f"POST /api/v1/sessions (Start session {session_id})", request.patient_id)
     return SessionCreateResponse(session_id=session_id, message="Sesi konsultasi dimulai")
 

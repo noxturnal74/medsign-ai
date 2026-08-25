@@ -31,14 +31,23 @@ const generateSeries = (tf, seedBase) => {
   return arr;
 };
 
-export const AdminAnalytics = ({ overview }) => {
+export const AdminAnalytics = ({ overview, weeklyData, title, subtitle, showControls = true }) => {
   const [tf, setTf] = useState('24h');
   const [mode, setMode] = useState('line'); // 'line' | 'bar'
   const [hovered, setHovered] = useState(null);
 
   const cfg = TIMEFRAMES[tf];
   const seedBase = { '1h': 11, '24h': 23, '7d': 37, '30d': 53 }[tf];
-  const series = useMemo(() => generateSeries(tf, seedBase), [tf]);
+
+  // Jika weeklyData disediakan (dashboard admin faskes), pakai data riil 7 hari
+  const isReal = Array.isArray(weeklyData) && weeklyData.length > 0;
+  const series = useMemo(
+    () => (isReal ? weeklyData.map(d => Math.max(0, d.sessions || 0)) : generateSeries(tf, seedBase)),
+    [tf, weeklyData]
+  );
+  const seriesLabels = isReal
+    ? weeklyData.map(d => (d.day || '').slice(0, 3))
+    : cfg.labels;
 
   const total = series.reduce((a, b) => a + b, 0);
   const avg = Math.round(total / series.length);
@@ -66,7 +75,7 @@ export const AdminAnalytics = ({ overview }) => {
 
   // Visible x labels (avoid crowding)
   const labelStep = Math.ceil(series.length / 8);
-  const visibleLabels = cfg.labels.map((l, i) => (i % labelStep === 0 ? l : ''));
+  const visibleLabels = seriesLabels.map((l, i) => (i % labelStep === 0 ? l : ''));
 
   /* ── User distribution donut ──────────────────────────────────── */
   const totalUsers = overview
@@ -95,13 +104,14 @@ export const AdminAnalytics = ({ overview }) => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h3 className="text-sm font-black text-slate-950 uppercase tracking-wide flex items-center gap-2">
-            <Gauge size={16} className="text-sky-600" /> Analitik Sesi Medis
+            <Gauge size={16} className="text-sky-600" /> {title || 'Analitik Sesi Medis'}
           </h3>
           <p className="text-[11px] font-semibold text-slate-400 mt-1">
-            Pantau volume konsultasi dokter-pasien dan distribusi pengguna secara real-time.
+            {subtitle || 'Pantau volume konsultasi dokter-pasien dan distribusi pengguna secara real-time.'}
           </p>
         </div>
 
+        {showControls && (
         <div className="flex items-center gap-2">
           {/* Timeframe filter */}
           <div className="flex items-center gap-1 rounded-2xl bg-slate-100 p-1 border border-slate-200">
@@ -131,15 +141,16 @@ export const AdminAnalytics = ({ overview }) => {
             ><BarChart3 size={15} /></button>
           </div>
         </div>
+        )}
       </div>
 
       {/* Period summary stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {[
-          { label: `Total Sesi (${cfg.label})`, desc: 'Seluruh sesi konsultasi aktif', value: total, icon: Activity, color: 'text-sky-600 bg-sky-50' },
+          { label: `Total Sesi (${isReal ? '7 Hari' : cfg.label})`, desc: isReal ? 'Seluruh sesi minggu ini' : 'Seluruh sesi konsultasi aktif', value: total, icon: Activity, color: 'text-sky-600 bg-sky-50' },
           { label: 'Rata-rata / Titik', desc: 'Jumlah sesi per titik data', value: avg, icon: Gauge, color: 'text-violet-600 bg-violet-50' },
           { label: 'Puncak Sesi', desc: 'Volume sesi tertinggi', value: peak, icon: Sparkles, color: 'text-amber-600 bg-amber-50' },
-          { label: 'Waktu Puncak', desc: 'Jam dengan sesi terbanyak', value: cfg.labels[peakIdx] || '-', icon: Clock, color: 'text-emerald-600 bg-emerald-50' },
+          { label: 'Waktu Puncak', desc: 'Jam dengan sesi terbanyak', value: seriesLabels[peakIdx] || '-', icon: Clock, color: 'text-emerald-600 bg-emerald-50' },
         ].map((s, i) => {
           const Icon = s.icon;
           return (
@@ -241,7 +252,7 @@ export const AdminAnalytics = ({ overview }) => {
               className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-full bg-slate-900 text-white text-[10px] font-black rounded-xl px-3 py-2 shadow-lg"
               style={{ left: `${hovered.xPct}%`, top: `${hovered.yPct - 4}%` }}
             >
-              <div className="opacity-70 font-bold text-[8px] uppercase">{cfg.labels[hovered.i]}</div>
+              <div className="opacity-70 font-bold text-[8px] uppercase">{seriesLabels[hovered.i]}</div>
               <div className="text-sm">{hovered.v} sesi</div>
             </div>
           )}

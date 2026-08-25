@@ -5,7 +5,70 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
+
+  /* ── RESPONSIVE MOBILE HELPERS ── */
+  @media (max-width: 640px) {
+    /* Tabel lebar selalu bisa digeser horizontal, tidak merusak layout */
+    table {
+      display: block;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    /* Grid berat jadi 1 kolom di ponsel */
+    .lg\:grid-cols-12 { grid-template-columns: 1fr !important; }
+    /* Padding halaman lebih rapat */
+    .px-4.md\:px-10, .md\:px-10.lg\:px-16 { padding-left: 1rem; padding-right: 1rem; }
+    /* Judul besar mengecil */
+    h2 { font-size: 1.35rem; }
+    .text-3xl { font-size: 1.5rem; }
+    .text-4xl { font-size: 1.75rem; }
+    /* Panel kaca tidak terlalu tebal paddingnya */
+    .glass-panel { border-radius: 22px; }
+  }
+
+  /* ── DARK MODE (class-based, persist di localStorage) ── */
+  html.dark {
+    color-scheme: dark;
+  }
+  html.dark body {
+    background:
+      linear-gradient(135deg, rgba(9, 14, 26, 0.96), rgba(11, 18, 32, 0.97) 44%, rgba(16, 13, 22, 0.95)),
+      linear-gradient(90deg, rgba(10, 22, 34, 0.6), rgba(8, 24, 20, 0.5), rgba(24, 12, 20, 0.5));
+    color: #e2e8f0;
+  }
+  html.dark .app-shell {
+    background:
+      linear-gradient(115deg, rgba(10, 17, 30, 0.98), rgba(9, 21, 19, 0.96) 50%, rgba(20, 14, 24, 0.96) 100%),
+      linear-gradient(180deg, rgba(15, 23, 42, 0.7), rgba(10, 15, 26, 0.65));
+  }
+  html.dark .glass-panel {
+    background: rgba(15, 23, 42, 0.72);
+    border-color: rgba(148, 163, 184, 0.12);
+  }
+  html.dark .surface-panel {
+    background: rgba(15, 23, 42, 0.6);
+    border-color: rgba(148, 163, 184, 0.1);
+  }
+  /* Override utilitas umum Tailwind di mode gelap */
+  html.dark .bg-white { background-color: #111a2c !important; }
+  html.dark .bg-slate-50 { background-color: #0d1524 !important; }
+  html.dark .bg-slate-100 { background-color: #1b2740 !important; }
+  html.dark .bg-slate-200 { background-color: #27354f !important; }
+  html.dark .hover\:bg-slate-50:hover { background-color: #1b2740 !important; }
+  html.dark .hover\:bg-slate-100:hover { background-color: #222f49 !important; }
+  html.dark .text-slate-950 { color: #f1f5f9 !important; }
+  html.dark .text-slate-900 { color: #e2e8f0 !important; }
+  html.dark .text-slate-850 { color: #dbe3ee !important; }
+  html.dark .text-slate-800 { color: #cbd5e1 !important; }
+  html.dark .text-slate-700 { color: #b6c2d4 !important; }
+  html.dark .text-slate-650 { color: #94a3b8 !important; }
+  html.dark .text-slate-600 { color: #8ea0b5 !important; }
+  html.dark .border-slate-200 { border-color: rgba(148, 163, 184, 0.16) !important; }
+  html.dark .border-slate-150 { border-color: rgba(148, 163, 184, 0.14) !important; }
+  html.dark .border-slate-100 { border-color: rgba(148, 163, 184, 0.1) !important; }
 
   body {
     margin: 0;
