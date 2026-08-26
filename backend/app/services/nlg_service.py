@@ -4,6 +4,7 @@ import re
 
 class NLGService:
     def __init__(self):
+        self._client = None
         self.recommendations = {
             "sakit": [
                 "sakit kepala", "sakit perut", "sakit dada", "sakit sejak kapan", "sakit saat bergerak",
