@@ -1,6 +1,6 @@
 # DATASET_HEALTH_REPORT
 
-Generated at: 2026-08-15T02:08:14
+Generated at: 2026-08-26T14:02:10
 
 ## Contract
 
@@ -14,204 +14,204 @@ Generated at: 2026-08-15T02:08:14
 - Filter label: `all`
 - Filter signer: `all`
 - Max empty frame ratio: `10.00%`
-- Valid samples: **7275**
-- Invalid samples: **51**
+- Valid samples: **21164**
+- Invalid samples: **901**
 
 ## Samples Per Label
 
 | Label | Samples | Signers | Avg empty frame ratio | Status |
 |---|---:|---:|---:|---|
-| `sakit` | 45 | 2 | 0.00% | ok |
-| `dokter` | 30 | 2 | 0.00% | ok |
-| `obat` | 50 | 3 | 0.00% | ok |
-| `periksa` | 25 | 2 | 0.00% | low_sample |
-| `sembuh` | 20 | 1 | 0.00% | low_sample |
-| `resep` | 15 | 1 | 0.00% | low_sample |
-| `alergi` | 15 | 1 | 0.00% | low_sample |
-| `berapa` | 15 | 1 | 0.00% | low_sample |
-| `kapan` | 65 | 2 | 0.00% | ok |
-| `pagi` | 15 | 1 | 0.00% | low_sample |
-| `siang` | 15 | 1 | 0.00% | low_sample |
-| `malam` | 30 | 2 | 0.00% | ok |
-| `makan` | 15 | 1 | 0.00% | low_sample |
-| `minum` | 15 | 1 | 0.00% | low_sample |
-| `batuk` | 15 | 1 | 0.00% | low_sample |
+| `sakit` | 95 | 3 | 0.00% | ok |
+| `dokter` | 155 | 3 | 0.00% | ok |
+| `obat` | 175 | 4 | 0.00% | ok |
+| `periksa` | 150 | 3 | 0.00% | ok |
+| `sembuh` | 70 | 2 | 0.00% | ok |
+| `resep` | 65 | 2 | 0.00% | ok |
+| `alergi` | 140 | 3 | 0.00% | ok |
+| `berapa` | 140 | 3 | 0.00% | ok |
+| `kapan` | 293 | 3 | 0.00% | ok |
+| `pagi` | 140 | 3 | 0.00% | ok |
+| `siang` | 65 | 2 | 0.00% | ok |
+| `malam` | 155 | 3 | 0.00% | ok |
+| `makan` | 140 | 3 | 0.00% | ok |
+| `minum` | 141 | 3 | 0.00% | ok |
+| `batuk` | 140 | 3 | 0.00% | ok |
 | `sesak` | 65 | 2 | 0.00% | ok |
-| `napas` | 15 | 1 | 0.00% | low_sample |
-| `dada` | 38 | 3 | 0.00% | ok |
-| `dahak` | 65 | 2 | 0.00% | ok |
-| `pilek` | 20 | 1 | 0.00% | low_sample |
+| `napas` | 140 | 3 | 0.00% | ok |
+| `dada` | 163 | 4 | 0.00% | ok |
+| `dahak` | 190 | 4 | 0.00% | ok |
+| `pilek` | 150 | 3 | 0.00% | ok |
 | `flu` | 0 | 0 | - | missing |
 | `tenggorokan` | 100 | 1 | 0.00% | ok |
-| `paru-paru` | 30 | 2 | 0.00% | ok |
-| `asma` | 30 | 2 | 0.00% | ok |
-| `pusing` | 30 | 1 | 0.00% | ok |
-| `kepala` | 55 | 2 | 0.00% | ok |
+| `paru-paru` | 155 | 4 | 0.00% | ok |
+| `asma` | 31 | 3 | 0.00% | ok |
+| `pusing` | 81 | 2 | 0.00% | ok |
+| `kepala` | 155 | 3 | 0.00% | ok |
 | `tensi` | 80 | 1 | 0.00% | ok |
-| `darah` | 75 | 1 | 0.00% | ok |
+| `darah` | 200 | 3 | 0.00% | ok |
 | `tinggi` | 100 | 2 | 0.00% | ok |
-| `berat tengkuk` | 0 | 0 | - | missing |
-| `leher` | 0 | 0 | - | missing |
-| `jantung` | 50 | 1 | 0.00% | ok |
-| `normal` | 50 | 1 | 0.00% | ok |
-| `gula` | 75 | 2 | 0.00% | ok |
-| `manis` | 50 | 1 | 0.00% | ok |
-| `lemas` | 50 | 1 | 0.00% | ok |
-| `haus` | 0 | 0 | - | missing |
-| `kencing` | 50 | 1 | 0.00% | ok |
-| `luka` | 50 | 1 | 0.00% | ok |
-| `kering` | 50 | 1 | 0.00% | ok |
-| `kesemutan` | 50 | 1 | 0.00% | ok |
-| `kaki` | 48 | 1 | 0.00% | ok |
-| `lapar` | 50 | 1 | 0.00% | ok |
-| `nyeri` | 49 | 1 | 0.00% | ok |
-| `otot` | 49 | 1 | 0.00% | ok |
-| `sendi` | 50 | 1 | 0.00% | ok |
+| `berat_tengkuk` | 0 | 0 | - | missing |
+| `leher` | 75 | 2 | 0.00% | ok |
+| `jantung` | 125 | 3 | 0.00% | ok |
+| `normal` | 175 | 4 | 0.00% | ok |
+| `gula` | 175 | 3 | 0.00% | ok |
+| `manis` | 175 | 3 | 0.00% | ok |
+| `lemas` | 175 | 3 | 0.00% | ok |
+| `haus` | 75 | 2 | 0.00% | ok |
+| `kencing` | 175 | 3 | 0.00% | ok |
+| `luka` | 175 | 3 | 0.00% | ok |
+| `kering` | 125 | 3 | 0.00% | ok |
+| `kesemutan` | 175 | 3 | 0.00% | ok |
+| `kaki` | 173 | 3 | 0.00% | ok |
+| `lapar` | 175 | 3 | 0.00% | ok |
+| `nyeri` | 179 | 3 | 0.00% | ok |
+| `otot` | 174 | 3 | 0.00% | ok |
+| `sendi` | 100 | 1 | 0.00% | ok |
 | `tulang` | 100 | 1 | 0.00% | ok |
-| `patah` | 49 | 1 | 0.00% | ok |
-| `bengkak` | 49 | 1 | 0.00% | ok |
-| `pegal` | 49 | 1 | 0.00% | ok |
+| `patah` | 174 | 3 | 0.00% | ok |
+| `bengkak` | 174 | 3 | 0.00% | ok |
+| `pegal` | 174 | 3 | 0.00% | ok |
 | `linu` | 0 | 0 | - | missing |
-| `pinggang` | 53 | 1 | 0.00% | ok |
-| `punggung` | 49 | 1 | 0.00% | ok |
-| `gerak` | 50 | 1 | 0.00% | ok |
-| `benjolan` | 50 | 1 | 0.00% | ok |
+| `pinggang` | 228 | 3 | 0.00% | ok |
+| `punggung` | 174 | 3 | 0.00% | ok |
+| `gerak` | 150 | 3 | 0.00% | ok |
+| `benjolan` | 125 | 3 | 0.00% | ok |
 | `tumor` | 0 | 0 | - | missing |
-| `kanker` | 50 | 1 | 0.00% | ok |
-| `operasi` | 50 | 1 | 0.00% | ok |
-| `besar` | 50 | 1 | 0.00% | ok |
+| `kanker` | 125 | 3 | 0.00% | ok |
+| `operasi` | 125 | 3 | 0.00% | ok |
+| `besar` | 125 | 3 | 0.00% | ok |
 | `tumbuh` | 124 | 2 | 0.00% | ok |
 | `susah` | 100 | 2 | 0.00% | ok |
 | `tidur` | 100 | 2 | 0.00% | ok |
-| `mual` | 50 | 1 | 0.00% | ok |
-| `muntah` | 50 | 1 | 0.00% | ok |
-| `demam` | 50 | 1 | 0.00% | ok |
-| `panas` | 50 | 1 | 0.00% | ok |
-| `dingin` | 60 | 1 | 0.00% | ok |
-| `bahaya` | 50 | 1 | 0.00% | ok |
-| `istirahat` | 50 | 1 | 0.00% | ok |
-| `bantuan` | 50 | 1 | 0.00% | ok |
-| `apa` | 50 | 1 | 0.00% | ok |
+| `mual` | 125 | 3 | 0.00% | ok |
+| `muntah` | 125 | 3 | 0.00% | ok |
+| `demam` | 125 | 3 | 0.00% | ok |
+| `panas` | 125 | 3 | 0.00% | ok |
+| `dingin` | 135 | 3 | 0.00% | ok |
+| `bahaya` | 125 | 3 | 0.00% | ok |
+| `istirahat` | 125 | 3 | 0.00% | ok |
+| `bantuan` | 130 | 3 | 0.00% | ok |
+| `apa` | 126 | 3 | 0.00% | ok |
 | `siapa` | 100 | 1 | 0.00% | ok |
-| `di mana` | 50 | 1 | 0.00% | ok |
-| `mengapa` | 56 | 1 | 0.00% | ok |
-| `bagaimana` | 50 | 1 | 0.00% | ok |
-| `berapa lama` | 66 | 1 | 0.00% | ok |
-| `sejak kapan` | 51 | 1 | 0.00% | ok |
-| `bagian mana` | 50 | 1 | 0.00% | ok |
-| `seberapa sering` | 50 | 1 | 0.00% | ok |
-| `ya` | 50 | 1 | 0.00% | ok |
+| `di_mana` | 125 | 3 | 0.00% | ok |
+| `mengapa` | 131 | 3 | 0.00% | ok |
+| `bagaimana` | 124 | 3 | 0.00% | ok |
+| `berapa_lama` | 141 | 3 | 0.00% | ok |
+| `sejak_kapan` | 121 | 2 | 0.00% | ok |
+| `bagian_mana` | 125 | 3 | 0.00% | ok |
+| `seberapa_sering` | 100 | 2 | 0.00% | ok |
+| `ya` | 100 | 2 | 0.00% | ok |
 | `tidak` | 100 | 2 | 0.00% | ok |
 | `tolong` | 48 | 1 | 0.00% | ok |
-| `terima kasih` | 100 | 2 | 0.00% | ok |
-| `mengerti` | 50 | 1 | 0.00% | ok |
-| `tidak mengerti` | 100 | 2 | 0.00% | ok |
-| `darurat` | 0 | 0 | - | missing |
-| `cepat` | 50 | 1 | 0.00% | ok |
-| `keluarga` | 50 | 1 | 0.00% | ok |
-| `pulang` | 50 | 1 | 0.00% | ok |
-| `rumah sakit` | 50 | 1 | 0.00% | ok |
-| `pasien` | 52 | 1 | 0.00% | ok |
-| `perawat` | 48 | 1 | 0.00% | ok |
-| `ambulans` | 50 | 1 | 0.00% | ok |
+| `terima_kasih` | 100 | 2 | 0.00% | ok |
+| `mengerti` | 125 | 3 | 0.00% | ok |
+| `tidak_mengerti` | 100 | 2 | 0.00% | ok |
+| `darurat` | 75 | 2 | 0.00% | ok |
+| `cepat` | 180 | 3 | 0.00% | ok |
+| `keluarga` | 175 | 3 | 0.00% | ok |
+| `pulang` | 175 | 3 | 0.00% | ok |
+| `rumah_sakit` | 100 | 1 | 0.00% | ok |
+| `pasien` | 226 | 4 | 0.00% | ok |
+| `perawat` | 173 | 3 | 0.00% | ok |
+| `ambulans` | 175 | 3 | 0.00% | ok |
 | `suntik` | 103 | 1 | 0.00% | ok |
-| `infus` | 50 | 1 | 0.00% | ok |
+| `infus` | 175 | 3 | 0.00% | ok |
 | `vaksin` | 100 | 1 | 0.00% | ok |
-| `laboratorium` | 93 | 2 | 0.00% | ok |
-| `rontgen` | 103 | 2 | 0.00% | ok |
-| `rawat inap` | 48 | 1 | 0.00% | ok |
-| `mata` | 49 | 1 | 0.00% | ok |
-| `hidung` | 50 | 1 | 0.00% | ok |
-| `mulut` | 50 | 1 | 0.00% | ok |
+| `laboratorium` | 218 | 3 | 0.00% | ok |
+| `rontgen` | 153 | 2 | 0.00% | ok |
+| `rawat_inap` | 98 | 1 | 0.00% | ok |
+| `mata` | 174 | 3 | 0.00% | ok |
+| `hidung` | 175 | 3 | 0.00% | ok |
+| `mulut` | 175 | 3 | 0.00% | ok |
 | `telinga` | 50 | 1 | 0.00% | ok |
-| `gigi` | 0 | 0 | - | missing |
-| `perut` | 0 | 0 | - | missing |
+| `gigi` | 125 | 3 | 0.00% | ok |
+| `perut` | 135 | 3 | 0.00% | ok |
 | `tangan` | 50 | 1 | 0.00% | ok |
-| `jari` | 0 | 0 | - | missing |
-| `lutut` | 0 | 0 | - | missing |
-| `bahu` | 0 | 0 | - | missing |
-| `gatal` | 0 | 0 | - | missing |
-| `diare` | 0 | 0 | - | missing |
-| `pendarahan` | 0 | 0 | - | missing |
-| `pingsan` | 0 | 0 | - | missing |
-| `kejang` | 0 | 0 | - | missing |
-| `meriang` | 0 | 0 | - | missing |
-| `kaku` | 0 | 0 | - | missing |
-| `mati rasa` | 0 | 0 | - | missing |
-| `sakit kepala` | 0 | 0 | - | missing |
-| `cedera` | 0 | 0 | - | missing |
-| `apotek` | 0 | 0 | - | missing |
+| `jari` | 125 | 3 | 0.00% | ok |
+| `lutut` | 125 | 3 | 0.00% | ok |
+| `bahu` | 125 | 3 | 0.00% | ok |
+| `gatal` | 125 | 3 | 0.00% | ok |
+| `diare` | 125 | 3 | 0.00% | ok |
+| `pendarahan` | 75 | 2 | 0.00% | ok |
+| `pingsan` | 125 | 3 | 0.00% | ok |
+| `kejang` | 125 | 3 | 0.00% | ok |
+| `meriang` | 125 | 3 | 0.00% | ok |
+| `kaku` | 125 | 3 | 0.00% | ok |
+| `mati_rasa` | 125 | 3 | 0.00% | ok |
+| `sakit_kepala` | 50 | 1 | 0.00% | ok |
+| `cedera` | 125 | 3 | 0.00% | ok |
+| `apotek` | 125 | 3 | 0.00% | ok |
 | `tablet` | 50 | 1 | 0.00% | ok |
-| `kapsul` | 0 | 0 | - | missing |
+| `kapsul` | 126 | 3 | 0.00% | ok |
 | `sirup` | 50 | 1 | 0.00% | ok |
-| `antibiotik` | 0 | 0 | - | missing |
-| `vitamin` | 0 | 0 | - | missing |
-| `dosis` | 0 | 0 | - | missing |
-| `minum obat` | 0 | 0 | - | missing |
-| `sebelum makan` | 50 | 1 | 0.00% | ok |
-| `sesudah makan` | 50 | 1 | 0.00% | ok |
-| `hari` | 50 | 1 | 0.00% | ok |
-| `minggu` | 50 | 1 | 0.00% | ok |
-| `bulan` | 50 | 1 | 0.00% | ok |
-| `kontrol` | 50 | 1 | 0.00% | ok |
+| `antibiotik` | 175 | 4 | 0.00% | ok |
+| `vitamin` | 100 | 2 | 0.00% | ok |
+| `dosis` | 175 | 4 | 0.00% | ok |
+| `minum_obat` | 175 | 4 | 0.00% | ok |
+| `sebelum_makan` | 100 | 2 | 0.00% | ok |
+| `sesudah_makan` | 100 | 2 | 0.00% | ok |
+| `hari` | 125 | 3 | 0.00% | ok |
+| `minggu` | 125 | 3 | 0.00% | ok |
+| `bulan` | 125 | 3 | 0.00% | ok |
+| `kontrol` | 125 | 3 | 0.00% | ok |
 | `terapi` | 100 | 2 | 0.00% | ok |
-| `rehabilitasi` | 50 | 1 | 0.00% | ok |
-| `efek samping` | 50 | 1 | 0.00% | ok |
-| `pemeriksaan` | 50 | 1 | 0.00% | ok |
-| `hasil` | 50 | 1 | 0.00% | ok |
+| `rehabilitasi` | 100 | 2 | 0.00% | ok |
+| `efek_samping` | 125 | 3 | 0.00% | ok |
+| `pemeriksaan` | 150 | 3 | 0.00% | ok |
+| `hasil` | 125 | 3 | 0.00% | ok |
 | `tes` | 100 | 2 | 0.00% | ok |
 | `urine` | 106 | 2 | 0.00% | ok |
-| `tekanan darah` | 100 | 2 | 0.00% | ok |
-| `berat badan` | 50 | 1 | 0.00% | ok |
-| `tinggi badan` | 100 | 2 | 0.00% | ok |
-| `suhu tubuh` | 100 | 2 | 0.00% | ok |
-| `denyut nadi` | 55 | 1 | 0.00% | ok |
-| `napas cepat` | 0 | 0 | - | missing |
-| `napas lambat` | 0 | 0 | - | missing |
-| `foto rontgen` | 0 | 0 | - | missing |
+| `tekanan_darah` | 100 | 2 | 0.00% | ok |
+| `berat_badan` | 125 | 3 | 0.00% | ok |
+| `tinggi_badan` | 100 | 2 | 0.00% | ok |
+| `suhu_tubuh` | 100 | 2 | 0.00% | ok |
+| `denyut_nadi` | 130 | 3 | 0.00% | ok |
+| `napas_cepat` | 50 | 1 | 0.00% | ok |
+| `napas_lambat` | 50 | 1 | 0.00% | ok |
+| `foto_rontgen` | 75 | 2 | 0.00% | ok |
 | `usg` | 103 | 2 | 0.00% | ok |
-| `ct scan` | 50 | 1 | 0.00% | ok |
+| `ct_scan` | 75 | 2 | 0.00% | ok |
 | `mri` | 0 | 0 | - | missing |
-| `positif` | 50 | 1 | 0.00% | ok |
-| `negatif` | 52 | 2 | 0.00% | ok |
-| `baik` | 50 | 1 | 0.00% | ok |
-| `buruk` | 50 | 1 | 0.00% | ok |
-| `ringan` | 50 | 1 | 0.00% | ok |
-| `sedang` | 50 | 1 | 0.00% | ok |
-| `berat` | 50 | 1 | 0.00% | ok |
+| `positif` | 125 | 3 | 0.00% | ok |
+| `negatif` | 127 | 4 | 0.00% | ok |
+| `baik` | 125 | 3 | 0.00% | ok |
+| `buruk` | 75 | 2 | 0.00% | ok |
+| `ringan` | 100 | 2 | 0.00% | ok |
+| `sedang` | 100 | 2 | 0.00% | ok |
+| `berat` | 125 | 2 | 0.00% | ok |
 | `stabil` | 100 | 2 | 0.00% | ok |
-| `tidak stabil` | 50 | 1 | 0.00% | ok |
-| `sadar` | 0 | 0 | - | missing |
-| `tidak sadar` | 0 | 0 | - | missing |
+| `tidak_stabil` | 50 | 1 | 0.00% | ok |
+| `sadar` | 50 | 1 | 0.00% | ok |
+| `tidak_sadar` | 0 | 0 | - | missing |
 | `lemah` | 0 | 0 | - | missing |
-| `lelah` | 0 | 0 | - | missing |
-| `gelisah` | 0 | 0 | - | missing |
-| `cemas` | 0 | 0 | - | missing |
+| `lelah` | 125 | 3 | 0.00% | ok |
+| `gelisah` | 125 | 3 | 0.00% | ok |
+| `cemas` | 125 | 3 | 0.00% | ok |
 | `takut` | 50 | 1 | 0.00% | ok |
-| `sedih` | 0 | 0 | - | missing |
+| `sedih` | 50 | 1 | 0.00% | ok |
 | `stres` | 50 | 1 | 0.00% | ok |
 | `nyaman` | 0 | 0 | - | missing |
-| `tidak nyaman` | 0 | 0 | - | missing |
+| `tidak_nyaman` | 0 | 0 | - | missing |
 | `sehat` | 0 | 0 | - | missing |
-| `pendaftaran` | 0 | 0 | - | missing |
-| `nomor antrean` | 0 | 0 | - | missing |
-| `ruang tunggu` | 0 | 0 | - | missing |
-| `ruang periksa` | 0 | 0 | - | missing |
-| `kamar pasien` | 0 | 0 | - | missing |
-| `instalasi gawat darurat` | 0 | 0 | - | missing |
-| `dokter spesialis` | 0 | 0 | - | missing |
-| `jadwal` | 0 | 0 | - | missing |
-| `janji temu` | 0 | 0 | - | missing |
+| `pendaftaran` | 80 | 2 | 0.00% | ok |
+| `nomor_antrean` | 75 | 2 | 0.00% | ok |
+| `ruang_tunggu` | 0 | 0 | - | missing |
+| `ruang_periksa` | 0 | 0 | - | missing |
+| `kamar_pasien` | 75 | 2 | 0.00% | ok |
+| `instalasi_gawat_darurat` | 75 | 2 | 0.00% | ok |
+| `dokter_spesialis` | 75 | 2 | 0.00% | ok |
+| `jadwal` | 75 | 2 | 0.00% | ok |
+| `janji_temu` | 75 | 2 | 0.00% | ok |
 | `rujukan` | 0 | 0 | - | missing |
-| `administrasi` | 0 | 0 | - | missing |
-| `pembayaran` | 0 | 0 | - | missing |
-| `bpjs` | 0 | 0 | - | missing |
-| `asuransi` | 0 | 0 | - | missing |
-| `identitas` | 0 | 0 | - | missing |
-| `kartu pasien` | 0 | 0 | - | missing |
-| `pendamping` | 0 | 0 | - | missing |
+| `administrasi` | 75 | 2 | 0.00% | ok |
+| `pembayaran` | 75 | 2 | 0.00% | ok |
+| `bpjs` | 75 | 2 | 0.00% | ok |
+| `asuransi` | 75 | 2 | 0.00% | ok |
+| `identitas` | 3 | 1 | 0.00% | low_sample |
+| `kartu_pasien` | 75 | 2 | 0.00% | ok |
+| `pendamping` | 75 | 2 | 0.00% | ok |
 | `wali` | 0 | 0 | - | missing |
-| `tanda tangan` | 0 | 0 | - | missing |
+| `tanda_tangan` | 0 | 0 | - | missing |
 | `selesai` | 0 | 0 | - | missing |
 | `halo_test` | 0 | 0 | - | missing |
 | `a` | 0 | 0 | - | missing |
@@ -253,75 +253,103 @@ Generated at: 2026-08-15T02:08:14
 ## Signer Distribution
 
 ### sakit
+- `albert_cheng`: 50
 - `glenn`: 40
 - `loren`: 5
 
 ### dokter
-- `glenn`: 15
-- `loren`: 15
+- `albert_cheng`: 50
+- `glenn`: 65
+- `loren`: 40
 
 ### obat
+- `albert_cheng`: 50
 - `albert_william`: 5
-- `glenn`: 30
-- `loren`: 15
+- `glenn`: 80
+- `loren`: 40
 
 ### periksa
-- `glenn`: 10
-- `loren`: 15
+- `albert_cheng`: 50
+- `glenn`: 60
+- `loren`: 40
 
 ### sembuh
+- `albert_cheng`: 50
 - `loren`: 20
 
 ### resep
+- `albert_cheng`: 50
 - `loren`: 15
 
 ### alergi
-- `loren`: 15
+- `albert_cheng`: 50
+- `glenn`: 50
+- `loren`: 40
 
 ### berapa
-- `loren`: 15
+- `albert_cheng`: 50
+- `glenn`: 50
+- `loren`: 40
 
 ### kapan
-- `glenn`: 50
-- `loren`: 15
+- `albert_cheng`: 100
+- `glenn`: 103
+- `loren`: 90
 
 ### pagi
-- `loren`: 15
+- `albert_cheng`: 50
+- `glenn`: 50
+- `loren`: 40
 
 ### siang
+- `albert_cheng`: 50
 - `loren`: 15
 
 ### malam
-- `glenn`: 15
-- `loren`: 15
+- `albert_cheng`: 50
+- `glenn`: 65
+- `loren`: 40
 
 ### makan
-- `loren`: 15
+- `albert_cheng`: 50
+- `glenn`: 50
+- `loren`: 40
 
 ### minum
-- `loren`: 15
+- `albert_cheng`: 50
+- `glenn`: 51
+- `loren`: 40
 
 ### batuk
-- `loren`: 15
+- `albert_cheng`: 50
+- `glenn`: 50
+- `loren`: 40
 
 ### sesak
 - `albert_cheng`: 50
 - `loren`: 15
 
 ### napas
-- `loren`: 15
+- `albert_cheng`: 50
+- `glenn`: 50
+- `loren`: 40
 
 ### dada
-- `albert_cheng`: 23
+- `albert_cheng`: 73
 - `albert_william`: 10
-- `glenn`: 5
+- `glenn`: 55
+- `loren`: 25
 
 ### dahak
-- `albert_cheng`: 45
+- `albert_cheng`: 95
 - `albert_william`: 20
+- `glenn`: 50
+- `loren`: 25
 
 ### pilek
-- `albert_cheng`: 20
+- `albert_cheng`: 75
+- `glenn`: 50
+- `loren`: 25
 
 ### flu
 - Belum ada data.
@@ -330,185 +358,271 @@ Generated at: 2026-08-15T02:08:14
 - `albert_cheng`: 100
 
 ### paru-paru
-- `albert_cheng`: 10
+- `albert_cheng`: 60
 - `albert_william`: 20
+- `glenn`: 50
+- `loren`: 25
 
 ### asma
 - `albert_cheng`: 10
 - `albert_william`: 20
+- `loren`: 1
 
 ### pusing
-- `albert_cheng`: 30
+- `albert_cheng`: 80
+- `glenn`: 1
 
 ### kepala
-- `albert_cheng`: 30
-- `glenn`: 25
+- `albert_cheng`: 80
+- `glenn`: 50
+- `loren`: 25
 
 ### tensi
 - `albert_cheng`: 80
 
 ### darah
-- `albert_cheng`: 75
+- `albert_cheng`: 125
+- `glenn`: 50
+- `loren`: 25
 
 ### tinggi
 - `albert_cheng`: 50
 - `albert_william`: 50
 
-### berat tengkuk
+### berat_tengkuk
 - Belum ada data.
 
 ### leher
-- Belum ada data.
+- `albert_cheng`: 50
+- `loren`: 25
 
 ### jantung
+- `albert_cheng`: 50
 - `glenn`: 50
+- `loren`: 25
 
 ### normal
+- `albert_cheng`: 50
 - `albert_william`: 50
+- `glenn`: 50
+- `loren`: 25
 
 ### gula
-- `albert_cheng`: 50
-- `glenn`: 25
+- `albert_cheng`: 100
+- `glenn`: 50
+- `loren`: 25
 
 ### manis
-- `albert_cheng`: 50
+- `albert_cheng`: 100
+- `glenn`: 50
+- `loren`: 25
 
 ### lemas
-- `albert_cheng`: 50
+- `albert_cheng`: 100
+- `glenn`: 50
+- `loren`: 25
 
 ### haus
-- Belum ada data.
+- `albert_cheng`: 50
+- `loren`: 25
 
 ### kencing
-- `albert_cheng`: 50
+- `albert_cheng`: 100
+- `glenn`: 50
+- `loren`: 25
 
 ### luka
-- `albert_cheng`: 50
+- `albert_cheng`: 100
+- `glenn`: 50
+- `loren`: 25
 
 ### kering
+- `albert_cheng`: 50
 - `glenn`: 50
+- `loren`: 25
 
 ### kesemutan
-- `albert_cheng`: 50
+- `albert_cheng`: 100
+- `glenn`: 50
+- `loren`: 25
 
 ### kaki
-- `albert_cheng`: 48
+- `albert_cheng`: 98
+- `glenn`: 50
+- `loren`: 25
 
 ### lapar
-- `albert_cheng`: 50
+- `albert_cheng`: 100
+- `glenn`: 50
+- `loren`: 25
 
 ### nyeri
-- `albert_cheng`: 49
+- `albert_cheng`: 104
+- `glenn`: 50
+- `loren`: 25
 
 ### otot
-- `albert_cheng`: 49
+- `albert_cheng`: 99
+- `glenn`: 50
+- `loren`: 25
 
 ### sendi
-- `albert_cheng`: 50
+- `albert_cheng`: 100
 
 ### tulang
 - `albert_cheng`: 100
 
 ### patah
-- `albert_cheng`: 49
+- `albert_cheng`: 99
+- `glenn`: 50
+- `loren`: 25
 
 ### bengkak
-- `albert_cheng`: 49
+- `albert_cheng`: 99
+- `glenn`: 50
+- `loren`: 25
 
 ### pegal
-- `albert_cheng`: 49
+- `albert_cheng`: 99
+- `glenn`: 50
+- `loren`: 25
 
 ### linu
 - Belum ada data.
 
 ### pinggang
-- `albert_cheng`: 53
+- `albert_cheng`: 153
+- `glenn`: 50
+- `loren`: 25
 
 ### punggung
-- `albert_cheng`: 49
+- `albert_cheng`: 99
+- `glenn`: 50
+- `loren`: 25
 
 ### gerak
+- `albert_cheng`: 50
 - `glenn`: 50
+- `loren`: 50
 
 ### benjolan
+- `albert_cheng`: 50
 - `glenn`: 50
+- `loren`: 25
 
 ### tumor
 - Belum ada data.
 
 ### kanker
+- `albert_cheng`: 50
 - `glenn`: 50
+- `loren`: 25
 
 ### operasi
+- `albert_cheng`: 50
 - `glenn`: 50
+- `loren`: 25
 
 ### besar
+- `albert_cheng`: 50
 - `glenn`: 50
+- `loren`: 25
 
 ### tumbuh
 - `albert_cheng`: 50
 - `glenn`: 74
 
 ### susah
+- `albert_cheng`: 50
 - `glenn`: 50
-- `susah`: 50
 
 ### tidur
 - `albert_cheng`: 50
 - `glenn`: 50
 
 ### mual
+- `albert_cheng`: 50
 - `glenn`: 50
+- `loren`: 25
 
 ### muntah
+- `albert_cheng`: 50
 - `glenn`: 50
+- `loren`: 25
 
 ### demam
+- `albert_cheng`: 50
 - `glenn`: 50
+- `loren`: 25
 
 ### panas
+- `albert_cheng`: 50
 - `glenn`: 50
+- `loren`: 25
 
 ### dingin
+- `albert_cheng`: 50
 - `glenn`: 60
+- `loren`: 25
 
 ### bahaya
+- `albert_cheng`: 50
 - `glenn`: 50
+- `loren`: 25
 
 ### istirahat
+- `albert_cheng`: 50
 - `glenn`: 50
+- `loren`: 25
 
 ### bantuan
+- `albert_cheng`: 55
 - `glenn`: 50
+- `loren`: 25
 
 ### apa
+- `albert_cheng`: 51
 - `albert_william`: 50
+- `loren`: 25
 
 ### siapa
 - `albert_cheng`: 100
 
-### di mana
+### di_mana
+- `albert_cheng`: 50
 - `glenn`: 50
+- `loren`: 25
 
 ### mengapa
+- `albert_cheng`: 50
 - `glenn`: 56
+- `loren`: 25
 
 ### bagaimana
+- `albert_cheng`: 49
 - `glenn`: 50
+- `loren`: 25
 
-### berapa lama
+### berapa_lama
+- `albert_cheng`: 50
 - `glenn`: 66
+- `loren`: 25
 
-### sejak kapan
+### sejak_kapan
+- `albert_cheng`: 70
 - `glenn`: 51
 
-### bagian mana
+### bagian_mana
+- `albert_cheng`: 50
 - `glenn`: 50
+- `loren`: 25
 
-### seberapa sering
+### seberapa_sering
+- `albert_cheng`: 50
 - `glenn`: 50
 
 ### ya
+- `albert_cheng`: 50
 - `glenn`: 50
 
 ### tidak
@@ -518,178 +632,261 @@ Generated at: 2026-08-15T02:08:14
 ### tolong
 - `glenn`: 48
 
-### terima kasih
+### terima_kasih
 - `albert_cheng`: 50
 - `glenn`: 50
 
 ### mengerti
+- `albert_cheng`: 50
 - `glenn`: 50
+- `loren`: 25
 
-### tidak mengerti
+### tidak_mengerti
 - `albert_cheng`: 50
 - `glenn`: 50
 
 ### darurat
-- Belum ada data.
+- `albert_cheng`: 50
+- `loren`: 25
 
 ### cepat
-- `albert_cheng`: 50
+- `albert_cheng`: 105
+- `glenn`: 50
+- `loren`: 25
 
 ### keluarga
-- `albert_cheng`: 50
+- `albert_cheng`: 100
+- `glenn`: 50
+- `loren`: 25
 
 ### pulang
-- `albert_cheng`: 50
+- `albert_cheng`: 100
+- `glenn`: 50
+- `loren`: 25
 
-### rumah sakit
-- `albert_cheng`: 50
+### rumah_sakit
+- `albert_cheng`: 100
 
 ### pasien
-- `albert_cheng`: 52
+- `albert_cheng`: 102
+- `albert_william`: 45
+- `glenn`: 54
+- `loren`: 25
 
 ### perawat
-- `albert_cheng`: 48
+- `albert_cheng`: 98
+- `glenn`: 50
+- `loren`: 25
 
 ### ambulans
-- `albert_cheng`: 50
+- `albert_cheng`: 100
+- `glenn`: 50
+- `loren`: 25
 
 ### suntik
 - `albert_cheng`: 103
 
 ### infus
-- `albert_cheng`: 50
+- `albert_cheng`: 100
+- `glenn`: 50
+- `loren`: 25
 
 ### vaksin
 - `albert_cheng`: 100
 
 ### laboratorium
-- `albert_cheng`: 50
-- `glenn`: 43
+- `albert_cheng`: 100
+- `glenn`: 93
+- `loren`: 25
 
 ### rontgen
-- `albert_cheng`: 50
+- `albert_cheng`: 100
 - `glenn`: 53
 
-### rawat inap
-- `albert_cheng`: 48
+### rawat_inap
+- `albert_cheng`: 98
 
 ### mata
-- `albert_cheng`: 49
+- `albert_cheng`: 99
+- `albert_william`: 50
+- `loren`: 25
 
 ### hidung
-- `albert_cheng`: 50
+- `albert_cheng`: 100
+- `glenn`: 50
+- `loren`: 25
 
 ### mulut
-- `albert_cheng`: 50
+- `albert_cheng`: 100
+- `glenn`: 50
+- `loren`: 25
 
 ### telinga
 - `albert_cheng`: 50
 
 ### gigi
-- Belum ada data.
+- `albert_cheng`: 50
+- `glenn`: 50
+- `loren`: 25
 
 ### perut
-- Belum ada data.
+- `albert_cheng`: 50
+- `glenn`: 60
+- `loren`: 25
 
 ### tangan
 - `albert_cheng`: 50
 
 ### jari
-- Belum ada data.
+- `albert_cheng`: 50
+- `glenn`: 50
+- `loren`: 25
 
 ### lutut
-- Belum ada data.
+- `albert_cheng`: 50
+- `glenn`: 50
+- `loren`: 25
 
 ### bahu
-- Belum ada data.
+- `albert_cheng`: 50
+- `glenn`: 50
+- `loren`: 25
 
 ### gatal
-- Belum ada data.
+- `albert_cheng`: 50
+- `glenn`: 50
+- `loren`: 25
 
 ### diare
-- Belum ada data.
+- `albert_cheng`: 50
+- `glenn`: 50
+- `loren`: 25
 
 ### pendarahan
-- Belum ada data.
+- `glenn`: 50
+- `loren`: 25
 
 ### pingsan
-- Belum ada data.
+- `albert_cheng`: 50
+- `glenn`: 50
+- `loren`: 25
 
 ### kejang
-- Belum ada data.
+- `albert_cheng`: 50
+- `glenn`: 50
+- `loren`: 25
 
 ### meriang
-- Belum ada data.
+- `albert_cheng`: 50
+- `glenn`: 50
+- `loren`: 25
 
 ### kaku
-- Belum ada data.
+- `albert_cheng`: 50
+- `glenn`: 50
+- `loren`: 25
 
-### mati rasa
-- Belum ada data.
+### mati_rasa
+- `albert_cheng`: 50
+- `glenn`: 50
+- `loren`: 25
 
-### sakit kepala
-- Belum ada data.
+### sakit_kepala
+- `albert_cheng`: 50
 
 ### cedera
-- Belum ada data.
+- `albert_cheng`: 50
+- `glenn`: 50
+- `loren`: 25
 
 ### apotek
-- Belum ada data.
+- `albert_cheng`: 50
+- `glenn`: 50
+- `loren`: 25
 
 ### tablet
 - `albert_cheng`: 50
 
 ### kapsul
-- Belum ada data.
+- `albert_cheng`: 51
+- `glenn`: 50
+- `loren`: 25
 
 ### sirup
 - `albert_cheng`: 50
 
 ### antibiotik
-- Belum ada data.
+- `albert_cheng`: 50
+- `albert_william`: 50
+- `glenn`: 50
+- `loren`: 25
 
 ### vitamin
-- Belum ada data.
-
-### dosis
-- Belum ada data.
-
-### minum obat
-- Belum ada data.
-
-### sebelum makan
+- `albert_cheng`: 50
 - `albert_william`: 50
 
-### sesudah makan
+### dosis
+- `albert_cheng`: 50
+- `albert_william`: 50
+- `glenn`: 50
+- `loren`: 25
+
+### minum_obat
+- `albert_cheng`: 50
+- `albert_william`: 50
+- `glenn`: 50
+- `loren`: 25
+
+### sebelum_makan
+- `albert_cheng`: 50
+- `albert_william`: 50
+
+### sesudah_makan
+- `albert_cheng`: 50
 - `albert_william`: 50
 
 ### hari
+- `albert_cheng`: 50
 - `glenn`: 50
+- `loren`: 25
 
 ### minggu
+- `albert_cheng`: 50
 - `glenn`: 50
+- `loren`: 25
 
 ### bulan
+- `albert_cheng`: 50
 - `glenn`: 50
+- `loren`: 25
 
 ### kontrol
+- `albert_cheng`: 50
 - `glenn`: 50
+- `loren`: 25
 
 ### terapi
 - `albert_cheng`: 50
 - `glenn`: 50
 
 ### rehabilitasi
+- `albert_cheng`: 50
 - `glenn`: 50
 
-### efek samping
+### efek_samping
+- `albert_cheng`: 50
 - `glenn`: 50
+- `loren`: 25
 
 ### pemeriksaan
+- `albert_cheng`: 50
 - `glenn`: 50
+- `loren`: 50
 
 ### hasil
+- `albert_cheng`: 50
 - `glenn`: 50
+- `loren`: 25
 
 ### tes
 - `albert_cheng`: 50
@@ -699,95 +896,117 @@ Generated at: 2026-08-15T02:08:14
 - `albert_cheng`: 50
 - `glenn`: 56
 
-### tekanan darah
+### tekanan_darah
 - `albert_cheng`: 50
 - `glenn`: 50
 
-### berat badan
+### berat_badan
+- `albert_cheng`: 50
 - `glenn`: 50
+- `loren`: 25
 
-### tinggi badan
+### tinggi_badan
 - `albert_cheng`: 50
 - `glenn`: 50
 
-### suhu tubuh
+### suhu_tubuh
 - `albert_cheng`: 50
 - `glenn`: 50
 
-### denyut nadi
+### denyut_nadi
+- `albert_cheng`: 50
 - `glenn`: 55
+- `loren`: 25
 
-### napas cepat
-- Belum ada data.
+### napas_cepat
+- `albert_cheng`: 50
 
-### napas lambat
-- Belum ada data.
+### napas_lambat
+- `albert_cheng`: 50
 
-### foto rontgen
-- Belum ada data.
+### foto_rontgen
+- `albert_cheng`: 50
+- `loren`: 25
 
 ### usg
 - `albert_cheng`: 50
 - `glenn`: 53
 
-### ct scan
+### ct_scan
 - `glenn`: 50
+- `loren`: 25
 
 ### mri
 - Belum ada data.
 
 ### positif
+- `albert_cheng`: 50
 - `albert_william`: 50
+- `loren`: 25
 
 ### negatif
+- `albert_cheng`: 50
 - `albert_william`: 50
 - `glenn`: 2
+- `loren`: 25
 
 ### baik
+- `albert_cheng`: 50
 - `glenn`: 50
+- `loren`: 25
 
 ### buruk
 - `glenn`: 50
+- `loren`: 25
 
 ### ringan
+- `albert_cheng`: 50
 - `glenn`: 50
 
 ### sedang
+- `albert_cheng`: 50
 - `glenn`: 50
 
 ### berat
-- `albert_cheng`: 50
+- `albert_cheng`: 100
+- `loren`: 25
 
 ### stabil
 - `albert_cheng`: 50
 - `glenn`: 50
 
-### tidak stabil
+### tidak_stabil
 - `albert_cheng`: 50
 
 ### sadar
-- Belum ada data.
+- `albert_cheng`: 50
 
-### tidak sadar
+### tidak_sadar
 - Belum ada data.
 
 ### lemah
 - Belum ada data.
 
 ### lelah
-- Belum ada data.
+- `albert_cheng`: 50
+- `glenn`: 50
+- `loren`: 25
 
 ### gelisah
-- Belum ada data.
+- `albert_cheng`: 50
+- `glenn`: 50
+- `loren`: 25
 
 ### cemas
-- Belum ada data.
+- `albert_cheng`: 50
+- `glenn`: 50
+- `loren`: 25
 
 ### takut
 - `albert_cheng`: 50
 
 ### sedih
-- Belum ada data.
+- `albert_cheng`: 50
 
 ### stres
 - `albert_cheng`: 50
@@ -795,67 +1014,80 @@ Generated at: 2026-08-15T02:08:14
 ### nyaman
 - Belum ada data.
 
-### tidak nyaman
+### tidak_nyaman
 - Belum ada data.
 
 ### sehat
 - Belum ada data.
 
 ### pendaftaran
+- `glenn`: 50
+- `loren`: 30
+
+### nomor_antrean
+- `glenn`: 50
+- `loren`: 25
+
+### ruang_tunggu
 - Belum ada data.
 
-### nomor antrean
+### ruang_periksa
 - Belum ada data.
 
-### ruang tunggu
-- Belum ada data.
+### kamar_pasien
+- `glenn`: 50
+- `loren`: 25
 
-### ruang periksa
-- Belum ada data.
+### instalasi_gawat_darurat
+- `glenn`: 50
+- `loren`: 25
 
-### kamar pasien
-- Belum ada data.
-
-### instalasi gawat darurat
-- Belum ada data.
-
-### dokter spesialis
-- Belum ada data.
+### dokter_spesialis
+- `glenn`: 50
+- `loren`: 25
 
 ### jadwal
-- Belum ada data.
+- `glenn`: 50
+- `loren`: 25
 
-### janji temu
-- Belum ada data.
+### janji_temu
+- `glenn`: 50
+- `loren`: 25
 
 ### rujukan
 - Belum ada data.
 
 ### administrasi
-- Belum ada data.
+- `glenn`: 50
+- `loren`: 25
 
 ### pembayaran
-- Belum ada data.
+- `glenn`: 50
+- `loren`: 25
 
 ### bpjs
-- Belum ada data.
+- `glenn`: 50
+- `loren`: 25
 
 ### asuransi
-- Belum ada data.
+- `glenn`: 50
+- `loren`: 25
 
 ### identitas
-- Belum ada data.
+- `loren`: 3
 
-### kartu pasien
-- Belum ada data.
+### kartu_pasien
+- `albert_william`: 50
+- `loren`: 25
 
 ### pendamping
-- Belum ada data.
+- `glenn`: 50
+- `loren`: 25
 
 ### wali
 - Belum ada data.
 
-### tanda tangan
+### tanda_tangan
 - Belum ada data.
 
 ### selesai
@@ -973,54 +1205,203 @@ Generated at: 2026-08-15T02:08:14
 
 | File | Reason | Quarantine |
 |---|---|---|
-| `D:\PKM\medsign-ai\backend\data\landmarks\sakit\albert_william\sakit_albert_william_test_sess_valid_sakit_999.npy` | empty_frame_ratio 100.00% melebihi batas 10.00% | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_001.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_002.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_003.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_004.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_005.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_006.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_007.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_008.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_009.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_010.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_011.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_012.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_013.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_014.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_015.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_016.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_017.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_018.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_019.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_020.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_021.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_022.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_023.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_024.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_025.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_026.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_027.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_028.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_029.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_030.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_031.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_032.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_033.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_034.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_035.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_036.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_037.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_038.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_039.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_040.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_041.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_042.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_043.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_044.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_045.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_046.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_047.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_048.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_049.npy` | label 'sore' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\sore\glenn\sore_glenn_20260723_153008_sore_050.npy` | label 'sore' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_001.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_002.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_003.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_004.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_005.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_006.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_007.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_008.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_009.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_010.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_011.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_012.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_013.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_014.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_015.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_016.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_017.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_018.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_019.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_020.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_021.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_022.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_023.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_024.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_025.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_026.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_027.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_028.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_029.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_030.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_031.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_032.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_033.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_034.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_035.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_036.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_037.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_038.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_039.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_040.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_041.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_042.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_043.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_044.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_045.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_046.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_047.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_048.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_049.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_050.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_001.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_002.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_003.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_004.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_005.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_006.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_007.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_008.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_009.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_010.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_011.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_012.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_013.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_014.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_015.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_016.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_017.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_018.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_019.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_020.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_021.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_022.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_023.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_024.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_025.npy` | label 'agar' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_001.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_002.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_003.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_004.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_005.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_006.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_007.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_008.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_009.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_010.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_011.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_012.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_013.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_014.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_015.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_016.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_017.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_018.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_019.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_020.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_021.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_022.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_023.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_024.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_025.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_026.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_027.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_028.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_029.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_030.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_031.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_032.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_033.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_034.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_035.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_036.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_037.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_038.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_039.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_040.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_041.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_042.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_043.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_044.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_045.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_046.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_047.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_048.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_049.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_050.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_001.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_002.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_003.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_004.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_005.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_006.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_007.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_008.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_009.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_010.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_011.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_012.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_013.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_014.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_015.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_016.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_017.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_018.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_019.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_020.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_021.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_022.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_023.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_024.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_025.npy` | label 'dan' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_001.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_002.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_003.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_004.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_005.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_006.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_007.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_008.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_009.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_010.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_011.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_012.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_013.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_014.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_015.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_016.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_017.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_018.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_019.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_020.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_021.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_022.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_023.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_024.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_025.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_026.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_027.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_028.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_029.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_030.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_031.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_032.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_033.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_034.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_035.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_036.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_037.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_038.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_039.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_040.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_041.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_042.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_043.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_044.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_045.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_046.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_047.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_048.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_049.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_050.npy` | label 'dari' tidak ada di labels.json | `-` |

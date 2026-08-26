@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-15T02:08:14",
+  "generated_at": "2026-08-26T14:02:10",
   "contract": {
     "version": "medsign-clinical-full-v1",
     "frame_count": 30,
@@ -35,7 +35,7 @@
       "tensi",
       "darah",
       "tinggi",
-      "berat tengkuk",
+      "berat_tengkuk",
       "leher",
       "jantung",
       "normal",
@@ -78,24 +78,24 @@
       "bantuan",
       "apa",
       "siapa",
-      "di mana",
+      "di_mana",
       "mengapa",
       "bagaimana",
-      "berapa lama",
-      "sejak kapan",
-      "bagian mana",
-      "seberapa sering",
+      "berapa_lama",
+      "sejak_kapan",
+      "bagian_mana",
+      "seberapa_sering",
       "ya",
       "tidak",
       "tolong",
-      "terima kasih",
+      "terima_kasih",
       "mengerti",
-      "tidak mengerti",
+      "tidak_mengerti",
       "darurat",
       "cepat",
       "keluarga",
       "pulang",
-      "rumah sakit",
+      "rumah_sakit",
       "pasien",
       "perawat",
       "ambulans",
@@ -104,7 +104,7 @@
       "vaksin",
       "laboratorium",
       "rontgen",
-      "rawat inap",
+      "rawat_inap",
       "mata",
       "hidung",
       "mulut",
@@ -122,8 +122,8 @@
       "kejang",
       "meriang",
       "kaku",
-      "mati rasa",
-      "sakit kepala",
+      "mati_rasa",
+      "sakit_kepala",
       "cedera",
       "apotek",
       "tablet",
@@ -132,30 +132,30 @@
       "antibiotik",
       "vitamin",
       "dosis",
-      "minum obat",
-      "sebelum makan",
-      "sesudah makan",
+      "minum_obat",
+      "sebelum_makan",
+      "sesudah_makan",
       "hari",
       "minggu",
       "bulan",
       "kontrol",
       "terapi",
       "rehabilitasi",
-      "efek samping",
+      "efek_samping",
       "pemeriksaan",
       "hasil",
       "tes",
       "urine",
-      "tekanan darah",
-      "berat badan",
-      "tinggi badan",
-      "suhu tubuh",
-      "denyut nadi",
-      "napas cepat",
-      "napas lambat",
-      "foto rontgen",
+      "tekanan_darah",
+      "berat_badan",
+      "tinggi_badan",
+      "suhu_tubuh",
+      "denyut_nadi",
+      "napas_cepat",
+      "napas_lambat",
+      "foto_rontgen",
       "usg",
-      "ct scan",
+      "ct_scan",
       "mri",
       "positif",
       "negatif",
@@ -165,9 +165,9 @@
       "sedang",
       "berat",
       "stabil",
-      "tidak stabil",
+      "tidak_stabil",
       "sadar",
-      "tidak sadar",
+      "tidak_sadar",
       "lemah",
       "lelah",
       "gelisah",
@@ -176,27 +176,27 @@
       "sedih",
       "stres",
       "nyaman",
-      "tidak nyaman",
+      "tidak_nyaman",
       "sehat",
       "pendaftaran",
-      "nomor antrean",
-      "ruang tunggu",
-      "ruang periksa",
-      "kamar pasien",
-      "instalasi gawat darurat",
-      "dokter spesialis",
+      "nomor_antrean",
+      "ruang_tunggu",
+      "ruang_periksa",
+      "kamar_pasien",
+      "instalasi_gawat_darurat",
+      "dokter_spesialis",
       "jadwal",
-      "janji temu",
+      "janji_temu",
       "rujukan",
       "administrasi",
       "pembayaran",
       "bpjs",
       "asuransi",
       "identitas",
-      "kartu pasien",
+      "kartu_pasien",
       "pendamping",
       "wali",
-      "tanda tangan",
+      "tanda_tangan",
       "selesai",
       "halo_test",
       "a",
@@ -241,200 +241,200 @@
     "signer_id": null,
     "max_empty_frame_ratio": 0.1
   },
-  "total_valid_samples": 7275,
-  "total_invalid_samples": 51,
+  "total_valid_samples": 21164,
+  "total_invalid_samples": 901,
   "counts": {
-    "sakit": 45,
-    "dokter": 30,
-    "obat": 50,
-    "periksa": 25,
-    "sembuh": 20,
-    "resep": 15,
-    "alergi": 15,
-    "berapa": 15,
-    "kapan": 65,
-    "pagi": 15,
-    "siang": 15,
-    "malam": 30,
-    "makan": 15,
-    "minum": 15,
-    "batuk": 15,
+    "sakit": 95,
+    "dokter": 155,
+    "obat": 175,
+    "periksa": 150,
+    "sembuh": 70,
+    "resep": 65,
+    "alergi": 140,
+    "berapa": 140,
+    "kapan": 293,
+    "pagi": 140,
+    "siang": 65,
+    "malam": 155,
+    "makan": 140,
+    "minum": 141,
+    "batuk": 140,
     "sesak": 65,
-    "napas": 15,
-    "dada": 38,
-    "dahak": 65,
-    "pilek": 20,
+    "napas": 140,
+    "dada": 163,
+    "dahak": 190,
+    "pilek": 150,
     "flu": 0,
     "tenggorokan": 100,
-    "paru-paru": 30,
-    "asma": 30,
-    "pusing": 30,
-    "kepala": 55,
+    "paru-paru": 155,
+    "asma": 31,
+    "pusing": 81,
+    "kepala": 155,
     "tensi": 80,
-    "darah": 75,
+    "darah": 200,
     "tinggi": 100,
-    "berat tengkuk": 0,
-    "leher": 0,
-    "jantung": 50,
-    "normal": 50,
-    "gula": 75,
-    "manis": 50,
-    "lemas": 50,
-    "haus": 0,
-    "kencing": 50,
-    "luka": 50,
-    "kering": 50,
-    "kesemutan": 50,
-    "kaki": 48,
-    "lapar": 50,
-    "nyeri": 49,
-    "otot": 49,
-    "sendi": 50,
+    "berat_tengkuk": 0,
+    "leher": 75,
+    "jantung": 125,
+    "normal": 175,
+    "gula": 175,
+    "manis": 175,
+    "lemas": 175,
+    "haus": 75,
+    "kencing": 175,
+    "luka": 175,
+    "kering": 125,
+    "kesemutan": 175,
+    "kaki": 173,
+    "lapar": 175,
+    "nyeri": 179,
+    "otot": 174,
+    "sendi": 100,
     "tulang": 100,
-    "patah": 49,
-    "bengkak": 49,
-    "pegal": 49,
+    "patah": 174,
+    "bengkak": 174,
+    "pegal": 174,
     "linu": 0,
-    "pinggang": 53,
-    "punggung": 49,
-    "gerak": 50,
-    "benjolan": 50,
+    "pinggang": 228,
+    "punggung": 174,
+    "gerak": 150,
+    "benjolan": 125,
     "tumor": 0,
-    "kanker": 50,
-    "operasi": 50,
-    "besar": 50,
+    "kanker": 125,
+    "operasi": 125,
+    "besar": 125,
     "tumbuh": 124,
     "susah": 100,
     "tidur": 100,
-    "mual": 50,
-    "muntah": 50,
-    "demam": 50,
-    "panas": 50,
-    "dingin": 60,
-    "bahaya": 50,
-    "istirahat": 50,
-    "bantuan": 50,
-    "apa": 50,
+    "mual": 125,
+    "muntah": 125,
+    "demam": 125,
+    "panas": 125,
+    "dingin": 135,
+    "bahaya": 125,
+    "istirahat": 125,
+    "bantuan": 130,
+    "apa": 126,
     "siapa": 100,
-    "di mana": 50,
-    "mengapa": 56,
-    "bagaimana": 50,
-    "berapa lama": 66,
-    "sejak kapan": 51,
-    "bagian mana": 50,
-    "seberapa sering": 50,
-    "ya": 50,
+    "di_mana": 125,
+    "mengapa": 131,
+    "bagaimana": 124,
+    "berapa_lama": 141,
+    "sejak_kapan": 121,
+    "bagian_mana": 125,
+    "seberapa_sering": 100,
+    "ya": 100,
     "tidak": 100,
     "tolong": 48,
-    "terima kasih": 100,
-    "mengerti": 50,
-    "tidak mengerti": 100,
-    "darurat": 0,
-    "cepat": 50,
-    "keluarga": 50,
-    "pulang": 50,
-    "rumah sakit": 50,
-    "pasien": 52,
-    "perawat": 48,
-    "ambulans": 50,
+    "terima_kasih": 100,
+    "mengerti": 125,
+    "tidak_mengerti": 100,
+    "darurat": 75,
+    "cepat": 180,
+    "keluarga": 175,
+    "pulang": 175,
+    "rumah_sakit": 100,
+    "pasien": 226,
+    "perawat": 173,
+    "ambulans": 175,
     "suntik": 103,
-    "infus": 50,
+    "infus": 175,
     "vaksin": 100,
-    "laboratorium": 93,
-    "rontgen": 103,
-    "rawat inap": 48,
-    "mata": 49,
-    "hidung": 50,
-    "mulut": 50,
+    "laboratorium": 218,
+    "rontgen": 153,
+    "rawat_inap": 98,
+    "mata": 174,
+    "hidung": 175,
+    "mulut": 175,
     "telinga": 50,
-    "gigi": 0,
-    "perut": 0,
+    "gigi": 125,
+    "perut": 135,
     "tangan": 50,
-    "jari": 0,
-    "lutut": 0,
-    "bahu": 0,
-    "gatal": 0,
-    "diare": 0,
-    "pendarahan": 0,
-    "pingsan": 0,
-    "kejang": 0,
-    "meriang": 0,
-    "kaku": 0,
-    "mati rasa": 0,
-    "sakit kepala": 0,
-    "cedera": 0,
-    "apotek": 0,
+    "jari": 125,
+    "lutut": 125,
+    "bahu": 125,
+    "gatal": 125,
+    "diare": 125,
+    "pendarahan": 75,
+    "pingsan": 125,
+    "kejang": 125,
+    "meriang": 125,
+    "kaku": 125,
+    "mati_rasa": 125,
+    "sakit_kepala": 50,
+    "cedera": 125,
+    "apotek": 125,
     "tablet": 50,
-    "kapsul": 0,
+    "kapsul": 126,
     "sirup": 50,
-    "antibiotik": 0,
-    "vitamin": 0,
-    "dosis": 0,
-    "minum obat": 0,
-    "sebelum makan": 50,
-    "sesudah makan": 50,
-    "hari": 50,
-    "minggu": 50,
-    "bulan": 50,
-    "kontrol": 50,
+    "antibiotik": 175,
+    "vitamin": 100,
+    "dosis": 175,
+    "minum_obat": 175,
+    "sebelum_makan": 100,
+    "sesudah_makan": 100,
+    "hari": 125,
+    "minggu": 125,
+    "bulan": 125,
+    "kontrol": 125,
     "terapi": 100,
-    "rehabilitasi": 50,
-    "efek samping": 50,
-    "pemeriksaan": 50,
-    "hasil": 50,
+    "rehabilitasi": 100,
+    "efek_samping": 125,
+    "pemeriksaan": 150,
+    "hasil": 125,
     "tes": 100,
     "urine": 106,
-    "tekanan darah": 100,
-    "berat badan": 50,
-    "tinggi badan": 100,
-    "suhu tubuh": 100,
-    "denyut nadi": 55,
-    "napas cepat": 0,
-    "napas lambat": 0,
-    "foto rontgen": 0,
+    "tekanan_darah": 100,
+    "berat_badan": 125,
+    "tinggi_badan": 100,
+    "suhu_tubuh": 100,
+    "denyut_nadi": 130,
+    "napas_cepat": 50,
+    "napas_lambat": 50,
+    "foto_rontgen": 75,
     "usg": 103,
-    "ct scan": 50,
+    "ct_scan": 75,
     "mri": 0,
-    "positif": 50,
-    "negatif": 52,
-    "baik": 50,
-    "buruk": 50,
-    "ringan": 50,
-    "sedang": 50,
-    "berat": 50,
+    "positif": 125,
+    "negatif": 127,
+    "baik": 125,
+    "buruk": 75,
+    "ringan": 100,
+    "sedang": 100,
+    "berat": 125,
     "stabil": 100,
-    "tidak stabil": 50,
-    "sadar": 0,
-    "tidak sadar": 0,
+    "tidak_stabil": 50,
+    "sadar": 50,
+    "tidak_sadar": 0,
     "lemah": 0,
-    "lelah": 0,
-    "gelisah": 0,
-    "cemas": 0,
+    "lelah": 125,
+    "gelisah": 125,
+    "cemas": 125,
     "takut": 50,
-    "sedih": 0,
+    "sedih": 50,
     "stres": 50,
     "nyaman": 0,
-    "tidak nyaman": 0,
+    "tidak_nyaman": 0,
     "sehat": 0,
-    "pendaftaran": 0,
-    "nomor antrean": 0,
-    "ruang tunggu": 0,
-    "ruang periksa": 0,
-    "kamar pasien": 0,
-    "instalasi gawat darurat": 0,
-    "dokter spesialis": 0,
-    "jadwal": 0,
-    "janji temu": 0,
+    "pendaftaran": 80,
+    "nomor_antrean": 75,
+    "ruang_tunggu": 0,
+    "ruang_periksa": 0,
+    "kamar_pasien": 75,
+    "instalasi_gawat_darurat": 75,
+    "dokter_spesialis": 75,
+    "jadwal": 75,
+    "janji_temu": 75,
     "rujukan": 0,
-    "administrasi": 0,
-    "pembayaran": 0,
-    "bpjs": 0,
-    "asuransi": 0,
-    "identitas": 0,
-    "kartu pasien": 0,
-    "pendamping": 0,
+    "administrasi": 75,
+    "pembayaran": 75,
+    "bpjs": 75,
+    "asuransi": 75,
+    "identitas": 3,
+    "kartu_pasien": 75,
+    "pendamping": 75,
     "wali": 0,
-    "tanda tangan": 0,
+    "tanda_tangan": 0,
     "selesai": 0,
     "halo_test": 0,
     "a": 0,
@@ -475,250 +475,368 @@
   },
   "signer_counts": {
     "sakit": {
+      "albert_cheng": 50,
       "glenn": 40,
       "loren": 5
     },
     "dokter": {
-      "glenn": 15,
-      "loren": 15
+      "albert_cheng": 50,
+      "glenn": 65,
+      "loren": 40
     },
     "obat": {
+      "albert_cheng": 50,
       "albert_william": 5,
-      "glenn": 30,
-      "loren": 15
+      "glenn": 80,
+      "loren": 40
     },
     "periksa": {
-      "glenn": 10,
-      "loren": 15
+      "albert_cheng": 50,
+      "glenn": 60,
+      "loren": 40
     },
     "sembuh": {
+      "albert_cheng": 50,
       "loren": 20
     },
     "resep": {
+      "albert_cheng": 50,
       "loren": 15
     },
     "alergi": {
-      "loren": 15
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 40
     },
     "berapa": {
-      "loren": 15
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 40
     },
     "kapan": {
-      "glenn": 50,
-      "loren": 15
+      "albert_cheng": 100,
+      "glenn": 103,
+      "loren": 90
     },
     "pagi": {
-      "loren": 15
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 40
     },
     "siang": {
+      "albert_cheng": 50,
       "loren": 15
     },
     "malam": {
-      "glenn": 15,
-      "loren": 15
+      "albert_cheng": 50,
+      "glenn": 65,
+      "loren": 40
     },
     "makan": {
-      "loren": 15
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 40
     },
     "minum": {
-      "loren": 15
+      "albert_cheng": 50,
+      "glenn": 51,
+      "loren": 40
     },
     "batuk": {
-      "loren": 15
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 40
     },
     "sesak": {
       "albert_cheng": 50,
       "loren": 15
     },
     "napas": {
-      "loren": 15
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 40
     },
     "dada": {
-      "albert_cheng": 23,
+      "albert_cheng": 73,
       "albert_william": 10,
-      "glenn": 5
+      "glenn": 55,
+      "loren": 25
     },
     "dahak": {
-      "albert_cheng": 45,
-      "albert_william": 20
+      "albert_cheng": 95,
+      "albert_william": 20,
+      "glenn": 50,
+      "loren": 25
     },
     "pilek": {
-      "albert_cheng": 20
+      "albert_cheng": 75,
+      "glenn": 50,
+      "loren": 25
     },
     "flu": {},
     "tenggorokan": {
       "albert_cheng": 100
     },
     "paru-paru": {
-      "albert_cheng": 10,
-      "albert_william": 20
+      "albert_cheng": 60,
+      "albert_william": 20,
+      "glenn": 50,
+      "loren": 25
     },
     "asma": {
       "albert_cheng": 10,
-      "albert_william": 20
+      "albert_william": 20,
+      "loren": 1
     },
     "pusing": {
-      "albert_cheng": 30
+      "albert_cheng": 80,
+      "glenn": 1
     },
     "kepala": {
-      "albert_cheng": 30,
-      "glenn": 25
+      "albert_cheng": 80,
+      "glenn": 50,
+      "loren": 25
     },
     "tensi": {
       "albert_cheng": 80
     },
     "darah": {
-      "albert_cheng": 75
+      "albert_cheng": 125,
+      "glenn": 50,
+      "loren": 25
     },
     "tinggi": {
       "albert_cheng": 50,
       "albert_william": 50
     },
-    "berat tengkuk": {},
-    "leher": {},
+    "berat_tengkuk": {},
+    "leher": {
+      "albert_cheng": 50,
+      "loren": 25
+    },
     "jantung": {
-      "glenn": 50
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
     },
     "normal": {
-      "albert_william": 50
+      "albert_cheng": 50,
+      "albert_william": 50,
+      "glenn": 50,
+      "loren": 25
     },
     "gula": {
-      "albert_cheng": 50,
-      "glenn": 25
+      "albert_cheng": 100,
+      "glenn": 50,
+      "loren": 25
     },
     "manis": {
-      "albert_cheng": 50
+      "albert_cheng": 100,
+      "glenn": 50,
+      "loren": 25
     },
     "lemas": {
-      "albert_cheng": 50
+      "albert_cheng": 100,
+      "glenn": 50,
+      "loren": 25
     },
-    "haus": {},
+    "haus": {
+      "albert_cheng": 50,
+      "loren": 25
+    },
     "kencing": {
-      "albert_cheng": 50
+      "albert_cheng": 100,
+      "glenn": 50,
+      "loren": 25
     },
     "luka": {
-      "albert_cheng": 50
+      "albert_cheng": 100,
+      "glenn": 50,
+      "loren": 25
     },
     "kering": {
-      "glenn": 50
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
     },
     "kesemutan": {
-      "albert_cheng": 50
+      "albert_cheng": 100,
+      "glenn": 50,
+      "loren": 25
     },
     "kaki": {
-      "albert_cheng": 48
+      "albert_cheng": 98,
+      "glenn": 50,
+      "loren": 25
     },
     "lapar": {
-      "albert_cheng": 50
+      "albert_cheng": 100,
+      "glenn": 50,
+      "loren": 25
     },
     "nyeri": {
-      "albert_cheng": 49
+      "albert_cheng": 104,
+      "glenn": 50,
+      "loren": 25
     },
     "otot": {
-      "albert_cheng": 49
+      "albert_cheng": 99,
+      "glenn": 50,
+      "loren": 25
     },
     "sendi": {
-      "albert_cheng": 50
+      "albert_cheng": 100
     },
     "tulang": {
       "albert_cheng": 100
     },
     "patah": {
-      "albert_cheng": 49
+      "albert_cheng": 99,
+      "glenn": 50,
+      "loren": 25
     },
     "bengkak": {
-      "albert_cheng": 49
+      "albert_cheng": 99,
+      "glenn": 50,
+      "loren": 25
     },
     "pegal": {
-      "albert_cheng": 49
+      "albert_cheng": 99,
+      "glenn": 50,
+      "loren": 25
     },
     "linu": {},
     "pinggang": {
-      "albert_cheng": 53
+      "albert_cheng": 153,
+      "glenn": 50,
+      "loren": 25
     },
     "punggung": {
-      "albert_cheng": 49
+      "albert_cheng": 99,
+      "glenn": 50,
+      "loren": 25
     },
     "gerak": {
-      "glenn": 50
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 50
     },
     "benjolan": {
-      "glenn": 50
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
     },
     "tumor": {},
     "kanker": {
-      "glenn": 50
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
     },
     "operasi": {
-      "glenn": 50
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
     },
     "besar": {
-      "glenn": 50
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
     },
     "tumbuh": {
       "albert_cheng": 50,
       "glenn": 74
     },
     "susah": {
-      "glenn": 50,
-      "susah": 50
+      "albert_cheng": 50,
+      "glenn": 50
     },
     "tidur": {
       "albert_cheng": 50,
       "glenn": 50
     },
     "mual": {
-      "glenn": 50
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
     },
     "muntah": {
-      "glenn": 50
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
     },
     "demam": {
-      "glenn": 50
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
     },
     "panas": {
-      "glenn": 50
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
     },
     "dingin": {
-      "glenn": 60
+      "albert_cheng": 50,
+      "glenn": 60,
+      "loren": 25
     },
     "bahaya": {
-      "glenn": 50
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
     },
     "istirahat": {
-      "glenn": 50
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
     },
     "bantuan": {
-      "glenn": 50
+      "albert_cheng": 55,
+      "glenn": 50,
+      "loren": 25
     },
     "apa": {
-      "albert_william": 50
+      "albert_cheng": 51,
+      "albert_william": 50,
+      "loren": 25
     },
     "siapa": {
       "albert_cheng": 100
     },
-    "di mana": {
-      "glenn": 50
+    "di_mana": {
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
     },
     "mengapa": {
-      "glenn": 56
+      "albert_cheng": 50,
+      "glenn": 56,
+      "loren": 25
     },
     "bagaimana": {
-      "glenn": 50
+      "albert_cheng": 49,
+      "glenn": 50,
+      "loren": 25
     },
-    "berapa lama": {
-      "glenn": 66
+    "berapa_lama": {
+      "albert_cheng": 50,
+      "glenn": 66,
+      "loren": 25
     },
-    "sejak kapan": {
+    "sejak_kapan": {
+      "albert_cheng": 70,
       "glenn": 51
     },
-    "bagian mana": {
-      "glenn": 50
+    "bagian_mana": {
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
     },
-    "seberapa sering": {
+    "seberapa_sering": {
+      "albert_cheng": 50,
       "glenn": 50
     },
     "ya": {
+      "albert_cheng": 50,
       "glenn": 50
     },
     "tidak": {
@@ -728,134 +846,261 @@
     "tolong": {
       "glenn": 48
     },
-    "terima kasih": {
+    "terima_kasih": {
       "albert_cheng": 50,
       "glenn": 50
     },
     "mengerti": {
-      "glenn": 50
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
     },
-    "tidak mengerti": {
+    "tidak_mengerti": {
       "albert_cheng": 50,
       "glenn": 50
     },
-    "darurat": {},
+    "darurat": {
+      "albert_cheng": 50,
+      "loren": 25
+    },
     "cepat": {
-      "albert_cheng": 50
+      "albert_cheng": 105,
+      "glenn": 50,
+      "loren": 25
     },
     "keluarga": {
-      "albert_cheng": 50
+      "albert_cheng": 100,
+      "glenn": 50,
+      "loren": 25
     },
     "pulang": {
-      "albert_cheng": 50
+      "albert_cheng": 100,
+      "glenn": 50,
+      "loren": 25
     },
-    "rumah sakit": {
-      "albert_cheng": 50
+    "rumah_sakit": {
+      "albert_cheng": 100
     },
     "pasien": {
-      "albert_cheng": 52
+      "albert_cheng": 102,
+      "albert_william": 45,
+      "glenn": 54,
+      "loren": 25
     },
     "perawat": {
-      "albert_cheng": 48
+      "albert_cheng": 98,
+      "glenn": 50,
+      "loren": 25
     },
     "ambulans": {
-      "albert_cheng": 50
+      "albert_cheng": 100,
+      "glenn": 50,
+      "loren": 25
     },
     "suntik": {
       "albert_cheng": 103
     },
     "infus": {
-      "albert_cheng": 50
+      "albert_cheng": 100,
+      "glenn": 50,
+      "loren": 25
     },
     "vaksin": {
       "albert_cheng": 100
     },
     "laboratorium": {
-      "albert_cheng": 50,
-      "glenn": 43
+      "albert_cheng": 100,
+      "glenn": 93,
+      "loren": 25
     },
     "rontgen": {
-      "albert_cheng": 50,
+      "albert_cheng": 100,
       "glenn": 53
     },
-    "rawat inap": {
-      "albert_cheng": 48
+    "rawat_inap": {
+      "albert_cheng": 98
     },
     "mata": {
-      "albert_cheng": 49
+      "albert_cheng": 99,
+      "albert_william": 50,
+      "loren": 25
     },
     "hidung": {
-      "albert_cheng": 50
+      "albert_cheng": 100,
+      "glenn": 50,
+      "loren": 25
     },
     "mulut": {
-      "albert_cheng": 50
+      "albert_cheng": 100,
+      "glenn": 50,
+      "loren": 25
     },
     "telinga": {
       "albert_cheng": 50
     },
-    "gigi": {},
-    "perut": {},
+    "gigi": {
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
+    },
+    "perut": {
+      "albert_cheng": 50,
+      "glenn": 60,
+      "loren": 25
+    },
     "tangan": {
       "albert_cheng": 50
     },
-    "jari": {},
-    "lutut": {},
-    "bahu": {},
-    "gatal": {},
-    "diare": {},
-    "pendarahan": {},
-    "pingsan": {},
-    "kejang": {},
-    "meriang": {},
-    "kaku": {},
-    "mati rasa": {},
-    "sakit kepala": {},
-    "cedera": {},
-    "apotek": {},
+    "jari": {
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
+    },
+    "lutut": {
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
+    },
+    "bahu": {
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
+    },
+    "gatal": {
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
+    },
+    "diare": {
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
+    },
+    "pendarahan": {
+      "glenn": 50,
+      "loren": 25
+    },
+    "pingsan": {
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
+    },
+    "kejang": {
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
+    },
+    "meriang": {
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
+    },
+    "kaku": {
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
+    },
+    "mati_rasa": {
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
+    },
+    "sakit_kepala": {
+      "albert_cheng": 50
+    },
+    "cedera": {
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
+    },
+    "apotek": {
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
+    },
     "tablet": {
       "albert_cheng": 50
     },
-    "kapsul": {},
+    "kapsul": {
+      "albert_cheng": 51,
+      "glenn": 50,
+      "loren": 25
+    },
     "sirup": {
       "albert_cheng": 50
     },
-    "antibiotik": {},
-    "vitamin": {},
-    "dosis": {},
-    "minum obat": {},
-    "sebelum makan": {
+    "antibiotik": {
+      "albert_cheng": 50,
+      "albert_william": 50,
+      "glenn": 50,
+      "loren": 25
+    },
+    "vitamin": {
+      "albert_cheng": 50,
       "albert_william": 50
     },
-    "sesudah makan": {
+    "dosis": {
+      "albert_cheng": 50,
+      "albert_william": 50,
+      "glenn": 50,
+      "loren": 25
+    },
+    "minum_obat": {
+      "albert_cheng": 50,
+      "albert_william": 50,
+      "glenn": 50,
+      "loren": 25
+    },
+    "sebelum_makan": {
+      "albert_cheng": 50,
+      "albert_william": 50
+    },
+    "sesudah_makan": {
+      "albert_cheng": 50,
       "albert_william": 50
     },
     "hari": {
-      "glenn": 50
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
     },
     "minggu": {
-      "glenn": 50
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
     },
     "bulan": {
-      "glenn": 50
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
     },
     "kontrol": {
-      "glenn": 50
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
     },
     "terapi": {
       "albert_cheng": 50,
       "glenn": 50
     },
     "rehabilitasi": {
+      "albert_cheng": 50,
       "glenn": 50
     },
-    "efek samping": {
-      "glenn": 50
+    "efek_samping": {
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
     },
     "pemeriksaan": {
-      "glenn": 50
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 50
     },
     "hasil": {
-      "glenn": 50
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
     },
     "tes": {
       "albert_cheng": 50,
@@ -865,99 +1110,178 @@
       "albert_cheng": 50,
       "glenn": 56
     },
-    "tekanan darah": {
+    "tekanan_darah": {
       "albert_cheng": 50,
       "glenn": 50
     },
-    "berat badan": {
-      "glenn": 50
+    "berat_badan": {
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
     },
-    "tinggi badan": {
+    "tinggi_badan": {
       "albert_cheng": 50,
       "glenn": 50
     },
-    "suhu tubuh": {
+    "suhu_tubuh": {
       "albert_cheng": 50,
       "glenn": 50
     },
-    "denyut nadi": {
-      "glenn": 55
+    "denyut_nadi": {
+      "albert_cheng": 50,
+      "glenn": 55,
+      "loren": 25
     },
-    "napas cepat": {},
-    "napas lambat": {},
-    "foto rontgen": {},
+    "napas_cepat": {
+      "albert_cheng": 50
+    },
+    "napas_lambat": {
+      "albert_cheng": 50
+    },
+    "foto_rontgen": {
+      "albert_cheng": 50,
+      "loren": 25
+    },
     "usg": {
       "albert_cheng": 50,
       "glenn": 53
     },
-    "ct scan": {
-      "glenn": 50
+    "ct_scan": {
+      "glenn": 50,
+      "loren": 25
     },
     "mri": {},
     "positif": {
-      "albert_william": 50
+      "albert_cheng": 50,
+      "albert_william": 50,
+      "loren": 25
     },
     "negatif": {
+      "albert_cheng": 50,
       "albert_william": 50,
-      "glenn": 2
+      "glenn": 2,
+      "loren": 25
     },
     "baik": {
-      "glenn": 50
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
     },
     "buruk": {
-      "glenn": 50
+      "glenn": 50,
+      "loren": 25
     },
     "ringan": {
+      "albert_cheng": 50,
       "glenn": 50
     },
     "sedang": {
+      "albert_cheng": 50,
       "glenn": 50
     },
     "berat": {
-      "albert_cheng": 50
+      "albert_cheng": 100,
+      "loren": 25
     },
     "stabil": {
       "albert_cheng": 50,
       "glenn": 50
     },
-    "tidak stabil": {
+    "tidak_stabil": {
       "albert_cheng": 50
     },
-    "sadar": {},
-    "tidak sadar": {},
+    "sadar": {
+      "albert_cheng": 50
+    },
+    "tidak_sadar": {},
     "lemah": {},
-    "lelah": {},
-    "gelisah": {},
-    "cemas": {},
+    "lelah": {
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
+    },
+    "gelisah": {
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
+    },
+    "cemas": {
+      "albert_cheng": 50,
+      "glenn": 50,
+      "loren": 25
+    },
     "takut": {
       "albert_cheng": 50
     },
-    "sedih": {},
+    "sedih": {
+      "albert_cheng": 50
+    },
     "stres": {
       "albert_cheng": 50
     },
     "nyaman": {},
-    "tidak nyaman": {},
+    "tidak_nyaman": {},
     "sehat": {},
-    "pendaftaran": {},
-    "nomor antrean": {},
-    "ruang tunggu": {},
-    "ruang periksa": {},
-    "kamar pasien": {},
-    "instalasi gawat darurat": {},
-    "dokter spesialis": {},
-    "jadwal": {},
-    "janji temu": {},
+    "pendaftaran": {
+      "glenn": 50,
+      "loren": 30
+    },
+    "nomor_antrean": {
+      "glenn": 50,
+      "loren": 25
+    },
+    "ruang_tunggu": {},
+    "ruang_periksa": {},
+    "kamar_pasien": {
+      "glenn": 50,
+      "loren": 25
+    },
+    "instalasi_gawat_darurat": {
+      "glenn": 50,
+      "loren": 25
+    },
+    "dokter_spesialis": {
+      "glenn": 50,
+      "loren": 25
+    },
+    "jadwal": {
+      "glenn": 50,
+      "loren": 25
+    },
+    "janji_temu": {
+      "glenn": 50,
+      "loren": 25
+    },
     "rujukan": {},
-    "administrasi": {},
-    "pembayaran": {},
-    "bpjs": {},
-    "asuransi": {},
-    "identitas": {},
-    "kartu pasien": {},
-    "pendamping": {},
+    "administrasi": {
+      "glenn": 50,
+      "loren": 25
+    },
+    "pembayaran": {
+      "glenn": 50,
+      "loren": 25
+    },
+    "bpjs": {
+      "glenn": 50,
+      "loren": 25
+    },
+    "asuransi": {
+      "glenn": 50,
+      "loren": 25
+    },
+    "identitas": {
+      "loren": 3
+    },
+    "kartu_pasien": {
+      "albert_william": 50,
+      "loren": 25
+    },
+    "pendamping": {
+      "glenn": 50,
+      "loren": 25
+    },
     "wali": {},
-    "tanda tangan": {},
+    "tanda_tangan": {},
     "selesai": {},
     "halo_test": {},
     "a": {},
@@ -1026,14 +1350,14 @@
     "tensi": 0.0,
     "darah": 0.0,
     "tinggi": 0.0,
-    "berat tengkuk": null,
-    "leher": null,
+    "berat_tengkuk": null,
+    "leher": 0.0,
     "jantung": 0.0,
     "normal": 0.0,
     "gula": 0.0,
     "manis": 0.0,
     "lemas": 0.0,
-    "haus": null,
+    "haus": 0.0,
     "kencing": 0.0,
     "luka": 0.0,
     "kering": 0.0,
@@ -1069,24 +1393,24 @@
     "bantuan": 0.0,
     "apa": 0.0,
     "siapa": 0.0,
-    "di mana": 0.0,
+    "di_mana": 0.0,
     "mengapa": 0.0,
     "bagaimana": 0.0,
-    "berapa lama": 0.0,
-    "sejak kapan": 0.0,
-    "bagian mana": 0.0,
-    "seberapa sering": 0.0,
+    "berapa_lama": 0.0,
+    "sejak_kapan": 0.0,
+    "bagian_mana": 0.0,
+    "seberapa_sering": 0.0,
     "ya": 0.0,
     "tidak": 0.0,
     "tolong": 0.0,
-    "terima kasih": 0.0,
+    "terima_kasih": 0.0,
     "mengerti": 0.0,
-    "tidak mengerti": 0.0,
-    "darurat": null,
+    "tidak_mengerti": 0.0,
+    "darurat": 0.0,
     "cepat": 0.0,
     "keluarga": 0.0,
     "pulang": 0.0,
-    "rumah sakit": 0.0,
+    "rumah_sakit": 0.0,
     "pasien": 0.0,
     "perawat": 0.0,
     "ambulans": 0.0,
@@ -1095,58 +1419,58 @@
     "vaksin": 0.0,
     "laboratorium": 0.0,
     "rontgen": 0.0,
-    "rawat inap": 0.0,
+    "rawat_inap": 0.0,
     "mata": 0.0,
     "hidung": 0.0,
     "mulut": 0.0,
     "telinga": 0.0,
-    "gigi": null,
-    "perut": null,
+    "gigi": 0.0,
+    "perut": 0.0,
     "tangan": 0.0,
-    "jari": null,
-    "lutut": null,
-    "bahu": null,
-    "gatal": null,
-    "diare": null,
-    "pendarahan": null,
-    "pingsan": null,
-    "kejang": null,
-    "meriang": null,
-    "kaku": null,
-    "mati rasa": null,
-    "sakit kepala": null,
-    "cedera": null,
-    "apotek": null,
+    "jari": 0.0,
+    "lutut": 0.0,
+    "bahu": 0.0,
+    "gatal": 0.0,
+    "diare": 0.0,
+    "pendarahan": 0.0,
+    "pingsan": 0.0,
+    "kejang": 0.0,
+    "meriang": 0.0,
+    "kaku": 0.0,
+    "mati_rasa": 0.0,
+    "sakit_kepala": 0.0,
+    "cedera": 0.0,
+    "apotek": 0.0,
     "tablet": 0.0,
-    "kapsul": null,
+    "kapsul": 0.0,
     "sirup": 0.0,
-    "antibiotik": null,
-    "vitamin": null,
-    "dosis": null,
-    "minum obat": null,
-    "sebelum makan": 0.0,
-    "sesudah makan": 0.0,
+    "antibiotik": 0.0,
+    "vitamin": 0.0,
+    "dosis": 0.0,
+    "minum_obat": 0.0,
+    "sebelum_makan": 0.0,
+    "sesudah_makan": 0.0,
     "hari": 0.0,
     "minggu": 0.0,
     "bulan": 0.0,
     "kontrol": 0.0,
     "terapi": 0.0,
     "rehabilitasi": 0.0,
-    "efek samping": 0.0,
+    "efek_samping": 0.0,
     "pemeriksaan": 0.0,
     "hasil": 0.0,
     "tes": 0.0,
     "urine": 0.0,
-    "tekanan darah": 0.0,
-    "berat badan": 0.0,
-    "tinggi badan": 0.0,
-    "suhu tubuh": 0.0,
-    "denyut nadi": 0.0,
-    "napas cepat": null,
-    "napas lambat": null,
-    "foto rontgen": null,
+    "tekanan_darah": 0.0,
+    "berat_badan": 0.0,
+    "tinggi_badan": 0.0,
+    "suhu_tubuh": 0.0,
+    "denyut_nadi": 0.0,
+    "napas_cepat": 0.0,
+    "napas_lambat": 0.0,
+    "foto_rontgen": 0.0,
     "usg": 0.0,
-    "ct scan": 0.0,
+    "ct_scan": 0.0,
     "mri": null,
     "positif": 0.0,
     "negatif": 0.0,
@@ -1156,38 +1480,38 @@
     "sedang": 0.0,
     "berat": 0.0,
     "stabil": 0.0,
-    "tidak stabil": 0.0,
-    "sadar": null,
-    "tidak sadar": null,
+    "tidak_stabil": 0.0,
+    "sadar": 0.0,
+    "tidak_sadar": null,
     "lemah": null,
-    "lelah": null,
-    "gelisah": null,
-    "cemas": null,
+    "lelah": 0.0,
+    "gelisah": 0.0,
+    "cemas": 0.0,
     "takut": 0.0,
-    "sedih": null,
+    "sedih": 0.0,
     "stres": 0.0,
     "nyaman": null,
-    "tidak nyaman": null,
+    "tidak_nyaman": null,
     "sehat": null,
-    "pendaftaran": null,
-    "nomor antrean": null,
-    "ruang tunggu": null,
-    "ruang periksa": null,
-    "kamar pasien": null,
-    "instalasi gawat darurat": null,
-    "dokter spesialis": null,
-    "jadwal": null,
-    "janji temu": null,
+    "pendaftaran": 0.0,
+    "nomor_antrean": 0.0,
+    "ruang_tunggu": null,
+    "ruang_periksa": null,
+    "kamar_pasien": 0.0,
+    "instalasi_gawat_darurat": 0.0,
+    "dokter_spesialis": 0.0,
+    "jadwal": 0.0,
+    "janji_temu": 0.0,
     "rujukan": null,
-    "administrasi": null,
-    "pembayaran": null,
-    "bpjs": null,
-    "asuransi": null,
-    "identitas": null,
-    "kartu pasien": null,
-    "pendamping": null,
+    "administrasi": 0.0,
+    "pembayaran": 0.0,
+    "bpjs": 0.0,
+    "asuransi": 0.0,
+    "identitas": 0.0,
+    "kartu_pasien": 0.0,
+    "pendamping": 0.0,
     "wali": null,
-    "tanda tangan": null,
+    "tanda_tangan": null,
     "selesai": null,
     "halo_test": null,
     "a": null,
@@ -1227,6 +1551,3406 @@
     "9": null
   },
   "invalid": [
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_001.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_002.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_003.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_004.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_005.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_006.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_007.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_008.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_009.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_010.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_011.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_012.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_013.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_014.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_015.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_016.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_017.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_018.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_019.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_020.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_021.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_022.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_023.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_024.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_025.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_026.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_027.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_028.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_029.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_030.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_031.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_032.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_033.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_034.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_035.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_036.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_037.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_038.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_039.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_040.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_041.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_042.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_043.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_044.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_045.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_046.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_047.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_048.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_049.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\glenn\\agar_glenn_20260811_113854_agar_050.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\loren\\agar_loren_20260813_195008_agar_001.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\loren\\agar_loren_20260813_195008_agar_002.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\loren\\agar_loren_20260813_195008_agar_003.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\loren\\agar_loren_20260813_195008_agar_004.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\loren\\agar_loren_20260813_195008_agar_005.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\loren\\agar_loren_20260813_195008_agar_006.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\loren\\agar_loren_20260813_195008_agar_007.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\loren\\agar_loren_20260813_195008_agar_008.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\loren\\agar_loren_20260813_195008_agar_009.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\loren\\agar_loren_20260813_195008_agar_010.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\loren\\agar_loren_20260813_195008_agar_011.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\loren\\agar_loren_20260813_195008_agar_012.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\loren\\agar_loren_20260813_195008_agar_013.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\loren\\agar_loren_20260813_195008_agar_014.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\loren\\agar_loren_20260813_195008_agar_015.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\loren\\agar_loren_20260813_195008_agar_016.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\loren\\agar_loren_20260813_195008_agar_017.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\loren\\agar_loren_20260813_195008_agar_018.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\loren\\agar_loren_20260813_195008_agar_019.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\loren\\agar_loren_20260813_195008_agar_020.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\loren\\agar_loren_20260813_195008_agar_021.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\loren\\agar_loren_20260813_195008_agar_022.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\loren\\agar_loren_20260813_195008_agar_023.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\loren\\agar_loren_20260813_195008_agar_024.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\agar\\loren\\agar_loren_20260813_195008_agar_025.npy",
+      "reason": "label 'agar' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_001.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_002.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_003.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_004.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_005.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_006.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_007.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_008.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_009.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_010.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_011.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_012.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_013.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_014.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_015.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_016.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_017.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_018.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_019.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_020.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_021.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_022.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_023.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_024.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_025.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_026.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_027.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_028.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_029.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_030.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_031.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_032.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_033.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_034.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_035.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_036.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_037.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_038.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_039.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_040.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_041.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_042.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_043.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_044.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_045.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_046.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_047.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_048.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_049.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\glenn\\dan_glenn_20260810_164938_dan_050.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\loren\\dan_loren_20260813_185531_dan_001.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\loren\\dan_loren_20260813_185531_dan_002.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\loren\\dan_loren_20260813_185531_dan_003.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\loren\\dan_loren_20260813_185531_dan_004.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\loren\\dan_loren_20260813_185531_dan_005.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\loren\\dan_loren_20260813_185531_dan_006.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\loren\\dan_loren_20260813_185531_dan_007.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\loren\\dan_loren_20260813_185531_dan_008.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\loren\\dan_loren_20260813_185531_dan_009.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\loren\\dan_loren_20260813_185531_dan_010.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\loren\\dan_loren_20260813_185531_dan_011.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\loren\\dan_loren_20260813_185531_dan_012.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\loren\\dan_loren_20260813_185531_dan_013.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\loren\\dan_loren_20260813_185531_dan_014.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\loren\\dan_loren_20260813_185531_dan_015.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\loren\\dan_loren_20260813_185531_dan_016.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\loren\\dan_loren_20260813_185531_dan_017.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\loren\\dan_loren_20260813_185531_dan_018.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\loren\\dan_loren_20260813_185531_dan_019.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\loren\\dan_loren_20260813_185531_dan_020.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\loren\\dan_loren_20260813_185531_dan_021.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\loren\\dan_loren_20260813_185531_dan_022.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\loren\\dan_loren_20260813_185531_dan_023.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\loren\\dan_loren_20260813_185531_dan_024.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dan\\loren\\dan_loren_20260813_185531_dan_025.npy",
+      "reason": "label 'dan' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_001.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_002.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_003.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_004.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_005.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_006.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_007.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_008.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_009.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_010.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_011.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_012.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_013.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_014.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_015.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_016.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_017.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_018.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_019.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_020.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_021.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_022.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_023.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_024.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_025.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_026.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_027.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_028.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_029.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_030.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_031.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_032.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_033.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_034.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_035.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_036.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_037.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_038.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_039.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_040.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_041.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_042.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_043.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_044.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_045.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_046.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_047.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_048.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_049.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\glenn\\dari_glenn_20260810_171411_dari_050.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\loren\\dari_loren_20260813_190916_dari_001.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\loren\\dari_loren_20260813_190916_dari_002.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\loren\\dari_loren_20260813_190916_dari_003.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\loren\\dari_loren_20260813_190916_dari_004.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\loren\\dari_loren_20260813_190916_dari_005.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\loren\\dari_loren_20260813_190916_dari_006.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\loren\\dari_loren_20260813_190916_dari_007.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\loren\\dari_loren_20260813_190916_dari_008.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\loren\\dari_loren_20260813_190916_dari_009.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\loren\\dari_loren_20260813_190916_dari_010.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\loren\\dari_loren_20260813_190916_dari_011.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\loren\\dari_loren_20260813_190916_dari_012.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\loren\\dari_loren_20260813_190916_dari_013.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\loren\\dari_loren_20260813_190916_dari_014.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\loren\\dari_loren_20260813_190916_dari_015.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\loren\\dari_loren_20260813_190916_dari_016.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\loren\\dari_loren_20260813_190916_dari_017.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\loren\\dari_loren_20260813_190916_dari_018.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\loren\\dari_loren_20260813_190916_dari_019.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\loren\\dari_loren_20260813_190916_dari_020.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\loren\\dari_loren_20260813_190916_dari_021.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\loren\\dari_loren_20260813_190916_dari_022.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\loren\\dari_loren_20260813_190916_dari_023.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\loren\\dari_loren_20260813_190916_dari_024.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dari\\loren\\dari_loren_20260813_190916_dari_025.npy",
+      "reason": "label 'dari' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_001.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_002.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_003.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_004.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_005.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_006.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_007.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_008.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_009.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_010.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_011.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_012.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_013.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_014.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_015.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_016.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_017.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_018.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_019.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_020.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_021.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_022.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_023.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_024.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_025.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_026.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_027.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_028.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_029.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_030.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_031.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_032.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_033.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_034.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_035.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_036.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_037.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_038.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_039.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_040.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_041.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_042.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_043.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_044.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_045.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_046.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_047.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_048.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_049.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\glenn\\di_glenn_20260810_165924_di_050.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\loren\\di_loren_20260813_190008_di_001.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\loren\\di_loren_20260813_190008_di_002.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\loren\\di_loren_20260813_190008_di_003.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\loren\\di_loren_20260813_190008_di_004.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\loren\\di_loren_20260813_190008_di_005.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\loren\\di_loren_20260813_190008_di_006.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\loren\\di_loren_20260813_190008_di_007.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\loren\\di_loren_20260813_190008_di_008.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\loren\\di_loren_20260813_190008_di_009.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\loren\\di_loren_20260813_190008_di_010.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\loren\\di_loren_20260813_190008_di_011.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\loren\\di_loren_20260813_190008_di_012.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\loren\\di_loren_20260813_190008_di_013.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\loren\\di_loren_20260813_190008_di_014.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\loren\\di_loren_20260813_190008_di_015.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\loren\\di_loren_20260813_190008_di_016.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\loren\\di_loren_20260813_190008_di_017.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\loren\\di_loren_20260813_190008_di_018.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\loren\\di_loren_20260813_190008_di_019.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\loren\\di_loren_20260813_190008_di_020.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\loren\\di_loren_20260813_190008_di_021.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\loren\\di_loren_20260813_190008_di_022.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\loren\\di_loren_20260813_190008_di_023.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\loren\\di_loren_20260813_190008_di_024.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\di\\loren\\di_loren_20260813_190008_di_025.npy",
+      "reason": "label 'di' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_001.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_002.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_003.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_004.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_005.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_006.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_007.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_008.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_009.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_010.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_011.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_012.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_013.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_014.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_015.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_016.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_017.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_018.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_019.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_020.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_021.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_022.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_023.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_024.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_025.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_026.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_027.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_028.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_029.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_030.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_031.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_032.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_033.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_034.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_035.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_036.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_037.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_038.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_039.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_040.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_041.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_042.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_043.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_044.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_045.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_046.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_047.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_048.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_049.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\glenn\\dia_glenn_20260823_235103_dia_050.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\loren\\dia_loren_20260813_182757_dia_001.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\loren\\dia_loren_20260813_182757_dia_002.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\loren\\dia_loren_20260813_182757_dia_003.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\loren\\dia_loren_20260813_182757_dia_004.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\loren\\dia_loren_20260813_182757_dia_005.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\loren\\dia_loren_20260813_182757_dia_006.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\loren\\dia_loren_20260813_182757_dia_007.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\loren\\dia_loren_20260813_182757_dia_008.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\loren\\dia_loren_20260813_182757_dia_009.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\loren\\dia_loren_20260813_182757_dia_010.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\loren\\dia_loren_20260813_182757_dia_011.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\loren\\dia_loren_20260813_182757_dia_012.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\loren\\dia_loren_20260813_182757_dia_013.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\loren\\dia_loren_20260813_182757_dia_014.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\loren\\dia_loren_20260813_182757_dia_015.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\loren\\dia_loren_20260813_182757_dia_016.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\loren\\dia_loren_20260813_182757_dia_017.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\loren\\dia_loren_20260813_182757_dia_018.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\loren\\dia_loren_20260813_182757_dia_019.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\loren\\dia_loren_20260813_182757_dia_020.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\loren\\dia_loren_20260813_182757_dia_021.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\loren\\dia_loren_20260813_182757_dia_022.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\loren\\dia_loren_20260813_182757_dia_023.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\loren\\dia_loren_20260813_182757_dia_024.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\dia\\loren\\dia_loren_20260813_182757_dia_025.npy",
+      "reason": "label 'dia' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kami\\loren\\kami_loren_20260813_183759_kami_001.npy",
+      "reason": "label 'kami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kami\\loren\\kami_loren_20260813_183759_kami_002.npy",
+      "reason": "label 'kami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kami\\loren\\kami_loren_20260813_183759_kami_003.npy",
+      "reason": "label 'kami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kami\\loren\\kami_loren_20260813_183759_kami_004.npy",
+      "reason": "label 'kami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kami\\loren\\kami_loren_20260813_183759_kami_005.npy",
+      "reason": "label 'kami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kami\\loren\\kami_loren_20260813_183759_kami_006.npy",
+      "reason": "label 'kami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kami\\loren\\kami_loren_20260813_183759_kami_007.npy",
+      "reason": "label 'kami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kami\\loren\\kami_loren_20260813_183759_kami_008.npy",
+      "reason": "label 'kami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kami\\loren\\kami_loren_20260813_183759_kami_009.npy",
+      "reason": "label 'kami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kami\\loren\\kami_loren_20260813_183759_kami_010.npy",
+      "reason": "label 'kami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kami\\loren\\kami_loren_20260813_183759_kami_011.npy",
+      "reason": "label 'kami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kami\\loren\\kami_loren_20260813_183759_kami_012.npy",
+      "reason": "label 'kami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kami\\loren\\kami_loren_20260813_183759_kami_013.npy",
+      "reason": "label 'kami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kami\\loren\\kami_loren_20260813_183759_kami_014.npy",
+      "reason": "label 'kami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kami\\loren\\kami_loren_20260813_183759_kami_015.npy",
+      "reason": "label 'kami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kami\\loren\\kami_loren_20260813_183759_kami_016.npy",
+      "reason": "label 'kami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kami\\loren\\kami_loren_20260813_183759_kami_017.npy",
+      "reason": "label 'kami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kami\\loren\\kami_loren_20260813_183759_kami_018.npy",
+      "reason": "label 'kami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kami\\loren\\kami_loren_20260813_183759_kami_019.npy",
+      "reason": "label 'kami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kami\\loren\\kami_loren_20260813_183759_kami_020.npy",
+      "reason": "label 'kami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kami\\loren\\kami_loren_20260813_183759_kami_021.npy",
+      "reason": "label 'kami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kami\\loren\\kami_loren_20260813_183759_kami_022.npy",
+      "reason": "label 'kami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kami\\loren\\kami_loren_20260813_183759_kami_023.npy",
+      "reason": "label 'kami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kami\\loren\\kami_loren_20260813_183759_kami_024.npy",
+      "reason": "label 'kami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kami\\loren\\kami_loren_20260813_183759_kami_025.npy",
+      "reason": "label 'kami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_001.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_002.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_003.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_004.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_005.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_006.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_007.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_008.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_009.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_010.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_011.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_012.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_013.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_014.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_015.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_016.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_017.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_018.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_019.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_020.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_021.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_022.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_023.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_024.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_025.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_026.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_027.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_028.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_029.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_030.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_031.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_032.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_033.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_034.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_035.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_036.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_037.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_038.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_039.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_040.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_041.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_042.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_043.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_044.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_045.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_046.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_047.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_048.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_049.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_161435_kamu_050.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_163422_kamu_001.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_163422_kamu_002.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_163422_kamu_003.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_163422_kamu_004.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_163422_kamu_005.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_163422_kamu_006.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_163422_kamu_007.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_163422_kamu_008.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_163422_kamu_009.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_163422_kamu_010.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_163422_kamu_011.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_163422_kamu_012.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_163422_kamu_013.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_163422_kamu_014.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_163422_kamu_015.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_163422_kamu_016.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_163422_kamu_017.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_163422_kamu_018.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_163422_kamu_019.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_163422_kamu_020.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_163422_kamu_021.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_163422_kamu_022.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_163422_kamu_023.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_163422_kamu_024.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\glenn\\kamu_glenn_20260810_163422_kamu_025.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\loren\\kamu_loren_20260813_182236_kamu_001.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\loren\\kamu_loren_20260813_182236_kamu_002.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\loren\\kamu_loren_20260813_182236_kamu_003.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\loren\\kamu_loren_20260813_182236_kamu_004.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\loren\\kamu_loren_20260813_182236_kamu_005.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\loren\\kamu_loren_20260813_182236_kamu_006.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\loren\\kamu_loren_20260813_182236_kamu_007.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\loren\\kamu_loren_20260813_182236_kamu_008.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\loren\\kamu_loren_20260813_182236_kamu_009.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\loren\\kamu_loren_20260813_182236_kamu_010.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\loren\\kamu_loren_20260813_182236_kamu_011.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\loren\\kamu_loren_20260813_182236_kamu_012.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\loren\\kamu_loren_20260813_182236_kamu_013.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\loren\\kamu_loren_20260813_182236_kamu_014.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\loren\\kamu_loren_20260813_182236_kamu_015.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\loren\\kamu_loren_20260813_182236_kamu_016.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\loren\\kamu_loren_20260813_182236_kamu_017.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\loren\\kamu_loren_20260813_182236_kamu_018.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\loren\\kamu_loren_20260813_182236_kamu_019.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\loren\\kamu_loren_20260813_182236_kamu_020.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\loren\\kamu_loren_20260813_182236_kamu_021.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\loren\\kamu_loren_20260813_182236_kamu_022.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\loren\\kamu_loren_20260813_182236_kamu_023.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\loren\\kamu_loren_20260813_182236_kamu_024.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kamu\\loren\\kamu_loren_20260813_182236_kamu_025.npy",
+      "reason": "label 'kamu' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_001.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_002.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_003.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_004.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_005.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_006.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_007.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_008.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_009.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_010.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_011.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_012.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_013.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_014.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_015.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_016.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_017.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_018.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_019.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_020.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_021.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_022.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_023.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_024.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_025.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_026.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_027.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_028.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_029.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_030.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_031.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_032.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_033.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_034.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_035.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_036.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_037.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_038.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_039.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_040.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_041.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_042.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_043.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_044.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_045.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_046.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_047.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_048.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_049.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\glenn\\karena_glenn_20260810_173731_karena_050.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\loren\\karena_loren_20260813_191805_karena_001.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\loren\\karena_loren_20260813_191805_karena_002.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\loren\\karena_loren_20260813_191805_karena_003.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\loren\\karena_loren_20260813_191805_karena_004.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\loren\\karena_loren_20260813_191805_karena_005.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\loren\\karena_loren_20260813_191805_karena_006.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\loren\\karena_loren_20260813_191805_karena_007.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\loren\\karena_loren_20260813_191805_karena_008.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\loren\\karena_loren_20260813_191805_karena_009.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\loren\\karena_loren_20260813_191805_karena_010.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\loren\\karena_loren_20260813_191805_karena_011.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\loren\\karena_loren_20260813_191805_karena_012.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\loren\\karena_loren_20260813_191805_karena_013.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\loren\\karena_loren_20260813_191805_karena_014.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\loren\\karena_loren_20260813_191805_karena_015.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\loren\\karena_loren_20260813_191805_karena_016.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\loren\\karena_loren_20260813_191805_karena_017.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\loren\\karena_loren_20260813_191805_karena_018.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\loren\\karena_loren_20260813_191805_karena_019.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\loren\\karena_loren_20260813_191805_karena_020.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\loren\\karena_loren_20260813_191805_karena_021.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\loren\\karena_loren_20260813_191805_karena_022.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\loren\\karena_loren_20260813_191805_karena_023.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\loren\\karena_loren_20260813_191805_karena_024.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\karena\\loren\\karena_loren_20260813_191805_karena_025.npy",
+      "reason": "label 'karena' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\ke\\loren\\ke_loren_20260813_190442_ke_001.npy",
+      "reason": "label 'ke' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\ke\\loren\\ke_loren_20260813_190442_ke_002.npy",
+      "reason": "label 'ke' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\ke\\loren\\ke_loren_20260813_190442_ke_003.npy",
+      "reason": "label 'ke' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\ke\\loren\\ke_loren_20260813_190442_ke_004.npy",
+      "reason": "label 'ke' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\ke\\loren\\ke_loren_20260813_190442_ke_005.npy",
+      "reason": "label 'ke' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\ke\\loren\\ke_loren_20260813_190442_ke_006.npy",
+      "reason": "label 'ke' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\ke\\loren\\ke_loren_20260813_190442_ke_007.npy",
+      "reason": "label 'ke' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\ke\\loren\\ke_loren_20260813_190442_ke_008.npy",
+      "reason": "label 'ke' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\ke\\loren\\ke_loren_20260813_190442_ke_009.npy",
+      "reason": "label 'ke' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\ke\\loren\\ke_loren_20260813_190442_ke_010.npy",
+      "reason": "label 'ke' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\ke\\loren\\ke_loren_20260813_190442_ke_011.npy",
+      "reason": "label 'ke' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\ke\\loren\\ke_loren_20260813_190442_ke_012.npy",
+      "reason": "label 'ke' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\ke\\loren\\ke_loren_20260813_190442_ke_013.npy",
+      "reason": "label 'ke' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\ke\\loren\\ke_loren_20260813_190442_ke_014.npy",
+      "reason": "label 'ke' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\ke\\loren\\ke_loren_20260813_190442_ke_015.npy",
+      "reason": "label 'ke' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\ke\\loren\\ke_loren_20260813_190442_ke_016.npy",
+      "reason": "label 'ke' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\ke\\loren\\ke_loren_20260813_190442_ke_017.npy",
+      "reason": "label 'ke' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\ke\\loren\\ke_loren_20260813_190442_ke_018.npy",
+      "reason": "label 'ke' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\ke\\loren\\ke_loren_20260813_190442_ke_019.npy",
+      "reason": "label 'ke' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\ke\\loren\\ke_loren_20260813_190442_ke_020.npy",
+      "reason": "label 'ke' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\ke\\loren\\ke_loren_20260813_190442_ke_021.npy",
+      "reason": "label 'ke' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\ke\\loren\\ke_loren_20260813_190442_ke_022.npy",
+      "reason": "label 'ke' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\ke\\loren\\ke_loren_20260813_190442_ke_023.npy",
+      "reason": "label 'ke' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\ke\\loren\\ke_loren_20260813_190442_ke_024.npy",
+      "reason": "label 'ke' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\ke\\loren\\ke_loren_20260813_190442_ke_025.npy",
+      "reason": "label 'ke' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_001.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_002.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_003.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_004.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_005.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_006.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_007.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_008.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_009.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_010.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_011.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_012.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_013.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_014.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_015.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_016.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_017.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_018.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_019.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_020.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_021.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_022.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_023.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_024.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_025.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_026.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_027.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_028.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_029.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_030.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_031.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_032.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_033.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_034.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_035.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_036.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_037.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_038.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_039.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_040.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_041.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_042.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_043.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_044.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_045.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_046.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_047.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_048.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_049.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\glenn\\kita_glenn_20260823_235756_kita_050.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\loren\\kita_loren_20260813_183359_kita_001.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\loren\\kita_loren_20260813_183359_kita_002.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\loren\\kita_loren_20260813_183359_kita_003.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\loren\\kita_loren_20260813_183359_kita_004.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\loren\\kita_loren_20260813_183359_kita_005.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\loren\\kita_loren_20260813_183359_kita_006.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\loren\\kita_loren_20260813_183359_kita_007.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\loren\\kita_loren_20260813_183359_kita_008.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\loren\\kita_loren_20260813_183359_kita_009.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\loren\\kita_loren_20260813_183359_kita_010.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\loren\\kita_loren_20260813_183359_kita_011.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\loren\\kita_loren_20260813_183359_kita_012.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\loren\\kita_loren_20260813_183359_kita_013.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\loren\\kita_loren_20260813_183359_kita_014.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\loren\\kita_loren_20260813_183359_kita_015.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\loren\\kita_loren_20260813_183359_kita_016.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\loren\\kita_loren_20260813_183359_kita_017.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\loren\\kita_loren_20260813_183359_kita_018.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\loren\\kita_loren_20260813_183359_kita_019.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\loren\\kita_loren_20260813_183359_kita_020.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\loren\\kita_loren_20260813_183359_kita_021.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\loren\\kita_loren_20260813_183359_kita_022.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\loren\\kita_loren_20260813_183359_kita_023.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\loren\\kita_loren_20260813_183359_kita_024.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\kita\\loren\\kita_loren_20260813_183359_kita_025.npy",
+      "reason": "label 'kita' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_001.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_002.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_003.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_004.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_005.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_006.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_007.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_008.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_009.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_010.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_011.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_012.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_013.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_014.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_015.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_016.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_017.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_018.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_019.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_020.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_021.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_022.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_023.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_024.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_025.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_026.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_027.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_028.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_029.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_030.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_031.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_032.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_033.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_034.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_035.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_036.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_037.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_038.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_039.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_040.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_041.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_042.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_043.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_044.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_045.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_046.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_047.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_048.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_049.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\glenn\\mengalami_glenn_20260810_191921_mengalami_050.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\loren\\mengalami_loren_20260813_194422_mengalami_001.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\loren\\mengalami_loren_20260813_194422_mengalami_002.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\loren\\mengalami_loren_20260813_194422_mengalami_003.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\loren\\mengalami_loren_20260813_194422_mengalami_004.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\loren\\mengalami_loren_20260813_194422_mengalami_005.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\loren\\mengalami_loren_20260813_194422_mengalami_006.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\loren\\mengalami_loren_20260813_194422_mengalami_007.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\loren\\mengalami_loren_20260813_194422_mengalami_008.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\loren\\mengalami_loren_20260813_194422_mengalami_009.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\loren\\mengalami_loren_20260813_194422_mengalami_010.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\loren\\mengalami_loren_20260813_194422_mengalami_011.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\loren\\mengalami_loren_20260813_194422_mengalami_012.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\loren\\mengalami_loren_20260813_194422_mengalami_013.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\loren\\mengalami_loren_20260813_194422_mengalami_014.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\loren\\mengalami_loren_20260813_194422_mengalami_015.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\loren\\mengalami_loren_20260813_194422_mengalami_016.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\loren\\mengalami_loren_20260813_194422_mengalami_017.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\loren\\mengalami_loren_20260813_194422_mengalami_018.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\loren\\mengalami_loren_20260813_194422_mengalami_019.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\loren\\mengalami_loren_20260813_194422_mengalami_020.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\loren\\mengalami_loren_20260813_194422_mengalami_021.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\loren\\mengalami_loren_20260813_194422_mengalami_022.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\loren\\mengalami_loren_20260813_194422_mengalami_023.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\loren\\mengalami_loren_20260813_194422_mengalami_024.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mengalami\\loren\\mengalami_loren_20260813_194422_mengalami_025.npy",
+      "reason": "label 'mengalami' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_001.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_002.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_003.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_004.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_005.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_006.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_007.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_008.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_009.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_010.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_011.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_012.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_013.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_014.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_015.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_016.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_017.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_018.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_019.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_020.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_021.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_022.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_023.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_024.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_025.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_026.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_027.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_028.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_029.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_030.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_031.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_032.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_033.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_034.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_035.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_036.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_037.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_038.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_039.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_040.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_041.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_042.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_043.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_044.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_045.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_046.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_047.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_048.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_049.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\glenn\\merasa_glenn_20260810_181551_merasa_050.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\loren\\merasa_loren_20260813_192619_merasa_001.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\loren\\merasa_loren_20260813_192619_merasa_002.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\loren\\merasa_loren_20260813_192619_merasa_003.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\loren\\merasa_loren_20260813_192619_merasa_004.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\loren\\merasa_loren_20260813_192619_merasa_005.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\loren\\merasa_loren_20260813_192619_merasa_006.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\loren\\merasa_loren_20260813_192619_merasa_007.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\loren\\merasa_loren_20260813_192619_merasa_008.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\loren\\merasa_loren_20260813_192619_merasa_009.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\loren\\merasa_loren_20260813_192619_merasa_010.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\loren\\merasa_loren_20260813_192619_merasa_011.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\loren\\merasa_loren_20260813_192619_merasa_012.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\loren\\merasa_loren_20260813_192619_merasa_013.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\loren\\merasa_loren_20260813_192619_merasa_014.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\loren\\merasa_loren_20260813_192619_merasa_015.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\loren\\merasa_loren_20260813_192619_merasa_016.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\loren\\merasa_loren_20260813_192619_merasa_017.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\loren\\merasa_loren_20260813_192619_merasa_018.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\loren\\merasa_loren_20260813_192619_merasa_019.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\loren\\merasa_loren_20260813_192619_merasa_020.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\loren\\merasa_loren_20260813_192619_merasa_021.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\loren\\merasa_loren_20260813_192619_merasa_022.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\loren\\merasa_loren_20260813_192619_merasa_023.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\loren\\merasa_loren_20260813_192619_merasa_024.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\merasa\\loren\\merasa_loren_20260813_192619_merasa_025.npy",
+      "reason": "label 'merasa' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mereka\\loren\\mereka_loren_20260813_184233_mereka_001.npy",
+      "reason": "label 'mereka' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mereka\\loren\\mereka_loren_20260813_184233_mereka_002.npy",
+      "reason": "label 'mereka' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mereka\\loren\\mereka_loren_20260813_184233_mereka_003.npy",
+      "reason": "label 'mereka' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mereka\\loren\\mereka_loren_20260813_184233_mereka_004.npy",
+      "reason": "label 'mereka' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mereka\\loren\\mereka_loren_20260813_184233_mereka_005.npy",
+      "reason": "label 'mereka' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mereka\\loren\\mereka_loren_20260813_184233_mereka_006.npy",
+      "reason": "label 'mereka' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mereka\\loren\\mereka_loren_20260813_184233_mereka_007.npy",
+      "reason": "label 'mereka' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mereka\\loren\\mereka_loren_20260813_184233_mereka_008.npy",
+      "reason": "label 'mereka' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mereka\\loren\\mereka_loren_20260813_184233_mereka_009.npy",
+      "reason": "label 'mereka' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mereka\\loren\\mereka_loren_20260813_184233_mereka_010.npy",
+      "reason": "label 'mereka' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mereka\\loren\\mereka_loren_20260813_184233_mereka_011.npy",
+      "reason": "label 'mereka' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mereka\\loren\\mereka_loren_20260813_184233_mereka_012.npy",
+      "reason": "label 'mereka' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mereka\\loren\\mereka_loren_20260813_184233_mereka_013.npy",
+      "reason": "label 'mereka' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mereka\\loren\\mereka_loren_20260813_184233_mereka_014.npy",
+      "reason": "label 'mereka' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mereka\\loren\\mereka_loren_20260813_184233_mereka_015.npy",
+      "reason": "label 'mereka' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mereka\\loren\\mereka_loren_20260813_184233_mereka_016.npy",
+      "reason": "label 'mereka' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mereka\\loren\\mereka_loren_20260813_184233_mereka_017.npy",
+      "reason": "label 'mereka' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mereka\\loren\\mereka_loren_20260813_184233_mereka_018.npy",
+      "reason": "label 'mereka' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mereka\\loren\\mereka_loren_20260813_184233_mereka_019.npy",
+      "reason": "label 'mereka' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mereka\\loren\\mereka_loren_20260813_184233_mereka_020.npy",
+      "reason": "label 'mereka' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mereka\\loren\\mereka_loren_20260813_184233_mereka_021.npy",
+      "reason": "label 'mereka' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mereka\\loren\\mereka_loren_20260813_184233_mereka_022.npy",
+      "reason": "label 'mereka' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mereka\\loren\\mereka_loren_20260813_184233_mereka_023.npy",
+      "reason": "label 'mereka' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mereka\\loren\\mereka_loren_20260813_184233_mereka_024.npy",
+      "reason": "label 'mereka' tidak ada di labels.json"
+    },
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\mereka\\loren\\mereka_loren_20260813_184233_mereka_025.npy",
+      "reason": "label 'mereka' tidak ada di labels.json"
+    },
     {
       "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit\\albert_william\\sakit_albert_william_test_sess_valid_sakit_999.npy",
       "reason": "empty_frame_ratio 100.00% melebihi batas 10.00%"

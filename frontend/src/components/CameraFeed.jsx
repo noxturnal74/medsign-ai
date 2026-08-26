@@ -78,7 +78,9 @@ export const CameraFeed = () => {
 
     spellingMode,
 
-    setSpellingMode
+    setSpellingMode,
+
+    activeSessionId
 
   } = useContext(AppContext);
 
@@ -149,9 +151,15 @@ export const CameraFeed = () => {
 
           lastAppendedWordRef.current = word;
 
+          // Auto-TTS + simpan ke log sesi (addLogEntry otomatis speak utk role patient)
 
+          addLogEntry(
 
+            { role: "patient", text: word, confidence: result.confidence, source: "gesture" },
 
+            activeSessionId
+
+          );
 
         }
 
