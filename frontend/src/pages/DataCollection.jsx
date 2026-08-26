@@ -8983,20 +8983,26 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
         if (!response.ok) {
 
+          // Parse error detail from backend JSON
+          const errorText = await response.text();
+
+          let detail = "Gagal memulai training";
+
+          try {
+
+            const err = JSON.parse(errorText);
+
+            detail = err.detail || err.message || "Gagal memulai training";
+
+          } catch {
+
+            detail = response.statusText || "Gagal memulai training";
+
+          }
+
           setLogs(
 
-            (prev) =>
-
-              const errorText = await response.text();
-              let detail = "Gagal memulai training";
-              try {
-                const err = JSON.parse(errorText);
-                detail = err.detail || err.message || "Gagal memulai training";
-              } catch {
-                detail = response.statusText || "Gagal memulai training";
-              }
-              prev + `Error starting training: ${detail}
-`,
+            (prev) => prev + `Error starting training: ${detail}\n`,
 
           );
 
@@ -9005,8 +9011,8 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
           setIsTraining(false);
 
           return;
-
         }
+
 
 
 
