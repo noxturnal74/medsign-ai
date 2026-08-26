@@ -8987,7 +8987,16 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
             (prev) =>
 
-              prev + `Error starting training: ${response.statusText}\n`,
+              const errorText = await response.text();
+              let detail = "Gagal memulai training";
+              try {
+                const err = JSON.parse(errorText);
+                detail = err.detail || err.message || "Gagal memulai training";
+              } catch {
+                detail = response.statusText || "Gagal memulai training";
+              }
+              prev + `Error starting training: ${detail}
+`,
 
           );
 
