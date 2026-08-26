@@ -10,7 +10,11 @@
   }
 
   /* ── RESPONSIVE MOBILE HELPERS ── */
-  @media (max-width: 640px) {
+  img, video, canvas, svg {
+    max-width: 100%;
+  }
+
+  @media (max-width: 768px) {
     /* Tabel lebar selalu bisa digeser horizontal, tidak merusak layout */
     table {
       display: block;
@@ -18,15 +22,25 @@
       white-space: nowrap;
     }
     /* Grid berat jadi 1 kolom di ponsel */
-    .lg\:grid-cols-12 { grid-template-columns: 1fr !important; }
-    /* Padding halaman lebih rapat */
-    .px-4.md\:px-10, .md\:px-10.lg\:px-16 { padding-left: 1rem; padding-right: 1rem; }
+    .lg\:grid-cols-12,
+    .md\:grid-cols-2,
+    .md\:grid-cols-3,
+    .lg\:grid-cols-2,
+    .lg\:grid-cols-3,
+    .lg\:grid-cols-4,
+    .lg\:grid-cols-5 {
+      grid-template-columns: 1fr !important;
+    }
     /* Judul besar mengecil */
-    h2 { font-size: 1.35rem; }
-    .text-3xl { font-size: 1.5rem; }
-    .text-4xl { font-size: 1.75rem; }
-    /* Panel kaca tidak terlalu tebal paddingnya */
+    h1 { font-size: 1.35rem !important; }
+    h2 { font-size: 1.3rem !important; }
+    h3 { font-size: 1.15rem !important; }
+    .text-3xl { font-size: 1.45rem !important; }
+    .text-4xl { font-size: 1.7rem !important; }
+    /* Panel kaca lebih rapat */
     .glass-panel { border-radius: 22px; }
+    /* Semua elemen tidak boleh meluber layar */
+    body { overflow-x: hidden; }
   }
 
   /* ── DARK MODE (class-based, persist di localStorage) ── */

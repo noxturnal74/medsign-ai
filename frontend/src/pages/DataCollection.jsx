@@ -9866,13 +9866,13 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
       {/* Header & Tabs */}
 
-      <div className="glass-panel flex flex-col md:flex-row items-center justify-between rounded-3xl p-4 gap-4 shadow-md">
+      <div className="glass-panel flex flex-col md:flex-row md:items-center justify-between rounded-3xl p-3 sm:p-4 gap-3 shadow-md">
 
         <button
 
           onClick={() => setView("home")}
 
-          className="glass-button rounded-2xl px-4 py-2 text-xs font-black transition-all hover:scale-[1.01]"
+          className="glass-button rounded-2xl px-4 py-2 text-xs font-black transition-all hover:scale-[1.01] self-start shrink-0"
 
         >
 
@@ -9888,14 +9888,14 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
         {!isSessionActive && (
 
-          <div className="flex items-center gap-1 rounded-2xl bg-slate-900/10 p-1.5 backdrop-blur-xl border border-white/50 shadow-sm shrink-0 select-none max-w-full overflow-x-auto scrollbar-none">
+          <div className="flex items-center gap-1 rounded-2xl bg-slate-900/10 p-1.5 backdrop-blur-xl border border-white/50 shadow-sm min-w-0 flex-1 select-none overflow-x-auto scrollbar-none">
 
             {['admin', 'super_admin'].includes(currentUser?.role) && (
               <button
 
                 onClick={() => handleTabChange("overview")}
 
-                className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all ${
+                className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all shrink-0 whitespace-nowrap ${
 
                   activeTab === "overview"
 
@@ -9917,7 +9917,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
               onClick={() => handleTabChange("record")}
 
-              className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all ${
+              className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all shrink-0 whitespace-nowrap ${
 
                 activeTab === "record"
 
@@ -9941,7 +9941,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
               onClick={() => handleTabChange("balance")}
 
-              className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all ${
+              className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all shrink-0 whitespace-nowrap ${
 
                 activeTab === "balance"
 
@@ -9963,7 +9963,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
               onClick={() => handleTabChange("augmentation")}
 
-              className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all ${
+              className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all shrink-0 whitespace-nowrap ${
 
                 activeTab === "augmentation"
 
@@ -9985,7 +9985,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
               onClick={() => handleTabChange("training")}
 
-              className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all ${
+              className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all shrink-0 whitespace-nowrap ${
 
                 activeTab === "training"
 
@@ -10008,7 +10008,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
               <>
                 <button
                   onClick={() => handleTabChange("articles")}
-                  className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all ${
+                  className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all shrink-0 whitespace-nowrap ${
                     activeTab === "articles"
                       ? "bg-white text-sky-700 shadow-sm border border-slate-200/20"
                       : "text-slate-500 hover:text-slate-950"
@@ -10019,7 +10019,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
                 <button
                   onClick={() => handleTabChange("instagram")}
-                  className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all ${
+                  className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all shrink-0 whitespace-nowrap ${
                     activeTab === "instagram"
                       ? "bg-white text-sky-700 shadow-sm border border-slate-200/20"
                       : "text-slate-500 hover:text-slate-950"
@@ -10030,7 +10030,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
                 <button
                   onClick={() => handleTabChange("reviews")}
-                  className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all ${
+                  className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all shrink-0 whitespace-nowrap ${
                     activeTab === "reviews"
                       ? "bg-white text-sky-700 shadow-sm border border-slate-200/20"
                       : "text-slate-500 hover:text-slate-950"
@@ -10041,7 +10041,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
                 <button
                   onClick={() => handleTabChange("mitra")}
-                  className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all ${
+                  className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all shrink-0 whitespace-nowrap ${
                     activeTab === "mitra"
                       ? "bg-white text-sky-700 shadow-sm border border-slate-200/20"
                       : "text-slate-500 hover:text-slate-950"
@@ -10052,7 +10052,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
                 <button
                   onClick={() => handleTabChange("users")}
-                  className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all ${
+                  className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all shrink-0 whitespace-nowrap ${
                     activeTab === "users"
                       ? "bg-white text-sky-700 shadow-sm border border-slate-200/20"
                       : "text-slate-500 hover:text-slate-950"
