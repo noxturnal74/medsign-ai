@@ -95,7 +95,7 @@ export const useMediaPipe = (isActive, videoElement, isMirrored = true) => {
                 
                 // If both wrists and middle finger MCPs are extremely close (less than 8% screen size),
                 // it is highly likely a single hand detected twice.
-                if (distWrist < 0.08 && distMcp < 0.08) {
+                if (distWrist < 0.035 && distMcp < 0.035) {
                   const score1 = filteredHandedness[0]?.score || 0;
                   const score2 = filteredHandedness[1]?.score || 0;
                   
