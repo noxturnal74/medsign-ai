@@ -212,7 +212,7 @@
     },
     {
       "id": 29,
-      "slug": "berat tengkuk",
+      "slug": "berat_tengkuk",
       "display": "Berat (tengkuk terasa berat)",
       "category": "hipertensi___kardiovaskular",
       "emergency": false
@@ -513,7 +513,7 @@
     },
     {
       "id": 72,
-      "slug": "di mana",
+      "slug": "di_mana",
       "display": "Di mana",
       "category": "kata_tanya",
       "emergency": false
@@ -534,28 +534,28 @@
     },
     {
       "id": 75,
-      "slug": "berapa lama",
+      "slug": "berapa_lama",
       "display": "Berapa lama",
       "category": "kata_tanya",
       "emergency": false
     },
     {
       "id": 76,
-      "slug": "sejak kapan",
+      "slug": "sejak_kapan",
       "display": "Sejak kapan",
       "category": "kata_tanya",
       "emergency": false
     },
     {
       "id": 77,
-      "slug": "bagian mana",
+      "slug": "bagian_mana",
       "display": "Bagian mana",
       "category": "kata_tanya",
       "emergency": false
     },
     {
       "id": 78,
-      "slug": "seberapa sering",
+      "slug": "seberapa_sering",
       "display": "Seberapa sering",
       "category": "kata_tanya",
       "emergency": false
@@ -583,7 +583,7 @@
     },
     {
       "id": 82,
-      "slug": "terima kasih",
+      "slug": "terima_kasih",
       "display": "Terima kasih",
       "category": "komunikasi_dasar",
       "emergency": false
@@ -597,7 +597,7 @@
     },
     {
       "id": 84,
-      "slug": "tidak mengerti",
+      "slug": "tidak_mengerti",
       "display": "Tidak mengerti",
       "category": "komunikasi_dasar",
       "emergency": false
@@ -632,7 +632,7 @@
     },
     {
       "id": 89,
-      "slug": "rumah sakit",
+      "slug": "rumah_sakit",
       "display": "Rumah sakit",
       "category": "fasilitas_tindakan_medis",
       "emergency": false
@@ -695,7 +695,7 @@
     },
     {
       "id": 98,
-      "slug": "rawat inap",
+      "slug": "rawat_inap",
       "display": "Rawat inap",
       "category": "fasilitas_tindakan_medis",
       "emergency": false
@@ -821,14 +821,14 @@
     },
     {
       "id": 116,
-      "slug": "mati rasa",
+      "slug": "mati_rasa",
       "display": "Mati rasa",
       "category": "gejala_tambahan",
       "emergency": false
     },
     {
       "id": 117,
-      "slug": "sakit kepala",
+      "slug": "sakit_kepala",
       "display": "Sakit kepala",
       "category": "gejala_tambahan",
       "emergency": true
@@ -891,21 +891,21 @@
     },
     {
       "id": 126,
-      "slug": "minum obat",
+      "slug": "minum_obat",
       "display": "Minum obat",
       "category": "obat_pengobatan",
       "emergency": false
     },
     {
       "id": 127,
-      "slug": "sebelum makan",
+      "slug": "sebelum_makan",
       "display": "Sebelum makan",
       "category": "obat_pengobatan",
       "emergency": false
     },
     {
       "id": 128,
-      "slug": "sesudah makan",
+      "slug": "sesudah_makan",
       "display": "Sesudah makan",
       "category": "obat_pengobatan",
       "emergency": false
@@ -954,7 +954,7 @@
     },
     {
       "id": 135,
-      "slug": "efek samping",
+      "slug": "efek_samping",
       "display": "Efek Samping",
       "category": "obat_pengobatan",
       "emergency": false
@@ -989,56 +989,56 @@
     },
     {
       "id": 140,
-      "slug": "tekanan darah",
+      "slug": "tekanan_darah",
       "display": "Tekanan darah",
       "category": "pemeriksaan_medis",
       "emergency": false
     },
     {
       "id": 141,
-      "slug": "berat badan",
+      "slug": "berat_badan",
       "display": "Berat badan",
       "category": "pemeriksaan_medis",
       "emergency": false
     },
     {
       "id": 142,
-      "slug": "tinggi badan",
+      "slug": "tinggi_badan",
       "display": "Tinggi badan",
       "category": "pemeriksaan_medis",
       "emergency": false
     },
     {
       "id": 143,
-      "slug": "suhu tubuh",
+      "slug": "suhu_tubuh",
       "display": "Suhu tubuh",
       "category": "pemeriksaan_medis",
       "emergency": false
     },
     {
       "id": 144,
-      "slug": "denyut nadi",
+      "slug": "denyut_nadi",
       "display": "Denyut nadi",
       "category": "pemeriksaan_medis",
       "emergency": false
     },
     {
       "id": 145,
-      "slug": "napas cepat",
+      "slug": "napas_cepat",
       "display": "Napas cepat",
       "category": "pemeriksaan_medis",
       "emergency": false
     },
     {
       "id": 146,
-      "slug": "napas lambat",
+      "slug": "napas_lambat",
       "display": "Napas lambat",
       "category": "pemeriksaan_medis",
       "emergency": false
     },
     {
       "id": 147,
-      "slug": "foto rontgen",
+      "slug": "foto_rontgen",
       "display": "Foto rontgen",
       "category": "pemeriksaan_medis",
       "emergency": false
@@ -1052,7 +1052,7 @@
     },
     {
       "id": 149,
-      "slug": "ct scan",
+      "slug": "ct_scan",
       "display": "CT SCAN",
       "category": "pemeriksaan_medis",
       "emergency": false
@@ -1122,7 +1122,7 @@
     },
     {
       "id": 159,
-      "slug": "tidak stabil",
+      "slug": "tidak_stabil",
       "display": "Tidak stabil",
       "category": "kondisi_pasien",
       "emergency": false
@@ -1136,7 +1136,7 @@
     },
     {
       "id": 161,
-      "slug": "tidak sadar",
+      "slug": "tidak_sadar",
       "display": "Tidak sadar",
       "category": "kondisi_pasien",
       "emergency": true
@@ -1199,7 +1199,7 @@
     },
     {
       "id": 170,
-      "slug": "tidak nyaman",
+      "slug": "tidak_nyaman",
       "display": "Tidak nyaman",
       "category": "kondisi_pasien",
       "emergency": false
@@ -1220,42 +1220,42 @@
     },
     {
       "id": 173,
-      "slug": "nomor antrean",
+      "slug": "nomor_antrean",
       "display": "Nomor antrean",
       "category": "komunikasi_rumah_sakit",
       "emergency": false
     },
     {
       "id": 174,
-      "slug": "ruang tunggu",
+      "slug": "ruang_tunggu",
       "display": "Ruang tunggu",
       "category": "komunikasi_rumah_sakit",
       "emergency": false
     },
     {
       "id": 175,
-      "slug": "ruang periksa",
+      "slug": "ruang_periksa",
       "display": "Ruang periksa",
       "category": "komunikasi_rumah_sakit",
       "emergency": false
     },
     {
       "id": 176,
-      "slug": "kamar pasien",
+      "slug": "kamar_pasien",
       "display": "Kamar pasien",
       "category": "komunikasi_rumah_sakit",
       "emergency": false
     },
     {
       "id": 177,
-      "slug": "instalasi gawat darurat",
+      "slug": "instalasi_gawat_darurat",
       "display": "Instalasi gawat darurat",
       "category": "komunikasi_rumah_sakit",
       "emergency": true
     },
     {
       "id": 178,
-      "slug": "dokter spesialis",
+      "slug": "dokter_spesialis",
       "display": "Dokter spesialis",
       "category": "komunikasi_rumah_sakit",
       "emergency": false
@@ -1269,7 +1269,7 @@
     },
     {
       "id": 180,
-      "slug": "janji temu",
+      "slug": "janji_temu",
       "display": "Janji temu",
       "category": "komunikasi_rumah_sakit",
       "emergency": false
@@ -1318,7 +1318,7 @@
     },
     {
       "id": 187,
-      "slug": "kartu pasien",
+      "slug": "kartu_pasien",
       "display": "Kartu pasien",
       "category": "komunikasi_rumah_sakit",
       "emergency": false
@@ -1339,7 +1339,7 @@
     },
     {
       "id": 190,
-      "slug": "tanda tangan",
+      "slug": "tanda_tangan",
       "display": "Tanda tangan",
       "category": "komunikasi_rumah_sakit",
       "emergency": false
