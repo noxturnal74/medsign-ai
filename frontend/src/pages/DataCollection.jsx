@@ -8884,7 +8884,6 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
     const [epochs, setEpochs] = useState(120);
 
   const [selectedWords, setSelectedWords] = useState([]);
-  const [editModal, setEditModal] = useState(null);
 
 
 
