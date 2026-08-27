@@ -580,6 +580,7 @@ html.lenis, html.lenis body {
 }
 .lenis-smooth [data-lenis-prevent] {
   overflow-anchor: none;
+  overflow-y: auto !important;
 }
 .lenis-stopped {
   overflow: hidden;

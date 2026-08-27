@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react';
+import React, { useState, useEffect, useCallback, useContext, useRef } from 'react';
 import {
   LayoutGrid, Save, ArrowUp, ArrowDown, Power, EyeOff,
   Plus, Pencil, Trash2, X, Check, Loader2, GripVertical, RotateCcw,
-  Newspaper, Star, Instagram, Building2, Video, Globe
+  Newspaper, Star, Instagram, Building2, Video, Globe, Upload, Search
 } from 'lucide-react';
 import { AppContext } from '../../context/AppContextObject';
 
@@ -71,6 +71,83 @@ const Field = ({ label, required, children }) => (
 const inputCls = 'w-full rounded-xl border border-slate-200 px-3 py-2.5 text-xs font-semibold text-slate-800 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-sky-400/40 focus:border-sky-400 transition-all placeholder:text-slate-300';
 const selectCls = inputCls + ' appearance-none';
 
+/* ═══ Image Upload Component ═══ */
+const ImageUpload = ({ value, onChange, accept = "image/*", label = "Upload Gambar" }) => {
+  const fileRef = useRef(null);
+  const [uploading, setUploading] = useState(false);
+  const [preview, setPreview] = useState(value || '');
+
+  useEffect(() => { setPreview(value || ''); }, [value]);
+
+  const handleUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('folder', 'data/uploads');
+      const apiBase = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const token = localStorage.getItem('medsign_token');
+      const res = await fetch(`${apiBase}/api/v1/upload`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.status === 'success') {
+        const fullUrl = `${apiBase}/${data.path}`;
+        onChange(fullUrl);
+        setPreview(fullUrl);
+      } else {
+        alert(data.detail || 'Gagal upload');
+      }
+    } catch (err) {
+      console.error('Upload error:', err);
+      alert('Gagal upload file');
+    }
+    setUploading(false);
+  };
+
+  return (
+    <div className="flex flex-col gap-1.5">
+      {preview && (
+        <div className="relative w-full h-20 rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
+          <img src={preview} alt="" className="w-full h-full object-contain" />
+          <button
+            type="button"
+            onClick={() => { onChange(''); setPreview(''); }}
+            className="absolute top-1 right-1 p-1 rounded-lg bg-white/90 text-rose-500 hover:bg-rose-50 transition-all shadow-sm"
+          ><X size={12} /></button>
+        </div>
+      )}
+      <input ref={fileRef} type="file" accept={accept} onChange={handleUpload} className="hidden" />
+      <button
+        type="button"
+        onClick={() => fileRef.current?.click()}
+        disabled={uploading}
+        className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border border-dashed border-slate-300 text-slate-500 hover:border-sky-400 hover:text-sky-600 hover:bg-sky-50/50 transition-all text-[10px] font-bold uppercase disabled:opacity-50"
+      >
+        {uploading ? <><Loader2 size={13} className="animate-spin" /> Mengunggah...</> : <><Upload size={13} /> {label}</>}
+      </button>
+    </div>
+  );
+};
+
+/* ═══ Search Input ═══ */
+const SearchInput = ({ value, onChange, placeholder = "Cari..." }) => (
+  <div className="relative">
+    <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+    <input
+      type="text"
+      value={value}
+      onChange={e => onChange(e.target.value)}
+      placeholder={placeholder}
+      className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-400/40 focus:border-sky-400 transition-all placeholder:text-slate-300"
+    />
+  </div>
+);
+
 /* ═══ Dashboard Modul Form — DIHAPUS (modul dihilangkan dari homepage) ═══ */
 
 /* ═══ Generic CRUD Table for mitra/video_tutorial/brand_pkm ═══ */
@@ -127,6 +204,7 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
   const [data, setData] = useState({ mitra: [], reviews: [], instagram: [], articles: [], brand_pkm: [], video_tutorial: [] });
   const [loading, setLoading] = useState({});
   const [modal, setModal] = useState({ open: false, module: null, item: null });
+  const [searchQuery, setSearchQuery] = useState('');
 
   const fetchData = useCallback(async (module) => {
     if (!module || module === 'layout') return;
@@ -147,7 +225,7 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
     setLoading(p => ({ ...p, [module]: false }));
   }, [token]);
 
-  useEffect(() => { fetchData(subTab); }, [subTab, fetchData]);
+  useEffect(() => { fetchData(subTab); setSearchQuery(''); }, [subTab, fetchData]);
 
   const deleteItem = async (module, id) => {
     if (!window.confirm('Yakin ingin menghapus item ini?')) return;
@@ -376,7 +454,10 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <button onClick={() => fetchData(subTab)}
+                <div className="w-48">
+                  <SearchInput value={searchQuery} onChange={setSearchQuery} placeholder={`Cari ${mod.label}...`} />
+                </div>
+                <button onClick={() => { setSearchQuery(''); fetchData(subTab); }}
                   title="Muat ulang data dari server (set ke tersimpan)"
                   className="px-4 py-2 rounded-xl bg-white border border-slate-300 text-slate-700 text-[10px] font-black uppercase tracking-wider hover:bg-slate-100 transition-all active:scale-95 flex items-center gap-1.5"
                 ><RotateCcw size={12} /> Set ke Tersimpan</button>
@@ -388,7 +469,11 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
 
             <div className="px-5 pb-5 overflow-x-auto">
               <GenericCrudTable
-                data={items}
+                data={items.filter(row => {
+                  if (!searchQuery.trim()) return true;
+                  const q = searchQuery.toLowerCase();
+                  return Object.values(row).some(v => String(v).toLowerCase().includes(q));
+                })}
                 columns={columnsFor(subTab)}
                 loading={isLoading}
                 onEdit={(row) => setModal({ open: true, module: subTab, item: row })}
@@ -421,6 +506,7 @@ const MitraForm = ({ item, onSave, onClose }) => {
     <div className="flex flex-col gap-3">
       <Field label="Nama Mitra" required><input className={inputCls} value={f.name} onChange={e => set('name', e.target.value)} /></Field>
       <Field label="Logo URL"><input className={inputCls} value={f.logo || ''} onChange={e => set('logo', e.target.value)} placeholder="https://..." /></Field>
+      <ImageUpload value={f.logo || ''} onChange={(url) => set('logo', url)} label="Upload Logo Mitra" />
       <div className="grid grid-cols-2 gap-3">
         <Field label="Website URL"><input className={inputCls} value={f.website_url || ''} onChange={e => set('website_url', e.target.value)} placeholder="https://..." /></Field>
         <Field label="Kategori"><input className={inputCls} value={f.category || ''} onChange={e => set('category', e.target.value)} placeholder="Mitra, Donatur, dll" /></Field>
@@ -468,6 +554,7 @@ const InstagramForm = ({ item, onSave, onClose }) => {
     <div className="flex flex-col gap-3">
       <Field label="URL Post Instagram" required><input className={inputCls} value={f.post_url} onChange={e => set('post_url', e.target.value)} placeholder="https://www.instagram.com/p/..." /></Field>
       <Field label="Thumbnail URL" required><input className={inputCls} value={f.thumbnail_image} onChange={e => set('thumbnail_image', e.target.value)} placeholder="https://..." /></Field>
+      <ImageUpload value={f.thumbnail_image || ''} onChange={(url) => set('thumbnail_image', url)} label="Upload Thumbnail" />
       <Field label="Caption Pendek"><input className={inputCls} value={f.caption_short || ''} onChange={e => set('caption_short', e.target.value)} placeholder="Ringkasan caption" /></Field>
       <div className="grid grid-cols-2 gap-3">
         <Field label="Urutan"><input type="number" className={inputCls} value={f.display_order || 0} onChange={e => set('display_order', parseInt(e.target.value) || 0)} /></Field>
@@ -496,6 +583,7 @@ const ArticleForm = ({ item, onSave, onClose }) => {
         <Field label="Penulis"><input className={inputCls} value={f.author || ''} onChange={e => set('author', e.target.value)} placeholder="MedSign AI" /></Field>
       </div>
       <Field label="Cover Image URL"><input className={inputCls} value={f.cover_image || ''} onChange={e => set('cover_image', e.target.value)} placeholder="https://..." /></Field>
+      <ImageUpload value={f.cover_image || ''} onChange={(url) => set('cover_image', url)} label="Upload Cover Artikel" />
       <Field label="Excerpt"><textarea className={inputCls + ' min-h-[50px] resize-none'} value={f.excerpt || ''} onChange={e => set('excerpt', e.target.value)} placeholder="Ringkasan artikel" /></Field>
       <Field label="Konten" required><textarea className={inputCls + ' min-h-[120px] resize-y'} value={f.content} onChange={e => set('content', e.target.value)} /></Field>
       <Field label="Status"><select className={selectCls} value={f.status} onChange={e => set('status', e.target.value)}>
@@ -516,7 +604,10 @@ const BrandPkmForm = ({ item, onSave, onClose }) => {
     <div className="flex flex-col gap-3">
       <Field label="Nama" required><input className={inputCls} value={f.name} onChange={e => set('name', e.target.value)} /></Field>
       <div className="grid grid-cols-2 gap-3">
-        <Field label="Logo URL"><input className={inputCls} value={f.logo || ''} onChange={e => set('logo', e.target.value)} placeholder="https://..." /></Field>
+        <div className="flex flex-col gap-1">
+          <Field label="Logo URL"><input className={inputCls} value={f.logo || ''} onChange={e => set('logo', e.target.value)} placeholder="https://..." /></Field>
+          <ImageUpload value={f.logo || ''} onChange={(url) => set('logo', url)} label="Upload Logo Brand" />
+        </div>
         <Field label="Kategori"><select className={selectCls} value={f.category || 'program'} onChange={e => set('category', e.target.value)}>
           <option value="program">Program</option><option value="brand">Brand</option><option value="inisiatif">Inisiatif</option>
         </select></Field>
@@ -546,7 +637,10 @@ const VideoTutorialForm = ({ item, onSave, onClose }) => {
       <Field label="Deskripsi"><textarea className={inputCls + ' min-h-[60px] resize-none'} value={f.description || ''} onChange={e => set('description', e.target.value)} /></Field>
       <Field label="URL Video" required><input className={inputCls} value={f.video_url} onChange={e => set('video_url', e.target.value)} placeholder="https://youtube.com/watch?v=..." /></Field>
       <div className="grid grid-cols-2 gap-3">
-        <Field label="Thumbnail URL"><input className={inputCls} value={f.thumbnail || ''} onChange={e => set('thumbnail', e.target.value)} placeholder="https://..." /></Field>
+        <div className="flex flex-col gap-1">
+          <Field label="Thumbnail URL"><input className={inputCls} value={f.thumbnail || ''} onChange={e => set('thumbnail', e.target.value)} placeholder="https://..." /></Field>
+          <ImageUpload value={f.thumbnail || ''} onChange={(url) => set('thumbnail', url)} label="Upload Thumbnail" accept="image/*" />
+        </div>
         <Field label="Durasi"><input className={inputCls} value={f.duration || ''} onChange={e => set('duration', e.target.value)} placeholder="5:30" /></Field>
       </div>
       <div className="grid grid-cols-2 gap-3">

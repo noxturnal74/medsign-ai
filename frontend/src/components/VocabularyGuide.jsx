@@ -55,7 +55,8 @@ export const VocabularyGuide = () => {
 
   const filteredVocabulary = useMemo(() => {
     return vocabulary.filter((w) => {
-      const matchesSearch = w.word.toLowerCase().includes(searchQuery.toLowerCase());
+      const displayText = (w.display || w.word).toLowerCase();
+      const matchesSearch = displayText.includes(searchQuery.toLowerCase()) || w.word.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesCategory = activeCategory === 'Semua' || w.category === activeCategory;
       return matchesSearch && matchesCategory;
     });
@@ -150,7 +151,7 @@ export const VocabularyGuide = () => {
                   <span className={`truncate text-[11px] font-black uppercase leading-tight ${
                     item.emergency ? 'text-red-700' : 'text-slate-800'
                   }`}>
-                    {item.word}
+                    {item.display || item.word}
                   </span>
                   <span className="mt-0.5 truncate text-[9px] font-semibold uppercase text-slate-500 leading-tight">
                     {item.category}

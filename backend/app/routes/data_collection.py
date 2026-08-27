@@ -1119,3 +1119,48 @@ def reset_active_model(_: dict = Depends(require_ml_user)):
         return {"status": "success", "message": "Model berhasil direset ke default"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ═══ General-purpose file upload for homepage content ═══
+UPLOAD_ALLOWED_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg', '.mp4', '.webm', '.pdf'}
+UPLOAD_MAX_SIZE_MB = 10
+
+@router.post("/upload")
+async def upload_file(
+    file: UploadFile = File(...),
+    folder: str = Form("uploads"),
+    _: dict = Depends(require_ml_user)
+):
+    ext = Path(file.filename).suffix.lower()
+    if ext not in UPLOAD_ALLOWED_EXTENSIONS:
+        raise HTTPException(status_code=400, detail=f"Ekstensi '{ext}' tidak diizinkan. Yang diizinkan: {', '.join(UPLOAD_ALLOWED_EXTENSIONS)}")
+
+    contents = await file.read()
+    size_mb = len(contents) / (1024 * 1024)
+    if size_mb > UPLOAD_MAX_SIZE_MB:
+        raise HTTPException(status_code=400, detail=f"Ukuran file {size_mb:.1f}MB melebihi batas {UPLOAD_MAX_SIZE_MB}MB")
+
+    backend_dir = Path(__file__).resolve().parents[2]
+    safe_folder = re.sub(r'[^a-zA-Z0-9_/]', '', folder).strip('/')
+    upload_dir = backend_dir / "data" / safe_folder
+    upload_dir.mkdir(parents=True, exist_ok=True)
+
+    safe_name = re.sub(r'[^a-zA-Z0-9._-]', '_', Path(file.filename).name)
+    file_path = upload_dir / safe_name
+    counter = 1
+    while file_path.exists():
+        stem = Path(file.filename).stem
+        file_path = upload_dir / f"{stem}_{counter}{ext}"
+        counter += 1
+
+    with open(file_path, "wb") as f:
+        f.write(contents)
+
+    relative = str(file_path.relative_to(backend_dir)).replace("\\", "/")
+    return {
+        "status": "success",
+        "message": f"File '{safe_name}' berhasil diunggah",
+        "path": relative,
+        "filename": file_path.name,
+        "size_kb": round(size_mb * 1024, 1)
+    }

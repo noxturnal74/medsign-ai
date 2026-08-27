@@ -79,6 +79,8 @@ import {
   Activity,
   Video,
   Instagram,
+  Pencil,
+  Trash2,
 } from "lucide-react";
 import { Backdrop, CircularProgress, Alert, AlertTitle, Skeleton } from "@mui/material";
 
@@ -102,6 +104,42 @@ const ALPHABET_LIST = [
 
 }));
 
+/* Edit Vocabulary Form */
+const EditVocabularyForm = ({ item, onSave, onClose }) => {
+  const [display, setDisplay] = useState(item.display || item.word.replace(/_/g, ' '));
+  const [category, setCategory] = useState(item.category || '');
+  const [folderPath, setFolderPath] = useState(item.folder_path || '');
+  const [emergency, setEmergency] = useState(item.emergency || false);
+
+  return (
+    <div className="flex flex-col gap-3">
+      <div>
+        <label className="text-[9px] font-bold uppercase text-slate-400 tracking-wide">Slug (tidak bisa diubah)</label>
+        <div className="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-xs font-mono font-bold text-slate-500 bg-slate-100">{item.word}</div>
+      </div>
+      <div>
+        <label className="text-[9px] font-bold uppercase text-slate-400 tracking-wide">Nama Tampilan</label>
+        <input className="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-xs font-semibold text-slate-800 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-sky-400/40" value={display} onChange={e => setDisplay(e.target.value)} />
+      </div>
+      <div>
+        <label className="text-[9px] font-bold uppercase text-slate-400 tracking-wide">Kategori</label>
+        <input className="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-xs font-semibold text-slate-800 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-sky-400/40" value={category} onChange={e => setCategory(e.target.value)} />
+      </div>
+      <div>
+        <label className="text-[9px] font-bold uppercase text-slate-400 tracking-wide">Path Folder Dataset</label>
+        <input className="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-xs font-mono text-slate-800 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-sky-400/40" value={folderPath} onChange={e => setFolderPath(e.target.value)} placeholder="data/landmarks/nama_label" />
+      </div>
+      <div className="flex items-center gap-2">
+        <input type="checkbox" checked={emergency} onChange={e => setEmergency(e.target.checked)} className="rounded border-slate-300" id="emergency-edit" />
+        <label htmlFor="emergency-edit" className="text-[10px] font-bold text-slate-600">Kata Darurat (Emergency)</label>
+      </div>
+      <div className="flex justify-end gap-2 pt-2">
+        <button onClick={onClose} className="px-4 py-2 rounded-xl text-[10px] font-bold uppercase text-slate-500 hover:bg-slate-100 transition-all">Batal</button>
+        <button onClick={() => onSave(item.word, { display, category, folder_path: folderPath, emergency })} className="px-5 py-2 rounded-xl bg-[#053D67] text-white text-[10px] font-black uppercase hover:opacity-90 transition-all flex items-center gap-1.5"><Check size={13} /> Simpan</button>
+      </div>
+    </div>
+  );
+};
 
 
 export const DataCollection = ({ setView, initialTab, embedded = false }) => {
@@ -2151,6 +2189,8 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
   const [showAddWord, setShowAddWord] = useState(false);
 
   const [newWordName, setNewWordName] = useState("");
+  const [newWordDisplay, setNewWordDisplay] = useState("");
+  const [newFolderPath, setNewFolderPath] = useState("");
 
   const [newWordCategory, setNewWordCategory] = useState(
 
@@ -2187,6 +2227,8 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
     if (searchQuery) {
 
       list = list.filter((w) =>
+
+        (w.display || w.word).toLowerCase().includes(searchQuery.toLowerCase()) ||
 
         w.word.toLowerCase().includes(searchQuery.toLowerCase()),
 
@@ -2231,9 +2273,13 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
             word: cleanWord,
 
+            display: newWordDisplay.trim() || cleanWord.replace(/_/g, ' ').replace(/-/g, ' '),
+
             category: newWordCategory,
 
             emergency: false,
+
+            folder_path: newFolderPath.trim(),
 
           }),
 
@@ -2246,7 +2292,8 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
         await refreshVocabulary();
 
         setNewWordName("");
-
+        setNewWordDisplay("");
+        setNewFolderPath("");
         setShowAddWord(false);
 
         setWordError("");
@@ -2265,6 +2312,54 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
     }
 
+  };
+
+
+
+  const handleEditWord = async (wordSlug, updates) => {
+    try {
+      const apiBaseUrl = apiUrl;
+      const response = await fetch(
+        `${apiBaseUrl.endsWith("/") ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/vocabulary/${wordSlug}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${currentUser?.token}` },
+          body: JSON.stringify(updates),
+        }
+      );
+      if (response.ok) {
+        await refreshVocabulary();
+        setEditModal(null);
+      } else {
+        const errData = await response.json();
+        alert(errData.detail || "Gagal memperbarui kata");
+      }
+    } catch (err) {
+      alert("Koneksi gagal");
+    }
+  };
+
+  const handleDeleteWord = async (wordSlug) => {
+    if (!window.confirm(`Hapus kata "${wordSlug}"?`)) return;
+    try {
+      const apiBaseUrl = apiUrl;
+      const response = await fetch(
+        `${apiBaseUrl.endsWith("/") ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/vocabulary/${wordSlug}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${currentUser?.token}` },
+        }
+      );
+      if (response.ok) {
+        await refreshVocabulary();
+        setSelectedWords(prev => prev.filter(w => w !== wordSlug));
+      } else {
+        const errData = await response.json();
+        alert(errData.detail || "Gagal menghapus kata");
+      }
+    } catch (err) {
+      alert("Koneksi gagal");
+    }
   };
 
 
@@ -4585,7 +4680,6 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
                       onChange={(e) => {
 
                         setNewWordName(e.target.value);
-
                         setWordError("");
 
                       }}
@@ -4599,6 +4693,34 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
                       autoCapitalize="none"
 
                       spellCheck="false"
+
+                    />
+
+                    <input
+
+                      type="text"
+
+                      placeholder="Nama tampilan (misal: Rumah Sakit)"
+
+                      value={newWordDisplay}
+
+                      onChange={(e) => setNewWordDisplay(e.target.value)}
+
+                      className="glass-input rounded-lg px-2 py-1 text-[10px]"
+
+                    />
+
+                    <input
+
+                      type="text"
+
+                      placeholder="Path folder dataset (misal: data/landmarks/rumah_sakit)"
+
+                      value={newFolderPath}
+
+                      onChange={(e) => setNewFolderPath(e.target.value)}
+
+                      className="glass-input rounded-lg px-2 py-1 text-[10px]"
 
                     />
 
@@ -4649,6 +4771,8 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
                           setShowAddWord(false);
 
                           setNewWordName("");
+                          setNewWordDisplay("");
+                          setNewFolderPath("");
 
                           setWordError("");
 
@@ -4728,7 +4852,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
                     <span className="truncate text-[10px] font-extrabold uppercase">
 
-                      {item.word}
+                      {item.display || item.word}
 
                     </span>
 
@@ -4968,7 +5092,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
                     <span className="text-white underline font-extrabold">
 
-                      {currentTake.word.toUpperCase()}
+                      {(currentTake.display || currentTake.word).toUpperCase()}
 
                     </span>
 
@@ -5194,7 +5318,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
                       >
 
-                        {item.word}
+                        {item.display || item.word}
 
                       </span>
 
@@ -8759,7 +8883,8 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
     const [epochs, setEpochs] = useState(120);
 
-    const [selectedWords, setSelectedWords] = useState([]);
+  const [selectedWords, setSelectedWords] = useState([]);
+  const [editModal, setEditModal] = useState(null);
 
 
 
@@ -8894,9 +9019,8 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
       if (trainingSearch) {
 
         list = list.filter((v) =>
-
+          (v.display || v.word).toLowerCase().includes(trainingSearch.toLowerCase()) ||
           v.word.toLowerCase().includes(trainingSearch.toLowerCase()),
-
         );
 
       }
@@ -9527,7 +9651,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
                     />
 
-                    <span className="uppercase truncate">{v.word}</span>
+                    <span className="uppercase truncate">{v.display || v.word}</span>
 
                   </label>
 
@@ -10500,6 +10624,19 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
                 })}
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {editModal && (
+        <div className="fixed inset-0 z-[300] flex items-center justify-center p-4" onClick={() => setEditModal(null)}>
+          <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" />
+          <div className="relative bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 animate-slide-up" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-sm font-black text-slate-900 uppercase">Edit Kosakata</h3>
+              <button onClick={() => setEditModal(null)} className="p-1.5 rounded-xl hover:bg-slate-100 text-slate-400"><X size={16} /></button>
+            </div>
+            <EditVocabularyForm item={editModal} onSave={handleEditWord} onClose={() => setEditModal(null)} />
           </div>
         </div>
       )}

@@ -449,7 +449,7 @@ export const SuperAdminView = ({ setView }) => {
   };
 
   return (
-    <div className="flex min-h-[calc(100vh-57px)] w-full bg-slate-50 text-slate-800 select-none overflow-hidden font-sans relative">
+    <div className="flex min-h-[calc(100vh-57px)] w-full bg-slate-50 text-slate-800 select-none font-sans relative">
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div

@@ -253,7 +253,7 @@ class NLGService:
         ]
 
     def generate_medical_sentence(self, words: list[str]) -> str:
-        cleaned_words = [w.strip().lower() for w in words if w.strip()]
+        cleaned_words = [w.strip().replace('_', ' ') for w in words if w.strip()]
         if not cleaned_words:
             return ""
         

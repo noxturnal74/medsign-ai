@@ -337,6 +337,7 @@ export const AppProvider = ({ children }) => {
               merged.push({
                 id: w.id,
                 word: w.word,
+                display: w.display || w.word.replace(/_/g, ' ').replace(/-/g, ' '),
                 category: w.category,
                 emergency: w.emergency
               });

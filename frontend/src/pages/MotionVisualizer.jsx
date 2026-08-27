@@ -541,7 +541,7 @@ export const MotionVisualizer = ({ setView }) => {
             >
               {vocabulary && vocabulary.map((item) => (
                 <option key={item.id} value={item.word} className="bg-white text-slate-800">
-                  {item.word.toUpperCase()} ({item.category})
+                  {(item.display || item.word).toUpperCase()} ({item.category})
                 </option>
               ))}
             </select>
