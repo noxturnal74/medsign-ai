@@ -32,65 +32,91 @@ const navItems = [
 ];
 
 const SwipeableNotifItem = ({ notification, onRead, onDelete }) => {
-  const [startX, setStartX] = useState(0);
   const [currentX, setCurrentX] = useState(0);
   const [swipedLeft, setSwipedLeft] = useState(false);
-
-  const handleTouchStart = (e) => {
-    setStartX(e.touches[0].clientX);
-  };
-
-  const handleTouchMove = (e) => {
-    const deltaX = e.touches[0].clientX - startX;
-    if (deltaX < 0) {
-      setCurrentX(deltaX);
-    }
-  };
-
-  const handleTouchEnd = () => {
-    if (currentX < -60) {
-      setSwipedLeft(true);
-      setTimeout(() => onDelete(notification.id), 200);
-    } else {
-      setCurrentX(0);
-    }
-  };
-
-  const handleMouseDown = (e) => {
-    setStartX(e.clientX);
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
-  };
-
-  const handleMouseMove = (e) => {
-    const deltaX = e.clientX - startX;
-    if (deltaX < 0) {
-      setCurrentX(deltaX);
-    }
-  };
-
-  const handleMouseUp = (e) => {
-    window.removeEventListener('mousemove', handleMouseMove);
-    window.removeEventListener('mouseup', handleMouseUp);
-    const finalDeltaX = e.clientX - startX;
-    if (finalDeltaX < -60) {
-      setSwipedLeft(true);
-      setTimeout(() => onDelete(notification.id), 200);
-    } else {
-      setCurrentX(0);
-    }
-  };
+  const itemRef = useRef(null);
+  
+  useEffect(() => {
+    const el = itemRef.current;
+    if (!el) return;
+    
+    let startX = 0;
+    let isDragging = false;
+    
+    const onStart = (clientX) => {
+      startX = clientX;
+      isDragging = true;
+      el.style.transition = 'none';
+    };
+    
+    const onMove = (clientX) => {
+      if (!isDragging) return;
+      const deltaX = clientX - startX;
+      if (deltaX < 0) {
+        setCurrentX(deltaX);
+      }
+    };
+    
+    const onEnd = (finalX) => {
+      if (!isDragging) return;
+      isDragging = false;
+      const deltaX = finalX - startX;
+      if (deltaX < -60) {
+        setSwipedLeft(true);
+        setTimeout(() => onDelete(notification.id), 200);
+      } else {
+        setCurrentX(0);
+        el.style.transition = 'transform 0.2s ease-out';
+      }
+    };
+    
+    // Mouse Events
+    const handleMouseDown = (e) => {
+      // Only drag on left click
+      if (e.button !== 0) return;
+      onStart(e.clientX);
+      
+      const handleMouseMove = (e) => onMove(e.clientX);
+      const handleMouseUp = (e) => {
+        window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('mouseup', handleMouseUp);
+        onEnd(e.clientX);
+      };
+      
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+    };
+    
+    // Touch Events
+    const handleTouchStart = (e) => {
+      onStart(e.touches[0].clientX);
+    };
+    const handleTouchMove = (e) => {
+      onMove(e.touches[0].clientX);
+    };
+    const handleTouchEnd = (e) => {
+      onEnd(e.changedTouches[0].clientX);
+    };
+    
+    el.addEventListener('mousedown', handleMouseDown);
+    el.addEventListener('touchstart', handleTouchStart);
+    el.addEventListener('touchmove', handleTouchMove, { passive: true });
+    el.addEventListener('touchend', handleTouchEnd);
+    
+    return () => {
+      el.removeEventListener('mousedown', handleMouseDown);
+      el.removeEventListener('touchstart', handleTouchStart);
+      el.removeEventListener('touchmove', handleTouchMove);
+      el.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [notification.id, onDelete]);
 
   return (
     <div
+      ref={itemRef}
       onClick={() => onRead(notification.id)}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-      onMouseDown={handleMouseDown}
       style={{
         transform: `translateX(${currentX}px)`,
-        transition: currentX === 0 ? 'transform 0.2s ease-out' : 'none',
         opacity: swipedLeft ? 0 : 1,
         maxHeight: swipedLeft ? 0 : '100px',
         overflow: 'hidden',
