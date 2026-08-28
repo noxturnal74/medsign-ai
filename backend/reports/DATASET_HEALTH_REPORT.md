@@ -1,21 +1,21 @@
 # DATASET_HEALTH_REPORT
 
-Generated at: 2026-08-26T14:02:10
+Generated at: 2026-08-28T21:06:13
 
 ## Contract
 
 - Version: `medsign-clinical-full-v1`
 - Frame count: `30`
 - Feature count: `63`
-- Labels: `228`
+- Labels: `242`
 
 ## Summary
 
 - Filter label: `all`
 - Filter signer: `all`
 - Max empty frame ratio: `10.00%`
-- Valid samples: **21164**
-- Invalid samples: **901**
+- Valid samples: **22039**
+- Invalid samples: **1**
 
 ## Samples Per Label
 
@@ -101,7 +101,6 @@ Generated at: 2026-08-26T14:02:10
 | `bagian_mana` | 125 | 3 | 0.00% | ok |
 | `seberapa_sering` | 100 | 2 | 0.00% | ok |
 | `ya` | 100 | 2 | 0.00% | ok |
-| `tidak` | 100 | 2 | 0.00% | ok |
 | `tolong` | 48 | 1 | 0.00% | ok |
 | `terima_kasih` | 100 | 2 | 0.00% | ok |
 | `mengerti` | 125 | 3 | 0.00% | ok |
@@ -249,6 +248,21 @@ Generated at: 2026-08-26T14:02:10
 | `7` | 0 | 0 | - | missing |
 | `8` | 0 | 0 | - | missing |
 | `9` | 0 | 0 | - | missing |
+| `agar` | 75 | 2 | 0.00% | ok |
+| `dan` | 75 | 2 | 0.00% | ok |
+| `dari` | 75 | 2 | 0.00% | ok |
+| `di` | 75 | 2 | 0.00% | ok |
+| `dia` | 75 | 2 | 0.00% | ok |
+| `kami` | 25 | 1 | 0.00% | low_sample |
+| `kamu` | 100 | 2 | 0.00% | ok |
+| `karena` | 75 | 2 | 0.00% | ok |
+| `ke` | 25 | 1 | 0.00% | low_sample |
+| `kita` | 75 | 2 | 0.00% | ok |
+| `mengalami` | 75 | 2 | 0.00% | ok |
+| `merasa` | 75 | 2 | 0.00% | ok |
+| `mereka` | 25 | 1 | 0.00% | low_sample |
+| `saya` | 75 | 2 | 0.00% | ok |
+| `sore` | 50 | 1 | 0.00% | ok |
 
 ## Signer Distribution
 
@@ -622,10 +636,6 @@ Generated at: 2026-08-26T14:02:10
 - `glenn`: 50
 
 ### ya
-- `albert_cheng`: 50
-- `glenn`: 50
-
-### tidak
 - `albert_cheng`: 50
 - `glenn`: 50
 
@@ -1201,207 +1211,64 @@ Generated at: 2026-08-26T14:02:10
 ### 9
 - Belum ada data.
 
+### agar
+- `glenn`: 50
+- `loren`: 25
+
+### dan
+- `glenn`: 50
+- `loren`: 25
+
+### dari
+- `glenn`: 50
+- `loren`: 25
+
+### di
+- `glenn`: 50
+- `loren`: 25
+
+### dia
+- `glenn`: 50
+- `loren`: 25
+
+### kami
+- `loren`: 25
+
+### kamu
+- `glenn`: 75
+- `loren`: 25
+
+### karena
+- `glenn`: 50
+- `loren`: 25
+
+### ke
+- `loren`: 25
+
+### kita
+- `glenn`: 50
+- `loren`: 25
+
+### mengalami
+- `glenn`: 50
+- `loren`: 25
+
+### merasa
+- `glenn`: 50
+- `loren`: 25
+
+### mereka
+- `loren`: 25
+
+### saya
+- `glenn`: 50
+- `loren`: 25
+
+### sore
+- `glenn`: 50
+
 ## Invalid Samples
 
 | File | Reason | Quarantine |
 |---|---|---|
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_001.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_002.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_003.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_004.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_005.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_006.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_007.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_008.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_009.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_010.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_011.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_012.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_013.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_014.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_015.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_016.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_017.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_018.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_019.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_020.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_021.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_022.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_023.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_024.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_025.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_026.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_027.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_028.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_029.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_030.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_031.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_032.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_033.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_034.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_035.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_036.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_037.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_038.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_039.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_040.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_041.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_042.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_043.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_044.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_045.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_046.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_047.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_048.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_049.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\glenn\agar_glenn_20260811_113854_agar_050.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_001.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_002.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_003.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_004.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_005.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_006.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_007.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_008.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_009.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_010.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_011.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_012.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_013.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_014.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_015.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_016.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_017.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_018.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_019.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_020.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_021.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_022.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_023.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_024.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\agar\loren\agar_loren_20260813_195008_agar_025.npy` | label 'agar' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_001.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_002.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_003.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_004.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_005.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_006.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_007.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_008.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_009.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_010.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_011.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_012.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_013.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_014.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_015.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_016.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_017.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_018.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_019.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_020.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_021.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_022.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_023.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_024.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_025.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_026.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_027.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_028.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_029.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_030.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_031.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_032.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_033.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_034.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_035.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_036.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_037.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_038.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_039.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_040.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_041.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_042.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_043.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_044.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_045.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_046.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_047.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_048.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_049.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\glenn\dan_glenn_20260810_164938_dan_050.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_001.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_002.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_003.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_004.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_005.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_006.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_007.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_008.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_009.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_010.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_011.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_012.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_013.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_014.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_015.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_016.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_017.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_018.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_019.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_020.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_021.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_022.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_023.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_024.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dan\loren\dan_loren_20260813_185531_dan_025.npy` | label 'dan' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_001.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_002.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_003.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_004.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_005.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_006.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_007.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_008.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_009.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_010.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_011.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_012.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_013.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_014.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_015.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_016.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_017.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_018.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_019.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_020.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_021.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_022.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_023.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_024.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_025.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_026.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_027.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_028.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_029.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_030.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_031.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_032.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_033.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_034.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_035.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_036.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_037.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_038.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_039.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_040.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_041.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_042.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_043.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_044.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_045.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_046.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_047.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_048.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_049.npy` | label 'dari' tidak ada di labels.json | `-` |
-| `D:\PKM\medsign-ai\backend\data\landmarks\dari\glenn\dari_glenn_20260810_171411_dari_050.npy` | label 'dari' tidak ada di labels.json | `-` |
+| `D:\PKM\medsign-ai\backend\data\landmarks\sakit\albert_william\sakit_albert_william_test_sess_valid_sakit_999.npy` | empty_frame_ratio 100.00% melebihi batas 10.00% | `-` |

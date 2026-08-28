@@ -60,11 +60,11 @@ export const AppProvider = ({ children }) => {
   }, []);
 
   const markAsRead = useCallback((id) => {
-    setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: True } : n));
+    setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
   }, []);
 
   const markAllAsRead = useCallback(() => {
-    setNotifications(prev => prev.map(n => ({ ...n, read: True })));
+    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
   }, []);
 
   const showToast = useCallback((message, type = "info") => {
