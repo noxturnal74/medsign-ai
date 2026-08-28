@@ -577,30 +577,35 @@ export const SuperAdminView = ({ setView }) => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                 {overview ? (
                   <>
-                    <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col gap-2 relative overflow-hidden group hover:shadow-md transition-all duration-300">
+                                        <div className="bg-white p-6 rounded-[28px] border border-slate-200/60 shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-[0.99] transition-all duration-300 flex flex-col justify-between relative overflow-hidden group cursor-pointer">
                       <div className="absolute right-0 top-0 w-24 h-24 -mr-5 -mt-5 rounded-full bg-sky-500/5 group-hover:scale-110 transition-transform duration-300" />
-                      <span className="text-[9px] font-black text-slate-450 uppercase tracking-wider block">Fasilitas</span>
-                      <span className="text-lg font-black text-slate-900 mt-1">{overview.total_facilities} <span className="text-[10px] font-black text-emerald-600 block bg-emerald-50 w-fit px-1.5 py-0.5 rounded mt-1">({overview.active_facilities} Aktif)</span></span>
+                      <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block">Fasilitas</span>
+                      <span className="text-3xl font-black text-slate-900 mt-2 tracking-tight leading-none">{overview.total_facilities}</span>
+                      <span className="text-[9px] font-black text-emerald-700 block bg-emerald-50 border border-emerald-100/50 w-fit px-2 py-0.5 rounded-full mt-3 uppercase">({overview.active_facilities} Aktif)</span>
                     </div>
-                    <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col gap-2 relative overflow-hidden group hover:shadow-md transition-all duration-300">
+                                        <div className="bg-white p-6 rounded-[28px] border border-slate-200/60 shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-[0.99] transition-all duration-300 flex flex-col justify-between relative overflow-hidden group cursor-pointer">
                       <div className="absolute right-0 top-0 w-24 h-24 -mr-5 -mt-5 rounded-full bg-indigo-500/5 group-hover:scale-110 transition-transform duration-300" />
-                      <span className="text-[9px] font-black text-slate-450 uppercase tracking-wider block">Total Admin</span>
-                      <span className="text-lg font-black text-slate-900 mt-1">{overview.total_admins}</span>
+                      <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block">Total Admin</span>
+                      <span className="text-3xl font-black text-slate-900 mt-2 tracking-tight leading-none">{overview.total_admins}</span>
+                      <span className="text-[9px] font-black text-indigo-700 block bg-indigo-50 border border-indigo-100/50 w-fit px-2 py-0.5 rounded-full mt-3 uppercase">Admin Faskes</span>
                     </div>
-                    <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col gap-2 relative overflow-hidden group hover:shadow-md transition-all duration-300">
+                                        <div className="bg-white p-6 rounded-[28px] border border-slate-200/60 shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-[0.99] transition-all duration-300 flex flex-col justify-between relative overflow-hidden group cursor-pointer">
                       <div className="absolute right-0 top-0 w-24 h-24 -mr-5 -mt-5 rounded-full bg-emerald-500/5 group-hover:scale-110 transition-transform duration-300" />
-                      <span className="text-[9px] font-black text-slate-450 uppercase tracking-wider block">Dokter Aktif</span>
-                      <span className="text-lg font-black text-slate-900 mt-1">{overview.active_doctors}</span>
+                      <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block">Dokter Aktif</span>
+                      <span className="text-3xl font-black text-slate-900 mt-2 tracking-tight leading-none">{overview.active_doctors}</span>
+                      <span className="text-[9px] font-black text-emerald-700 block bg-emerald-50 border border-emerald-100/50 w-fit px-2 py-0.5 rounded-full mt-3 uppercase">Dokter Terdaftar</span>
                     </div>
-                    <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col gap-2 relative overflow-hidden group hover:shadow-md transition-all duration-300">
+                                        <div className="bg-white p-6 rounded-[28px] border border-slate-200/60 shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-[0.99] transition-all duration-300 flex flex-col justify-between relative overflow-hidden group cursor-pointer">
                       <div className="absolute right-0 top-0 w-24 h-24 -mr-5 -mt-5 rounded-full bg-rose-500/5 group-hover:scale-110 transition-transform duration-300" />
-                      <span className="text-[9px] font-black text-slate-450 uppercase tracking-wider block">Total Pasien</span>
-                      <span className="text-lg font-black text-slate-900 mt-1">{overview.total_patients} <span className="text-[10px] font-black text-rose-600 block bg-rose-50 w-fit px-1.5 py-0.5 rounded mt-1">({overview.pending_verifications} Pending)</span></span>
+                      <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block">Total Pasien</span>
+                      <span className="text-3xl font-black text-slate-900 mt-2 tracking-tight leading-none">{overview.total_patients}</span>
+                      <span className="text-[9px] font-black text-rose-700 block bg-rose-50 border border-rose-100/50 w-fit px-2 py-0.5 rounded-full mt-3 uppercase">({overview.pending_verifications} Pending)</span>
                     </div>
-                    <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-col gap-2 relative overflow-hidden group hover:shadow-md transition-all duration-300">
+                                        <div className="bg-white p-6 rounded-[28px] border border-slate-200/60 shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-[0.99] transition-all duration-300 flex flex-col justify-between relative overflow-hidden group cursor-pointer">
                       <div className="absolute right-0 top-0 w-24 h-24 -mr-5 -mt-5 rounded-full bg-amber-500/5 group-hover:scale-110 transition-transform duration-300" />
-                      <span className="text-[9px] font-black text-slate-450 uppercase tracking-wider block">Sesi Medis</span>
-                      <span className="text-lg font-black text-slate-900 mt-1">{overview.active_consultations} <span className="text-[10px] font-black text-slate-550 block mt-1">({overview.completed_consultations} Selesai)</span></span>
+                      <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest block">Sesi Medis</span>
+                      <span className="text-3xl font-black text-slate-900 mt-2 tracking-tight leading-none">{overview.active_consultations}</span>
+                      <span className="text-[9px] font-black text-amber-700 block bg-amber-50 border border-amber-100/50 w-fit px-2 py-0.5 rounded-full mt-3 uppercase">({overview.completed_consultations} Selesai)</span>
                     </div>
                   </>
                 ) : (

@@ -154,12 +154,12 @@ export const AdminAnalytics = ({ overview, weeklyData, title, subtitle, showCont
         ].map((s, i) => {
           const Icon = s.icon;
           return (
-            <div key={i} className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex items-center gap-3">
-              <div className={`h-10 w-10 rounded-xl flex items-center justify-center ${s.color}`}><Icon size={18} /></div>
+            <div key={i} className="bg-white rounded-[24px] border border-slate-200/60 p-4 shadow-sm hover:shadow-md hover:scale-[1.03] active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center gap-3.5">
+              <div className={`h-11 w-11 rounded-[16px] flex items-center justify-center shrink-0 shadow-inner ${s.color}`}><Icon size={20} /></div>
               <div className="min-w-0">
-                <p className="text-[9px] font-bold uppercase text-slate-400 truncate">{s.label}</p>
-                <p className="text-lg font-black text-slate-900 leading-tight">{s.value}</p>
-                <p className="text-[8px] font-semibold text-slate-400 truncate">{s.desc}</p>
+                <p className="text-[9px] font-black uppercase text-slate-400 tracking-wider truncate">{s.label}</p>
+                <p className="text-xl font-black text-slate-900 leading-tight mt-0.5">{s.value}</p>
+                <p className="text-[8px] font-semibold text-slate-450 truncate">{s.desc}</p>
               </div>
             </div>
           );
@@ -182,8 +182,14 @@ export const AdminAnalytics = ({ overview, weeklyData, title, subtitle, showCont
           <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto overflow-visible">
             <defs>
               <linearGradient id="adminArea" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.28" />
+                <stop offset="0%" stopColor="#6366f1" stopOpacity="0.26" />
+                <stop offset="60%" stopColor="#0ea5e9" stopOpacity="0.10" />
                 <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0" />
+              </linearGradient>
+              <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#0ea5e9" />
+                <stop offset="50%" stopColor="#6366f1" />
+                <stop offset="100%" stopColor="#a855f7" />
               </linearGradient>
             </defs>
 
@@ -221,13 +227,13 @@ export const AdminAnalytics = ({ overview, weeklyData, title, subtitle, showCont
               <>
                 <path d={areaPath} fill="url(#adminArea)" />
                 <polyline
-                  points={linePts} fill="none" stroke="#0ea5e9" strokeWidth="3"
+                  points={linePts} fill="none" stroke="url(#lineGrad)" strokeWidth="3.5"
                   strokeLinecap="round" strokeLinejoin="round"
                 />
                 {series.map((v, i) => (
                   <circle
-                    key={i} cx={xAt(i)} cy={yAt(v)} r={hovered?.i === i ? 6 : 3.5}
-                    fill="#fff" stroke="#0ea5e9" strokeWidth="3"
+                    key={i} cx={xAt(i)} cy={yAt(v)} r={hovered?.i === i ? 6.5 : 4}
+                    fill="#fff" stroke="#6366f1" strokeWidth="3"
                     onMouseEnter={() => setHovered({ i, v, xPct: (xAt(i) / W) * 100, yPct: (yAt(v) / H) * 100 })}
                     className="cursor-pointer transition-all"
                   />
@@ -293,9 +299,9 @@ export const AdminAnalytics = ({ overview, weeklyData, title, subtitle, showCont
 
           <div className="flex-1 grid grid-cols-1 gap-2.5">
             {donut.map((s) => (
-              <div key={s.label} className="flex items-center justify-between bg-slate-50 rounded-xl px-3 py-2 border border-slate-100">
-                <span className="flex items-center gap-2 text-[11px] font-bold text-slate-600">
-                  <span className="w-2.5 h-2.5 rounded-full" style={{ background: s.color }} /> {s.label}
+              <div key={s.label} className="flex items-center justify-between bg-slate-50 rounded-[20px] px-4 py-3 border border-slate-200/60 shadow-sm hover:shadow-md hover:scale-[1.02] active:scale-[0.99] transition-all duration-200 cursor-pointer">
+                <span className="flex items-center gap-2 text-[11px] font-black text-slate-650">
+                  <span className="w-3 h-3 rounded-full shadow-inner" style={{ background: s.color }} /> {s.label}
                 </span>
                 <span className="text-sm font-black text-slate-900">{s.pct}%</span>
               </div>
