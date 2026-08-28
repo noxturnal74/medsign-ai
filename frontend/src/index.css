@@ -80,6 +80,9 @@
   html.dark .text-slate-700 { color: #b6c2d4 !important; }
   html.dark .text-slate-650 { color: #94a3b8 !important; }
   html.dark .text-slate-600 { color: #8ea0b5 !important; }
+  html.dark .text-slate-500 { color: #94a3b8 !important; }
+  html.dark .text-slate-450 { color: #a1a1aa !important; }
+  html.dark .text-slate-400 { color: #cbd5e1 !important; }
   html.dark .border-slate-200 { border-color: rgba(148, 163, 184, 0.16) !important; }
   html.dark .border-slate-150 { border-color: rgba(148, 163, 184, 0.14) !important; }
   html.dark .border-slate-100 { border-color: rgba(148, 163, 184, 0.1) !important; }

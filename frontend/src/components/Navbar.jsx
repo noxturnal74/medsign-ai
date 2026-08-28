@@ -303,11 +303,15 @@ export const Navbar = ({ currentView, setView }) => {
           {/* ── Desktop nav pill ── */}
           <div className="desktop-nav" style={{
             display: 'flex', alignItems: 'center', gap: 2,
-            background: scrolled ? 'rgba(15,23,42,0.04)' : 'rgba(255,255,255,0.5)',
+            background: darkMode
+              ? (scrolled ? 'rgba(255, 255, 255, 0.05)' : 'rgba(15, 23, 42, 0.6)')
+              : (scrolled ? 'rgba(15, 23, 42, 0.04)' : 'rgba(255, 255, 255, 0.5)'),
             padding: '4px 5px', borderRadius: 14,
-            border: scrolled ? '1px solid rgba(15,23,42,0.06)' : '1px solid rgba(255,255,255,0.3)',
+            border: darkMode
+              ? (scrolled ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(15, 23, 42, 0.15)')
+              : (scrolled ? '1px solid rgba(15, 23, 42, 0.06)' : '1px solid rgba(255, 255, 255, 0.3)'),
             justifyContent: 'center',
-            margin: '0 auto',
+            justifySelf: 'center',
             backdropFilter: scrolled ? 'none' : 'blur(8px)',
             transition: 'background 0.3s ease, border-color 0.3s ease',
           }}>
@@ -323,9 +327,9 @@ export const Navbar = ({ currentView, setView }) => {
                     padding: '6px 11px', borderRadius: 10, border: 'none',
                     cursor: 'pointer', fontSize: 11.5,
                     fontWeight: active ? 700 : 600,
-                    background: active ? 'rgba(14,165,233,0.1)' : 'transparent',
-                    color: active ? '#0284c7' : '#475569',
-                    boxShadow: active ? 'inset 0 0 0 1px rgba(14,165,233,0.22)' : 'none',
+                    background: active ? (darkMode ? 'rgba(14,165,233,0.15)' : 'rgba(14,165,233,0.1)') : 'transparent',
+                    color: active ? (darkMode ? '#38bdf8' : '#0284c7') : (darkMode ? '#cbd5e1' : '#475569'),
+                    boxShadow: active ? (darkMode ? 'inset 0 0 0 1px rgba(14,165,233,0.35)' : 'inset 0 0 0 1px rgba(14,165,233,0.22)') : 'none',
                     transition: 'background 0.15s, color 0.15s',
                     whiteSpace: 'nowrap',
                   }}
