@@ -87,7 +87,7 @@ const ImageUpload = ({ value, onChange, accept = "image/*", label = "Upload Gamb
     try {
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('folder', 'data/uploads');
+      formData.append('folder', 'uploads');
       const apiBase = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
       const savedUser = localStorage.getItem('medsign_user');
       const token = savedUser ? JSON.parse(savedUser).token : null;

@@ -108,6 +108,12 @@ app.include_router(auth.router, prefix="/api/v1", tags=["auth"])
 app.include_router(patient.router, prefix="/api/v1", tags=["patient"])
 app.include_router(admin.router, prefix="/api/v1", tags=["admin"])
 
+# Mount static files to serve uploaded images (e.g. logos, avatars)
+from fastapi.staticfiles import StaticFiles
+data_dir = Path(__file__).parent.parent / "data"
+data_dir.mkdir(parents=True, exist_ok=True)
+app.mount("/data", StaticFiles(directory=str(data_dir)), name="data")
+
 # WebSocket Streaming Endpoint
 @app.websocket("/api/v1/stream")
 async def websocket_stream(websocket: WebSocket):
