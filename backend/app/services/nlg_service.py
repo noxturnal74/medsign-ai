@@ -1,10 +1,32 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
 import re
+import os
+import json
+import requests
+
+_SYSTEM_PROMPT = (
+    "Anda adalah AI asisten penerjemah medis bahasa isyarat BISINDO. "
+    "Tugas Anda adalah merapikan kata-kata acak/fragmen kata dari pasien menjadi satu kalimat "
+    "bahasa Indonesia yang wajar, santun, dan gramatikal. "
+    "Hanya gunakan informasi dari kata-kata yang diberikan. "
+    "Jangan menambah diagnosis, obat, atau informasi medis lain. "
+    "Output harus berupa JSON dengan key: refined_sentence, confidence (high/medium/low), "
+    "dan follow_up (daftar 1-3 pertanyaan klinis lanjutan jika kalimat kurang jelas)."
+)
 
 class NLGService:
     def __init__(self):
         self._client = None
+        self._model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+        
+        openai_key = os.getenv("OPENAI_API_KEY")
+        if openai_key and openai_key != "sk-your-key-here":
+            try:
+                from openai import OpenAI
+                self._client = OpenAI(api_key=openai_key)
+            except Exception as e:
+                print(f"[NLG] Gagal inisialisasi OpenAI client: {e}")
         self.recommendations = {
             "sakit": [
                 "sakit kepala", "sakit perut", "sakit dada", "sakit sejak kapan", "sakit saat bergerak",
@@ -344,6 +366,52 @@ class NLGService:
 
 
     
+    async def _call_llm(self, system_prompt: str, user_prompt: str, json_mode: bool = False) -> str | None:
+        gemini_key = os.getenv("GEMINI_API_KEY")
+        if gemini_key and gemini_key != "your-gemini-key-here":
+            try:
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key={gemini_key}"
+                headers = {"Content-Type": "application/json"}
+                payload = {
+                    "systemInstruction": {
+                        "parts": [{"text": system_prompt}]
+                    },
+                    "contents": [{
+                        "parts": [{"text": user_prompt}]
+                    }],
+                    "generationConfig": {}
+                }
+                if json_mode:
+                    payload["generationConfig"]["responseMimeType"] = "application/json"
+                    
+                res = requests.post(url, json=payload, headers=headers, timeout=10)
+                if res.status_code == 200:
+                    data = res.json()
+                    text = data["candidates"][0]["content"]["parts"][0]["text"]
+                    return text
+                else:
+                    print(f"[NLG] Gemini API error: {res.status_code} - {res.text}")
+            except Exception as e:
+                print(f"[NLG] Gemini request failed: {e}")
+                
+        if self._client:
+            try:
+                response = self._client.chat.completions.create(
+                    model=self._model,
+                    messages=[
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": user_prompt},
+                    ],
+                    response_format={"type": "json_object"} if json_mode else None,
+                    temperature=0.3,
+                    max_tokens=500,
+                )
+                return response.choices[0].message.content
+            except Exception as e:
+                print(f"[NLG] OpenAI request failed: {e}")
+                
+        return None
+
     async def refine_sentence(self, text: str) -> dict:
         """
         Refine fragmented patient input into a complete, natural sentence.
@@ -369,20 +437,10 @@ class NLGService:
                 return raw_text
             return refined
 
-        if self._client:
+        llm_response = await self._call_llm(_SYSTEM_PROMPT, text, json_mode=True)
+        if llm_response:
             try:
-                response = self._client.chat.completions.create(
-                    model=self._model,
-                    messages=[
-                        {"role": "system", "content": _SYSTEM_PROMPT},
-                        {"role": "user", "content": text},
-                    ],
-                    response_format={"type": "json_object"},
-                    temperature=0.3,
-                    max_tokens=300,
-                )
-                raw = response.choices[0].message.content
-                parsed = json.loads(raw)
+                parsed = json.loads(llm_response)
                 refined = parsed.get("refined_sentence", text)
                 return {
                     "refined_sentence": generate_recommendation_HOTFIX(text, refined),
@@ -391,7 +449,7 @@ class NLGService:
                     "llm_used": True,
                 }
             except Exception as e:
-                print(f"[NLG] OpenAI error, falling back to template: {e}")
+                print(f"[NLG] LLM refine error, falling back to template: {e}")
 
         # ?? fallback: template engine ??
         words = text.split()
@@ -413,10 +471,58 @@ class NLGService:
         }
   
 
-    def summarize_session(self, logs: list) -> str:
+        async def summarize_session(self, logs: list) -> dict:
         if not logs:
-            return "Belum ada riwayat percakapan untuk diringkas."
-            
+            empty_msg = "Belum ada riwayat percakapan untuk diringkas."
+            return {
+                "subjective": empty_msg,
+                "objective": empty_msg,
+                "assessment": empty_msg,
+                "plan": empty_msg,
+                "full_text": empty_msg,
+                "llm_used": False
+            }
+
+        conversation = "\n".join([f"{l.get('role', 'unknown').capitalize()}: {l.get('text', '')}" for l in logs])
+        
+        system_prompt = (
+            "Anda adalah AI Notetaker Klinis. Rangkum percakapan medis antara Dokter dan Pasien "
+            "ke dalam format Rencana Medis SOAP (Subjective, Objective, Assessment, Plan) dalam format JSON. "
+            "Gunakan bahasa Indonesia yang formal, ringkas, dan profesional. "
+            "Jangan menambahkan diagnosis atau informasi medis yang tidak disebutkan dalam percakapan.\n"
+            "Format JSON output harus memiliki key: subjective, objective, assessment, plan."
+        )
+        
+        user_prompt = f"Percakapan:\n{conversation}"
+        
+        llm_response = await self._call_llm(system_prompt, user_prompt, json_mode=True)
+        if llm_response:
+            try:
+                parsed = json.loads(llm_response)
+                subjective = parsed.get("subjective", "")
+                objective = parsed.get("objective", "")
+                assessment = parsed.get("assessment", "")
+                plan = parsed.get("plan", "")
+                
+                full_text = (
+                    f"### 📋 LAPORAN MEDIS AI (SOAP NOTE)\n\n"
+                    f"**S — Subjective (Keluhan Pasien):**\n{subjective}\n\n"
+                    f"**O — Objective (Instruksi & Observasi Dokter):**\n{objective}\n\n"
+                    f"**A — Assessment (Evaluasi/Diagnosis):**\n{assessment}\n\n"
+                    f"**P — Plan (Rencana Tindak Lanjut):**\n{plan}"
+                )
+                
+                return {
+                    "subjective": subjective,
+                    "objective": objective,
+                    "assessment": assessment,
+                    "plan": plan,
+                    "full_text": full_text,
+                    "llm_used": True
+                }
+            except Exception as e:
+                print(f"[NLG] Failed to parse LLM SOAP response: {e}")
+                
         patient_messages = [l.get("text", "") for l in logs if l.get("role") == "patient"]
         doctor_messages = [l.get("text", "") for l in logs if l.get("role") == "doctor"]
         
@@ -431,35 +537,33 @@ class NLGService:
             if any(w in msg.lower() for w in ["obat", "resep", "minum", "dosis", "tablet", "kapsul", "sirup", "salam", "pagi", "malam"]):
                 resep.append(msg)
                 
-        summary = "### 📋 LAPORAN MEDIS AI (NOTETAKER)\n\n"
-        summary += f"**Sesi Konsultasi:** {len(logs)} pesan pertukaran\n\n"
+        subjective = f"Keluhan utama terdeteksi: {', '.join(gejala).upper() if gejala else '-'}\n" + "\n".join([f"- {m}" for m in patient_messages])
+        objective = f"Anjuran/Resep: {', '.join(resep) if resep else '-'}\n" + "\n".join([f"- {m}" for m in doctor_messages if m not in resep])
         
-        summary += "#### 👤 RINGKASAN GEJALA PASIEN\n"
-        if gejala:
-            summary += f"- Keluhan utama terdeteksi: **{', '.join(gejala).upper()}**\n"
-        else:
-            summary += "- Tidak ada gejala spesifik terdeteksi secara otomatis.\n"
-        
-        for msg in patient_messages:
-            summary += f"  - *\"{msg}\"*\n"
-            
-        summary += "\n#### 🩺 INSTRUKSI & TINDAKAN DOKTER\n"
-        if resep:
-            for r in resep:
-                summary += f"- Anjuran: {r}\n"
-        else:
-            summary += "- Dokter belum memberikan instruksi/resep spesifik dalam riwayat teks.\n"
-        for msg in doctor_messages:
-            if msg not in resep:
-                summary += f"  - *\"{msg}\"*\n"
-                
-        summary += "\n#### 📝 REKOMENDASI KLINIS\n"
         patient_text_all = "".join(patient_messages).lower()
         if "dada" in patient_text_all or "sesak" in patient_text_all:
-            summary += "- ⚠️ Pasien mengeluhkan sesak/nyeri dada. Harap lakukan pemeriksaan EKG/fisik jantung segera.\n"
+            assessment = "Keluhan sesak atau nyeri dada (Suspek gangguan kardiovaskular/pernapasan)."
+            plan = "Rujuk untuk pemeriksaan EKG/fisik jantung segera."
         elif "tensi" in patient_text_all or "darah" in patient_text_all:
-            summary += "- Pantau tekanan darah pasien secara rutin.\n"
+            assessment = "Keluhan terkait tekanan darah (Suspek hipertensi)."
+            plan = "Pantau tekanan darah berkala, edukasi pola hidup sehat."
         else:
-            summary += "- Berikan edukasi minum obat secara teratur sesuai dosis.\n"
+            assessment = "Pemeriksaan umum pasca konsultasi."
+            plan = "Edukasi kepatuhan minum obat sesuai dosis dokter."
             
-        return summary
+        full_text = (
+            f"### 📋 LAPORAN MEDIS AI (SOAP NOTE - Fallback Mode)\n\n"
+            f"**S — Subjective:**\n{subjective}\n\n"
+            f"**O — Objective:**\n{objective}\n\n"
+            f"**A — Assessment:**\n{assessment}\n\n"
+            f"**P — Plan:**\n{plan}"
+        )
+        
+        return {
+            "subjective": subjective,
+            "objective": objective,
+            "assessment": assessment,
+            "plan": plan,
+            "full_text": full_text,
+            "llm_used": False
+        }

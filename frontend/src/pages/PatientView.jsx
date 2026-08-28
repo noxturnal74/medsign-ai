@@ -86,7 +86,7 @@ export const PatientView = ({ setView, isSplit = false }) => {
 
   } = useContext(AppContext);
 
-  const { currentUser, showToast, activeSessionId } = useContext(AppContext);
+  const { currentUser, showToast, activeSessionId, activePatient } = useContext(AppContext);
   const [patientMessage, setPatientMessage] = useState("");
   const [showGuideModal, setShowGuideModal] = useState(false);
   const [showTtsModal, setShowTtsModal] = useState(false);
@@ -461,7 +461,7 @@ export const PatientView = ({ setView, isSplit = false }) => {
               <div className="text-left">
                 <span className="block text-[10px] font-black uppercase text-sky-700 leading-none">Portal Pasien</span>
                 <h2 className="text-sm md:text-base font-black text-slate-950 mt-1 leading-none">
-                  {currentUser ? `Pasien: ${currentUser.emailOrNik}` : "Penerjemah Bahasa Isyarat"}
+                  {activePatient ? <>Pasien: <span className="text-sky-700">{activePatient.name}</span> <span className="text-[10px] font-semibold text-slate-500">({activePatient.no_rm || activePatient.nik})</span></> : (currentUser ? `Pasien: ${currentUser.emailOrNik}` : "Penerjemah Bahasa Isyarat")}
                 </h2>
               </div>
             </div>
@@ -668,7 +668,7 @@ export const PatientView = ({ setView, isSplit = false }) => {
                         e.preventDefault();
                         if (customTtsText.trim()) {
                           speak(customTtsText);
-                          addLogEntry({ role: 'patient', text: customTtsText, confidence: 1.0 });
+                          addLogEntry({ role: 'patient', text: customTtsText, confidence: 1.0 }, activeSessionId);
                         }
                       }
                     }}
@@ -678,7 +678,7 @@ export const PatientView = ({ setView, isSplit = false }) => {
                     onClick={() => {
                       if (customTtsText.trim()) {
                         speak(customTtsText);
-                        addLogEntry({ role: 'patient', text: customTtsText, confidence: 1.0 });
+                        addLogEntry({ role: 'patient', text: customTtsText, confidence: 1.0 }, activeSessionId);
                       }
                     }}
                     className="px-5 py-2.5 bg-[#053D67] text-white rounded-xl font-bold text-xs uppercase hover:opacity-90 active:scale-95 transition-all shadow-md shrink-0"

@@ -30,9 +30,47 @@ export const AppProvider = ({ children }) => {
   const [showFeatureModal, setShowFeatureModal] = useState(false);
   const [toast, setToast] = useState(null);
 
+  const [notifications, setNotifications] = useState(() => {
+    const saved = localStorage.getItem('medsign_notifications');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('medsign_notifications', JSON.stringify(notifications));
+  }, [notifications]);
+
+  const addNotification = useCallback((message, type = 'info') => {
+    const timestampStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    const newNotif = {
+      id: Math.random().toString(36).substring(2, 9),
+      message,
+      type,
+      timestamp: timestampStr,
+      read: false
+    };
+    setNotifications(prev => [newNotif, ...prev]);
+  }, []);
+
+  const clearNotification = useCallback((id) => {
+    setNotifications(prev => prev.filter(n => n.id !== id));
+  }, []);
+
+  const clearAllNotifications = useCallback(() => {
+    setNotifications([]);
+  }, []);
+
+  const markAsRead = useCallback((id) => {
+    setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: True } : n));
+  }, []);
+
+  const markAllAsRead = useCallback(() => {
+    setNotifications(prev => prev.map(n => ({ ...n, read: True })));
+  }, []);
+
   const showToast = useCallback((message, type = "info") => {
     setToast({ message, type });
-  }, []);
+    addNotification(message, type);
+  }, [addNotification]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -282,7 +320,8 @@ export const AppProvider = ({ children }) => {
           emailOrNik,
           role: data.role || role,
           token: data.token,
-          must_change_password: data.must_change_password
+          must_change_password: data.must_change_password,
+          loginTime: Date.now()
         };
         setCurrentUser(userObj);
         localStorage.setItem('medsign_user', JSON.stringify(userObj));
@@ -299,11 +338,40 @@ export const AppProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
+  const logout = useCallback((reason = "") => {
     setCurrentUser(null);
     localStorage.removeItem('medsign_user');
-    showToast("Berhasil logout", "success");
-  };
+    localStorage.removeItem('medsign_grants');
+    if (reason === "expired") {
+      showToast("Sesi login Anda telah berakhir. Silakan login kembali.", "warning");
+      window.dispatchEvent(new CustomEvent('medsign:logout-expired'));
+    } else {
+      showToast("Berhasil logout", "success");
+    }
+  }, [showToast]);
+
+  useEffect(() => {
+    if (!currentUser) return;
+    const SESSION_TIMEOUT = 2 * 60 * 60 * 1000; // 2 jam
+    
+    // ponytail: default 2 hours timeout, upgrade to sliding session if needed
+    if (!currentUser.loginTime) {
+      const updatedUser = { ...currentUser, loginTime: Date.now() };
+      setCurrentUser(updatedUser);
+      localStorage.setItem('medsign_user', JSON.stringify(updatedUser));
+      return;
+    }
+    
+    const checkExpiry = () => {
+      if (Date.now() - currentUser.loginTime > SESSION_TIMEOUT) {
+        logout("expired");
+      }
+    };
+    
+    checkExpiry();
+    const interval = setInterval(checkExpiry, 15000);
+    return () => clearInterval(interval);
+  }, [currentUser, logout]);
 
   const setLanguage = (lang) => {
     setLanguageState(lang);
@@ -442,7 +510,9 @@ export const AppProvider = ({ children }) => {
     setSpeakingText(text);
     setSpeakingProgress(0);
 
-    const utterance = new SpeechSynthesisUtterance(text);
+    // Replace underscores and hyphens with spaces for natural SpeechSynthesis speech
+    const cleanText = text.replace(/[_-]/g, ' ');
+    const utterance = new SpeechSynthesisUtterance(cleanText);
     
     if (selectedVoiceName && availableVoices.length > 0) {
       const voice = availableVoices.find(v => v.name === selectedVoiceName);
@@ -786,6 +856,11 @@ export const AppProvider = ({ children }) => {
         nlgResult,
         setNlgResult,
         isGenerating,
+        notifications,
+        clearNotification,
+        clearAllNotifications,
+        markAsRead,
+        markAllAsRead,
         isTtsPaused,
         pauseTts,
         resumeTts,

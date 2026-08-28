@@ -569,1038 +569,1192 @@
     },
     {
       "id": 80,
-      "slug": "tidak",
-      "display": "Tidak",
-      "category": "komunikasi_dasar",
-      "emergency": false
-    },
-    {
-      "id": 81,
       "slug": "tolong",
       "display": "Tolong",
       "category": "komunikasi_dasar",
       "emergency": true
     },
     {
-      "id": 82,
+      "id": 81,
       "slug": "terima_kasih",
       "display": "Terima kasih",
       "category": "komunikasi_dasar",
       "emergency": false
     },
     {
-      "id": 83,
+      "id": 82,
       "slug": "mengerti",
       "display": "Mengerti",
       "category": "komunikasi_dasar",
       "emergency": false
     },
     {
-      "id": 84,
+      "id": 83,
       "slug": "tidak_mengerti",
       "display": "Tidak mengerti",
       "category": "komunikasi_dasar",
       "emergency": false
     },
     {
-      "id": 85,
+      "id": 84,
       "slug": "darurat",
       "display": "Darurat",
       "category": "komunikasi_dasar",
       "emergency": true
     },
     {
-      "id": 86,
+      "id": 85,
       "slug": "cepat",
       "display": "Cepat",
       "category": "komunikasi_dasar",
       "emergency": false
     },
     {
-      "id": 87,
+      "id": 86,
       "slug": "keluarga",
       "display": "Keluarga",
       "category": "komunikasi_dasar",
       "emergency": false
     },
     {
-      "id": 88,
+      "id": 87,
       "slug": "pulang",
       "display": "Pulang",
       "category": "komunikasi_dasar",
       "emergency": false
     },
     {
-      "id": 89,
+      "id": 88,
       "slug": "rumah_sakit",
       "display": "Rumah sakit",
       "category": "fasilitas_tindakan_medis",
       "emergency": false
     },
     {
-      "id": 90,
+      "id": 89,
       "slug": "pasien",
       "display": "Pasien",
       "category": "fasilitas_tindakan_medis",
       "emergency": false
     },
     {
-      "id": 91,
+      "id": 90,
       "slug": "perawat",
       "display": "Perawat",
       "category": "fasilitas_tindakan_medis",
       "emergency": false
     },
     {
-      "id": 92,
+      "id": 91,
       "slug": "ambulans",
       "display": "Ambulans",
       "category": "fasilitas_tindakan_medis",
       "emergency": true
     },
     {
-      "id": 93,
+      "id": 92,
       "slug": "suntik",
       "display": "Suntik",
       "category": "fasilitas_tindakan_medis",
       "emergency": false
     },
     {
-      "id": 94,
+      "id": 93,
       "slug": "infus",
       "display": "Infus",
       "category": "fasilitas_tindakan_medis",
       "emergency": false
     },
     {
-      "id": 95,
+      "id": 94,
       "slug": "vaksin",
       "display": "Vaksin",
       "category": "fasilitas_tindakan_medis",
       "emergency": false
     },
     {
-      "id": 96,
+      "id": 95,
       "slug": "laboratorium",
       "display": "Laboratorium",
       "category": "fasilitas_tindakan_medis",
       "emergency": false
     },
     {
-      "id": 97,
+      "id": 96,
       "slug": "rontgen",
       "display": "Rontgen",
       "category": "fasilitas_tindakan_medis",
       "emergency": false
     },
     {
-      "id": 98,
+      "id": 97,
       "slug": "rawat_inap",
       "display": "Rawat inap",
       "category": "fasilitas_tindakan_medis",
       "emergency": false
     },
     {
-      "id": 99,
+      "id": 98,
       "slug": "mata",
       "display": "Mata",
       "category": "bagian_tubuh",
       "emergency": false
     },
     {
-      "id": 100,
+      "id": 99,
       "slug": "hidung",
       "display": "Hidung",
       "category": "bagian_tubuh",
       "emergency": false
     },
     {
-      "id": 101,
+      "id": 100,
       "slug": "mulut",
       "display": "Mulut",
       "category": "bagian_tubuh",
       "emergency": false
     },
     {
-      "id": 102,
+      "id": 101,
       "slug": "telinga",
       "display": "Telinga",
       "category": "bagian_tubuh",
       "emergency": false
     },
     {
-      "id": 103,
+      "id": 102,
       "slug": "gigi",
       "display": "Gigi",
       "category": "bagian_tubuh",
       "emergency": false
     },
     {
-      "id": 104,
+      "id": 103,
       "slug": "perut",
       "display": "Perut",
       "category": "bagian_tubuh",
       "emergency": false
     },
     {
-      "id": 105,
+      "id": 104,
       "slug": "tangan",
       "display": "Tangan",
       "category": "bagian_tubuh",
       "emergency": false
     },
     {
-      "id": 106,
+      "id": 105,
       "slug": "jari",
       "display": "Jari",
       "category": "bagian_tubuh",
       "emergency": false
     },
     {
-      "id": 107,
+      "id": 106,
       "slug": "lutut",
       "display": "Lutut",
       "category": "bagian_tubuh",
       "emergency": false
     },
     {
-      "id": 108,
+      "id": 107,
       "slug": "bahu",
       "display": "Bahu",
       "category": "bagian_tubuh",
       "emergency": false
     },
     {
-      "id": 109,
+      "id": 108,
       "slug": "gatal",
       "display": "Gatal",
       "category": "gejala_tambahan",
       "emergency": false
     },
     {
-      "id": 110,
+      "id": 109,
       "slug": "diare",
       "display": "Diare",
       "category": "gejala_tambahan",
       "emergency": false
     },
     {
-      "id": 111,
+      "id": 110,
       "slug": "pendarahan",
       "display": "Pendarahan",
       "category": "gejala_tambahan",
       "emergency": true
     },
     {
-      "id": 112,
+      "id": 111,
       "slug": "pingsan",
       "display": "Pingsan",
       "category": "gejala_tambahan",
       "emergency": true
     },
     {
-      "id": 113,
+      "id": 112,
       "slug": "kejang",
       "display": "Kejang",
       "category": "gejala_tambahan",
       "emergency": true
     },
     {
-      "id": 114,
+      "id": 113,
       "slug": "meriang",
       "display": "Meriang",
       "category": "gejala_tambahan",
       "emergency": false
     },
     {
-      "id": 115,
+      "id": 114,
       "slug": "kaku",
       "display": "Kaku",
       "category": "gejala_tambahan",
       "emergency": false
     },
     {
-      "id": 116,
+      "id": 115,
       "slug": "mati_rasa",
       "display": "Mati rasa",
       "category": "gejala_tambahan",
       "emergency": false
     },
     {
-      "id": 117,
+      "id": 116,
       "slug": "sakit_kepala",
       "display": "Sakit kepala",
       "category": "gejala_tambahan",
       "emergency": true
     },
     {
-      "id": 118,
+      "id": 117,
       "slug": "cedera",
       "display": "Cedera",
       "category": "gejala_tambahan",
       "emergency": true
     },
     {
-      "id": 119,
+      "id": 118,
       "slug": "apotek",
       "display": "Apotek",
       "category": "obat_pengobatan",
       "emergency": false
     },
     {
-      "id": 120,
+      "id": 119,
       "slug": "tablet",
       "display": "Tablet",
       "category": "obat_pengobatan",
       "emergency": false
     },
     {
-      "id": 121,
+      "id": 120,
       "slug": "kapsul",
       "display": "Kapsul",
       "category": "obat_pengobatan",
       "emergency": false
     },
     {
-      "id": 122,
+      "id": 121,
       "slug": "sirup",
       "display": "Sirup",
       "category": "obat_pengobatan",
       "emergency": false
     },
     {
-      "id": 123,
+      "id": 122,
       "slug": "antibiotik",
       "display": "Antibiotik",
       "category": "obat_pengobatan",
       "emergency": false
     },
     {
-      "id": 124,
+      "id": 123,
       "slug": "vitamin",
       "display": "Vitamin",
       "category": "obat_pengobatan",
       "emergency": false
     },
     {
-      "id": 125,
+      "id": 124,
       "slug": "dosis",
       "display": "Dosis",
       "category": "obat_pengobatan",
       "emergency": false
     },
     {
-      "id": 126,
+      "id": 125,
       "slug": "minum_obat",
       "display": "Minum obat",
       "category": "obat_pengobatan",
       "emergency": false
     },
     {
-      "id": 127,
+      "id": 126,
       "slug": "sebelum_makan",
       "display": "Sebelum makan",
       "category": "obat_pengobatan",
       "emergency": false
     },
     {
-      "id": 128,
+      "id": 127,
       "slug": "sesudah_makan",
       "display": "Sesudah makan",
       "category": "obat_pengobatan",
       "emergency": false
     },
     {
-      "id": 129,
+      "id": 128,
       "slug": "hari",
       "display": "Hari",
       "category": "obat_pengobatan",
       "emergency": false
     },
     {
-      "id": 130,
+      "id": 129,
       "slug": "minggu",
       "display": "Minggu",
       "category": "obat_pengobatan",
       "emergency": false
     },
     {
-      "id": 131,
+      "id": 130,
       "slug": "bulan",
       "display": "Bulan",
       "category": "obat_pengobatan",
       "emergency": false
     },
     {
-      "id": 132,
+      "id": 131,
       "slug": "kontrol",
       "display": "Kontrol",
       "category": "obat_pengobatan",
       "emergency": false
     },
     {
-      "id": 133,
+      "id": 132,
       "slug": "terapi",
       "display": "Terapi",
       "category": "obat_pengobatan",
       "emergency": false
     },
     {
-      "id": 134,
+      "id": 133,
       "slug": "rehabilitasi",
       "display": "Rehabilitasi",
       "category": "obat_pengobatan",
       "emergency": false
     },
     {
-      "id": 135,
+      "id": 134,
       "slug": "efek_samping",
       "display": "Efek Samping",
       "category": "obat_pengobatan",
       "emergency": false
     },
     {
-      "id": 136,
+      "id": 135,
       "slug": "pemeriksaan",
       "display": "Pemeriksaan",
       "category": "pemeriksaan_medis",
       "emergency": false
     },
     {
-      "id": 137,
+      "id": 136,
       "slug": "hasil",
       "display": "Hasil",
       "category": "pemeriksaan_medis",
       "emergency": false
     },
     {
-      "id": 138,
+      "id": 137,
       "slug": "tes",
       "display": "Tes",
       "category": "pemeriksaan_medis",
       "emergency": false
     },
     {
-      "id": 139,
+      "id": 138,
       "slug": "urine",
       "display": "Urine",
       "category": "pemeriksaan_medis",
       "emergency": false
     },
     {
-      "id": 140,
+      "id": 139,
       "slug": "tekanan_darah",
       "display": "Tekanan darah",
       "category": "pemeriksaan_medis",
       "emergency": false
     },
     {
-      "id": 141,
+      "id": 140,
       "slug": "berat_badan",
       "display": "Berat badan",
       "category": "pemeriksaan_medis",
       "emergency": false
     },
     {
-      "id": 142,
+      "id": 141,
       "slug": "tinggi_badan",
       "display": "Tinggi badan",
       "category": "pemeriksaan_medis",
       "emergency": false
     },
     {
-      "id": 143,
+      "id": 142,
       "slug": "suhu_tubuh",
       "display": "Suhu tubuh",
       "category": "pemeriksaan_medis",
       "emergency": false
     },
     {
-      "id": 144,
+      "id": 143,
       "slug": "denyut_nadi",
       "display": "Denyut nadi",
       "category": "pemeriksaan_medis",
       "emergency": false
     },
     {
-      "id": 145,
+      "id": 144,
       "slug": "napas_cepat",
       "display": "Napas cepat",
       "category": "pemeriksaan_medis",
       "emergency": false
     },
     {
-      "id": 146,
+      "id": 145,
       "slug": "napas_lambat",
       "display": "Napas lambat",
       "category": "pemeriksaan_medis",
       "emergency": false
     },
     {
-      "id": 147,
+      "id": 146,
       "slug": "foto_rontgen",
       "display": "Foto rontgen",
       "category": "pemeriksaan_medis",
       "emergency": false
     },
     {
-      "id": 148,
+      "id": 147,
       "slug": "usg",
       "display": "USG",
       "category": "pemeriksaan_medis",
       "emergency": false
     },
     {
-      "id": 149,
+      "id": 148,
       "slug": "ct_scan",
       "display": "CT SCAN",
       "category": "pemeriksaan_medis",
       "emergency": false
     },
     {
-      "id": 150,
+      "id": 149,
       "slug": "mri",
       "display": "MRI",
       "category": "pemeriksaan_medis",
       "emergency": false
     },
     {
-      "id": 151,
+      "id": 150,
       "slug": "positif",
       "display": "Positif",
       "category": "pemeriksaan_medis",
       "emergency": false
     },
     {
-      "id": 152,
+      "id": 151,
       "slug": "negatif",
       "display": "Negatif",
       "category": "pemeriksaan_medis",
       "emergency": false
     },
     {
-      "id": 153,
+      "id": 152,
       "slug": "baik",
       "display": "Baik",
       "category": "kondisi_pasien",
       "emergency": false
     },
     {
-      "id": 154,
+      "id": 153,
       "slug": "buruk",
       "display": "Buruk",
       "category": "kondisi_pasien",
       "emergency": false
     },
     {
-      "id": 155,
+      "id": 154,
       "slug": "ringan",
       "display": "Ringan",
       "category": "kondisi_pasien",
       "emergency": false
     },
     {
-      "id": 156,
+      "id": 155,
       "slug": "sedang",
       "display": "Sedang",
       "category": "kondisi_pasien",
       "emergency": false
     },
     {
-      "id": 157,
+      "id": 156,
       "slug": "berat",
       "display": "Berat",
       "category": "kondisi_pasien",
       "emergency": false
     },
     {
-      "id": 158,
+      "id": 157,
       "slug": "stabil",
       "display": "Stabil",
       "category": "kondisi_pasien",
       "emergency": false
     },
     {
-      "id": 159,
+      "id": 158,
       "slug": "tidak_stabil",
       "display": "Tidak stabil",
       "category": "kondisi_pasien",
       "emergency": false
     },
     {
-      "id": 160,
+      "id": 159,
       "slug": "sadar",
       "display": "Sadar",
       "category": "kondisi_pasien",
       "emergency": false
     },
     {
-      "id": 161,
+      "id": 160,
       "slug": "tidak_sadar",
       "display": "Tidak sadar",
       "category": "kondisi_pasien",
       "emergency": true
     },
     {
-      "id": 162,
+      "id": 161,
       "slug": "lemah",
       "display": "Lemah",
       "category": "kondisi_pasien",
       "emergency": false
     },
     {
-      "id": 163,
+      "id": 162,
       "slug": "lelah",
       "display": "Lelah",
       "category": "kondisi_pasien",
       "emergency": false
     },
     {
-      "id": 164,
+      "id": 163,
       "slug": "gelisah",
       "display": "Gelisah",
       "category": "kondisi_pasien",
       "emergency": false
     },
     {
-      "id": 165,
+      "id": 164,
       "slug": "cemas",
       "display": "Cemas",
       "category": "kondisi_pasien",
       "emergency": false
     },
     {
-      "id": 166,
+      "id": 165,
       "slug": "takut",
       "display": "Takut",
       "category": "kondisi_pasien",
       "emergency": false
     },
     {
-      "id": 167,
+      "id": 166,
       "slug": "sedih",
       "display": "Sedih",
       "category": "kondisi_pasien",
       "emergency": false
     },
     {
-      "id": 168,
+      "id": 167,
       "slug": "stres",
       "display": "Stres",
       "category": "kondisi_pasien",
       "emergency": false
     },
     {
-      "id": 169,
+      "id": 168,
       "slug": "nyaman",
       "display": "Nyaman",
       "category": "kondisi_pasien",
       "emergency": false
     },
     {
-      "id": 170,
+      "id": 169,
       "slug": "tidak_nyaman",
       "display": "Tidak nyaman",
       "category": "kondisi_pasien",
       "emergency": false
     },
     {
-      "id": 171,
+      "id": 170,
       "slug": "sehat",
       "display": "Sehat",
       "category": "kondisi_pasien",
       "emergency": false
     },
     {
-      "id": 172,
+      "id": 171,
       "slug": "pendaftaran",
       "display": "Pendaftaran",
       "category": "komunikasi_rumah_sakit",
       "emergency": false
     },
     {
-      "id": 173,
+      "id": 172,
       "slug": "nomor_antrean",
       "display": "Nomor antrean",
       "category": "komunikasi_rumah_sakit",
       "emergency": false
     },
     {
-      "id": 174,
+      "id": 173,
       "slug": "ruang_tunggu",
       "display": "Ruang tunggu",
       "category": "komunikasi_rumah_sakit",
       "emergency": false
     },
     {
-      "id": 175,
+      "id": 174,
       "slug": "ruang_periksa",
       "display": "Ruang periksa",
       "category": "komunikasi_rumah_sakit",
       "emergency": false
     },
     {
-      "id": 176,
+      "id": 175,
       "slug": "kamar_pasien",
       "display": "Kamar pasien",
       "category": "komunikasi_rumah_sakit",
       "emergency": false
     },
     {
-      "id": 177,
+      "id": 176,
       "slug": "instalasi_gawat_darurat",
       "display": "Instalasi gawat darurat",
       "category": "komunikasi_rumah_sakit",
       "emergency": true
     },
     {
-      "id": 178,
+      "id": 177,
       "slug": "dokter_spesialis",
       "display": "Dokter spesialis",
       "category": "komunikasi_rumah_sakit",
       "emergency": false
     },
     {
-      "id": 179,
+      "id": 178,
       "slug": "jadwal",
       "display": "Jadwal",
       "category": "komunikasi_rumah_sakit",
       "emergency": false
     },
     {
-      "id": 180,
+      "id": 179,
       "slug": "janji_temu",
       "display": "Janji temu",
       "category": "komunikasi_rumah_sakit",
       "emergency": false
     },
     {
-      "id": 181,
+      "id": 180,
       "slug": "rujukan",
       "display": "Rujukan",
       "category": "komunikasi_rumah_sakit",
       "emergency": false
     },
     {
-      "id": 182,
+      "id": 181,
       "slug": "administrasi",
       "display": "Administrasi",
       "category": "komunikasi_rumah_sakit",
       "emergency": false
     },
     {
-      "id": 183,
+      "id": 182,
       "slug": "pembayaran",
       "display": "Pembayaran",
       "category": "komunikasi_rumah_sakit",
       "emergency": false
     },
     {
-      "id": 184,
+      "id": 183,
       "slug": "bpjs",
       "display": "BPJS",
       "category": "komunikasi_rumah_sakit",
       "emergency": false
     },
     {
-      "id": 185,
+      "id": 184,
       "slug": "asuransi",
       "display": "Asuransi",
       "category": "komunikasi_rumah_sakit",
       "emergency": false
     },
     {
-      "id": 186,
+      "id": 185,
       "slug": "identitas",
       "display": "Identitas",
       "category": "komunikasi_rumah_sakit",
       "emergency": false
     },
     {
-      "id": 187,
+      "id": 186,
       "slug": "kartu_pasien",
       "display": "Kartu pasien",
       "category": "komunikasi_rumah_sakit",
       "emergency": false
     },
     {
-      "id": 188,
+      "id": 187,
       "slug": "pendamping",
       "display": "Pendamping",
       "category": "komunikasi_rumah_sakit",
       "emergency": false
     },
     {
-      "id": 189,
+      "id": 188,
       "slug": "wali",
       "display": "Wali",
       "category": "komunikasi_rumah_sakit",
       "emergency": false
     },
     {
-      "id": 190,
+      "id": 189,
       "slug": "tanda_tangan",
       "display": "Tanda tangan",
       "category": "komunikasi_rumah_sakit",
       "emergency": false
     },
     {
-      "id": 191,
+      "id": 190,
       "slug": "selesai",
       "display": "Selesai",
       "category": "komunikasi_rumah_sakit",
       "emergency": false
     },
     {
-      "id": 192,
+      "id": 191,
       "slug": "halo_test",
       "display": "Halo_test",
       "category": "kategori_umum_kata_interaksi",
       "emergency": false
     },
     {
-      "id": 193,
+      "id": 192,
       "slug": "a",
       "display": "A",
       "category": "Abjad",
       "emergency": false
     },
     {
-      "id": 194,
+      "id": 193,
       "slug": "b",
       "display": "B",
       "category": "Abjad",
       "emergency": false
     },
     {
-      "id": 195,
+      "id": 194,
       "slug": "c",
       "display": "C",
       "category": "Abjad",
       "emergency": false
     },
     {
-      "id": 196,
+      "id": 195,
       "slug": "d",
       "display": "D",
       "category": "Abjad",
       "emergency": false
     },
     {
-      "id": 197,
+      "id": 196,
       "slug": "e",
       "display": "E",
       "category": "Abjad",
       "emergency": false
     },
     {
-      "id": 198,
+      "id": 197,
       "slug": "f",
       "display": "F",
       "category": "Abjad",
       "emergency": false
     },
     {
-      "id": 199,
+      "id": 198,
       "slug": "g",
       "display": "G",
       "category": "Abjad",
       "emergency": false
     },
     {
-      "id": 200,
+      "id": 199,
       "slug": "h",
       "display": "H",
       "category": "Abjad",
       "emergency": false
     },
     {
-      "id": 201,
+      "id": 200,
       "slug": "i",
       "display": "I",
       "category": "Abjad",
       "emergency": false
     },
     {
-      "id": 202,
+      "id": 201,
       "slug": "j",
       "display": "J",
       "category": "Abjad",
       "emergency": false
     },
     {
-      "id": 203,
+      "id": 202,
       "slug": "k",
       "display": "K",
       "category": "Abjad",
       "emergency": false
     },
     {
-      "id": 204,
+      "id": 203,
       "slug": "l",
       "display": "L",
       "category": "Abjad",
       "emergency": false
     },
     {
-      "id": 205,
+      "id": 204,
       "slug": "m",
       "display": "M",
       "category": "Abjad",
       "emergency": false
     },
     {
-      "id": 206,
+      "id": 205,
       "slug": "n",
       "display": "N",
       "category": "Abjad",
       "emergency": false
     },
     {
-      "id": 207,
+      "id": 206,
       "slug": "o",
       "display": "O",
       "category": "Abjad",
       "emergency": false
     },
     {
-      "id": 208,
+      "id": 207,
       "slug": "p",
       "display": "P",
       "category": "Abjad",
       "emergency": false
     },
     {
-      "id": 209,
+      "id": 208,
       "slug": "q",
       "display": "Q",
       "category": "Abjad",
       "emergency": false
     },
     {
-      "id": 210,
+      "id": 209,
       "slug": "r",
       "display": "R",
       "category": "Abjad",
       "emergency": false
     },
     {
-      "id": 211,
+      "id": 210,
       "slug": "s",
       "display": "S",
       "category": "Abjad",
       "emergency": false
     },
     {
-      "id": 212,
+      "id": 211,
       "slug": "t",
       "display": "T",
       "category": "Abjad",
       "emergency": false
     },
     {
-      "id": 213,
+      "id": 212,
       "slug": "u",
       "display": "U",
       "category": "Abjad",
       "emergency": false
     },
     {
-      "id": 214,
+      "id": 213,
       "slug": "v",
       "display": "V",
       "category": "Abjad",
       "emergency": false
     },
     {
-      "id": 215,
+      "id": 214,
       "slug": "w",
       "display": "W",
       "category": "Abjad",
       "emergency": false
     },
     {
-      "id": 216,
+      "id": 215,
       "slug": "x",
       "display": "X",
       "category": "Abjad",
       "emergency": false
     },
     {
-      "id": 217,
+      "id": 216,
       "slug": "y",
       "display": "Y",
       "category": "Abjad",
       "emergency": false
     },
     {
-      "id": 218,
+      "id": 217,
       "slug": "z",
       "display": "Z",
       "category": "Abjad",
       "emergency": false
     },
     {
-      "id": 219,
+      "id": 218,
       "slug": "1",
       "display": "1",
       "category": "Angka",
       "emergency": false
     },
     {
-      "id": 220,
+      "id": 219,
       "slug": "2",
       "display": "2",
       "category": "Angka",
       "emergency": false
     },
     {
-      "id": 221,
+      "id": 220,
       "slug": "3",
       "display": "3",
       "category": "Angka",
       "emergency": false
     },
     {
-      "id": 222,
+      "id": 221,
       "slug": "4",
       "display": "4",
       "category": "Angka",
       "emergency": false
     },
     {
-      "id": 223,
+      "id": 222,
       "slug": "5",
       "display": "5",
       "category": "Angka",
       "emergency": false
     },
     {
-      "id": 224,
+      "id": 223,
       "slug": "6",
       "display": "6",
       "category": "Angka",
       "emergency": false
     },
     {
-      "id": 225,
+      "id": 224,
       "slug": "7",
       "display": "7",
       "category": "Angka",
       "emergency": false
     },
     {
-      "id": 226,
+      "id": 225,
       "slug": "8",
       "display": "8",
       "category": "Angka",
       "emergency": false
     },
     {
-      "id": 227,
+      "id": 226,
       "slug": "9",
       "display": "9",
       "category": "Angka",
+      "emergency": false
+    },
+    {
+      "id": 227,
+      "slug": "agar",
+      "display": "Agar",
+      "category": "komunikasi_dasar",
+      "emergency": false
+    },
+    {
+      "id": 228,
+      "slug": "dan",
+      "display": "Dan",
+      "category": "komunikasi_dasar",
+      "emergency": false
+    },
+    {
+      "id": 229,
+      "slug": "dari",
+      "display": "Dari",
+      "category": "komunikasi_dasar",
+      "emergency": false
+    },
+    {
+      "id": 230,
+      "slug": "di",
+      "display": "Di",
+      "category": "komunikasi_dasar",
+      "emergency": false
+    },
+    {
+      "id": 231,
+      "slug": "dia",
+      "display": "Dia",
+      "category": "komunikasi_dasar",
+      "emergency": false
+    },
+    {
+      "id": 232,
+      "slug": "kami",
+      "display": "Kami",
+      "category": "komunikasi_dasar",
+      "emergency": false
+    },
+    {
+      "id": 233,
+      "slug": "kamu",
+      "display": "Kamu",
+      "category": "komunikasi_dasar",
+      "emergency": false
+    },
+    {
+      "id": 234,
+      "slug": "karena",
+      "display": "Karena",
+      "category": "komunikasi_dasar",
+      "emergency": false
+    },
+    {
+      "id": 235,
+      "slug": "ke",
+      "display": "Ke",
+      "category": "komunikasi_dasar",
+      "emergency": false
+    },
+    {
+      "id": 236,
+      "slug": "kita",
+      "display": "Kita",
+      "category": "komunikasi_dasar",
+      "emergency": false
+    },
+    {
+      "id": 237,
+      "slug": "mengalami",
+      "display": "Mengalami",
+      "category": "komunikasi_dasar",
+      "emergency": false
+    },
+    {
+      "id": 238,
+      "slug": "merasa",
+      "display": "Merasa",
+      "category": "komunikasi_dasar",
+      "emergency": false
+    },
+    {
+      "id": 239,
+      "slug": "mereka",
+      "display": "Mereka",
+      "category": "komunikasi_dasar",
+      "emergency": false
+    },
+    {
+      "id": 240,
+      "slug": "saya",
+      "display": "Saya",
+      "category": "komunikasi_dasar",
+      "emergency": false
+    },
+    {
+      "id": 241,
+      "slug": "sore",
+      "display": "Sore",
+      "category": "kategori_umum_kata_interaksi",
+      "emergency": false
+    },
+    {
+      "id": 242,
+      "slug": "aku",
+      "display": "Aku",
+      "category": "komunikasi_dasar",
+      "emergency": false
+    },
+    {
+      "id": 243,
+      "slug": "sepertinya",
+      "display": "Sepertinya",
+      "category": "komunikasi_dasar",
+      "emergency": false
+    },
+    {
+      "id": 244,
+      "slug": "sampai",
+      "display": "Sampai",
+      "category": "komunikasi_dasar",
+      "emergency": false
+    },
+    {
+      "id": 245,
+      "slug": "sehingga",
+      "display": "Sehingga",
+      "category": "komunikasi_dasar",
+      "emergency": false
+    },
+    {
+      "id": 246,
+      "slug": "sering",
+      "display": "Sering",
+      "category": "komunikasi_dasar",
+      "emergency": false
+    },
+    {
+      "id": 247,
+      "slug": "tetapi",
+      "display": "Tetapi",
+      "category": "komunikasi_dasar",
+      "emergency": false
+    },
+    {
+      "id": 248,
+      "slug": "tidak",
+      "display": "Tidak",
+      "category": "komunikasi_dasar",
+      "emergency": false
+    },
+    {
+      "id": 249,
+      "slug": "yang",
+      "display": "Yang",
+      "category": "komunikasi_dasar",
       "emergency": false
     }
   ]

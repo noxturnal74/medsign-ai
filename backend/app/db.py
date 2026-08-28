@@ -1139,6 +1139,7 @@ def init_db():
         ("ig_new_1", "https://www.instagram.com/p/Dccj5D-ksGL/", "https://www.instagram.com/p/Dccj5D-ksGL/media/?size=l", "Konten terbaru MedSign AI — edukasi & dokumentasi kegiatan PKM-KC.", 1),
         ("ig_new_2", "https://www.instagram.com/p/DccjpxGEuzm/", "https://www.instagram.com/p/DccjpxGEuzm/media/?size=l", "Konten terbaru MedSign AI — edukasi & dokumentasi kegiatan PKM-KC.", 2),
         ("ig_new_3", "https://www.instagram.com/p/DcQqPOHEqKw/", "https://www.instagram.com/p/DcQqPOHEqKw/media/?size=l", "Konten terbaru MedSign AI — edukasi & dokumentasi kegiatan PKM-KC.", 3),
+        ("ig_new_4", "https://www.instagram.com/p/Dclp_ZCpiOd/", "https://www.instagram.com/p/Dclp_ZCpiOd/media/?size=l", "Mulai Konsultasi Dengan Teman Tuli.", 4),
     ]
     for item in ig_new_posts:
         cursor.execute("SELECT id FROM instagram_posts WHERE post_url = ?", (item[1],))
@@ -1147,6 +1148,21 @@ def init_db():
                 INSERT INTO instagram_posts (id, post_url, thumbnail_image, caption_short, display_order, is_active, added_at)
                 VALUES (?, ?, ?, ?, ?, 1, ?)
             """, (item[0], item[1], item[2], item[3], item[4], datetime.utcnow().isoformat()))
+
+    # 6c. Seed new Medium articles (idempotent per slug)
+    medium_articles = [
+        ("medium_1", "AI System Developed by Indonesian Students Aims to Bridge Communication Between Deaf Patients and Healthcare Professionals", "ai-system-developed-by-indonesian-students", "/Homepage/ezgif-frame-008.png", "An artificial intelligence system developed by Indonesian students from Universitas Ma Chung aims to bridge communication between deaf patients and healthcare professionals using computer vision and deep learning to translate Indonesian Sign Language (BISINDO). Read more on Medium.", "AI System Developed by Indonesian Students Aims to Bridge Communication.", "Internasional", "MedSign AI", "https://medium.com/@aimedsign/ai-system-developed-by-indonesian-students-aims-to-bridge-communication-between-deaf-patients-and-a2e10d192858"),
+        ("medium_2", "Before It Ever Reaches a Patient, This Sign Language Website Had to Prove Itself First", "before-it-ever-reaches-a-patient", "/Homepage/ezgif-frame-015.png", "Before implementing a medical sign language translation system in a hospital setting, the software must go through rigorous validation, training, and testing to prove its accuracy and reliability for clinical use. Read the full article on Medium.", "Before It Ever Reaches a Patient, This Sign Language Website Had to Prove Itself.", "Edukasi BISINDO", "MedSign AI", "https://medium.com/@aimedsign/before-it-ever-reaches-a-patient-this-sign-language-website-had-to-prove-itself-first-ba200e1cfae0"),
+        ("medium_3", "Inside a Malang Hospital: Students are Teaching AI to Bridge a Communication Gap", "inside-a-malang-hospital", "/Homepage/ezgif-frame-030.png", "Inside a hospital in Malang, students from Universitas Ma Chung are working closely with medical professionals to train an AI model on clinical gestures to eliminate communication barriers for Deaf patients. Read more on Medium.", "Inside a Malang Hospital: Students are Teaching AI to Bridge a Communication Gap.", "Berita Utama", "MedSign AI", "https://medium.com/@aimedsign/inside-a-malang-hospital-students-are-teaching-ai-to-bridge-a-communication-gap-ec60e028c4ba")
+    ]
+    for item in medium_articles:
+        cursor.execute("SELECT id FROM articles WHERE slug = ?", (item[2],))
+        if not cursor.fetchone():
+            now = datetime.utcnow().isoformat()
+            cursor.execute("""
+                INSERT INTO articles (id, title, slug, cover_image, content, excerpt, category, author, status, published_at, created_at, updated_at, ref_url)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'published', ?, ?, ?, ?)
+            """, (item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7], now, now, now, item[8]))
 
     cursor.execute("SELECT COUNT(*) FROM reviews")
     if cursor.fetchone()[0] == 0:

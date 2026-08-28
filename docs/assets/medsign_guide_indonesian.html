@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Buku Panduan Pengguna MedSign AI</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+@page {
+  size: A4;
+  margin: 0;
+}
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: 'Inter', sans-serif;
+  color: #2d3f4e;
+  background-color: #ffffff;
+  line-height: 1.6;
+  font-size: 9.5pt;
+}
+
+/* Page styles */
+.page {
+  width: 210mm;
+  height: 297mm;
+  padding: 22mm 20mm 20mm 22mm;
+  position: relative;
+  page-break-after: always;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Cover Page Specific */
+.cover {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  background-color: #f8fafc;
+}
+.cover-header {
+  width: 100%;
+  padding: 40px 45px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+}
+.cover-logos {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.cover-logo-img {
+  height: 45px;
+  object-fit: contain;
+}
+.cover-body {
+  width: 100%;
+  padding: 0 45px;
+  margin-top: auto;
+  margin-bottom: auto;
+  z-index: 10;
+  text-align: left;
+}
+.cover-label {
+  font-size: 10pt;
+  font-weight: 900;
+  color: #0284c7;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cover-label::before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 3px;
+  background: #0284c7;
+}
+.cover-title {
+  font-size: 38pt;
+  font-weight: 900;
+  color: #0f172a;
+  line-height: 1.1;
+  letter-spacing: -1.5px;
+  margin-bottom: 12px;
+}
+.cover-subtitle {
+  font-size: 14pt;
+  font-weight: 600;
+  color: #0284c7;
+  line-height: 1.4;
+  margin-bottom: 24px;
+}
+.cover-desc {
+  font-size: 10pt;
+  color: #475569;
+  line-height: 1.6;
+  max-width: 150mm;
+}
+.cover-meta {
+  width: 100%;
+  padding: 40px 45px;
+  border-top: 1px solid rgba(0,0,0,0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  z-index: 10;
+}
+.cover-team {
+  font-size: 8.5pt;
+  color: #64748b;
+  line-height: 1.6;
+}
+.cover-team strong {
+  color: #0f172a;
+  font-weight: 700;
+}
+.cover-year {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9pt;
+  color: #64748b;
+  font-weight: 700;
+}
+
+/* Content styles */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #0284c7;
+  padding-bottom: 8px;
+  margin-bottom: 15px;
+}
+.header-title {
+  font-size: 8.5pt;
+  font-weight: 900;
+  color: #0f172a;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.header-chapter {
+  font-size: 8.5pt;
+  font-weight: 700;
+  color: #0284c7;
+  text-transform: uppercase;
+}
+.content {
+  flex-grow: 1;
+}
+.chapter-title {
+  font-size: 18pt;
+  font-weight: 900;
+  color: #0f172a;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+.section-title {
+  font-size: 11pt;
+  font-weight: 700;
+  color: #1e293b;
+  margin-top: 12px;
+  margin-bottom: 6px;
+  border-left: 3px solid #0284c7;
+  padding-left: 8px;
+}
+p {
+  font-size: 9pt;
+  color: #334155;
+  margin-bottom: 8px;
+  text-align: justify;
+}
+ul, ol {
+  margin-bottom: 10px;
+  padding-left: 18px;
+}
+li {
+  font-size: 9pt;
+  color: #334155;
+  margin-bottom: 4px;
+}
+li strong {
+  color: #0f172a;
+}
+.table-wrap {
+  margin: 12px 0;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th {
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 8pt;
+  font-weight: 700;
+  padding: 6px 8px;
+  border: 1px solid #0f172a;
+  text-transform: uppercase;
+}
+td {
+  padding: 6px 8px;
+  border: 1px solid #e2e8f0;
+  font-size: 8pt;
+  color: #334155;
+}
+tr:nth-child(even) {
+  background: #f8fafc;
+}
+.screenshot-wrap {
+  margin: 12px 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  background: #f1f5f9;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.screenshot-label {
+  display: block;
+  color: #64748b;
+  font-size: 8pt;
+  font-weight: 700;
+  text-align: center;
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 6px;
+  margin-top: 15px;
+}
+.footer span {
+  font-size: 7.5pt;
+  color: #94a3b8;
+  font-weight: 600;
+}
+</style>
+</head>
+<body>
+
+<!-- HALAMAN 1: COVER -->
+<div class="page cover">
+  <div class="cover-header">
+    <div class="cover-logos">
+      <img src="http://localhost:3001/assets/medsign-mark.png" class="cover-logo-img" onerror="this.src='https://qzodlgnlchvqkeupgpgv.supabase.co/storage/v1/object/public/logos/medsign-mark.png'" />
+    </div>
+  </div>
+  <div class="cover-body">
+    <span class="cover-label">User Manual</span>
+    <h1 class="cover-title">MedSign AI</h1>
+    <h2 class="cover-subtitle">Buku Panduan Pengguna (Revisi Terbaru)</h2>
+    <p class="cover-desc">
+      Sistem bantu komunikasi Bahasa Isyarat Indonesia (BISINDO) medis berbasis kecerdasan buatan (Deep Learning) untuk mewujudkan faskes inklusif di Indonesia.
+    </p>
+  </div>
+  <div class="cover-meta">
+    <div class="cover-team">
+      Disusun oleh:<br/>
+      <strong>Tim MedSign AI PKM-KC 2026</strong><br/>
+      Universitas Ma Chung Malang
+    </div>
+    <div class="cover-year">2026</div>
+  </div>
+</div>
+
+<!-- HALAMAN 2: LATAR BELAKANG & PENDAHULUAN -->
+<div class="page">
+  <div class="header">
+    <span class="header-title">Buku Panduan MedSign AI</span>
+    <span class="header-chapter">Bab I: Pendahuluan</span>
+  </div>
+  <div class="content">
+    <h1 class="chapter-title">Latar Belakang &amp; Peran Sistem</h1>
+    <p>
+      Komunikasi yang efektif di rumah sakit merupakan kebutuhan vital. Bagi pasien tuli atau tuna rungu, kendala komunikasi dapat memicu misdiagnosis. MedSign AI hadir untuk menerjemahkan gerakan isyarat BISINDO medis menjadi teks klinis secara real-time.
+    </p>
+    <div class="section-title">Peran Pengguna &amp; Hak Akses</div>
+    <p>Sistem ini dirancang menggunakan sistem akses berbasis peran (RBAC) yang terintegrasi penuh:</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Peran</th>
+            <th>Pengguna Utama</th>
+            <th>Kewenangan Utama</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Super Admin</strong></td>
+            <td>Staf IT Faskes Pusat</td>
+            <td>Mengelola data Faskes, Admin Faskes Lokal, database backups, audit log sistem, ML model global, dan konten homepage.</td>
+          </tr>
+          <tr>
+            <td><strong>Admin</strong></td>
+            <td>Perekam Medis / Staf Faskes</td>
+            <td>Registrasi pasien, manajemen data dokter, penugasan dokter-pasien, rekam dataset, augmentasi data, dan training model.</td>
+          </tr>
+          <tr>
+            <td><strong>Dokter</strong></td>
+            <td>Tenaga Medis / Pemeriksa</td>
+            <td>Pencarian pasien, memulai sesi konsultasi, preset respon cepat, speech-to-text, menulis catatan SOAP rekam medis (RME).</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="footer">
+    <span>MedSign AI - Buku Panduan Pengguna</span>
+    <span>Halaman 2</span>
+  </div>
+</div>
+
+<!-- HALAMAN 3: PANDUAN SUPER ADMIN -->
+<div class="page">
+  <div class="header">
+    <span class="header-title">Buku Panduan MedSign AI</span>
+    <span class="header-chapter">Bab II: Panduan Super Admin</span>
+  </div>
+  <div class="content">
+    <h1 class="chapter-title">Fitur Keamanan &amp; Konten Global</h1>
+    
+    <div class="section-title">1. Manajemen Faskes &amp; Admin Lokal</div>
+    <p>Super Admin berwenang mengelola entitas Rumah Sakit/Klinik beserta akun Admin yang bertugas:</p>
+    <ul>
+      <li>Klik menu <strong>Kelola Faskes</strong> pada sidebar, isi data kode faskes, nama, alamat, dan simpan.</li>
+      <li>Klik menu <strong>Kelola Admin Faskes</strong> untuk menugaskan staf admin lokal di RS terkait.</li>
+    </ul>
+    
+    <div class="section-title">2. Sistem Audit Logs &amp; Database Backups</div>
+    <p>Untuk memantau integritas data rekam medis elektronik (RME):</p>
+    <ul>
+      <li>Gunakan menu <strong>Sistem Audit Logs</strong> untuk melihat siapa saja dokter yang membuka data pasien tuli. Ekspor data ke CSV untuk verifikasi kepatuhan hukum.</li>
+      <li>Gunakan menu <strong>Database Backups</strong> untuk memicu pencadangan asinkron. Klik *Restore* hanya jika database Supabase mengalami gangguan.</li>
+    </ul>
+    
+    <div class="section-title">3. Kelola Konten Homepage (Modul Tentang Kami)</div>
+    <p>Konten landing page dikelola dari satu pintu untuk menjamin efisiensi:</p>
+    <ul>
+      <li>Klik menu <strong>Kelola Konten</strong>, pilih tab <strong>Tentang Kami</strong> untuk menambahkan dokumentasi tim.</li>
+      <li>Unggah gambar menggunakan tombol **Upload Foto** (Token otentikasi Supabase sudah terintegrasi secara otomatis).</li>
+    </ul>
+  </div>
+  <div class="footer">
+    <span>MedSign AI - Buku Panduan Pengguna</span>
+    <span>Halaman 3</span>
+  </div>
+</div>
+
+<!-- HALAMAN 4: PANDUAN ADMIN (REGISTRASI & DOKTER) -->
+<div class="page">
+  <div class="header">
+    <span class="header-title">Buku Panduan MedSign AI</span>
+    <span class="header-chapter">Bab III: Panduan Admin</span>
+  </div>
+  <div class="content">
+    <h1 class="chapter-title">Manajemen Akun &amp; Penugasan Medis</h1>
+    
+    <div class="section-title">1. Registrasi Pasien &amp; Reset Password</div>
+    <p>Untuk menghindari kebocoran data NIK, pasien tuli tidak bisa mendaftar sendiri. Registrasi dilakukan oleh Admin:</p>
+    <ol>
+      <li>Klik menu <strong>Kelola Pasien</strong> di Portal Admin, masukkan NIK, Nama Lengkap, dan Tanggal Lahir. NIK akan dienkripsi di database Supabase (*at-rest*).</li>
+      <li>Jika pasien lupa password, gunakan tombol **Reset Password** pada baris pasien untuk menghasilkan password acak sementara.</li>
+    </ol>
+    
+    <div class="section-title">2. Pendaftaran Akun Dokter &amp; Penugasan Pasien</div>
+    <p>Agar dokter dapat mengakses data medis pasien sesuai kebijakan isolasi data RLS:</p>
+    <ol>
+      <li>Pilih menu <strong>Kelola Dokter</strong>, masukkan nama, spesialisasi, dan nomor lisensi medis.</li>
+      <li>Pilih menu <strong>Penugasan Dokter-Pasien</strong>, tentukan nama dokter lalu centang daftar pasien yang menjadi tanggung jawabnya. Klik **Simpan Relasi**.</li>
+    </ol>
+  </div>
+  <div class="footer">
+    <span>MedSign AI - Buku Panduan Pengguna</span>
+    <span>Halaman 4</span>
+  </div>
+</div>
+
+<!-- HALAMAN 5: PANDUAN ADMIN (DATASET & AUGMENTASI) -->
+<div class="page">
+  <div class="header">
+    <span class="header-title">Buku Panduan MedSign AI</span>
+    <span class="header-chapter">Bab III: Panduan Admin</span>
+  </div>
+  <div class="content">
+    <h1 class="chapter-title">Perekaman Dataset &amp; Augmentasi AI</h1>
+    
+    <div class="section-title">1. Ambil Data Landmark Tangan</div>
+    <p>Melakukan perekaman sampel isyarat baru untuk menambah kapasitas latih model:</p>
+    <ol>
+      <li>Buka tab <strong>Rekam Dataset</strong>, pilih nama responden (signer), target kata, dan jumlah iterasi (minimum 5 take).</li>
+      <li>Aktifkan kamera, posisikan tangan hingga MediaPipe mendeteksi lingkaran 3D hijau. Lakukan gerakan saat hitungan mundur selesai.</li>
+    </ol>
+    
+    <div class="section-title">2. AI Dataset Augmentation &amp; Rollback</div>
+    <p>Mengatasi ketimpangan data (data imbalance) secara cerdas menggunakan visual augmentasi:</p>
+    <ul>
+      <li>Buka tab <strong>AI Augmentation</strong>, pilih kata dan atur variasi (spasial/temporal) yang ingin dihasilkan.</li>
+      <li>Klik **Jalankan Augmentasi** untuk memicu penambahan sampel di server.</li>
+      <li>Jika performa model menurun setelah augmentasi, gunakan tombol **Rollback** untuk mengembalikan dataset ke kondisi orisinal.</li>
+    </ul>
+  </div>
+  <div class="footer">
+    <span>MedSign AI - Buku Panduan Pengguna</span>
+    <span>Halaman 5</span>
+  </div>
+</div>
+
+<!-- HALAMAN 6: PANDUAN ADMIN (BALANCE & TRAINING) -->
+<div class="page">
+  <div class="header">
+    <span class="header-title">Buku Panduan MedSign AI</span>
+    <span class="header-chapter">Bab III: Panduan Admin</span>
+  </div>
+  <div class="content">
+    <h1 class="chapter-title">Balance Checker &amp; Pelatihan Model</h1>
+    
+    <div class="section-title">1. Pemantauan Dataset &amp; Hapus Masal</div>
+    <p>Kosakata klinis harus seimbang agar model tidak bias terhadap gerakan tertentu:</p>
+    <ul>
+      <li>Buka tab <strong>Balance Checker</strong>. Kata yang kekurangan data akan ditandai *NEED MORE DATA*.</li>
+      <li>Klik **Check Dataset** untuk membuka daftar file `.npy`.</li>
+      <li>Centang baris sampel yang rusak/kosong, lalu klik tombol merah **Hapus Terpilih** untuk menghapusnya secara masal.</li>
+    </ul>
+    
+    <div class="section-title">2. Pelatihan Model Klinis Asinkron</div>
+    <p>Melatih ulang model untuk memperbarui akurasi translasi di faskes:</p>
+    <ol>
+      <li>Buka tab <strong>Training Model</strong>, tentukan arsitektur neural network (contoh: **gru**) dan epoch (default 120).</li>
+      <li>Klik **Mulai Pelatihan**. Sistem akan melatih model secara asinkron di latar belakang.</li>
+      <li>Server akan mendeteksi model baru dan melakukan *Auto-Reload* tanpa perlu mematikan website.</li>
+    </ol>
+  </div>
+  <div class="footer">
+    <span>MedSign AI - Buku Panduan Pengguna</span>
+    <span>Halaman 6</span>
+  </div>
+</div>
+
+<!-- HALAMAN 7: PANDUAN DOKTER -->
+<div class="page">
+  <div class="header">
+    <span class="header-title">Buku Panduan MedSign AI</span>
+    <span class="header-chapter">Bab IV: Panduan Dokter</span>
+  </div>
+  <div class="content">
+    <h1 class="chapter-title">Layar Diagnosis &amp; AI SOAP Writer</h1>
+    
+    <div class="section-title">1. Mulai Sesi Konsultasi Real-Time</div>
+    <p>Menjalankan komunikasi langsung dua arah dengan pasien tuli:</p>
+    <ol>
+      <li>Pencarian pasien: Masukkan nama/RM pasien pada dashboard dokter.</li>
+      <li>Klik **Mulai Sesi Konsultasi** (Tombol kontras biru indigo).</li>
+      <li>Kamera pasien akan mendeteksi isyarat BISINDO dan menampilkan teks terjemahannya di layar Anda.</li>
+    </ol>
+    
+    <div class="section-title">2. AI SOAP Writer (Notetaker Otomatis) &amp; Rekam Medis</div>
+    <p>Mencatat rekam medis elektronik secara otomatis tanpa mengetik:</p>
+    <ul>
+      <li>Setelah sesi selesai, klik tombol **Buat SOAP Note**.</li>
+      <li>AI Notetaker (Google Gemini) akan memproses pesan percakapan dan membuat draf SOAP (Subjective, Objective, Assessment, Plan) secara terstruktur.</li>
+      <li>Jika koneksi terganggu, sistem akan masuk ke **Fallback Mode** (menggunakan algoritma lokal) agar penulisan SOAP tetap berjalan.</li>
+      <li>Sunting bagian yang kurang tepat, lalu klik **Simpan Rekam Medis** ke database Supabase.</li>
+    </ul>
+  </div>
+  <div class="footer">
+    <span>MedSign AI - Buku Panduan Pengguna</span>
+    <span>Halaman 7</span>
+  </div>
+</div>
+
+<!-- HALAMAN 8: FAQ & GLOSARIUM -->
+<div class="page">
+  <div class="header">
+    <span class="header-title">Buku Panduan MedSign AI</span>
+    <span class="header-chapter">Bab V: FAQ &amp; Glosarium</span>
+  </div>
+  <div class="content">
+    <h1 class="chapter-title">Pertanyaan Umum &amp; Istilah</h1>
+    
+    <div class="section-title">Pertanyaan Umum (FAQ)</div>
+    <p><strong>Q: Mengapa tangan saya tidak terdeteksi oleh kamera?</strong><br/>
+    A: MedSign menggunakan model MediaPipe Hands tingkat tinggi (complexity: 1) untuk akurasi sendi jari. Pastikan posisi tangan masuk di dalam kotak target pemindai.</p>
+    <p><strong>Q: Mengapa ringkasan SOAP AI gagal dibuat?</strong><br/>
+    A: Periksa koneksi internet atau kunci API Gemini di file `.env`. Sistem akan otomatis mengaktifkan *Fallback Mode* jika kunci API bermasalah.</p>
+    <p><strong>Q: Berapa lama batas sesi login saya tetap tersimpan?</strong><br/>
+    A: Sesi login dibatasi 2 jam demi privasi medis. Setelah 2 jam tidak aktif, sistem otomatis melakukan logout demi keamanan data.</p>
+    
+    <div class="section-title">Glosarium</div>
+    <ul>
+      <li><strong>Landmark Tangan:</strong> 21 titik koordinat sendi jari tangan yang diekstrak oleh MediaPipe.</li>
+      <li><strong>TFLite Model:</strong> Berkas kecerdasan buatan terkompresi hasil pelatihan untuk mendeteksi gerakan BISINDO.</li>
+      <li><strong>SOAP Note:</strong> Format penulisan catatan medis (Subjective, Objective, Assessment, Plan) standar rumah sakit.</li>
+    </ul>
+  </div>
+  <div class="footer">
+    <span>MedSign AI - Buku Panduan Pengguna</span>
+    <span>Halaman 8</span>
+  </div>
+</div>
+
+</body>
+</html>

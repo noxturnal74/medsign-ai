@@ -211,7 +211,7 @@ export const Home = ({ setView }) => {
       {/* ════════════════════════════════════════════════════
           KONTEN UTAMA — background putih full halaman
       ════════════════════════════════════════════════════ */}
-      <div className="relative z-30 w-full bg-white -mt-[40vh]">
+      <div className="relative z-30 w-full bg-white -mt-[100vh]">
         {sectionOrder.map((sectionKey) => {
           switch (sectionKey.trim()) {
             case "mitra":

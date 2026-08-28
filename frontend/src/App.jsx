@@ -146,8 +146,15 @@ function AppContent() {
     const handlePopState = () => {
       setView(getInitialView());
     };
+    const handleExpired = () => {
+      handleSetView('login');
+    };
     window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+    window.addEventListener('medsign:logout-expired', handleExpired);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('medsign:logout-expired', handleExpired);
+    };
   }, []);
 
   useEffect(() => {

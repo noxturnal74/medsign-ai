@@ -105,7 +105,7 @@ const ALPHABET_LIST = [
 }));
 
 /* Edit Vocabulary Form */
-const EditVocabularyForm = ({ item, onSave, onClose }) => {
+const EditVocabularyForm = ({ item, onSave, onDelete, onClose }) => {
   const [display, setDisplay] = useState(item.display || item.word.replace(/_/g, ' '));
   const [category, setCategory] = useState(item.category || '');
   const [folderPath, setFolderPath] = useState(item.folder_path || '');
@@ -134,6 +134,15 @@ const EditVocabularyForm = ({ item, onSave, onClose }) => {
         <label htmlFor="emergency-edit" className="text-[10px] font-bold text-slate-600">Kata Darurat (Emergency)</label>
       </div>
       <div className="flex justify-end gap-2 pt-2">
+        {onDelete && (
+          <button 
+            type="button"
+            onClick={() => onDelete(item.word)} 
+            className="px-4 py-2 rounded-xl text-[10px] font-bold uppercase text-rose-600 bg-rose-50 hover:bg-rose-100 transition-all mr-auto"
+          >
+            Hapus Kosakata
+          </button>
+        )}
         <button onClick={onClose} className="px-4 py-2 rounded-xl text-[10px] font-bold uppercase text-slate-500 hover:bg-slate-100 transition-all">Batal</button>
         <button onClick={() => onSave(item.word, { display, category, folder_path: folderPath, emergency })} className="px-5 py-2 rounded-xl bg-[#053D67] text-white text-[10px] font-black uppercase hover:opacity-90 transition-all flex items-center gap-1.5"><Check size={13} /> Simpan</button>
       </div>
@@ -332,6 +341,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
 
   const [balanceData, setBalanceData] = useState(null);
+  const [editModal, setEditModal] = useState(null);
 
   const [balanceLoading, setBalanceLoading] = useState(false);
 
@@ -2339,6 +2349,8 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
     }
   };
 
+
+
   const handleDeleteWord = async (wordSlug) => {
     if (!window.confirm(`Hapus kata "${wordSlug}"?`)) return;
     try {
@@ -2353,6 +2365,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
       if (response.ok) {
         await refreshVocabulary();
         setSelectedWords(prev => prev.filter(w => w !== wordSlug));
+        setEditModal(null);
       } else {
         const errData = await response.json();
         alert(errData.detail || "Gagal menghapus kata");
@@ -7063,6 +7076,22 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
                       </button>
 
+                      <button
+
+                        onClick={() => {
+
+                          setEditModal(b);
+
+                        }}
+
+                        className="inline-flex items-center gap-1 rounded-xl bg-amber-500/10 px-2.5 py-1.5 text-[9px] font-black text-amber-700 hover:bg-amber-500/20 active:scale-[0.98] transition-all shadow-sm uppercase ml-1.5"
+
+                      >
+
+                        Edit
+
+                      </button>
+
                     </td>
 
                   </tr>
@@ -10026,7 +10055,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
         {!isSessionActive && (
 
-          <div className="flex items-center gap-1 rounded-2xl bg-slate-900/10 p-1.5 backdrop-blur-xl border border-white/50 shadow-sm min-w-0 flex-1 select-none overflow-x-auto scrollbar-none">
+          <div className="flex items-center justify-center gap-2.5 rounded-2xl bg-slate-900/10 p-1.5 backdrop-blur-xl border border-white/50 shadow-sm min-w-0 flex-1 select-none overflow-x-auto scrollbar-none mx-auto max-w-3xl">
 
             {['admin', 'super_admin'].includes(currentUser?.role) && (
               <button
@@ -10142,64 +10171,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
             </>)}
 
-            {(currentUser?.role === "super_admin" || currentUser?.role === "admin") && (
-              <>
-                <button
-                  onClick={() => handleTabChange("articles")}
-                  className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all shrink-0 whitespace-nowrap ${
-                    activeTab === "articles"
-                      ? "bg-white text-sky-700 shadow-sm border border-slate-200/20"
-                      : "text-slate-500 hover:text-slate-950"
-                  }`}
-                >
-                  Kelola Artikel
-                </button>
 
-                <button
-                  onClick={() => handleTabChange("instagram")}
-                  className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all shrink-0 whitespace-nowrap ${
-                    activeTab === "instagram"
-                      ? "bg-white text-sky-700 shadow-sm border border-slate-200/20"
-                      : "text-slate-500 hover:text-slate-950"
-                  }`}
-                >
-                  Kelola Instagram
-                </button>
-
-                <button
-                  onClick={() => handleTabChange("reviews")}
-                  className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all shrink-0 whitespace-nowrap ${
-                    activeTab === "reviews"
-                      ? "bg-white text-sky-700 shadow-sm border border-slate-200/20"
-                      : "text-slate-500 hover:text-slate-950"
-                  }`}
-                >
-                  Kelola Ulasan
-                </button>
-
-                <button
-                  onClick={() => handleTabChange("mitra")}
-                  className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all shrink-0 whitespace-nowrap ${
-                    activeTab === "mitra"
-                      ? "bg-white text-sky-700 shadow-sm border border-slate-200/20"
-                      : "text-slate-500 hover:text-slate-950"
-                  }`}
-                >
-                  Kelola Mitra
-                </button>
-
-                <button
-                  onClick={() => handleTabChange("users")}
-                  className={`rounded-xl px-4 py-1.5 text-xs font-black transition-all shrink-0 whitespace-nowrap ${
-                    activeTab === "users"
-                      ? "bg-white text-sky-700 shadow-sm border border-slate-200/20"
-                      : "text-slate-500 hover:text-slate-950"
-                  }`}
-                >
-                  Kelola User
-                </button>
-              </>
-            )}
 
           </div>
 
@@ -10635,7 +10607,18 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
               <h3 className="text-sm font-black text-slate-900 uppercase">Edit Kosakata</h3>
               <button onClick={() => setEditModal(null)} className="p-1.5 rounded-xl hover:bg-slate-100 text-slate-400"><X size={16} /></button>
             </div>
-            <EditVocabularyForm item={editModal} onSave={handleEditWord} onClose={() => setEditModal(null)} />
+            <EditVocabularyForm 
+              item={{
+                word: editModal.label,
+                display: editModal.display,
+                category: editModal.category,
+                folder_path: editModal.folder_path,
+                emergency: editModal.emergency
+              }} 
+              onSave={handleEditWord} 
+              onDelete={handleDeleteWord}
+              onClose={() => setEditModal(null)} 
+            />
           </div>
         </div>
       )}

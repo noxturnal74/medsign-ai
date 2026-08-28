@@ -459,7 +459,7 @@ export const SuperAdminView = ({ setView }) => {
       )}
 
       {/* Sidebar Navigation */}
-      <aside className={`fixed lg:static inset-y-0 left-0 top-[57px] lg:top-auto z-[100] w-64 max-w-[80vw] bg-slate-900 text-slate-300 flex-col shrink-0 justify-between border-r border-slate-800 shadow-xl transition-transform duration-300 ease-out ${sidebarOpen ? 'flex translate-x-0' : 'hidden -translate-x-full'} lg:flex lg:translate-x-0`}>
+      <aside className={`fixed lg:static inset-y-0 left-0 top-[57px] lg:top-auto z-[100] w-64 max-w-[80vw] bg-slate-900 text-slate-300 flex flex-col shrink-0 justify-between border-r border-slate-800 shadow-xl transition-transform duration-300 ease-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
         <div className="flex flex-col overflow-y-auto">
           {/* Sidebar Brand header */}
           <div className="flex items-center justify-between gap-3.5 p-6 border-b border-slate-800 bg-slate-950/40">
@@ -541,7 +541,7 @@ export const SuperAdminView = ({ setView }) => {
             <div className="min-w-0">
               <span className="text-[10px] font-black text-sky-700 uppercase tracking-widest">Keamanan Global</span>
               <h1 className="text-base sm:text-xl font-black text-slate-950 leading-none mt-1 truncate">
-                {activeTab === "dashboard" ? "Dashboard Ringkasan Utama" : activeTab === "dataset" ? "Dataset & Training Panel" : activeTab === "articles" ? "Kelola Artikel Homepage" : activeTab === "instagram" ? "Kelola Instagram Feed" : activeTab === "reviews" ? "Kelola Ulasan Pengguna" : activeTab === "mitra" ? "Kelola Mitra Kerja" : activeTab === "users" ? "Kelola User System" : activeTab === "facilities" ? "Manajemen Fasilitas Kesehatan" : activeTab === "admins" ? "Manajemen Administrator Faskes" : activeTab === "audit_logs" ? "Sistem Audit Logs & Laporan" : activeTab === "incidents" ? "Keamanan - Insiden Terdeteksi" : "models" === activeTab ? "Manajemen Model & ML Global" : activeTab === "homepage_content" ? "Kelola Konten Homepage" : activeTab === "grants" ? "Manajemen Grant & Akses" : "Manajemen Database Backups"}
+                {activeTab === "dashboard" ? "Dashboard Ringkasan Utama" : activeTab === "dataset" ? "Dataset & Training Panel" : activeTab === "facilities" ? "Manajemen Fasilitas Kesehatan" : activeTab === "admins" ? "Manajemen Administrator Faskes" : activeTab === "audit_logs" ? "Sistem Audit Logs & Laporan" : activeTab === "incidents" ? "Keamanan - Insiden Terdeteksi" : "models" === activeTab ? "Manajemen Model & ML Global" : activeTab === "homepage_content" ? "Kelola Konten Homepage" : activeTab === "grants" ? "Manajemen Grant & Akses" : "Manajemen Database Backups"}
               </h1>
             </div>
           </div>
@@ -568,45 +568,7 @@ export const SuperAdminView = ({ setView }) => {
             </div>
           )}
 
-          {activeTab === "articles" && (
-            <div className="flex flex-col gap-6 animate-slide-up">
-              <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm" data-lenis-prevent>
-                <DataCollection setView={setView} initialTab="articles" embedded />
-              </div>
-            </div>
-          )}
 
-          {activeTab === "instagram" && (
-            <div className="flex flex-col gap-6 animate-slide-up">
-              <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm" data-lenis-prevent>
-                <DataCollection setView={setView} initialTab="instagram" embedded />
-              </div>
-            </div>
-          )}
-
-          {activeTab === "reviews" && (
-            <div className="flex flex-col gap-6 animate-slide-up">
-              <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm" data-lenis-prevent>
-                <DataCollection setView={setView} initialTab="reviews" embedded />
-              </div>
-            </div>
-          )}
-
-          {activeTab === "mitra" && (
-            <div className="flex flex-col gap-6 animate-slide-up">
-              <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm" data-lenis-prevent>
-                <DataCollection setView={setView} initialTab="mitra" embedded />
-              </div>
-            </div>
-          )}
-
-          {activeTab === "users" && (
-            <div className="flex flex-col gap-6 animate-slide-up">
-              <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm" data-lenis-prevent>
-                <DataCollection setView={setView} initialTab="users" embedded />
-              </div>
-            </div>
-          )}
 
           {/* TAB 1: Dashboard Overview */}
           {activeTab === "dashboard" && (

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useContext, useRef } from 'rea
 import {
   LayoutGrid, Save, ArrowUp, ArrowDown, Power, EyeOff,
   Plus, Pencil, Trash2, X, Check, Loader2, GripVertical, RotateCcw,
-  Newspaper, Star, Instagram, Building2, Video, Globe, Upload, Search
+  Newspaper, Star, Instagram, Building2, Video, Globe, Upload, Search, Users
 } from 'lucide-react';
 import { AppContext } from '../../context/AppContextObject';
 
@@ -17,6 +17,7 @@ const ALL_MODULES = [
   { id: 'articles',       label: 'Artikel',                icon: <Newspaper size={14} />, color: 'emerald', hint: 'Daftar artikel blog' },
   { id: 'brand_pkm',      label: 'Brand & Program PKM',    icon: <Globe size={14} />,     color: 'violet', hint: 'Brand & program akademik' },
   { id: 'video_tutorial', label: 'Video Tutorial',         icon: <Video size={14} />,     color: 'rose',   hint: 'Video panduan & status demo' },
+  { id: 'team_gallery',   label: 'Tentang Kami',           icon: <Users size={14} />,     color: 'sky',    hint: 'Galeri dokumentasi tim' },
 ];
 
 const tabColor = (c) => ({
@@ -88,7 +89,8 @@ const ImageUpload = ({ value, onChange, accept = "image/*", label = "Upload Gamb
       formData.append('file', file);
       formData.append('folder', 'data/uploads');
       const apiBase = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
-      const token = localStorage.getItem('medsign_token');
+      const savedUser = localStorage.getItem('medsign_user');
+      const token = savedUser ? JSON.parse(savedUser).token : null;
       const res = await fetch(`${apiBase}/api/v1/upload`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
@@ -185,7 +187,8 @@ const GenericCrudTable = ({ data, columns, onEdit, onDelete, loading }) => (
 
 /* ═══ Main Component ═══ */
 export const HomepageManager = ({ order, setOrder, onSave }) => {
-  const { token } = useContext(AppContext);
+  const { currentUser } = useContext(AppContext);
+  const token = currentUser?.token;
   const headers = { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' };
 
   const activeModules = order
@@ -201,7 +204,7 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
   const [subTab, setSubTab] = useState('layout'); // 'layout' | module id
 
   /* ── Data per module ── */
-  const [data, setData] = useState({ mitra: [], reviews: [], instagram: [], articles: [], brand_pkm: [], video_tutorial: [] });
+  const [data, setData] = useState({ mitra: [], reviews: [], instagram: [], articles: [], brand_pkm: [], video_tutorial: [], team_gallery: [] });
   const [loading, setLoading] = useState({});
   const [modal, setModal] = useState({ open: false, module: null, item: null });
   const [searchQuery, setSearchQuery] = useState('');
@@ -217,10 +220,17 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
       else if (module === 'articles') url = `${API}/api/v1/articles`;
       else if (module === 'brand_pkm') url = `${API}/api/v1/admin/brand-pkm`;
       else if (module === 'video_tutorial') url = `${API}/api/v1/admin/video-tutorials`;
+      else if (module === 'team_gallery') url = `${API}/api/v1/about/team-gallery`;
       else return;
       const r = await fetch(url, { headers });
       const json = await r.json();
-      setData(p => ({ ...p, [module]: Array.isArray(json) ? json : [] }));
+      let list = [];
+      if (module === 'team_gallery') {
+        list = json.items || [];
+      } else {
+        list = Array.isArray(json) ? json : [];
+      }
+      setData(p => ({ ...p, [module]: list }));
     } catch (e) { console.error(`Fetch ${module} error:`, e); }
     setLoading(p => ({ ...p, [module]: false }));
   }, [token]);
@@ -230,6 +240,23 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
   const deleteItem = async (module, id) => {
     if (!window.confirm('Yakin ingin menghapus item ini?')) return;
     try {
+      if (module === 'team_gallery') {
+        const currentList = data.team_gallery || [];
+        const newList = currentList.filter(item => item.id !== id);
+        const url = `${API}/api/v1/admin/team-gallery`;
+        const res = await fetch(url, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ items: newList })
+        });
+        if (res.ok) {
+          fetchData(module);
+        } else {
+          const err = await res.json();
+          alert(err.detail || 'Gagal menghapus item');
+        }
+        return;
+      }
       let url;
       if (module === 'mitra') url = `${API}/api/v1/admin/mitra/${id}`;
       else if (module === 'reviews') url = `${API}/api/v1/admin/reviews/${id}`;
@@ -245,6 +272,36 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
 
   const saveItem = async (module, item) => {
     try {
+      if (module === 'team_gallery') {
+        const currentList = data.team_gallery || [];
+        let newList = [];
+        const isEdit = !!item.id && currentList.some(r => r.id === item.id);
+        if (isEdit) {
+          newList = currentList.map(r => r.id === item.id ? item : r);
+        } else {
+          const newItem = {
+            ...item,
+            id: Math.random().toString(36).substring(2, 9)
+          };
+          newList = [...currentList, newItem];
+        }
+        
+        const url = `${API}/api/v1/admin/team-gallery`;
+        const res = await fetch(url, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ items: newList })
+        });
+        if (res.ok) {
+          setModal({ open: false, module: null, item: null });
+          fetchData(module);
+        } else {
+          const err = await res.json();
+          alert(err.detail || 'Gagal menyimpan item');
+        }
+        return;
+      }
+
       const isEdit = !!item.id && data[module].some(i => i.id === item.id);
 
       let url, method;
@@ -295,6 +352,7 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
       { key: 'content', label: 'Ulasan', render: (v) => <span className="line-clamp-1 italic text-slate-500">{v}</span> },
     ];
     if (mod === 'instagram') return [
+      { key: 'thumbnail_image', label: 'Foto', render: (v) => v ? <img src={v} alt="" className="h-10 w-10 object-cover rounded-lg border border-slate-100 shadow-sm" /> : '-' },
       { key: 'caption_short', label: 'Caption' },
       { key: 'post_url', label: 'URL', render: (v) => <span className="text-pink-600 truncate block max-w-[140px]">{v}</span> },
       { key: 'is_active', label: 'Status', render: (v) => <span className={`inline-block px-2 py-0.5 rounded-full text-[8px] font-black uppercase ${v ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-400'}`}>{v ? 'Aktif' : 'Off'}</span> },
@@ -317,6 +375,12 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
       { key: 'duration', label: 'Durasi' },
       { key: 'video_url', label: 'URL Video', render: (v) => <span className="text-rose-600 truncate block max-w-[140px]">{v}</span> },
       { key: 'is_active', label: 'Status', render: (v) => <span className={`inline-block px-2 py-0.5 rounded-full text-[8px] font-black uppercase ${v ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-400'}`}>{v ? 'Aktif' : 'Off'}</span> },
+    ];
+    if (mod === 'team_gallery') return [
+      { key: 'image_url', label: 'Foto', render: (v) => v ? <img src={v} alt="" className="h-10 w-10 object-cover rounded-lg border border-slate-100 shadow-sm" /> : '-' },
+      { key: 'title', label: 'Nama/Judul' },
+      { key: 'caption', label: 'Jabatan/Keterangan' },
+      { key: 'display_order', label: 'Urutan' },
     ];
     return [];
   };
@@ -492,6 +556,7 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
         {modal.module === 'articles' && <ArticleForm item={modal.item} onSave={(f) => saveItem('articles', f)} onClose={() => setModal({ open: false })} />}
         {modal.module === 'brand_pkm' && <BrandPkmForm item={modal.item} onSave={(f) => saveItem('brand_pkm', f)} onClose={() => setModal({ open: false })} />}
         {modal.module === 'video_tutorial' && <VideoTutorialForm item={modal.item} onSave={(f) => saveItem('video_tutorial', f)} onClose={() => setModal({ open: false })} />}
+        {modal.module === 'team_gallery' && <TeamGalleryForm item={modal.item} onSave={(f) => saveItem('team_gallery', f)} onClose={() => setModal({ open: false, module: null, item: null })} />}
       </Modal>
     </div>
   );
@@ -623,6 +688,26 @@ const BrandPkmForm = ({ item, onSave, onClose }) => {
       <div className="flex justify-end gap-2 pt-2">
         <button onClick={onClose} className="px-4 py-2 rounded-xl text-[10px] font-bold uppercase text-slate-500 hover:bg-slate-100 transition-all">Batal</button>
         <button onClick={() => onSave(f)} disabled={!f.name} className="px-5 py-2 rounded-xl bg-[#053D67] text-white text-[10px] font-black uppercase hover:opacity-90 transition-all disabled:opacity-30 flex items-center gap-1.5"><Check size={13} /> Simpan</button>
+      </div>
+    </div>
+  );
+};
+
+const TeamGalleryForm = ({ item, onSave, onClose }) => {
+  const [f, setF] = useState(item || { title: '', caption: '', image_url: '', display_order: 0 });
+  const set = (k, v) => setF(p => ({ ...p, [k]: v }));
+  return (
+    <div className="flex flex-col gap-3">
+      <Field label="Judul/Nama Anggota" required><input className={inputCls} value={f.title} onChange={e => set('title', e.target.value)} /></Field>
+      <Field label="Keterangan/Jabatan"><input className={inputCls} value={f.caption || ''} onChange={e => set('caption', e.target.value)} placeholder="Contoh: Ketua Tim R&D" /></Field>
+      <div className="flex flex-col gap-1">
+        <Field label="URL Foto" required><input className={inputCls} value={f.image_url} onChange={e => set('image_url', e.target.value)} placeholder="https://..." /></Field>
+        <ImageUpload value={f.image_url || ''} onChange={(url) => set('image_url', url)} label="Upload Foto Anggota" />
+      </div>
+      <Field label="Urutan Tampilan"><input type="number" className={inputCls} value={f.display_order || 0} onChange={e => set('display_order', parseInt(e.target.value) || 0)} /></Field>
+      <div className="flex justify-end gap-2 pt-2">
+        <button onClick={onClose} className="px-4 py-2 rounded-xl text-[10px] font-bold uppercase text-slate-500 hover:bg-slate-100 transition-all">Batal</button>
+        <button onClick={() => onSave(f)} disabled={!f.title || !f.image_url} className="px-5 py-2 rounded-xl bg-[#053D67] text-white text-[10px] font-black uppercase hover:opacity-90 transition-all disabled:opacity-30 flex items-center gap-1.5"><Check size={13} /> Simpan</button>
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import { AppContext } from '../context/AppContextObject';
 import {
   Home, Info, Stethoscope, User, Volume2, VolumeX,
   Database, BookOpen, Video, FileText, MessageSquare,
-  Menu as MenuIcon, X, ExternalLink, Shield, Columns,
+  Menu as MenuIcon, X, ExternalLink, Shield, Columns, Bell,
   MoreVertical, UserCog, Moon, Sun, Loader2, Camera, KeyRound, Check,
 } from 'lucide-react';
 
@@ -31,9 +31,118 @@ const navItems = [
   { id: 'split',         label: 'Split View',         icon: Columns },
 ];
 
+const SwipeableNotifItem = ({ notification, onRead, onDelete }) => {
+  const [startX, setStartX] = useState(0);
+  const [currentX, setCurrentX] = useState(0);
+  const [swipedLeft, setSwipedLeft] = useState(false);
+
+  const handleTouchStart = (e) => {
+    setStartX(e.touches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    const deltaX = e.touches[0].clientX - startX;
+    if (deltaX < 0) {
+      setCurrentX(deltaX);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (currentX < -60) {
+      setSwipedLeft(true);
+      setTimeout(() => onDelete(notification.id), 200);
+    } else {
+      setCurrentX(0);
+    }
+  };
+
+  const handleMouseDown = (e) => {
+    setStartX(e.clientX);
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+  };
+
+  const handleMouseMove = (e) => {
+    const deltaX = e.clientX - startX;
+    if (deltaX < 0) {
+      setCurrentX(deltaX);
+    }
+  };
+
+  const handleMouseUp = (e) => {
+    window.removeEventListener('mousemove', handleMouseMove);
+    window.removeEventListener('mouseup', handleMouseUp);
+    const finalDeltaX = e.clientX - startX;
+    if (finalDeltaX < -60) {
+      setSwipedLeft(true);
+      setTimeout(() => onDelete(notification.id), 200);
+    } else {
+      setCurrentX(0);
+    }
+  };
+
+  return (
+    <div
+      onClick={() => onRead(notification.id)}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      onMouseDown={handleMouseDown}
+      style={{
+        transform: `translateX(${currentX}px)`,
+        transition: currentX === 0 ? 'transform 0.2s ease-out' : 'none',
+        opacity: swipedLeft ? 0 : 1,
+        maxHeight: swipedLeft ? 0 : '100px',
+        overflow: 'hidden',
+        cursor: 'grab',
+        display: 'flex', gap: 6, alignItems: 'flex-start', justifyContent: 'space-between',
+        padding: '8px 10px', borderRadius: 8,
+        backgroundColor: !notification.read 
+          ? 'rgba(14,165,233,0.06)'
+          : 'rgba(15,23,42,0.02)',
+        border: `1px solid ${!notification.read ? 'rgba(14,165,233,0.18)' : 'rgba(15,23,42,0.05)'}`,
+        position: 'relative',
+        userSelect: 'none'
+      }}
+    >
+      <div style={{ minWidth: 0, flexGrow: 1 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          {!notification.read && (
+            <span style={{ width: 5, height: 5, borderRadius: '50%', backgroundColor: '#0ea5e9' }} />
+          )}
+          <p style={{ margin: 0, fontSize: 10.5, fontWeight: !notification.read ? 800 : 600, color: '#334155', wordBreak: 'break-word', lineHeight: 1.3 }}>
+            {notification.message}
+          </p>
+        </div>
+        <span style={{ fontSize: 8, color: '#94a3b8', fontWeight: 600, marginLeft: !notification.read ? 9 : 0 }}>{notification.timestamp}</span>
+      </div>
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          onDelete(notification.id);
+        }}
+        style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: '#94a3b8', padding: 0, display: 'inline-flex' }}
+      >
+        <X size={10} />
+      </button>
+    </div>
+  );
+};
+
 export const Navbar = ({ currentView, setView }) => {
-  const { ttsEnabled, setTtsEnabled, t, setShowFeatureModal, currentUser, logout, hasGrant } =
+  const { ttsEnabled, setTtsEnabled, t, setShowFeatureModal, currentUser, logout, hasGrant,
+          notifications, clearNotification, clearAllNotifications, markAsRead, markAllAsRead } =
     useContext(AppContext);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const notifRef = useRef(null);
+
+  useEffect(() => {
+    const onClickAwayNotif = (e) => {
+      if (notifRef.current && !notifRef.current.contains(e.target)) setNotifOpen(false);
+    };
+    document.addEventListener('mousedown', onClickAwayNotif);
+    return () => document.removeEventListener('mousedown', onClickAwayNotif);
+  }, []);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled]     = useState(false);
   const [splitEnabled, setSplitEnabled] = useState(false);
@@ -151,9 +260,9 @@ export const Navbar = ({ currentView, setView }) => {
         <div style={{
           maxWidth: 1400,
           margin: '0 auto',
-          display: 'flex',
+          display: 'grid',
+          gridTemplateColumns: '1fr auto 1fr',
           alignItems: 'center',
-          justifyContent: 'space-between',
           gap: 8,
         }}>
 
@@ -164,6 +273,7 @@ export const Navbar = ({ currentView, setView }) => {
               display: 'flex', alignItems: 'center', gap: 10,
               background: 'none', border: 'none', cursor: 'pointer', padding: 0,
               flexShrink: 0,
+              justifySelf: 'start',
             }}
           >
             <span style={{
@@ -242,7 +352,81 @@ export const Navbar = ({ currentView, setView }) => {
           </div>
 
           {/* ── Right controls ── */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0, justifySelf: 'end' }}>
+
+            {/* Bell Notification Dropdown */}
+            <div style={{ position: 'relative' }} ref={notifRef}>
+              <button
+                onClick={() => setNotifOpen(!notifOpen)}
+                title="Notifikasi & Log System"
+                style={{
+                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                  padding: '7px 10px', borderRadius: 10, cursor: 'pointer',
+                  border: '1px solid rgba(15,23,42,0.08)',
+                  background: notifOpen ? 'rgba(15,23,42,0.08)' : 'rgba(15,23,42,0.03)',
+                  color: '#334155',
+                  transition: 'all 0.2s',
+                  position: 'relative'
+                }}
+              >
+                <Bell size={15} />
+                {notifications.some(n => !n.read) && (
+                  <span style={{
+                    position: 'absolute', top: -2, right: -2,
+                    width: 8, height: 8, borderRadius: '50%',
+                    backgroundColor: '#ef4444'
+                  }} />
+                )}
+              </button>
+
+              {notifOpen && (
+                <div style={{
+                  position: 'absolute', right: 0, marginTop: 8,
+                  width: 280, backgroundColor: '#ffffff',
+                  borderRadius: 16, border: '1px solid rgba(15,23,42,0.08)',
+                  boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
+                  zIndex: 99999, padding: '12px 14px',
+                  display: 'flex', flexDirection: 'column', gap: 8
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(15,23,42,0.06)', paddingBottom: 6 }}>
+                  <span style={{ fontSize: 11, fontWeight: 900, textTransform: 'uppercase', color: '#0f172a' }}>Log System</span>
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    {notifications.some(n => !n.read) && (
+                      <button
+                        onClick={markAllAsRead}
+                        style={{ fontSize: 10, fontWeight: 700, color: '#0ea5e9', border: 'none', background: 'transparent', cursor: 'pointer' }}
+                      >
+                        Baca Semua
+                      </button>
+                    )}
+                    {notifications.length > 0 && (
+                      <button
+                        onClick={clearAllNotifications}
+                        style={{ fontSize: 10, fontWeight: 700, color: '#ef4444', border: 'none', background: 'transparent', cursor: 'pointer' }}
+                      >
+                        Hapus Semua
+                      </button>
+                    )}
+                  </div>
+                </div>
+                  
+                  <div style={{ maxHeight: 200, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    {notifications.length === 0 ? (
+                      <div style={{ textAlign: 'center', color: '#94a3b8', fontSize: 10, padding: '16px 0' }}>Tidak ada notifikasi log.</div>
+                    ) : (
+                      notifications.map(n => (
+                        <SwipeableNotifItem
+                          key={n.id}
+                          notification={n}
+                          onRead={markAsRead}
+                          onDelete={clearNotification}
+                        />
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* TTS toggle */}
             <button
@@ -467,7 +651,32 @@ export const Navbar = ({ currentView, setView }) => {
             })}
 
             <hr style={{ margin: '6px 4px', border: 'none', borderTop: '1px solid rgba(15,23,42,0.06)' }} />
+            
+            {/* Mobile Log System */}
+            <div style={{ padding: '8px 10px', display: 'flex', flexDirection: 'column', gap: 4 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                <span style={{ fontSize: 9, fontWeight: 900, textTransform: 'uppercase', color: '#94a3b8' }}>Log System</span>
+                {notifications.length > 0 && (
+                  <button onClick={clearAllNotifications} style={{ fontSize: 9, fontWeight: 700, color: '#ef4444', border: 'none', background: 'transparent', cursor: 'pointer' }}>Hapus Semua</button>
+                )}
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 4, maxHeight: 120, overflowY: 'auto' }}>
+                {notifications.length === 0 ? (
+                  <div style={{ fontSize: 9, color: '#94a3b8', textAlign: 'center', padding: '4px 0' }}>Tidak ada log.</div>
+                ) : (
+                  notifications.slice(0, 3).map(n => (
+                    <SwipeableNotifItem
+                      key={n.id}
+                      notification={n}
+                      onRead={markAsRead}
+                      onDelete={clearNotification}
+                    />
+                  ))
+                )}
+              </div>
+            </div>
 
+            <hr style={{ margin: '6px 4px', border: 'none', borderTop: '1px solid rgba(15,23,42,0.06)' }} />
             <div style={{ display: 'flex', gap: 6, padding: '4px 4px 2px' }}>
               <button
                 onClick={() => setTtsEnabled(!ttsEnabled)}
@@ -533,7 +742,7 @@ export const Navbar = ({ currentView, setView }) => {
         @media (min-width: 640px) {
           .brand-text { display: block; }
         }
-        @media (min-width: 1340px) {
+        @media (min-width: 1024px) {
           .desktop-nav { display: flex !important; }
           .hide-mobile { display: inline-flex !important; }
           .show-mobile { display: none !important; }

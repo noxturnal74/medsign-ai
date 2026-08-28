@@ -522,7 +522,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
   if (showProfile && currentUser && currentUser.role !== 'guest') {
     const inputCls = "w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-400/40 focus:border-sky-400 transition-all placeholder:text-slate-300 disabled:bg-slate-50 disabled:text-slate-400";
     return (
-      <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 py-2 animate-slide-up">
+      <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 py-2 animate-slide-up px-4 md:px-8">
         {/* Header */}
         <div className="glass-panel flex items-center justify-between rounded-3xl p-4 shadow-sm border border-white/60">
           <button onClick={() => setShowProfile(false)} className="glass-button rounded-2xl px-4 py-2 text-xs font-black">
@@ -776,7 +776,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
   // ── VIEW A: GUEST MODE (NO PATIENT SELECT) ──
   if (!currentUser || currentUser.role === 'guest') {
     return (
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 py-2 animate-slide-up">
+      <div className={`mx-auto flex w-full max-w-7xl flex-col gap-6 py-2 animate-slide-up ${isSplit ? 'px-2' : 'px-4 md:px-8 lg:px-12'}`}>
         {/* Guest Header */}
         {!isSplit && (
           <div className="glass-panel flex items-center justify-between rounded-3xl p-4 shadow-sm border border-white/60">
@@ -788,7 +788,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
               Kembali
             </button>
             <div className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-indigo-500/10 text-indigo-650 shrink-0">
+              <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-indigo-500/10 text-indigo-600 shrink-0">
                 <Stethoscope size={17} />
               </div>
               <div className="text-left">
@@ -861,7 +861,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
   // ── VIEW B: PATIENT SELECTOR (FOR LOGGED IN DOCTOR) ──
   if (!activePatient) {
     return (
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 py-2 animate-slide-up">
+      <div className={`mx-auto flex w-full max-w-7xl flex-col gap-6 py-2 animate-slide-up ${isSplit ? 'px-2' : 'px-4 md:px-8 lg:px-12'}`}>
         {/* Header */}
         {!isSplit && (
           <div className="glass-panel flex items-center justify-between rounded-3xl p-4 shadow-sm border border-white/60">
@@ -882,7 +882,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
               </button>
             </div>
             <div className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-indigo-500/10 text-indigo-650 shrink-0">
+              <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-indigo-500/10 text-indigo-600 shrink-0">
                 <Stethoscope size={17} />
               </div>
               <div className="text-left">
@@ -983,7 +983,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
                   <div className="flex flex-col gap-2">
                     <button
                       onClick={() => handleSelectPatient(pat)}
-                      className="w-full py-2 rounded-xl bg-indigo-650 hover:bg-indigo-750 text-white font-black text-[10px] uppercase tracking-wider transition-all"
+                      className="w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-[10px] uppercase tracking-wider transition-all"
                     >
                       Mulai Sesi Konsultasi
                     </button>
@@ -1065,7 +1065,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
   // ── VIEW C: ACTIVE CONSULTATION MODE (FOR LOGGED IN DOCTOR) ──
   return (
     <>
-      <div className="flex w-full flex-col gap-6 animate-slide-up">
+      <div className={`mx-auto flex w-full max-w-7xl flex-col gap-6 py-2 animate-slide-up ${isSplit ? 'px-2' : 'px-4 md:px-8 lg:px-12'}`}>
         {/* Active Session Header */}
         {!isSplit && (
           <div className="glass-panel flex items-center justify-between rounded-3xl p-4 shadow-sm border border-white/60">
@@ -1193,7 +1193,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
           <div className="glass-panel rounded-3xl p-6 border border-white/60 shadow-sm flex flex-col gap-5 animate-slide-up">
             <div className="flex items-center justify-between border-b border-slate-100 pb-2">
               <span className="block text-xs font-bold uppercase text-slate-500 flex items-center gap-1">
-                <History size={15} className="text-indigo-650" /> Histori Log Chat Sesi Sebelumnya
+                <History size={15} className="text-indigo-600" /> Histori Log Chat Sesi Sebelumnya
               </span>
               <span className="text-[10px] font-semibold text-slate-400">Total: {patientSessions.length} sesi</span>
             </div>
@@ -1226,7 +1226,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
                     </div>
                     <button
                       onClick={() => handleViewPastSessionLogs(s)}
-                      className="w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-750 text-white font-black text-[10px] uppercase tracking-wider transition-all"
+                      className="w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-[10px] uppercase tracking-wider transition-all"
                     >
                       Show History Chat
                     </button>
