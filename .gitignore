@@ -1,82 +1,82 @@
-# Node.js dependencies
-node_modules/
-dist/
-dist-ssr/
-*.local
-.eslintcache
-frontend/dist/
-
-# Python environment
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-env/
-venv/
-.venv/
-pip-log.txt
-pip-delete-this-directory.txt
-.ipynb_checkpoints/
-.pytest_cache/
-
-# OS metadata
-.DS_Store
-Thumbs.db
-*.bak
-*.log
-
-# IDE files
-.vscode/
-.idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.swp
-
-# Environment files
-.env
-.env.production
-.env.development
-
-# Database (local dev only)
-backend/medsign.db
-
-# Local ML artifacts and datasets
-backend/data/*
-!backend/data/raw_videos/
-backend/data/raw_videos/*
-!backend/data/raw_videos/.gitkeep
-!backend/data/landmarks/
-backend/data/landmarks/*
-!backend/data/landmarks/.gitkeep
-!backend/data/invalid_samples/
-backend/data/invalid_samples/*
-!backend/data/invalid_samples/.gitkeep
-!backend/data/metadata/
-!backend/data/metadata/.gitkeep
-!backend/data/metadata/labels.json
-!backend/data/metadata/README_DATASET.md
-backend/models/*
-!backend/models/.gitkeep
-!backend/models/*.tflite
-!backend/models/*.h5
-!backend/models/*_labels.json
-backend/training/visualization/
-
-# Local Vercel metadata
-.vercel/
-
-# Local scripts
-patch_augmentation_tab.py
-medsign-ai/.obsidian/
-
-# Demo Credentials
-credentials.txt
-
-# Generated frames (large binary assets)
-frontend/public/Homepage/ezgif-frame-*.png
-
-# Manual screenshots (large binary assets)
-manual_screenshots/
+# Node.js dependencies
+node_modules/
+dist/
+dist-ssr/
+*.local
+.eslintcache
+frontend/dist/
+
+# Python environment
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.ipynb_checkpoints/
+.pytest_cache/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+*.bak
+*.log
+
+# IDE files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Environment files
+.env
+.env.production
+.env.development
+
+# Database (local dev only)
+backend/medsign.db
+
+# Local ML artifacts and datasets
+backend/data/*
+!backend/data/raw_videos/
+backend/data/raw_videos/*
+!backend/data/raw_videos/.gitkeep
+!backend/data/landmarks/
+backend/data/landmarks/*
+!backend/data/landmarks/.gitkeep
+!backend/data/invalid_samples/
+backend/data/invalid_samples/*
+!backend/data/invalid_samples/.gitkeep
+!backend/data/metadata/
+!backend/data/metadata/.gitkeep
+!backend/data/metadata/labels.json
+!backend/data/metadata/README_DATASET.md
+backend/models/*
+!backend/models/.gitkeep
+!backend/models/*.tflite
+!backend/models/*.h5
+!backend/models/*_labels.json
+backend/training/visualization/
+
+# Local Vercel metadata
+.vercel/
+
+# Local scripts
+patch_augmentation_tab.py
+medsign-ai/.obsidian/
+
+# Demo Credentials
+credentials.txt
+
+# Generated frames (large binary assets)
+# frontend/public/Homepage/ezgif-frame-*.png
+
+# Manual screenshots (large binary assets)
+manual_screenshots/
