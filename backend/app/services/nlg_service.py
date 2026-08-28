@@ -471,7 +471,7 @@ class NLGService:
         }
   
 
-        async def summarize_session(self, logs: list) -> dict:
+    async def summarize_session(self, logs: list) -> dict:
         if not logs:
             empty_msg = "Belum ada riwayat percakapan untuk diringkas."
             return {
@@ -545,7 +545,7 @@ class NLGService:
             assessment = "Keluhan sesak atau nyeri dada (Suspek gangguan kardiovaskular/pernapasan)."
             plan = "Rujuk untuk pemeriksaan EKG/fisik jantung segera."
         elif "tensi" in patient_text_all or "darah" in patient_text_all:
-            assessment = "Keluhan terkait tekanan darah (Suspek hipertensi)."
+            assessment = "Keluhan terkait tekanan darah (Suspek hiatus/hipertensi)."
             plan = "Pantau tekanan darah berkala, edukasi pola hidup sehat."
         else:
             assessment = "Pemeriksaan umum pasca konsultasi."
