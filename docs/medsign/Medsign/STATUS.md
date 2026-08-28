@@ -19,6 +19,7 @@ The MedSign AI MVP is fully functional and successfully migrated to the Supabase
   * **Instagram Feed:** Added photo thumbnail previews in the table list.
   * **Image Upload:** Fixed authentication token lookup bug (from `medsign_user` JSON string).
 * **Super Admin View:** Cleaned up redundant legacy tabs (`articles`, `instagram`, `reviews`, `mitra`, `users`), leaving only global security and system settings.
+* **Deployment Manual:** The comprehensive [[Panduan Deployment VPS IDwebhost.md|VPS Deployment Guide]] is live.
 * **User Manual:** The comprehensive [[Buku Panduan Sistem MedSign.md|User Manual]] is fully completed.
 * **Homepage Scroll Effect:** Parallax scroll overlay offset set to `-mt-[100vh]` to produce a seamless curtain scroll effect over the Hero section.
 

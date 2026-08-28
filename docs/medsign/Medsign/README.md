@@ -17,6 +17,7 @@
 ## Linkages & Navigation Map
 This Obsidian vault serves as the central documentation index. Below are links connecting all project files:
 * Refer to the [[Buku Panduan Sistem MedSign.md|Buku Panduan Sistem MedSign]] for user manuals.
+* Check [[Panduan Deployment VPS IDwebhost.md|Panduan Deployment VPS IDwebhost]] for deployment instructions.
 * Check [[STATUS.md|STATUS]] for the current project state, active milestones, and blockers.
 * View [[progress.md|Progress Diary]] for chronological updates, fixes, and release history.
 * Refer to [[decisions.md|Decisions Log]] to trace key technical and design architectural decisions.
