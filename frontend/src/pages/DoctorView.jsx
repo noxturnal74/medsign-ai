@@ -23,7 +23,8 @@ import {
   AlertCircle,
   UserCog,
   Loader2,
-  KeyRound
+  KeyRound,
+  Users
 } from 'lucide-react';
 
 export const DoctorView = ({ setView, isSplit = false }) => {
@@ -311,6 +312,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
         const data = await response.json();
         setActiveMedicalRecord(data);
         showToast("Rekam Medis Elektronik (RME) berhasil dibuat!", "success");
+        await handleEndSession(false);
       } else {
         const err = await response.json();
         showToast(err.detail || "Gagal membuat RME", "error");
@@ -412,8 +414,8 @@ export const DoctorView = ({ setView, isSplit = false }) => {
     }
   };
 
-  const handleEndSession = async () => {
-    if (!window.confirm("Apakah Anda yakin ingin mengakhiri sesi konsultasi ini?")) return;
+  const handleEndSession = async (confirm = true) => {
+    if (confirm && !window.confirm("Apakah Anda yakin ingin mengakhiri sesi konsultasi ini?")) return;
     try {
       const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
       const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/sessions/${activeSessionId}/end`, {
@@ -423,11 +425,18 @@ export const DoctorView = ({ setView, isSplit = false }) => {
       
       if (response.ok) {
         showToast("Sesi konsultasi telah diakhiri", "success");
+        const pat = activePatient;
         setActivePatient(null);
         setActiveSessionId(null);
         setSelectedPastSession(null);
         setPatientSessions([]);
-        fetchAssignedPatients();
+        
+        if (pat) {
+          await handleOpenPatientHistory(pat);
+          setDoctorTab("history");
+        } else {
+          fetchAssignedPatients();
+        }
       }
     } catch (err) {
       showToast("Koneksi gagal", "error");
@@ -888,6 +897,44 @@ export const DoctorView = ({ setView, isSplit = false }) => {
               <div className="text-left">
                 <span className="block text-[10px] font-black uppercase text-indigo-700 leading-none">Dashboard Dokter</span>
                 <h2 className="text-sm md:text-base font-black text-slate-900 mt-1 leading-none">Pilih Pasien Terdaftar</h2>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Doctor Dashboard Metrics Grid */}
+        {!isSplit && (
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="bg-white p-5 rounded-[24px] border border-slate-200/60 shadow-sm flex items-center gap-3.5 hover:shadow-md hover:scale-[1.02] active:scale-[0.99] transition-all duration-200 cursor-pointer">
+              <div className="h-11 w-11 rounded-[16px] flex items-center justify-center shrink-0 bg-sky-500/10 text-sky-600 shadow-inner">
+                <Users size={20} />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[9px] font-black uppercase text-slate-400 tracking-wider truncate">Pasien Saya</p>
+                <p className="text-xl font-black text-slate-900 leading-tight mt-0.5">{patients.length}</p>
+                <p className="text-[8px] font-semibold text-slate-450 truncate">Pasien aktif terdaftar</p>
+              </div>
+            </div>
+
+            <div className="bg-white p-5 rounded-[24px] border border-slate-200/60 shadow-sm flex items-center gap-3.5 hover:shadow-md hover:scale-[1.02] active:scale-[0.99] transition-all duration-200 cursor-pointer">
+              <div className="h-11 w-11 rounded-[16px] flex items-center justify-center shrink-0 bg-emerald-500/10 text-emerald-600 shadow-inner">
+                <Stethoscope size={20} />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[9px] font-black uppercase text-slate-400 tracking-wider truncate">Fasilitas Medis</p>
+                <p className="text-xl font-black text-slate-900 leading-tight mt-0.5">{currentUser?.facility_name || "BISINDO Medical"}</p>
+                <p className="text-[8px] font-semibold text-slate-450 truncate">Lokasi pelayanan faskes</p>
+              </div>
+            </div>
+
+            <div className="bg-white p-5 rounded-[24px] border border-slate-200/60 shadow-sm flex items-center gap-3.5 hover:shadow-md hover:scale-[1.02] active:scale-[0.99] transition-all duration-200 cursor-pointer">
+              <div className="h-11 w-11 rounded-[16px] flex items-center justify-center shrink-0 bg-amber-500/10 text-amber-600 shadow-inner">
+                <Activity size={20} />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[9px] font-black uppercase text-slate-400 tracking-wider truncate">Status Sesi</p>
+                <p className="text-xl font-black text-[#053D67] leading-tight mt-0.5">Siap</p>
+                <p className="text-[8px] font-semibold text-slate-450 truncate">AI Notetaker (Gemini 3.6)</p>
               </div>
             </div>
           </div>
