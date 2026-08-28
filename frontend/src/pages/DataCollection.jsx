@@ -8914,6 +8914,8 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
   const [selectedWords, setSelectedWords] = useState([]);
 
+  const [trainingStatusFilters, setTrainingStatusFilters] = useState(["Cukup", "Kurang"]);
+
 
 
     // Auto-select recommended words on mount or when balanceData changes
@@ -8924,7 +8926,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
         const recommended = balanceData.balance
 
-          .filter(b => b.status === "Cukup")
+          .filter(b => b.total > 0)
 
           .map(b => b.label);
 
@@ -9053,6 +9055,25 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
       }
 
+      if (balanceData && balanceData.balance) {
+        list = list.filter((v) => {
+          const balanceItem = balanceData.balance.find(b => b.label === v.word);
+          if (!balanceItem) return trainingStatusFilters.includes("Belum");
+          
+          const total = balanceItem.total;
+          const signers = Object.values(balanceItem.counts || {}).filter(c => c > 0).length;
+          
+          let statusText = "Belum";
+          if (total >= 20 && signers >= 3) {
+            statusText = "Cukup";
+          } else if (total >= 5 && signers >= 1) {
+            statusText = "Kurang";
+          }
+          
+          return trainingStatusFilters.includes(statusText);
+        });
+      }
+
       const seen = new Set();
 
       return list.filter((v) => {
@@ -9065,7 +9086,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
       });
 
-    }, [vocabulary, trainingCategory, trainingSearch, modelType]);
+    }, [vocabulary, trainingCategory, trainingSearch, modelType, balanceData, trainingStatusFilters]);
 
 
 
@@ -9488,6 +9509,38 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
             </div>
 
 
+
+            {/* Filter Status Data */}
+            {modelType === "clinical" && (
+              <div className="flex items-center gap-3.5 text-[9.5px] font-extrabold text-slate-500 select-none pb-1.5 pt-0.5 border-b border-white/20 mb-1.5">
+                <span>STATUS DATA:</span>
+                {["Cukup", "Kurang", "Belum"].map(status => {
+                  const checked = trainingStatusFilters.includes(status);
+                  const colorMap = {
+                    Cukup: "text-emerald-700 bg-emerald-50 border-emerald-200",
+                    Kurang: "text-amber-700 bg-amber-50 border-amber-200",
+                    Belum: "text-rose-700 bg-rose-50 border-rose-200"
+                  };
+                  return (
+                    <label key={status} className={`flex items-center gap-1 px-2 py-0.5 rounded-lg border cursor-pointer hover:opacity-85 transition-all ${checked ? colorMap[status] : "bg-white/40 border-slate-200 text-slate-400"}`}>
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() => {
+                          if (checked) {
+                            setTrainingStatusFilters(trainingStatusFilters.filter(s => s !== status));
+                          } else {
+                            setTrainingStatusFilters([...trainingStatusFilters, status]);
+                          }
+                        }}
+                        className="hidden"
+                      />
+                      <span>{status.toUpperCase()}</span>
+                    </label>
+                  );
+                })}
+              </div>
+            )}
 
             {/* Filter kategori */}
 
