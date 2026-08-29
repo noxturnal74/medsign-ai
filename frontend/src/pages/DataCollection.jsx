@@ -3335,6 +3335,89 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
 
 
+  // Dashboard Ringkasan khusus Dataset & Kosakata (Dataset-only Overview)
+  const renderDatasetOverview = () => {
+    const totalWords = evaluatedList.length;
+    const cukupWords = evaluatedList.filter(w => w.status === "Cukup").length;
+    const kurangWords = evaluatedList.filter(w => w.status === "Kurang").length;
+    const belumWords = evaluatedList.filter(w => w.total === 0).length;
+    const totalSamples = evaluatedList.reduce((sum, w) => sum + w.total, 0);
+    const needRetake = evaluatedList.filter(w => w.recommendForRetake && w.total > 0).length;
+
+    const cards = [
+      { label: "Total Kosakata", value: totalWords, sub: "Kamus BISINDO medis", color: "sky" },
+      { label: "Kosakata Cukup", value: cukupWords, sub: "Siap digunakan training", color: "emerald" },
+      { label: "Kosakata Kurang", value: kurangWords, sub: "Butuh tambahan sampel", color: "amber" },
+      { label: "Belum Direkam", value: belumWords, sub: "Belum ada sampel data", color: "rose" },
+    ];
+
+    const toneMap = {
+      sky: "text-sky-600 bg-sky-50",
+      emerald: "text-emerald-600 bg-emerald-50",
+      amber: "text-amber-600 bg-amber-50",
+      rose: "text-rose-600 bg-rose-50",
+    };
+
+    return (
+      <div className="flex flex-col gap-6 animate-slide-up">
+        {/* Header */}
+        <div className="glass-panel rounded-3xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <span className="text-[10px] font-black uppercase text-sky-700 tracking-widest">Ringkasan Dataset MedSign</span>
+            <h2 className="text-lg font-black text-slate-950 tracking-tight">
+              Status Kesehatan & Kelayakan Dataset
+            </h2>
+          </div>
+          <div className="text-right">
+            <span className="text-[9px] font-black text-slate-455 block uppercase">Total Sampel Landmark</span>
+            <span className="text-lg font-black text-[#053D67]">{totalSamples} file (.npy)</span>
+          </div>
+        </div>
+
+        {/* Metrics Grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {cards.map(c => (
+            <div key={c.label} className="bg-white rounded-3xl border border-slate-200/60 shadow-sm p-5 flex flex-col gap-1.5 hover:shadow-md hover:scale-[1.03] active:scale-[0.98] transition-all duration-200 cursor-pointer">
+              <span className={`inline-flex w-fit px-2.5 py-1 rounded-full text-[8px] font-black uppercase tracking-wider ${toneMap[c.color]}`}>
+                {c.label}
+              </span>
+              <span className="text-2xl font-black text-slate-950 tracking-tight">{c.value}</span>
+              <span className="text-[9px] font-bold text-slate-455">{c.sub}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Dataset Recommendation & Health Card */}
+        <div className="bg-white rounded-[28px] p-6 border border-slate-200 shadow-sm flex flex-col gap-4">
+          <h3 className="text-xs font-black text-slate-950 uppercase tracking-wide flex items-center gap-2">
+            <Sparkles size={16} className="text-sky-600 animate-pulse" /> Rekomendasi Pelatihan Model
+          </h3>
+          <div className="text-xs font-semibold text-slate-650 leading-relaxed flex flex-col gap-2">
+            <p>
+              Pelatihan model klinis membutuhkan minimal <strong>30 sampel valid per kata</strong> untuk setidaknya <strong>12 kata kunci (MVP)</strong> agar dapat dijalankan.
+            </p>
+            <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex flex-col gap-1">
+                <span className="text-[9px] font-black text-slate-455 uppercase">Kelayakan Training</span>
+                <span className={`text-xs font-black uppercase ${cukupWords >= 12 ? 'text-emerald-700' : 'text-rose-700'}`}>
+                  {cukupWords >= 12 ? '✓ MEMENUHI SYARAT MVP' : '✗ BELUM MEMENUHI SYARAT MVP'}
+                </span>
+                <span className="text-[8.5px] font-bold text-slate-450 mt-1">Butuh minimal 12 kata dengan status Cukup (Saat ini: {cukupWords})</span>
+              </div>
+              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex flex-col gap-1">
+                <span className="text-[9px] font-black text-slate-455 uppercase">Kosakata Perlu Retake</span>
+                <span className={`text-xs font-black uppercase ${needRetake > 0 ? 'text-amber-700' : 'text-emerald-700'}`}>
+                  {needRetake > 0 ? `${needRetake} KATA PERLU PERBAIKAN` : 'SEMUA DATA SEHAT'}
+                </span>
+                <span className="text-[8.5px] font-bold text-slate-450 mt-1">Kosakata dengan akurasi rendah atau sampel di bawah 150</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   // Dashboard Ringkasan untuk Admin Faskes (statistik + grafik + laporan)
   const renderAdminOverview = () => {
     const o = adminOverview;
@@ -10328,7 +10411,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
       >
 
-        {renderAdminOverview()}
+        {renderDatasetOverview()}
 
       </div>
 
