@@ -455,7 +455,7 @@ def assign_doctor_patient(request: AssignmentRequest, current_user: dict = Depen
 
 @router.post("/admin/doctor-patient-assignment/remove")
 def remove_doctor_patient_assignment(request: AssignmentRequest, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "admin":
+    if current_user["role"] not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya admin yang dapat menghapus hubungan dokter-pasien")
         
     if not db_check_doctor_patient_link(request.doctor_id, request.patient_id):
@@ -722,7 +722,7 @@ def get_articles_endpoint():
 
 @router.post("/admin/articles", response_model=ArticleResponse)
 def create_article_endpoint(request: ArticleCreateRequest, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "admin":
+    if current_user["role"] not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya admin yang dapat membuat artikel")
     article_id = str(uuid.uuid4())
     success = db_create_article(
@@ -760,7 +760,7 @@ def create_article_endpoint(request: ArticleCreateRequest, current_user: dict = 
 
 @router.put("/admin/articles/{article_id}")
 def update_article_endpoint(article_id: str, request: ArticleUpdateRequest, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "admin":
+    if current_user["role"] not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya admin yang dapat mengedit artikel")
     success = db_update_article(
         article_id,
@@ -781,7 +781,7 @@ def update_article_endpoint(article_id: str, request: ArticleUpdateRequest, curr
 
 @router.delete("/admin/articles/{article_id}")
 def delete_article_endpoint(article_id: str, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "admin":
+    if current_user["role"] not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya admin yang dapat menghapus artikel")
     success = db_delete_article(article_id)
     if not success:
@@ -808,7 +808,7 @@ def get_reviews_endpoint():
 
 @router.post("/admin/reviews", response_model=ReviewResponse)
 def create_review_endpoint(request: ReviewCreateRequest, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "admin":
+    if current_user["role"] not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya admin yang dapat membuat review")
     review_id = str(uuid.uuid4())
     success = db_create_review(review_id, request.name, request.role, request.rating, request.content, request.avatar)
@@ -827,7 +827,7 @@ def create_review_endpoint(request: ReviewCreateRequest, current_user: dict = De
 
 @router.put("/admin/reviews/{review_id}")
 def update_review_endpoint(review_id: str, request: ReviewUpdateRequest, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "admin":
+    if current_user["role"] not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya admin yang dapat mengedit review")
     success = db_update_review(review_id, request.name, request.role, request.rating, request.content, request.avatar)
     if not success:
@@ -837,7 +837,7 @@ def update_review_endpoint(review_id: str, request: ReviewUpdateRequest, current
 
 @router.delete("/admin/reviews/{review_id}")
 def delete_review_endpoint(review_id: str, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "admin":
+    if current_user["role"] not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya admin yang dapat menghapus review")
     success = db_delete_review(review_id)
     if not success:
@@ -864,7 +864,7 @@ def get_instagram_posts_endpoint():
 
 @router.post("/admin/instagram-posts", response_model=InstagramPostResponse)
 def create_instagram_post_endpoint(request: InstagramPostCreateRequest, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "admin":
+    if current_user["role"] not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya admin yang dapat mengelola feed instagram")
     post_id = str(uuid.uuid4())
     success = db_create_instagram_post(post_id, request.post_url, request.thumbnail_image, request.caption_short, request.display_order, request.is_active)
@@ -884,7 +884,7 @@ def create_instagram_post_endpoint(request: InstagramPostCreateRequest, current_
 
 @router.put("/admin/instagram-posts/{post_id}")
 def update_instagram_post_endpoint(post_id: str, request: InstagramPostUpdateRequest, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "admin":
+    if current_user["role"] not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya admin yang dapat mengedit feed instagram")
     success = db_update_instagram_post(post_id, request.post_url, request.thumbnail_image, request.caption_short, request.display_order, request.is_active)
     if not success:
@@ -894,7 +894,7 @@ def update_instagram_post_endpoint(post_id: str, request: InstagramPostUpdateReq
 
 @router.delete("/admin/instagram-posts/{post_id}")
 def delete_instagram_post_endpoint(post_id: str, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "admin":
+    if current_user["role"] not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya admin yang dapat menghapus feed instagram")
     success = db_delete_instagram_post(post_id)
     if not success:
@@ -922,7 +922,7 @@ def get_mitra_endpoint():
 
 @router.post("/admin/mitra", response_model=MitraResponse)
 def create_mitra_endpoint(request: MitraCreateRequest, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "admin":
+    if current_user["role"] not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya admin yang dapat mengelola data mitra")
     mitra_id = str(uuid.uuid4())
     success = db_create_mitra(mitra_id, request.name, request.logo, request.website_url, request.category, request.display_order, request.is_active)
@@ -943,7 +943,7 @@ def create_mitra_endpoint(request: MitraCreateRequest, current_user: dict = Depe
 
 @router.put("/admin/mitra/{mitra_id}")
 def update_mitra_endpoint(mitra_id: str, request: MitraUpdateRequest, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "admin":
+    if current_user["role"] not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya admin yang dapat mengedit data mitra")
     success = db_update_mitra(mitra_id, request.name, request.logo, request.website_url, request.category, request.display_order, request.is_active)
     if not success:
@@ -953,7 +953,7 @@ def update_mitra_endpoint(mitra_id: str, request: MitraUpdateRequest, current_us
 
 @router.delete("/admin/mitra/{mitra_id}")
 def delete_mitra_endpoint(mitra_id: str, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "admin":
+    if current_user["role"] not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya admin yang dapat menghapus data mitra")
     success = db_delete_mitra(mitra_id)
     if not success:
