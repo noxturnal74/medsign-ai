@@ -3105,7 +3105,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
               label: take.label,
 
-              signer_id: take.signer_id,
+              signer_id: take.signer_id.toLowerCase().replace(/[^a-z0-9_]/g, '_').replace(/_+/g, '_'),
 
               session_id: take.session_id,
 
