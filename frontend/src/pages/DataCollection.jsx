@@ -9861,6 +9861,36 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
           </button>
 
+          {/* Laporan Training Download Group */}
+          <div className="mt-4 p-4 bg-slate-50 border border-slate-200/60 rounded-2xl flex flex-col gap-2 animate-slide-up">
+            <div>
+              <span className="block text-[10px] font-black text-slate-500 uppercase tracking-wider">Unduh Laporan Pelatihan</span>
+              <p className="text-[9px] font-semibold text-slate-400 mt-0.5">Ekspor hasil akurasi, recall, F1-score, overfitting/underfitting, dan confusion matrix.</p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <a
+                href={`${apiUrl.endsWith("/") ? apiUrl.slice(0, -1) : apiUrl}/api/v1/dataset/train/report?format=pdf`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-[9px] px-3.5 py-2 uppercase shadow-sm active:scale-95 transition-all"
+              >
+                Laporan PDF
+              </a>
+              <a
+                href={`${apiUrl.endsWith("/") ? apiUrl.slice(0, -1) : apiUrl}/api/v1/dataset/train/report?format=docx`}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-black text-[9px] px-3.5 py-2 uppercase shadow-sm active:scale-95 transition-all"
+              >
+                Laporan DOCX
+              </a>
+              <a
+                href={`${apiUrl.endsWith("/") ? apiUrl.slice(0, -1) : apiUrl}/api/v1/dataset/train/report?format=excel`}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-[9px] px-3.5 py-2 uppercase shadow-sm active:scale-95 transition-all"
+              >
+                Laporan Excel
+              </a>
+            </div>
+          </div>
+
         </div>
 
 

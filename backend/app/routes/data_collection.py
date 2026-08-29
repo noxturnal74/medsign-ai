@@ -1164,3 +1164,193 @@ async def upload_file(
         "filename": file_path.name,
         "size_kb": round(size_mb * 1024, 1)
     }
+
+
+# ═══ Training Model Report Export (PDF, DOCX, Excel) ═══
+
+from fastapi import Response
+from datetime import datetime
+
+@router.get("/dataset/train/report")
+async def download_training_report(format: str = "pdf"):
+    fmt = (format or "pdf").lower()
+    if fmt not in ("pdf", "docx", "excel"):
+        raise HTTPException(status_code=400, detail="Format harus pdf | docx | excel")
+        
+    backend_dir = Path(__file__).resolve().parents[2]
+    metrics_path = backend_dir / "reports" / "training_metrics.json"
+    if not metrics_path.exists():
+        raise HTTPException(status_code=404, detail="Laporan training belum tersedia. Silakan jalankan training terlebih dahulu.")
+        
+    with open(metrics_path, "r", encoding="utf-8") as f:
+        metrics = json.load(f)
+        
+    loss, val_loss, acc, val_acc = 0.0, 0.0, 0.0, 0.0
+    history_path = backend_dir / "reports" / "training_history.csv"
+    if history_path.exists():
+        import csv
+        with open(history_path, "r", encoding="utf-8") as f:
+            reader = list(csv.DictReader(f))
+            if reader:
+                last = reader[-1]
+                loss = float(last.get("loss", 0.0))
+                val_loss = float(last.get("val_loss", 0.0))
+                acc = float(last.get("accuracy", 0.0))
+                val_acc = float(last.get("val_accuracy", 0.0))
+                
+    if acc < 0.75:
+        model_fit = "Underfitting (Model kurang mempelajari pola data latih, akurasi rendah)"
+    elif val_loss > 1.8 * loss and (val_loss - loss) > 0.2:
+        model_fit = "Overfitting (Model menghafal data latih, performa generalisasi data uji menurun)"
+    else:
+        model_fit = "Optimal (Model memiliki kemampuan generalisasi yang baik pada data latih dan uji)"
+        
+    report_items = []
+    report_path = backend_dir / "reports" / "classification_report.txt"
+    if report_path.exists():
+        lines = report_path.read_text(encoding="utf-8").splitlines()
+        for line in lines[2:]:
+            line = line.strip()
+            if not line or any(k in line for k in ("accuracy", "macro avg", "weighted avg")):
+                continue
+            parts = re.split(r'\s+', line)
+            if len(parts) >= 5:
+                report_items.append({
+                    "label": parts[0],
+                    "precision": float(parts[1]),
+                    "recall": float(parts[2]),
+                    "f1_score": float(parts[3]),
+                    "support": int(parts[4])
+                })
+                
+    table_rows = "".join([
+        f"<tr><td>{item['label']}</td><td>{item['precision']:.2f}</td><td>{item['recall']:.2f}</td><td>{item['f1_score']:.2f}</td><td>{item['support']}</td></tr>"
+        for item in report_items
+    ])
+    
+    timestamp = datetime.now().strftime("%d/%m/%Y %H:%M")
+    
+    cm_img_path = backend_dir / "reports" / "confusion_matrix.png"
+    cm_section = ""
+    if cm_img_path.exists():
+        api_base = os.getenv("VITE_API_BASE_URL", "http://localhost:8000")
+        cm_section = f"""
+        <h2>Confusion Matrix</h2>
+        <div class="screenshot-wrap">
+            <img src="{api_base}/reports/confusion_matrix.png" style="max-width: 100%; height: auto; border: 1px solid #e2e8f0; border-radius: 12px;" />
+            <span class="screenshot-label">Gambar: Confusion Matrix MedSign AI</span>
+        </div>
+        """
+        
+    html_report = f"""<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Laporan Hasil Pelatihan Model MedSign AI</title>
+<style>
+  body {{ font-family: sans-serif; color: #1e293b; padding: 25px; line-height: 1.5; }}
+  h1, h2, h3 {{ color: #0f172a; }}
+  .grid {{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }}
+  .card {{ background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 12px; }}
+  .card-title {{ font-size: 10px; font-weight: bold; color: #64748b; text-transform: uppercase; }}
+  .card-value {{ font-size: 20px; font-weight: 800; color: #0f172a; margin-top: 5px; }}
+  .status-box {{ background: #eff6ff; border: 1px solid #bfdbfe; padding: 15px; border-radius: 12px; margin-bottom: 20px; }}
+  table {{ width: 100%; border-collapse: collapse; margin-top: 15px; }}
+  th, td {{ border: 1px solid #e2e8f0; padding: 8px; text-align: left; font-size: 11px; }}
+  th {{ background: #f1f5f9; color: #475569; }}
+  .screenshot-wrap {{ margin: 15px 0; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; background: #f8fafc; padding: 10px; text-align: center; }}
+  .screenshot-label {{ display: block; color: #64748b; font-size: 8px; font-weight: 700; margin-top: 5px; }}
+</style>
+</head>
+<body>
+  <h1>Laporan Hasil Pelatihan Model MedSign AI</h1>
+  <p>Dihasilkan pada: {{timestamp}}</p>
+  
+  <h2>Ringkasan Metrik Utama</h2>
+  <div class="grid">
+    <div class="card"><div class="card-title">Akurasi Uji (Test Acc)</div><div class="card-value">{{metrics.get("test_accuracy", 0.0):.2%}}</div></div>
+    <div class="card"><div class="card-title">Loss Uji (Test Loss)</div><div class="card-value">{{metrics.get("test_loss", 0.0):.4f}}</div></div>
+    <div class="card"><div class="card-title">Total Kelas (Labels)</div><div class="card-value">{{metrics.get("num_classes", 0)}}</div></div>
+    <div class="card"><div class="card-title">Total Sampel</div><div class="card-value">{{metrics.get("num_samples", 0)}}</div></div>
+  </div>
+  
+  <div class="status-box">
+    <strong>Evaluasi Kelayakan Model (Fit Assessment):</strong>
+    <p style="margin: 5px 0 0 0; font-size: 13px; font-weight: bold; color: #1e3a8a;">
+      {{model_fit}}
+    </p>
+    <p style="margin: 5px 0 0 0; font-size: 11px; color: #475569;">
+      Training Loss: {{loss:.4f}} | Val Loss: {{val_loss:.4f}} | Training Acc: {{acc:.2%}} | Val Acc: {{val_acc:.2%}}
+    </p>
+  </div>
+  
+  <h2>Laporan Klasifikasi per Kosakata</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Kosakata (Label)</th>
+        <th>Precision</th>
+        <th>Recall</th>
+        <th>F1-Score</th>
+        <th>Jumlah Sampel (Support)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{table_rows}}
+    </tbody>
+  </table>
+  
+  {{cm_section}}
+</body>
+</html>
+"""
+
+    stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    
+    if fmt == "pdf":
+        from playwright.async_api import async_playwright
+        temp_html_path = backend_dir / "reports" / f"temp_report_{stamp}.html"
+        temp_html_path.write_text(html_report, encoding="utf-8")
+        
+        pdf_path = backend_dir / "reports" / f"temp_report_{stamp}.pdf"
+        
+        async with async_playwright() as p:
+            browser = await p.chromium.launch()
+            page = await browser.newPage()
+            await page.goto("file://" + str(temp_html_path), wait_until="networkidle")
+            await page.waitForTimeout(1000)
+            await page.pdf(
+                path=str(pdf_path),
+                format="A4",
+                print_background=True,
+                margin={"top": "15mm", "right": "15mm", "bottom": "15mm", "left": "15mm"}
+            )
+            await browser.close()
+            
+        with open(pdf_path, "rb") as f:
+            pdf_bytes = f.read()
+            
+        if temp_html_path.exists():
+            temp_html_path.unlink()
+        if pdf_path.exists():
+            pdf_path.unlink()
+            
+        return Response(
+            content=pdf_bytes,
+            media_type="application/pdf",
+            headers={"Content-Disposition": f'attachment; filename="laporan_training_{stamp}.pdf"'}
+        )
+        
+    elif fmt == "docx":
+        return Response(
+            content=html_report.encode("utf-8"),
+            media_type="application/msword",
+            headers={"Content-Disposition": f'attachment; filename="laporan_training_{stamp}.doc"'}
+        )
+        
+    elif fmt == "excel":
+        return Response(
+            content=html_report.encode("utf-8"),
+            media_type="application/vnd.ms-excel",
+            headers={"Content-Disposition": f'attachment; filename="laporan_training_{stamp}.xls"'}
+        )

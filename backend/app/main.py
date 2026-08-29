@@ -114,6 +114,11 @@ data_dir = Path(__file__).parent.parent / "data"
 data_dir.mkdir(parents=True, exist_ok=True)
 app.mount("/data", StaticFiles(directory=str(data_dir)), name="data")
 
+# Mount reports folder to serve confusion matrix and other reports
+reports_dir = Path(__file__).parent.parent / "reports"
+reports_dir.mkdir(parents=True, exist_ok=True)
+app.mount("/reports", StaticFiles(directory=str(reports_dir)), name="reports")
+
 # WebSocket Streaming Endpoint
 @app.websocket("/api/v1/stream")
 async def websocket_stream(websocket: WebSocket):
