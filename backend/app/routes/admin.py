@@ -974,6 +974,7 @@ class SuperAdminOverviewResponse(BaseModel):
     completed_consultations: int
     security_events: int
     system_errors: int
+    weekly_sessions: List[dict]
 
 class FacilityOverviewItem(BaseModel):
     id: str
@@ -1194,6 +1195,18 @@ def get_superadmin_overview(current_user: dict = Depends(get_current_user)):
     
     conn.close()
     
+    # Sesi 7 hari terakhir (Sen..Min)
+    from datetime import datetime as _dt, timedelta as _td
+    today = _dt.utcnow().date()
+    week_days = [today - _td(days=i) for i in range(6, -1, -1)]
+    day_names = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"]
+    weekly = []
+    
+    all_sessions = db_get_all_sessions()
+    for d in week_days:
+        count = sum(1 for s in all_sessions if (s.get("started_at") or "")[:10] == d.isoformat())
+        weekly.append({"day": day_names[d.weekday()], "date": d.isoformat(), "sessions": count})
+    
     return SuperAdminOverviewResponse(
         total_facilities=total_facs,
         active_facilities=active_facs,
@@ -1204,7 +1217,8 @@ def get_superadmin_overview(current_user: dict = Depends(get_current_user)):
         active_consultations=active_consultations,
         completed_consultations=completed_consultations,
         security_events=security_events,
-        system_errors=system_errors
+        system_errors=system_errors,
+        weekly_sessions=weekly
     )
 
 @router.get("/superadmin/facilities-overview", response_model=List[FacilityOverviewItem])

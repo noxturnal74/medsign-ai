@@ -614,7 +614,7 @@ export const SuperAdminView = ({ setView }) => {
               </div>
 
               {/* Visual Analytics Grid (interactive, timeframe-filtered) */}
-              {overview && <AdminAnalytics overview={overview} />}
+              {overview && <AdminAnalytics overview={overview} weeklyData={overview.weekly_sessions} />}
 
               {/* Unduh Laporan (PDF / Excel / Word / CSV) */}
               <div className="bg-white rounded-[28px] p-5 border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
