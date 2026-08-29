@@ -128,7 +128,8 @@ const SwipeableNotifItem = ({ notification, onRead, onDelete }) => {
           : 'rgba(15,23,42,0.02)',
         border: `1px solid ${!notification.read ? 'rgba(14,165,233,0.18)' : 'rgba(15,23,42,0.05)'}`,
         position: 'relative',
-        userSelect: 'none'
+        userSelect: 'none',
+        flexShrink: 0
       }}
     >
       <div style={{ minWidth: 0, flexGrow: 1 }}>
