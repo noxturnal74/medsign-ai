@@ -65,7 +65,7 @@ export const useMediaPipe = (isActive, videoElement, isMirrored = true) => {
 
         hands.setOptions({
           maxNumHands: 2,
-          modelComplexity: 1, // Full model: higher quality, handles dual hands much better
+          modelComplexity: 0, // Lite model: much faster and less CPU/GPU intensive
           minDetectionConfidence: 0.5,
           minTrackingConfidence: 0.5
         });
