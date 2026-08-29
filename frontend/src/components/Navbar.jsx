@@ -129,7 +129,8 @@ const SwipeableNotifItem = ({ notification, onRead, onDelete }) => {
         border: `1px solid ${!notification.read ? 'rgba(14,165,233,0.18)' : 'rgba(15,23,42,0.05)'}`,
         position: 'relative',
         userSelect: 'none',
-        flexShrink: 0
+        flexShrink: 0,
+        marginBottom: '6px'
       }}
     >
       <div style={{ minWidth: 0, flexGrow: 1 }}>
@@ -441,7 +442,7 @@ export const Navbar = ({ currentView, setView }) => {
                   </div>
                 </div>
                   
-                  <div style={{ maxHeight: 200, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  <div style={{ maxHeight: 200, overflowY: 'auto', display: 'block' }}>
                     {notifications.length === 0 ? (
                       <div style={{ textAlign: 'center', color: '#94a3b8', fontSize: 10, padding: '16px 0' }}>Tidak ada notifikasi log.</div>
                     ) : (
@@ -707,7 +708,7 @@ export const Navbar = ({ currentView, setView }) => {
                   <button onClick={clearAllNotifications} style={{ fontSize: 9, fontWeight: 700, color: '#ef4444', border: 'none', background: 'transparent', cursor: 'pointer' }}>Hapus Semua</button>
                 )}
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 4, maxHeight: 120, overflowY: 'auto' }}>
+              <div style={{ maxHeight: 120, overflowY: 'auto', display: 'block' }}>
                 {notifications.length === 0 ? (
                   <div style={{ fontSize: 9, color: '#94a3b8', textAlign: 'center', padding: '4px 0' }}>Tidak ada log.</div>
                 ) : (
