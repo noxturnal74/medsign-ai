@@ -2679,7 +2679,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
             label: currentTake.word,
 
-            signer_id: signerId,
+            signer_id: signerId.toLowerCase().replace(/[^a-z0-9_]/g, '_').replace(/_+/g, '_'),
 
             session_id: sessionId,
 
@@ -2803,7 +2803,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
         label: currentTake.word,
 
-        signer_id: signerId,
+        signer_id: signerId.toLowerCase().replace(/[^a-z0-9_]/g, '_').replace(/_+/g, '_'),
 
         session_id: sessionId,
 
@@ -5513,7 +5513,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
         const label = parts[parts.length - 3].toLowerCase().trim();
 
-        const signer = parts[parts.length - 2].toLowerCase().trim();
+        const signer = parts[parts.length - 2].toLowerCase().trim().replace(/[^a-z0-9_]/g, '_').replace(/_+/g, '_');
 
         if (label && signer) {
 
@@ -5533,7 +5533,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
         const label = fileParts[0].toLowerCase().trim();
 
-        const signer = fileParts[1].toLowerCase().trim();
+        const signer = fileParts[1].toLowerCase().trim().replace(/[^a-z0-9_]/g, '_').replace(/_+/g, '_');
 
         if (label && signer) {
 
@@ -5545,7 +5545,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
       
 
-      return { label: "unknown", signer: signerId || "unknown" };
+      return { label: "unknown", signer: (signerId || "unknown").toLowerCase().replace(/[^a-z0-9_]/g, "_").replace(/_+/g, "_") };
 
     };
 
