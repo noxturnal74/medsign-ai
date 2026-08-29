@@ -911,7 +911,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
               </div>
               <div className="min-w-0">
                 <p className="text-[9px] font-black uppercase text-slate-400 tracking-wider truncate">Pasien Saya</p>
-                <p className="text-xl font-black text-slate-900 leading-tight mt-0.5">{patients.length}</p>
+                <p className="text-xl font-black text-slate-900 leading-tight mt-0.5">{assignedPatients.length}</p>
                 <p className="text-[8px] font-semibold text-slate-450 truncate">Pasien aktif terdaftar</p>
               </div>
             </div>
