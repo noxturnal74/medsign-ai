@@ -474,6 +474,22 @@ export const Navbar = ({ currentView, setView }) => {
               {ttsEnabled ? <Volume2 size={15} /> : <VolumeX size={15} />}
             </button>
 
+            {/* Dark Mode Toggle */}
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              title={darkMode ? 'Aktifkan mode terang' : 'Aktifkan mode gelap'}
+              style={{
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                padding: '7px 10px', borderRadius: 10, cursor: 'pointer',
+                border: '1px solid rgba(15,23,42,0.1)',
+                background: 'rgba(15,23,42,0.04)',
+                color: darkMode ? '#f59e0b' : '#64748b',
+                transition: 'all 0.2s',
+              }}
+            >
+              {darkMode ? <Sun size={15} /> : <Moon size={15} />}
+            </button>
+
             {/* Layout modal */}
             <button
               onClick={() => setShowFeatureModal(true)}

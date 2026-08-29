@@ -29,8 +29,31 @@ ENCRYPTION_KEY = os.getenv("MEDSIGN_ENCRYPTION_KEY", "medsign_secure_nik_key_202
 SUPABASE_URL = os.getenv("SUPABASE_URL", "")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY", "")
 
+def test_supabase_connection(url: str, key: str) -> bool:
+    if not url or not key:
+        return False
+    import requests
+    try:
+        test_url = f"{url.rstrip('/')}/rest/v1/doctors?limit=1"
+        headers = {
+            "apikey": key,
+            "Authorization": f"Bearer {key}"
+        }
+        res = requests.get(test_url, headers=headers, timeout=1.5)
+        return res.status_code in (200, 404, 201)
+    except Exception as e:
+        print(f"[DB] Supabase connection check failed: {e}")
+        return False
+
 # Determine if we should connect to production Supabase or fall back to local SQLite
-USE_SUPABASE = bool(SUPABASE_URL and SUPABASE_KEY and "supabase" in SUPABASE_URL)
+USE_SUPABASE = False
+if SUPABASE_URL and SUPABASE_KEY and "supabase" in SUPABASE_URL:
+    print("[DB] Testing connection to Supabase Cloud...")
+    if test_supabase_connection(SUPABASE_URL, SUPABASE_KEY):
+        USE_SUPABASE = True
+        print("[DB] Supabase Cloud connected successfully. Using Supabase database.")
+    else:
+        print("[DB] Supabase connection failed or offline. Falling back to local SQLite database!")
 
 def get_db_connection():
     conn = sqlite3.connect(DB_PATH)
