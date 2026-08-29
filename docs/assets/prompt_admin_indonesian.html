@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>MedSign — Prompt Implementasi: Sistem Admin (Lengkap)</title>
+<style>
+@page {
+  size: A4;
+  margin: 0;
+}
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  color: #2d3f4e;
+  background-color: #ffffff;
+  line-height: 1.6;
+  font-size: 9.5pt;
+}
+
+/* Page styles */
+.page {
+  width: 210mm;
+  height: 297mm;
+  padding: 22mm 20mm 20mm 22mm;
+  position: relative;
+  page-break-after: always;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Cover Page Specific */
+.cover {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  background-color: #f8fafc;
+}
+.cover-header {
+  width: 100%;
+  padding: 40px 45px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+}
+.cover-logos {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.cover-logo-img {
+  height: 45px;
+  object-fit: contain;
+}
+.cover-body {
+  width: 100%;
+  padding: 0 45px;
+  margin-top: auto;
+  margin-bottom: auto;
+  z-index: 10;
+  text-align: left;
+}
+.cover-label {
+  font-size: 10pt;
+  font-weight: 900;
+  color: #0284c7;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cover-label::before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 3px;
+  background: #0284c7;
+}
+.cover-title {
+  font-size: 34pt;
+  font-weight: 900;
+  color: #0f172a;
+  line-height: 1.1;
+  letter-spacing: -1.5px;
+  margin-bottom: 12px;
+}
+.cover-subtitle {
+  font-size: 14pt;
+  font-weight: 600;
+  color: #0284c7;
+  line-height: 1.4;
+  margin-bottom: 24px;
+}
+.cover-desc {
+  font-size: 10pt;
+  color: #475569;
+  line-height: 1.6;
+  max-width: 150mm;
+}
+.cover-meta {
+  width: 100%;
+  padding: 40px 45px;
+  border-top: 1px solid rgba(0,0,0,0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  z-index: 10;
+}
+.cover-team {
+  font-size: 8.5pt;
+  color: #64748b;
+  line-height: 1.6;
+}
+.cover-team strong {
+  color: #0f172a;
+  font-weight: 700;
+}
+.cover-year {
+  font-size: 9pt;
+  color: #64748b;
+  font-weight: 700;
+}
+
+/* Content styles */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #0284c7;
+  padding-bottom: 8px;
+  margin-bottom: 15px;
+}
+.header-title {
+  font-size: 8.5pt;
+  font-weight: 900;
+  color: #0f172a;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.header-chapter {
+  font-size: 8.5pt;
+  font-weight: 700;
+  color: #0284c7;
+  text-transform: uppercase;
+}
+.content {
+  flex-grow: 1;
+}
+.chapter-title {
+  font-size: 16pt;
+  font-weight: 900;
+  color: #0f172a;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+.section-title {
+  font-size: 11pt;
+  font-weight: 700;
+  color: #1e293b;
+  margin-top: 12px;
+  margin-bottom: 6px;
+  border-left: 3px solid #0284c7;
+  padding-left: 8px;
+}
+p {
+  font-size: 9pt;
+  color: #334155;
+  margin-bottom: 8px;
+  text-align: justify;
+}
+ul, ol {
+  margin-bottom: 10px;
+  padding-left: 18px;
+}
+li {
+  font-size: 9pt;
+  color: #334155;
+  margin-bottom: 4px;
+}
+li strong {
+  color: #0f172a;
+}
+pre {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 8pt;
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin: 10px 0;
+  color: #0f172a;
+}
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 6px;
+  margin-top: 15px;
+}
+.footer span {
+  font-size: 7.5pt;
+  color: #94a3b8;
+  font-weight: 600;
+}
+</style>
+</head>
+<body>
+
+<!-- HALAMAN 1: COVER -->
+<div class="page cover">
+  <div class="cover-header">
+    <div class="cover-logos">
+      <img src="http://localhost:3001/assets/medsign-mark.png" class="cover-logo-img" onerror="this.src='https://qzodlgnlchvqkeupgpgv.supabase.co/storage/v1/object/public/logos/medsign-mark.png'" />
+    </div>
+  </div>
+  <div class="cover-body">
+    <span class="cover-label">Prompt Implementasi</span>
+    <h1 class="cover-title">MedSign AI</h1>
+    <h2 class="cover-subtitle">Sistem Admin Lengkap</h2>
+    <p class="cover-desc">
+      Dokumen spesifikasi teknis dan prompt terstruktur untuk memicu pembuatan kode implementasi lengkap di sisi panel Admin faskes (FastAPI + React + Supabase).
+    </p>
+  </div>
+  <div class="cover-meta">
+    <div class="cover-team">
+      Disusun oleh:<br/>
+      <strong>Tim MedSign AI PKM-KC 2026</strong><br/>
+      Universitas Ma Chung Malang
+    </div>
+    <div class="cover-year">2026</div>
+  </div>
+</div>
+
+<!-- HALAMAN 2: CONTEXT & SCOPE -->
+<div class="page">
+  <div class="header">
+    <span class="header-title">Prompt Implementasi Admin</span>
+    <span class="header-chapter">Bab I: Pendahuluan</span>
+  </div>
+  <div class="content">
+    <h1 class="chapter-title">Konteks &amp; Aturan Umum</h1>
+    <p>
+      Dokumen ini menggabungkan seluruh rancangan modul sistem Admin MedSign AI menjadi satu instruksi YAML terstruktur yang dapat disuapkan langsung ke asisten pemrograman AI.
+    </p>
+    <div class="section-title">Kewenangan &amp; Aturan Lintas Modul</div>
+    <ul>
+      <li><strong>Otentikasi &amp; RBAC:</strong> Seluruh rute administratif di bawah path <code>/admin/*</code> wajib melewati proteksi middleware otentikasi role "admin" atau "super_admin".</li>
+      <li><strong>Audit Logging:</strong> Setiap aksi sensitif yang memodifikasi database (seperti registrasi pasien, rollback augmentasi, penghapusan, dll.) wajib direkam di tabel <code>audit_logs</code> yang bersifat append-only.</li>
+      <li><strong>Soft Delete:</strong> Seluruh tabel utama menggunakan metode soft delete (is_active / status) dan melarang hard delete demi menjaga keutuhan rekam medis.</li>
+      <li><strong>Validasi File:</strong> File gambar yang diunggah (cover artikel, logo mitra, dll.) wajib divalidasi ukuran maksimal (10MB) dan tipenya di sisi backend.</li>
+    </ul>
+  </div>
+  <div class="footer">
+    <span>MedSign AI - Prompt Admin</span>
+    <span>Halaman 2</span>
+  </div>
+</div>
+
+<!-- HALAMAN 3: MODUL 1 S.D 3 -->
+<div class="page">
+  <div class="header">
+    <span class="header-title">Prompt Implementasi Admin</span>
+    <span class="header-chapter">Bab II: Modul 1 - 3</span>
+  </div>
+  <div class="content">
+    <h1 class="chapter-title">Modul 1 s.d Modul 3: Manajemen Akun</h1>
+    
+    <div class="section-title">Modul 1 — Kelola Pasien</div>
+    <p>Mengelola registrasi pasien tuli menggunakan NIK yang dienkripsi secara asinkron di database Supabase:</p>
+    <ul>
+      <li><code>POST /admin/patients</code>: Registrasi pasien, generate password acak awal, return sekali di response.</li>
+      <li><code>GET /admin/patients</code>: List dengan pagination + search. NIK wajib ditampilkan secara bermasking (contoh: <code>327101********1234</code>).</li>
+      <li><code>POST /admin/patients/{id}/reset-password</code>: Reset password, kembalikan password baru sekali saja.</li>
+    </ul>
+
+    <div class="section-title">Modul 2 — Kelola Dokter</div>
+    <p>Mengelola data dokter yang bertugas di faskes (spesialisasi, lisensi medis, dll.). Endpoint CRUD mirip dengan Modul 1.</p>
+
+    <div class="section-title">Modul 3 — Kelola Relasi Dokter-Pasien</div>
+    <p>Mengatur penugasan pasien di bawah naungan dokter pemeriksa agar lolos validasi RLS database:</p>
+    <ul>
+      <li><code>POST /admin/doctor-patient-assignment</code>: Daftarkan relasi penugasan baru.</li>
+      <li><code>DELETE /admin/doctor-patient-assignment/{id}</code>: Hapus relasi penugasan dokter-pasien.</li>
+    </ul>
+  </div>
+  <div class="footer">
+    <span>MedSign AI - Prompt Admin</span>
+    <span>Halaman 3</span>
+  </div>
+</div>
+
+<!-- HALAMAN 4: MODUL 4 S.D 5 -->
+<div class="page">
+  <div class="header">
+    <span class="header-title">Prompt Implementasi Admin</span>
+    <span class="header-chapter">Bab III: Modul 4 - 5</span>
+  </div>
+  <div class="content">
+    <h1 class="chapter-title">Modul 4 s.d Modul 5: Augmentasi &amp; Motion</h1>
+    
+    <div class="section-title">Modul 4 — AI Dataset Augmentation</div>
+    <p>Melipatgandakan data landmark latih secara spasial/temporal untuk menyeimbangkan kelas:</p>
+    <ul>
+      <li>Menghasilkan dataset augmentasi terisolasi per run (tabel: <code>augmentation_runs</code>).</li>
+      <li><strong>Rollback per Run:</strong> Hapus berkas hasil augmentasi dengan ID run terkait tanpa menyentuh data asli.</li>
+      <li><strong>Restore / Regenerate:</strong> Hasilkan ulang data dengan random_seed yang sama.</li>
+    </ul>
+
+    <div class="section-title">Modul 5 — Motion Graphics 3D Visualizer</div>
+    <p>Mengekspor video visualisasi 3D dari koordinat gerak landmark tangan untuk kebutuhan HAKI:</p>
+    <ul>
+      <li>Merekam checksum SHA-256 berkas video hasil ekspor.</li>
+      <li><strong>Verifikasi Integritas:</strong> Pencocokan berkas di server dengan nilai checksum untuk mendeteksi perubahan ilegal.</li>
+      <li>Pilihan durasi ekspor real-time: 10s, 30s, 45s, 1m, 2m.</li>
+    </ul>
+  </div>
+  <div class="footer">
+    <span>MedSign AI - Prompt Admin</span>
+    <span>Halaman 4</span>
+  </div>
+</div>
+
+<!-- HALAMAN 5: MODUL 6 S.D 8 -->
+<div class="page">
+  <div class="header">
+    <span class="header-title">Prompt Implementasi Admin</span>
+    <span class="header-chapter">Bab IV: Modul 6 - 8</span>
+  </div>
+  <div class="content">
+    <h1 class="chapter-title">Modul 6 s.d Modul 8: Pengelolaan Konten</h1>
+    
+    <div class="section-title">Modul 6 — Kelola Artikel</div>
+    <p>Pengelolaan blog artikel landing page. Endpoint CRUD dengan tombol publikasi yang otomatis mengisi <code>published_at</code>.</p>
+
+    <div class="section-title">Modul 7 — Kelola Instagram</div>
+    <p>Kurasi feed instagram interaktif. Mendukung fitur Drag-and-drop reorder di frontend untuk memperbarui urutan tampilan di database sekaligus.</p>
+
+    <div class="section-title">Modul 8 — Kelola Mitra</div>
+    <p>Pengelolaan logo mitra &amp; ekosistem rumah sakit. Mendukung togol aktif/nonaktif dan reorder layout.</p>
+  </div>
+  <div class="footer">
+    <span>MedSign AI - Prompt Admin</span>
+    <span>Halaman 5</span>
+  </div>
+</div>
+
+<!-- HALAMAN 6: PROMPT YAML -->
+<div class="page">
+  <div class="header">
+    <span class="header-title">Prompt Implementasi Admin</span>
+    <span class="header-chapter">Bab V: Prompt YAML</span>
+  </div>
+  <div class="content">
+    <h1 class="chapter-title">Prompt YAML Siap Salin</h1>
+    <pre>Kamu membantu membangun panel Admin lengkap untuk MedSign, platform BISINDO medis.
+Scope: Bangun HANYA panel Admin. Hubungkan ke database Supabase PostgreSQL.
+Aturan Lintas Modul:
+1. Validasi RBAC admin/super_admin di /admin/*
+2. Tulis log audit ke tabel audit_logs untuk setiap aksi modifikasi.
+3. Batasi upload file maksimal 10MB tipe gambar di backend.
+4. Terapkan soft delete dan pagination.
+Urutan Modul:
+- Modul 1: Kelola Pasien (nik encrypted & masking, reset password)
+- Modul 2: Kelola Dokter (CRUD & reset password)
+- Modul 3: Kelola Relasi Dokter-Pasien (doctor_patient)
+- Modul 4: AI Augmentation (isolation per run, rollback, restore)
+- Modul 5: Motion Graphics (SHA-256 checksum, 5 durasi HAKI, video 3D)
+- Modul 6: Kelola Artikel (Rich text, cover, slug auto-generate, publish time)
+- Modul 7: Kelola Instagram (URL post, thumbnail, drag-and-drop reorder)
+- Modul 8: Kelola Mitra (Upload logo, nama, kategori, reorder)</pre>
+  </div>
+  <div class="footer">
+    <span>MedSign AI - Prompt Admin</span>
+    <span>Halaman 6</span>
+  </div>
+</div>
+
+</body>
+</html>
