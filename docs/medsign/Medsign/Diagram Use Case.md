@@ -5,46 +5,52 @@ Dokumen ini mendefinisikan hubungan antara aktor (pengguna) dan fungsionalitas s
 ## 1. Visualisasi Use Case (Mermaid)
 
 ```mermaid
-usecaseDiagram
-    actor Pasien as "Pasien Tuli"
-    actor Dokter as "Dokter Pemeriksa"
-    actor Admin as "Admin Faskes"
-    actor SuperAdmin as "Super Admin"
+flowchart TB
+    %% Actors
+    Pasien["Pasien Tuli (Aktor)"]
+    Dokter["Dokter Pemeriksa (Aktor)"]
+    Admin["Admin Faskes (Aktor)"]
+    SuperAdmin["Super Admin (Aktor)"]
 
-    %% Boundary System
-    rect "Sistem MedSign AI"
-        usecase UC_Login as "Login & Autentikasi (JWT/RBAC)"
-        usecase UC_Kamera as "Aktifkan Kamera & Deteksi Sendi 3D (MediaPipe)"
-        usecase UC_Translasi as "Translasi BISINDO Medis (TFLite)"
-        usecase UC_TTS as "Ketik & Bersuara (Text-to-Speech)"
-        usecase UC_Log as "Tulis Sesi Log Percakapan"
-        usecase UC_Quick as "Kirim preset Tanggapan Medis Cepat"
-        usecase UC_STT as "Speech-to-Text Dokter"
-        usecase UC_SOAP as "Generate Draf SOAP Note (Gemini 3.6)"
-        usecase UC_RME as "Sunting & Simpan Rekam Medis (Supabase)"
-        usecase UC_Histori as "Lihat Histori Konsultasi Pasien"
-        usecase UC_RegPasien as "Registrasi & Reset Password Pasien"
-        usecase UC_RegDokter as "Registrasi & Kelola Akun Dokter"
-        usecase UC_Assign as "Penugasan Relasi Dokter-Pasien"
-        usecase UC_Record as "Perekaman Dataset Landmark"
-        usecase UC_Augment as "AI Dataset Augmentasi & Rollback"
-        usecase UC_Balance as "Balance Checker & Hapus Masal"
-        usecase UC_Train as "Pelatihan Model Klinis Asinkron"
-        usecase UC_Faskes as "Manajemen Faskes Global"
-        usecase UC_AdminFaskes as "Manajemen Admin Faskes"
-        usecase UC_Audit as "Sistem Audit Logs Keamanan"
-        usecase UC_Backup as "Database Backups & Restore"
-        usecase UC_Homepage as "Kelola Konten Homepage (Mitra/Tentang Kami)"
+    subgraph Sistem_MedSign_AI ["Sistem MedSign AI"]
+        %% Patient Use Cases
+        UC_Login["Autentikasi & Login (JWT/RBAC)"]
+        UC_Kamera["Deteksi Sendi Tangan 3D (MediaPipe)"]
+        UC_Translasi["Translasi Isyarat BISINDO Real-Time"]
+        UC_TTS["Ketik & Bersuara (Text-to-Speech)"]
+        UC_Log["Simpan Log Percakapan Sesi"]
+        
+        %% Doctor Use Cases
+        UC_Quick["Preset Tanggapan Medis Cepat"]
+        UC_STT["Speech-to-Text Dokter"]
+        UC_SOAP["Draf SOAP Note Otomatis (Gemini 3.6)"]
+        UC_RME["Sunting & Simpan RME (Supabase)"]
+        UC_Histori["Lihat Histori Konsultasi Pasien"]
+        
+        %% Admin Use Cases
+        UC_RegPasien["Registrasi & Reset Password Pasien"]
+        UC_RegDokter["Registrasi & Kelola Akun Dokter"]
+        UC_Assign["Penugasan Relasi Dokter-Pasien (RLS)"]
+        UC_Record["Perekaman Dataset Landmark (Npy)"]
+        UC_Augment["AI Dataset Augmentasi & Rollback"]
+        UC_Balance["Balance Checker & Hapus Masal"]
+        UC_Train["Pelatihan Model Klinis Asinkron"]
+        
+        %% Super Admin Use Cases
+        UC_Faskes["Manajemen Faskes Global"]
+        UC_AdminFaskes["Manajemen Akun Admin Faskes"]
+        UC_Audit["Sistem Audit Logs & Ekspor CSV"]
+        UC_Backup["Database Backups & Restore"]
+        UC_Homepage["Kelola Konten Homepage (Mitra/Tentang Kami)"]
     end
 
-    %% Relasi Pasien
+    %% Connections
     Pasien --> UC_Login
     Pasien --> UC_Kamera
     Pasien --> UC_Translasi
     Pasien --> UC_TTS
     Pasien --> UC_Log
 
-    %% Relasi Dokter
     Dokter --> UC_Login
     Dokter --> UC_Kamera
     Dokter --> UC_Translasi
@@ -55,7 +61,6 @@ usecaseDiagram
     Dokter --> UC_Histori
     Dokter --> UC_Log
 
-    %% Relasi Admin
     Admin --> UC_Login
     Admin --> UC_RegPasien
     Admin --> UC_RegDokter
@@ -65,13 +70,18 @@ usecaseDiagram
     Admin --> UC_Balance
     Admin --> UC_Train
 
-    %% Relasi Super Admin
     SuperAdmin --> UC_Login
     SuperAdmin --> UC_Faskes
     SuperAdmin --> UC_AdminFaskes
     SuperAdmin --> UC_Audit
     SuperAdmin --> UC_Backup
     SuperAdmin --> UC_Homepage
+
+    %% Style nodes
+    style Pasien fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#0f172a
+    style Dokter fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#0f172a
+    style Admin fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#0f172a
+    style SuperAdmin fill:#f3e8ff,stroke:#7e22ce,stroke-width:2px,color:#0f172a
 ```
 
 ---
