@@ -17,6 +17,8 @@
 ## Linkages & Navigation Map
 This Obsidian vault serves as the central documentation index. Below are links connecting all project files:
 * Refer to the [[Buku Panduan Sistem MedSign.md|Buku Panduan Sistem MedSign]] for user manuals.
+* View [[Diagram Use Case.md|Diagram Use Case]] to understand system boundaries and actors.
+* Refer to [[Diagram Activity.md|Diagram Activity]] for detailed workflows and process lifecycles.
 * Check [[Panduan Deployment VPS IDwebhost.md|Panduan Deployment VPS IDwebhost]] for deployment instructions.
 * Check [[STATUS.md|STATUS]] for the current project state, active milestones, and blockers.
 * View [[progress.md|Progress Diary]] for chronological updates, fixes, and release history.
