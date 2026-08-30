@@ -1,6 +1,6 @@
 import React, { useContext, useState, useRef } from 'react';
 import { AppContext } from '../context/AppContextObject';
-import { FileText, Loader2, RefreshCw, Copy, CheckCheck, ChevronDown, ChevronUp } from 'lucide-react';
+import { FileText, Loader2, RefreshCw, Copy, CheckCheck, ChevronDown, ChevronUp, Save } from 'lucide-react';
 
 const SOAP_LABELS = {
   subjective: { label: 'S — Subjective', desc: 'Keluhan utama pasien', color: 'text-sky-700', bg: 'bg-sky-50 border-sky-200' },
@@ -9,7 +9,7 @@ const SOAP_LABELS = {
   plan:       { label: 'P — Plan',       desc: 'Rencana tindak lanjut', color: 'text-violet-700', bg: 'bg-violet-50 border-violet-200' },
 };
 
-export const AiNotetaker = () => {
+export const AiNotetaker = ({ onSaveSummary, savedSummary }) => {
   const { sessionLog, clearLog } = useContext(AppContext);
 
   const [soap, setSoap]           = useState(null);   // { subjective, objective, assessment, plan, full_text, llm_used }
@@ -49,10 +49,20 @@ export const AiNotetaker = () => {
 
   const copyAll = () => {
     if (!soap) return;
-    navigator.clipboard.writeText(soap.full_text).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
+    try {
+      navigator.clipboard.writeText(soap.full_text)
+        .then(() => {
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2000);
+        })
+        .catch(err => {
+          console.error("Gagal menyalin teks:", err);
+          alert("Gagal menyalin otomatis. Silakan seleksi teks secara manual.");
+        });
+    } catch (e) {
+      console.error(e);
+      alert("Gagal menyalin otomatis. Silakan seleksi teks secara manual.");
+    }
   };
 
   const hasNewMessages = soap && sessionLog.length > lastCount;
@@ -177,6 +187,17 @@ export const AiNotetaker = () => {
           >
             {copied ? <CheckCheck size={13} className="text-emerald-600" /> : <Copy size={13} />}
             {copied ? 'Tersalin' : 'Salin'}
+          </button>
+        )}
+
+        {soap && onSaveSummary && (
+          <button
+            onClick={() => onSaveSummary(soap.full_text)}
+            className="flex items-center gap-1.5 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 px-3 py-2.5 text-xs font-black text-slate-600 transition-all active:scale-95"
+            title="Simpan Ringkasan SOAP ke Sesi Pasien"
+          >
+            <Save size={13} className="text-sky-600" />
+            Simpan
           </button>
         )}
       </div>
