@@ -274,10 +274,14 @@ export const Navbar = ({ currentView, setView }) => {
         zIndex: 100,
         width: '100%',
         padding: '10px 16px',
-        background: scrolled
-          ? 'rgba(255,255,255,0.96)'
-          : 'rgba(255,255,255,0.88)',
-        borderBottom: `1px solid ${scrolled ? 'rgba(15,23,42,0.09)' : 'rgba(15,23,42,0.06)'}`,
+        background: darkMode
+          ? (scrolled ? 'rgba(15, 23, 42, 0.96)' : 'rgba(9, 14, 26, 0.88)')
+          : (scrolled ? 'rgba(255, 255, 255, 0.96)' : 'rgba(255, 255, 255, 0.88)'),
+        borderBottom: `1px solid ${
+          darkMode
+            ? (scrolled ? 'rgba(255, 255, 255, 0.08)' : 'rgba(255, 255, 255, 0.05)')
+            : (scrolled ? 'rgba(15, 23, 42, 0.09)' : 'rgba(15, 23, 42, 0.06)')
+        }`,
         boxShadow: scrolled
           ? '0 4px 24px rgba(15,23,42,0.08)'
           : '0 1px 0 rgba(255,255,255,0.9)',
@@ -317,10 +321,10 @@ export const Navbar = ({ currentView, setView }) => {
               />
             </span>
             <div className="brand-text">
-              <span style={{ display: 'block', fontSize: 14, fontWeight: 800, color: '#0f172a', lineHeight: 1.2 }}>
+              <span style={{ display: 'block', fontSize: 14, fontWeight: 800, color: darkMode ? '#f1f5f9' : '#0f172a', lineHeight: 1.2 }}>
                 MedSign AI
               </span>
-              <span style={{ display: 'block', fontSize: 9, fontWeight: 700, color: '#64748b', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+              <span style={{ display: 'block', fontSize: 9, fontWeight: 700, color: darkMode ? '#94a3b8' : '#64748b', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
                 BISINDO Medical
               </span>
             </div>
