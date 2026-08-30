@@ -105,7 +105,7 @@ class LogEntryData(BaseModel):
 
 @router.post("/sessions", response_model=SessionCreateResponse)
 def create_session(request: SessionCreateRequest, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "doctor":
+    if current_user["role"] not in ["doctor", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya dokter yang dapat memulai sesi konsultasi")
 
     patient = db_get_patient_by_id(request.patient_id)
@@ -141,14 +141,14 @@ def create_session(request: SessionCreateRequest, current_user: dict = Depends(g
 
 @router.post("/sessions/{session_id}/end")
 def end_session(session_id: str, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "doctor":
+    if current_user["role"] not in ["doctor", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya dokter yang dapat mengakhiri sesi konsultasi")
         
     session_row = db_get_session_by_id(session_id)
     if not session_row:
         raise HTTPException(status_code=404, detail="Sesi tidak ditemukan")
         
-    if session_row["doctor_id"] != current_user["user_id"]:
+    if current_user["role"] != "super_admin" and session_row["doctor_id"] != current_user["user_id"]:
         raise HTTPException(status_code=403, detail="Akses ditolak: Anda tidak memiliki wewenang atas sesi ini")
         
     ended_at = datetime.utcnow().isoformat()
@@ -184,14 +184,14 @@ class SummaryUpdateRequest(BaseModel):
 
 @router.post("/sessions/{session_id}/summary")
 def update_session_summary(session_id: str, request: SummaryUpdateRequest, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "doctor":
+    if current_user["role"] not in ["doctor", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya dokter yang dapat menyimpan ringkasan sesi")
         
     session_row = db_get_session_by_id(session_id)
     if not session_row:
         raise HTTPException(status_code=404, detail="Sesi tidak ditemukan")
         
-    if session_row["doctor_id"] != current_user["user_id"]:
+    if current_user["role"] != "super_admin" and session_row["doctor_id"] != current_user["user_id"]:
         raise HTTPException(status_code=403, detail="Akses ditolak: Anda tidak memiliki wewenang atas sesi ini")
         
     success = db_save_session_summary(session_id, request.summary)
@@ -229,14 +229,14 @@ def get_session_logs(session_id: str, current_user: dict = Depends(get_current_u
 
 @router.post("/sessions/{session_id}/medical-record", response_model=MedicalRecordResponse)
 def create_medical_record_endpoint(session_id: str, req: MedicalRecordCreateRequest, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "doctor":
+    if current_user["role"] not in ["doctor", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya dokter yang dapat membuat rekam medis")
         
     session_row = db_get_session_by_id(session_id)
     if not session_row:
         raise HTTPException(status_code=404, detail="Sesi tidak ditemukan")
         
-    if session_row["doctor_id"] != current_user["user_id"]:
+    if current_user["role"] != "super_admin" and session_row["doctor_id"] != current_user["user_id"]:
         raise HTTPException(status_code=403, detail="Akses ditolak: Anda tidak terdaftar sebagai dokter untuk sesi ini")
         
     # Check if medical record already exists for this session
@@ -335,7 +335,7 @@ def get_medical_record_by_id(record_id: str, current_user: dict = Depends(get_cu
 
 @router.put("/medical-records/{record_id}")
 def update_medical_record_endpoint(record_id: str, req: MedicalRecordCreateRequest, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "doctor":
+    if current_user["role"] not in ["doctor", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya dokter yang dapat memperbarui rekam medis")
         
     from app.db import get_db_connection
@@ -392,7 +392,7 @@ def get_patient_medical_records_endpoint(patient_id: str, current_user: dict = D
 
 @router.post("/medical-records/{record_id}/correction", response_model=MedicalRecordResponse)
 def correct_medical_record_endpoint(record_id: str, req: MedicalRecordCreateRequest, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "doctor":
+    if current_user["role"] not in ["doctor", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya dokter yang dapat melakukan koreksi")
         
     from app.db import get_db_connection
@@ -476,7 +476,7 @@ def correct_medical_record_endpoint(record_id: str, req: MedicalRecordCreateRequ
 
 @router.post("/medical-records/{record_id}/sign")
 def sign_medical_record_endpoint(record_id: str, req: SignRecordRequest, current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "doctor":
+    if current_user["role"] not in ["doctor", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya dokter yang dapat menandatangani rekam medis")
         
     from app.db import get_db_connection
@@ -508,7 +508,7 @@ def sign_medical_record_endpoint(record_id: str, req: SignRecordRequest, current
 
 @router.post("/medical-records/{record_id}/medications")
 def add_medications_endpoint(record_id: str, items: List[MedicationItem], current_user: dict = Depends(get_current_user)):
-    if current_user["role"] != "doctor":
+    if current_user["role"] not in ["doctor", "super_admin"]:
         raise HTTPException(status_code=403, detail="Hanya dokter yang dapat meresepkan obat")
         
     from app.db import get_db_connection
