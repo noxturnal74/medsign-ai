@@ -285,11 +285,9 @@ export const Navbar = ({ currentView, setView }) => {
         WebkitBackdropFilter: 'blur(20px) saturate(1.8)',
         transition: 'background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease',
       }}>
-        <div style={{
+        <div className="navbar-container" style={{
           maxWidth: 1400,
           margin: '0 auto',
-          display: 'grid',
-          gridTemplateColumns: '1fr auto 1fr',
           alignItems: 'center',
           gap: 8,
         }}>

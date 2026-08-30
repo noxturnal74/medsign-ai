@@ -591,3 +591,17 @@ html.lenis, html.lenis body {
 .lenis-scrolling iframe {
   pointer-events: none;
 }
+
+/* Responsive Navbar Container */
+.navbar-container {
+  display: flex !important;
+  justify-content: space-between !important;
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .navbar-container {
+    display: grid !important;
+    grid-template-columns: 1fr auto 1fr !important;
+  }
+}
