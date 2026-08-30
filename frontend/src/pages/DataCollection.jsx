@@ -2677,7 +2677,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
           body: JSON.stringify({
 
-            label: currentTake.word,
+            label: currentTake.word.toLowerCase(),
 
             signer_id: signerId.toLowerCase().replace(/[^a-z0-9_]/g, '_').replace(/_+/g, '_'),
 
@@ -2801,7 +2801,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
         id: Math.random().toString(36).substr(2, 9),
 
-        label: currentTake.word,
+        label: currentTake.word.toLowerCase(),
 
         signer_id: signerId.toLowerCase().replace(/[^a-z0-9_]/g, '_').replace(/_+/g, '_'),
 
@@ -3103,7 +3103,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
             body: JSON.stringify({
 
-              label: take.label,
+              label: take.label.toLowerCase(),
 
               signer_id: take.signer_id.toLowerCase().replace(/[^a-z0-9_]/g, '_').replace(/_+/g, '_'),
 
