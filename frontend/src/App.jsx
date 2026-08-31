@@ -2,12 +2,11 @@ import { Services } from './pages/Services';
 import { Contact } from './pages/Contact';
 import { ArticlesPage } from './pages/ArticlesPage';
 import { ReviewsPage } from './pages/ReviewsPage';
+import { ChatHistory } from './pages/ChatHistory';
 import React, { useEffect, useState, useContext } from 'react';
 import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
 import { AppProvider } from './context/AppContext';
 import { AppContext } from './context/AppContextObject';
 import { Login } from './pages/Login';
@@ -68,6 +67,9 @@ function AppContent() {
     if (path === '/manual') {
       return 'manual';
     }
+    if (path === '/chat') {
+      return 'chat_history';
+    }
     return 'home';
   };
 
@@ -119,7 +121,7 @@ function AppContent() {
   }, []);
 
   // Sync state view with URL
-  const handleSetView = (newView) => {
+  const handleSetView = (newView, chatId) => {
     // data-collection dan motion butuh login; doctor & patient bisa guest
     if ((newView === 'data-collection' || newView === 'motion') && !currentUser) {
       localStorage.setItem('medsign_redirect_view', newView);
@@ -134,8 +136,12 @@ function AppContent() {
     } else {
       window.scrollTo({ top: 0, behavior: 'auto' });
     }
-    if (newView === 'data-collection') {
-      window.history.pushState({}, '', '/data-collection');
+    // Simpan chatId ke localStorage dan update URL query param
+    if (newView === 'chat_history' && chatId) {
+      localStorage.setItem('medsign_chat_id', chatId);
+      window.history.pushState({}, '', '/chat?chatId=' + chatId);
+    } else if (newView === 'home') {
+      window.history.pushState({}, '', '/');
     } else {
       window.history.pushState({}, '', newView === 'home' ? '/' : '/' + newView);
     }
@@ -283,6 +289,7 @@ function AppContent() {
       })()}
       {view === 'manual' && <UserManual setView={handleSetView} />}
       {view === 'motion' && <MotionVisualizer setView={handleSetView} />}
+      {view === 'chat_history' && <ChatHistory setView={handleSetView} />}
     </Layout>
   );
 }

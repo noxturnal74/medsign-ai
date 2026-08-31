@@ -1,6 +1,6 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import predict, session, vocabulary, data_collection, nlg, tts, auth, patient, admin
+from app.routes import predict, session, vocabulary, data_collection, nlg, tts, auth, patient, admin, chat
 from app.services.slt_adapter import SLTAdapterService
 from app.ml.labels import get_model_contract
 import json
@@ -107,6 +107,7 @@ app.include_router(tts.router, prefix="/api/v1", tags=["tts"])
 app.include_router(auth.router, prefix="/api/v1", tags=["auth"])
 app.include_router(patient.router, prefix="/api/v1", tags=["patient"])
 app.include_router(admin.router, prefix="/api/v1", tags=["admin"])
+app.include_router(chat.router, prefix="/api/v1", tags=["chat"])
 
 # Mount static files to serve uploaded images (e.g. logos, avatars)
 from fastapi.staticfiles import StaticFiles

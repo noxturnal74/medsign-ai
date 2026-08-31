@@ -486,26 +486,73 @@ export const DoctorView = ({ setView, isSplit = false }) => {
   const [viewingHistoryPatient, setViewingHistoryPatient] = useState(null);
   const [historyLoading, setHistoryLoading] = useState(false);
 
-  const handleOpenPatientHistory = async (pat) => {
-    setViewingHistoryPatient(pat);
-    setHistoryLoading(true);
-    setSelectedPastSession(null);
-    setSelectedPastSessionLogs([]);
+const handleOpenPatientHistory = async (pat) => {
+    // WhatsApp-style: satu thread per pasien. Coba ambil chat yg sudah ada, kalau belum ada buat baru.
     try {
       const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
-      const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/patients/${pat.id}/sessions`, {
-        headers: { 'Authorization': `Bearer ${currentUser?.token}` }
-      });
+      const headers = { Authorization: `Bearer ${currentUser?.token}` };
+      // coba ambil daftar chat pasien
+      let chatId = null;
+      try {
+        const listRes = await fetch(`${apiBaseUrl.replace(/\/$/, '')}/api/v1/chat/patient/${pat.id}`, { headers });
+        if (listRes.ok) {
+          const chats = await listRes.json();
+          if (Array.isArray(chats) && chats.length > 0) chatId = chats[0].id;
+          else if (chats?.data && chats.data.length > 0) chatId = chats.data[0].id;
+        }
+      } catch {}
+      if (!chatId) {
+        // buat chat baru
+        try {
+          const createRes = await fetch(`${apiBaseUrl.replace(/\/$/, '')}/api/v1/chat/create`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${currentUser?.token}` },
+            body: JSON.stringify({ patient_id: pat.id, doctor_id: currentUser?.id || currentUser?.user_id || pat.id }),
+          });
+          if (createRes.ok) {
+            const c = await createRes.json();
+            chatId = c.id || c.chat_id || pat.id;
+          }
+        } catch {}
+      }
+      if (!chatId) chatId = pat.id; // fallback pakai patient id supaya halaman tetap buka
+      localStorage.setItem('medsign_chat_id', chatId);
+      localStorage.setItem('medsign_chat_patient_id', pat.id);
+      localStorage.setItem('medsign_chat_patient_name', pat.name || 'Pasien');
+      setView('chat_history', chatId);
+      return;
+    } catch (e) {
+      const chatId = pat.id;
+      try {
+        localStorage.setItem('medsign_chat_id', chatId);
+        localStorage.setItem('medsign_chat_patient_id', pat.id);
+        localStorage.setItem('medsign_chat_patient_name', pat.name || 'Pasien');
+      } catch {}
+      setView('chat_history', chatId);
+      return;
+    }
+  };
+
+  const _loadChatMessages_UNUSED = async (chatId) => {
+    setHistoryLoading(true);
+    try {
+      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const response = await fetch(
+        `${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/chat/history/${chatId}`,
+        {
+          headers: { Authorization: `Bearer ${currentUser?.token}` }
+        }
+      );
       if (response.ok) {
-        setPatientSessions(await response.json());
+        const data = await response.json();
+        setMessages(data);
+        setHistoryLoading(false);
       } else {
-        setPatientSessions([]);
-        showToast("Gagal memuat histori sesi", "error");
+        showToast("Gagal memuat riwayat chat", "error");
+        setHistoryLoading(false);
       }
     } catch (err) {
-      setPatientSessions([]);
-      showToast("Gagal terhubung ke server", "error");
-    } finally {
+      showToast("Koneksi gagal", "error");
       setHistoryLoading(false);
     }
   };
