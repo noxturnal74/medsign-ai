@@ -5742,7 +5742,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
         const response = await fetch(
 
-          `${apiBaseUrl.endsWith("/") ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/samples/${label}`
+          `${apiBaseUrl.endsWith("/") ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/samples/${label.toLowerCase()}`
 
         );
 
