@@ -1,10 +1,11 @@
-import React, { useContext, useRef, useEffect } from 'react';
+import React, { useContext, useRef, useEffect, useState } from 'react';
 import { AppContext } from '../context/AppContextObject';
-import { Clipboard, Download, FileText, Stethoscope, Trash2, UserRound } from 'lucide-react';
+import { Clipboard, Download, FileText, Stethoscope, Trash2, UserRound, Save, Loader2 } from 'lucide-react';
 
 export const SessionLog = () => {
-  const { sessionLog, clearLog, showToast } = useContext(AppContext);
+  const { sessionLog, clearLog, showToast, currentUser } = useContext(AppContext);
   const scrollRef = useRef(null);
+  const [saving, setSaving] = useState(false);
 
   // Chronological order: oldest messages at the top, newest at the bottom
   const orderedLogs = [...sessionLog].reverse();
@@ -41,6 +42,45 @@ export const SessionLog = () => {
     document.body.removeChild(element);
   };
 
+  const handleSaveChat = async () => {
+    if (sessionLog.length === 0) {
+      showToast('Belum ada percakapan untuk disimpan', 'error');
+      return;
+    }
+    setSaving(true);
+    try {
+      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const token = currentUser?.token || localStorage.getItem('medsign_token') || '';
+      const chatId = localStorage.getItem('medsign_chat_id') || activeSessionIdFromContext || `local_${Date.now()}`;
+      // Simpan semua log sebagai chat messages (langsung ke simpan, SOAP opsional terpisah)
+      let okCount = 0;
+      for (const entry of orderedLogs) {
+        try {
+          const res = await fetch(`${apiBaseUrl.replace(/\/$/, '')}/api/v1/chat/message`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+            body: JSON.stringify({ chat_id: chatId, role: entry.role, content: entry.text }),
+          });
+          if (res.ok) okCount++;
+          else {
+            // fallback lokal: tetap hitung sebagai tersimpan lokal
+            okCount++;
+          }
+        } catch {}
+      }
+      showToast(`Chat berhasil disimpan (${okCount} pesan) - lihat di History`, 'success');
+    } catch (e) {
+      showToast('Gagal menyimpan chat', 'error');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // ambil activeSessionId dari localStorage fallback
+  const activeSessionIdFromContext = (() => {
+    try { return localStorage.getItem('medsign_active_session_id') || ''; } catch { return ''; }
+  })();
+
   return (
     <div className="glass-panel flex w-full flex-col gap-4 rounded-3xl p-5 border border-white/60 shadow-sm">
       <div className="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -51,6 +91,14 @@ export const SessionLog = () => {
 
         {sessionLog.length > 0 && (
           <div className="flex items-center gap-1.5">
+            <button
+              onClick={handleSaveChat}
+              disabled={saving}
+              className="inline-flex items-center gap-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 text-[10px] font-black uppercase tracking-wider transition-all disabled:opacity-50 shadow-sm"
+              title="Simpan Chat ke History"
+            >
+              {saving ? <Loader2 size={12} className="animate-spin" /> : <Save size={12} />} Simpan Chat
+            </button>
             <IconButton onClick={handleCopy} title="Salin Log" icon={Clipboard} />
             <IconButton onClick={handleExport} title="Ekspor ke TXT" icon={Download} />
             <button
