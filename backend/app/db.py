@@ -810,6 +810,33 @@ def init_db():
         FOREIGN KEY (session_id) REFERENCES sessions(id) ON DELETE CASCADE
     )
     """)
+
+    # Migration: add missing columns to existing sessions table
+    try:
+        cursor.execute("ALTER TABLE sessions ADD COLUMN summary TEXT")
+    except Exception:
+        pass  # column already exists
+    try:
+        cursor.execute("ALTER TABLE sessions ADD COLUMN doctor_id TEXT")
+    except Exception:
+        pass
+    try:
+        cursor.execute("ALTER TABLE sessions ADD COLUMN model_version TEXT NOT NULL DEFAULT 'unknown'")
+    except Exception:
+        pass
+    try:
+        cursor.execute("ALTER TABLE sessions ADD COLUMN status TEXT DEFAULT 'ongoing' CHECK(status IN ('ongoing', 'completed'))")
+    except Exception:
+        pass
+    try:
+        cursor.execute("ALTER TABLE sessions ADD COLUMN ended_at TEXT")
+    except Exception:
+        pass
+    try:
+        cursor.execute("ALTER TABLE sessions ADD COLUMN started_at TEXT NOT NULL DEFAULT ''")
+    except Exception:
+        pass
+
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS articles (
         id TEXT PRIMARY KEY,
