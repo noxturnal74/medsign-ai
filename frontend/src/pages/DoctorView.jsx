@@ -513,7 +513,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
   // ── PARTNER LOGOS FOOTER ──
   const PartnerFooter = () => (
     <div className="w-full flex flex-col items-center gap-3 mt-8 pb-4 animate-slide-up select-none">
-      <div className="flex flex-wrap items-center justify-center gap-6 px-6 py-4 bg-white/60 backdrop-blur border border-slate-200/50 rounded-3xl shadow-sm max-w-4xl w-full">
+      <div className="flex flex-wrap items-center justify-center gap-6 px-6 py-4 bg-white/60 dark:bg-white/10 backdrop-blur border border-slate-200/50 rounded-3xl shadow-sm max-w-4xl w-full">
         <img src="/assets/logo-kemdikbudristek.png" alt="Kemdikbudristek" className="h-7 object-contain" />
         <img src="/assets/logo-diktisaintek.png" alt="Diktisaintek" className="h-6 object-contain" />
         <img src="/assets/logo-simbelmawa.png" alt="Simbelmawa" className="h-6 object-contain" />
@@ -521,7 +521,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
         <img src="/assets/logo-umc.png" alt="Universitas Ma Chung" className="h-7 object-contain" />
         <img src="/assets/logo-medsign-source.png" alt="MedSign" className="h-7 object-contain" />
       </div>
-      <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] text-center">
+      <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] text-center dark:text-slate-200">
         MedSign AI / PKM-KC 2026 / BISINDO clinical communication assistant
       </span>
     </div>
@@ -978,7 +978,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
                   <div className="flex flex-col gap-2">
                     <button
                       onClick={() => handleSelectPatient(pat)}
-                      className="w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-[10px] uppercase tracking-wider transition-all"
+                      className="w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-[10px] uppercase tracking-wider transition-all dark:bg-indigo-500 dark:text-white dark:hover:bg-indigo-600"
                     >
                       Mulai Sesi Konsultasi
                     </button>
