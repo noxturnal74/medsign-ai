@@ -1307,6 +1307,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
               )}
             </div>
           </div>
+        )}
 
         {/* Partner Logos Footer */}
         <PartnerFooter />
