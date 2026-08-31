@@ -728,59 +728,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
 
   const historyTitleName = viewingHistoryPatient?.name || activePatient?.name || 'Pasien';
 
-  const pastSessionModal = selectedPastSession ? (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-3xl shadow-xl w-full max-w-md overflow-hidden border border-slate-100 flex flex-col max-h-[80vh] text-slate-800 animate-slide-up">
-        <div className="p-4 border-b border-slate-100 flex items-center justify-between">
-          <div>
-            <h3 className="text-xs font-black text-slate-900 uppercase tracking-wide">Histori Chat — {historyTitleName}</h3>
-            <span className="text-[9px] text-slate-400 font-bold uppercase">{fmtSessionDate(selectedPastSession.started_at)}</span>
-          </div>
-          <button onClick={() => setSelectedPastSession(null)} className="p-1 rounded bg-slate-50 text-slate-400 hover:text-slate-700">
-            <X size={15} />
-          </button>
-        </div>
-
-        <div className="p-4 overflow-y-auto flex-1 flex flex-col gap-3">
-          {/* SOAP Note view */}
-          <div className="bg-slate-50 border border-slate-150 p-3 rounded-2xl flex flex-col gap-2">
-            <span className="text-[9px] font-black text-slate-400 uppercase flex items-center gap-1">
-              <FileText size={12} /> Catatan Medis Dokter
-            </span>
-            <p className="text-[10px] font-semibold text-slate-700 leading-relaxed whitespace-pre-line">
-              {selectedPastSession.summary || "Tidak ada catatan medis SOAP disimpan untuk sesi ini."}
-            </p>
-          </div>
-
-          {/* Chat log view */}
-          <span className="text-[9px] font-black text-slate-400 uppercase flex items-center gap-1 border-t border-slate-100 pt-2">
-            <MessageSquare size={12} /> Transkrip Percakapan Sesi
-          </span>
-
-          <div className="flex flex-col gap-2 max-h-[250px] overflow-y-auto">
-            {selectedPastSessionLogs.length === 0 ? (
-              <span className="text-[9px] text-slate-400 text-center py-4">Sesi ini tidak memiliki log percakapan.</span>
-            ) : (
-              selectedPastSessionLogs.map(log => (
-                <div
-                  key={log.id}
-                  className={`p-2 rounded-xl text-[10px] font-semibold max-w-[85%] ${
-                    log.role === 'doctor'
-                      ? 'bg-sky-500/10 text-sky-850 border border-sky-200/20 align-self-end ml-auto'
-                      : 'bg-emerald-500/10 text-emerald-850 border border-emerald-250/20 align-self-start mr-auto'
-                  }`}
-                >
-                  <span className="font-extrabold uppercase text-[8px] block opacity-60 mb-0.5">{log.role}</span>
-                  {log.text}
-                  {log.confidence && <span className="block text-[8px] text-slate-400 text-right mt-0.5">Conf: {log.confidence}%</span>}
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  ) : null;
+  const pastSessionModal = null;
 
   // ── VIEW A: GUEST MODE (NO PATIENT SELECT) ──
   if (!currentUser || currentUser.role === 'guest') {
@@ -1236,53 +1184,130 @@ export const DoctorView = ({ setView, isSplit = false }) => {
 
           </div>
         ) : (
-          /* Past Session History List View */
-          <div className="glass-panel rounded-3xl p-6 border border-white/60 shadow-sm flex flex-col gap-5 animate-slide-up">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-              <span className="block text-xs font-bold uppercase text-slate-500 flex items-center gap-1">
-                <History size={15} className="text-indigo-600" /> Histori Log Chat Sesi Sebelumnya
-              </span>
-              <span className="text-[10px] font-semibold text-slate-400">Total: {patientSessions.length} sesi</span>
-            </div>
+          /* Past Session History List View (Email split view style) */
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 animate-slide-up">
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {patientSessions.length === 0 ? (
-                <div className="col-span-full py-12 text-center text-xs font-semibold text-slate-400">
-                  Belum ada riwayat sesi konsultasi medis tersimpan untuk pasien ini.
+            {/* Left side: Sessions List (Inbox style) */}
+            <div className="md:col-span-4 flex flex-col gap-4">
+              <div className="glass-panel rounded-3xl p-5 border border-white/60 shadow-sm flex flex-col gap-3">
+                <div className="flex items-center justify-between border-b border-slate-150 pb-2">
+                  <span className="block text-xs font-black uppercase text-slate-500 flex items-center gap-1">
+                    <History size={14} className="text-indigo-600" /> Daftar Sesi
+                  </span>
+                  <span className="text-[10px] font-bold text-slate-400">Total: {patientSessions.length}</span>
+                </div>
+                
+                <div className="flex flex-col gap-2.5 max-h-[550px] overflow-y-auto pr-1">
+                  {patientSessions.length === 0 ? (
+                    <div className="text-center text-[10px] font-semibold text-slate-400 py-8">
+                      Belum ada riwayat sesi.
+                    </div>
+                  ) : (
+                    patientSessions.map(s => {
+                      const isActiveSession = selectedPastSession?.id === s.id;
+                      return (
+                        <div 
+                          key={s.id} 
+                          onClick={() => handleViewPastSessionLogs(s)}
+                          className={`rounded-2xl p-4 border transition-all cursor-pointer flex flex-col gap-2 ${
+                            isActiveSession
+                              ? 'bg-indigo-500/10 border-indigo-500/30 text-indigo-950 font-black shadow-inner scale-[1.01]'
+                              : 'bg-white border-slate-200/60 hover:bg-slate-50/50'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded-full ${
+                              s.status === 'active' ? 'bg-emerald-500/10 text-emerald-700' : 'bg-slate-500/10 text-slate-400'
+                            }`}>
+                              {s.status === 'active' ? 'Berlangsung' : 'Selesai'}
+                            </span>
+                            <span className="text-[8px] font-bold text-slate-400">{fmtSessionDate(s.started_at).split(',')[0]}</span>
+                          </div>
+                          <h4 className="text-xs font-black text-slate-900 leading-snug">
+                            {s.summary ? s.summary.split("\n")[0].slice(0, 32) : "Sesi Konsultasi"}
+                          </h4>
+                          <span className="text-[8.5px] font-bold text-slate-450 block">Model: {s.model_version}</span>
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Right side: Session Details (Email content reader style) */}
+            <div className="md:col-span-8">
+              {!selectedPastSession ? (
+                <div className="glass-panel rounded-[32px] p-12 border border-slate-200/60 bg-white/40 shadow-sm flex flex-col items-center justify-center text-center gap-3 min-h-[400px]">
+                  <div className="h-14 w-14 rounded-full bg-indigo-500/10 text-indigo-600 flex items-center justify-center shadow-inner">
+                    <History size={26} />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-black text-slate-950 uppercase tracking-wide">Pilih Sesi Konsultasi</h3>
+                    <p className="text-[10px] font-semibold text-slate-455 mt-1 max-w-xs leading-relaxed">
+                      Pilih salah satu riwayat sesi di sebelah kiri untuk melihat rangkuman catatan medis SOAP dan transkrip percakapan lengkap.
+                    </p>
+                  </div>
                 </div>
               ) : (
-                patientSessions.map(s => (
-                  <div 
-                    key={s.id} 
-                    className="glass-panel rounded-2xl p-5 border border-slate-150 flex flex-col justify-between gap-4 shadow-sm"
-                  >
+                <div className="glass-panel rounded-[32px] p-6 border border-white/60 bg-white shadow-sm flex flex-col gap-4 animate-slide-up min-h-[400px]">
+                  {/* Detail Header */}
+                  <div className="flex items-center justify-between border-b border-slate-150 pb-3">
                     <div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-black uppercase text-indigo-700 tracking-wider bg-indigo-500/10 px-2.5 py-0.5 rounded">
-                          {s.status === 'active' ? 'Berlangsung' : 'Selesai'}
-                        </span>
-                        <History size={15} className="text-slate-400" />
-                      </div>
-                      <h3 className="text-sm font-black text-slate-900 mt-2">
-                        Konsultasi Medis
-                      </h3>
-                      <div className="flex flex-col gap-1 mt-2 text-[10px] font-semibold text-slate-500 leading-relaxed">
-                        <span>Tanggal: {fmtSessionDate(s.started_at)}</span>
-                        <span>Model: {s.model_version}</span>
-                      </div>
+                      <h3 className="text-xs font-black text-slate-950 uppercase tracking-wide">Detail Sesi Konsultasi</h3>
+                      <span className="text-[9px] text-slate-455 font-bold uppercase">{fmtSessionDate(selectedPastSession.started_at)}</span>
                     </div>
-                    <button
-                      onClick={() => handleViewPastSessionLogs(s)}
-                      className="w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-[10px] uppercase tracking-wider transition-all"
+                    <button 
+                      onClick={() => setSelectedPastSession(null)} 
+                      className="p-1.5 rounded-xl hover:bg-slate-100 text-slate-400"
+                      title="Tutup Detail"
                     >
-                      Show History Chat
+                      <X size={15} />
                     </button>
                   </div>
-                ))
+
+                  {/* SOAP Note view */}
+                  <div className="bg-slate-50 border border-slate-150/70 p-4 rounded-2xl flex flex-col gap-2">
+                    <span className="text-[9px] font-black text-slate-400 uppercase flex items-center gap-1">
+                      <FileText size={12} className="text-indigo-600" /> Catatan Medis SOAP
+                    </span>
+                    <p className="text-[10px] font-semibold text-slate-750 leading-relaxed whitespace-pre-line">
+                      {selectedPastSession.summary || "Tidak ada catatan medis SOAP disimpan untuk sesi ini."}
+                    </p>
+                  </div>
+
+                  {/* Chat log view */}
+                  <div className="flex-1 flex flex-col gap-2 min-h-0">
+                    <span className="text-[9px] font-black text-slate-400 uppercase flex items-center gap-1 border-t border-slate-150/70 pt-3">
+                      <MessageSquare size={12} className="text-sky-600" /> Transkrip Percakapan Sesi
+                    </span>
+
+                    <div className="flex flex-col gap-2.5 max-h-[300px] overflow-y-auto pr-1">
+                      {selectedPastSessionLogs.length === 0 ? (
+                        <span className="text-[9px] text-slate-400 text-center py-4">Sesi ini tidak memiliki log percakapan.</span>
+                      ) : (
+                        selectedPastSessionLogs.map(log => (
+                          <div
+                            key={log.id}
+                            className={`p-2.5 rounded-2xl text-[10px] font-semibold max-w-[85%] border ${
+                              log.role === 'doctor'
+                                ? 'bg-sky-500/10 text-sky-900 border-sky-200/20 align-self-end ml-auto'
+                                : 'bg-emerald-500/10 text-emerald-900 border-emerald-250/20 align-self-start mr-auto'
+                            }`}
+                          >
+                            <span className="font-extrabold uppercase text-[7.5px] block opacity-60 mb-0.5">{log.role === 'doctor' ? 'DOKTER' : 'PASIEN'}</span>
+                            {log.text}
+                            {log.confidence && <span className="block text-[7.5px] text-slate-400 text-right mt-0.5">Akurasi: {log.confidence}%</span>}
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                </div>
               )}
             </div>
           </div>
-        )}
+        </div>
 
         {/* Partner Logos Footer */}
         <PartnerFooter />
