@@ -708,8 +708,8 @@ export const PatientView = ({ setView, isSplit = false }) => {
               <TranslationDisplay />
               
               {/* Doctor Instruction Card */}
-              {sessionLog.find(entry => entry.role === 'doctor') && (() => {
-                const lastDoctorMessage = sessionLog.find(entry => entry.role === 'doctor');
+              {sessionLog.some(entry => entry.role === 'doctor') && (() => {
+                const lastDoctorMessage = [...sessionLog].reverse().find(entry => entry.role === 'doctor');
                 if (!lastDoctorMessage) return null;
                 return (
                   <div key={lastDoctorMessage.id} className="glass-panel border-emerald-400 bg-emerald-500/10 p-5 rounded-[28px] animate-slide-up flex items-start gap-4 shadow-md">
@@ -1041,13 +1041,13 @@ export const PatientView = ({ setView, isSplit = false }) => {
                 {selectedPastSessionLogs.length === 0 ? (
                   <span className="text-[9px] text-slate-400 text-center py-4">Sesi ini tidak memiliki log percakapan.</span>
                 ) : (
-                  selectedPastSessionLogs.map(log => (
+                  [...selectedPastSessionLogs].sort((a, b) => new Date(a.created_at || a.timestamp || 0) - new Date(b.created_at || b.timestamp || 0)).map(log => (
                     <div 
                       key={log.id} 
                       className={`p-2 rounded-xl text-[10px] font-semibold max-w-[85%] ${
                         log.role === 'doctor' 
-                          ? 'bg-sky-500/10 text-sky-850 border border-sky-200/20 align-self-end ml-auto' 
-                          : 'bg-emerald-500/10 text-emerald-850 border border-emerald-250/20 align-self-start mr-auto'
+                          ? 'bg-sky-500/10 text-sky-900 border border-sky-200/20 self-end ml-auto' 
+                          : 'bg-emerald-500/10 text-emerald-900 border border-emerald-200/20 self-start mr-auto'
                       }`}
                     >
                       <span className="font-extrabold uppercase text-[8px] block opacity-60 mb-0.5">{log.role}</span>

@@ -41,20 +41,28 @@ const SwipeableNotifItem = ({ notification, onRead, onDelete }) => {
     if (!el) return;
     
     let startX = 0;
+    let startY = 0;
     let isDragging = false;
     
-    const onStart = (clientX) => {
+    const onStart = (clientX, clientY) => {
       startX = clientX;
+      startY = clientY;
       isDragging = true;
       el.style.transition = 'none';
     };
     
-    const onMove = (clientX) => {
+    const onMove = (clientX, clientY) => {
       if (!isDragging) return;
       const deltaX = clientX - startX;
-      if (deltaX < 0) {
-        setCurrentX(deltaX);
+      const deltaY = clientY - startY;
+      // Vertikal dominan → lepas drag, biarkan browser scroll
+      if (Math.abs(deltaY) > Math.abs(deltaX)) {
+        isDragging = false;
+        setCurrentX(0);
+        el.style.transition = 'transform 0.2s ease-out';
+        return;
       }
+      if (deltaX < 0) setCurrentX(deltaX);
     };
     
     const onEnd = (finalX) => {

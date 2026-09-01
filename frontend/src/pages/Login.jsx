@@ -279,7 +279,7 @@ export const Login = ({ setView, onLoginSuccess }) => {
                   }
                 }}
                 className="w-full rounded-2xl border border-slate-200 bg-white/60 px-4 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
-                placeholder={role === 'admin' ? "Contoh: administrator" : "dokter@medsign.com"}
+                placeholder={role === 'admin' ? "Masukkan username admin" : "Masukkan email terdaftar"}
                 required
               />
             </div>

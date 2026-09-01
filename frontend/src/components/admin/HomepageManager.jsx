@@ -72,19 +72,141 @@ const Field = ({ label, required, children }) => (
 const inputCls = 'w-full rounded-xl border border-slate-200 px-3 py-2.5 text-xs font-semibold text-slate-800 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-sky-400/40 focus:border-sky-400 transition-all placeholder:text-slate-300';
 const selectCls = inputCls + ' appearance-none';
 
-/* ═══ Image Upload Component ═══ */
+/* ═══ Image Upload & Interactive Resizer / Compressor ═══ */
 const ImageUpload = ({ value, onChange, accept = "image/*", label = "Upload Gambar" }) => {
   const fileRef = useRef(null);
+  const canvasRef = useRef(null);
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState(value || '');
+  
+  // Resizer modal state
+  const [showResizer, setShowResizer] = useState(false);
+  const [rawImageSrc, setRawImageSrc] = useState(null);
+  const [origDimensions, setOrigDimensions] = useState({ width: 0, height: 0, sizeKb: 0 });
+  const [targetWidth, setTargetWidth] = useState(800);
+  const [targetHeight, setTargetHeight] = useState(600);
+  const [maintainAspect, setMaintainAspect] = useState(true);
+  const [quality, setQuality] = useState(85); // 1 - 100%
+  const [fitMode, setFitMode] = useState('contain'); // 'contain' | 'cover' | 'stretch'
+  const [estimatedSizeKb, setEstimatedSizeKb] = useState(0);
+  const [processing, setProcessing] = useState(false);
 
   useEffect(() => { setPreview(value || ''); }, [value]);
 
-  const handleUpload = async (e) => {
+  // Live Canvas Renderer whenever targetWidth, targetHeight, quality, or fitMode changes
+  useEffect(() => {
+    if (!showResizer || !rawImageSrc || !canvasRef.current) return;
+
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      canvas.width = targetWidth;
+      canvas.height = targetHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, targetWidth, targetHeight);
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+
+      if (fitMode === 'stretch') {
+        ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+      } else if (fitMode === 'contain') {
+        // Fit within with transparent background
+        const hRatio = targetWidth / img.width;
+        const vRatio = targetHeight / img.height;
+        const ratio = Math.min(hRatio, vRatio);
+        const centerShiftX = (targetWidth - img.width * ratio) / 2;
+        const centerShiftY = (targetHeight - img.height * ratio) / 2;
+        ctx.drawImage(img, 0, 0, img.width, img.height, centerShiftX, centerShiftY, img.width * ratio, img.height * ratio);
+      } else if (fitMode === 'cover') {
+        // Crop center
+        const hRatio = targetWidth / img.width;
+        const vRatio = targetHeight / img.height;
+        const ratio = Math.max(hRatio, vRatio);
+        const centerShiftX = (targetWidth - img.width * ratio) / 2;
+        const centerShiftY = (targetHeight - img.height * ratio) / 2;
+        ctx.drawImage(img, 0, 0, img.width, img.height, centerShiftX, centerShiftY, img.width * ratio, img.height * ratio);
+      }
+
+      // Calculate real output size
+      canvas.toBlob((blob) => {
+        if (blob) {
+          setEstimatedSizeKb(Math.round(blob.size / 1024));
+        }
+      }, 'image/jpeg', quality / 100);
+    };
+    img.src = rawImageSrc;
+  }, [showResizer, rawImageSrc, targetWidth, targetHeight, quality, fitMode]);
+
+  const onFileSelect = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    setUploading(true);
+    const sizeKb = Math.round(file.size / 1024);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        setOrigDimensions({ width: img.width, height: img.height, sizeKb });
+        // Set initial smart defaults
+        const maxInit = 1200;
+        let w = img.width;
+        let h = img.height;
+        if (w > maxInit) {
+          h = Math.round((h * maxInit) / w);
+          w = maxInit;
+        }
+        setTargetWidth(w);
+        setTargetHeight(h);
+        setRawImageSrc(event.target.result);
+        setShowResizer(true);
+      };
+      img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+    if (fileRef.current) fileRef.current.value = "";
+  };
+
+  const handleWidthChange = (val) => {
+    const w = Math.max(10, parseInt(val) || 10);
+    setTargetWidth(w);
+    if (maintainAspect && origDimensions.width > 0) {
+      const h = Math.round((w * origDimensions.height) / origDimensions.width);
+      setTargetHeight(Math.max(10, h));
+    }
+  };
+
+  const handleHeightChange = (val) => {
+    const h = Math.max(10, parseInt(val) || 10);
+    setTargetHeight(h);
+    if (maintainAspect && origDimensions.height > 0) {
+      const w = Math.round((h * origDimensions.width) / origDimensions.height);
+      setTargetWidth(Math.max(10, w));
+    }
+  };
+
+  const applyPreset = (w, h, fit = 'contain') => {
+    setMaintainAspect(false);
+    setTargetWidth(w);
+    setTargetHeight(h);
+    setFitMode(fit);
+  };
+
+  const processAndUpload = async () => {
+    if (!canvasRef.current) return;
+    setProcessing(true);
     try {
+      const canvas = canvasRef.current;
+      const blob = await new Promise((resolve) => {
+        canvas.toBlob(resolve, 'image/jpeg', quality / 100);
+      });
+
+      if (!blob) throw new Error("Gagal mengompresi kanvas gambar");
+
+      const file = new File([blob], `resized_${Date.now()}.jpg`, { type: 'image/jpeg' });
+      setShowResizer(false);
+      setUploading(true);
+
       const formData = new FormData();
       formData.append('file', file);
       formData.append('folder', 'uploads');
@@ -102,39 +224,261 @@ const ImageUpload = ({ value, onChange, accept = "image/*", label = "Upload Gamb
         onChange(fullUrl);
         setPreview(fullUrl);
       } else {
-        alert(data.detail || 'Gagal upload');
+        showToast?.(data.detail || 'Gagal upload gambar', 'error');
       }
     } catch (err) {
-      console.error('Upload error:', err);
-      alert('Gagal upload file');
+      console.error('Resize/upload error:', err);
+      showToast?.('Gagal memproses dan mengunggah gambar', 'error');
+    } finally {
+      setProcessing(false);
+      setUploading(false);
     }
-    setUploading(false);
   };
 
   return (
     <div className="flex flex-col gap-1.5">
       {preview && (
-        <div className="relative w-full h-20 rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
+        <div className="relative w-full h-24 rounded-xl overflow-hidden border border-slate-200 bg-slate-50 group">
           <img src={preview} alt="" className="w-full h-full object-contain" />
-          <button
-            type="button"
-            onClick={() => { onChange(''); setPreview(''); }}
-            className="absolute top-1 right-1 p-1 rounded-lg bg-white/90 text-rose-500 hover:bg-rose-50 transition-all shadow-sm"
-          ><X size={12} /></button>
+          <div className="absolute inset-0 bg-slate-900/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                const img = new Image();
+                img.onload = () => {
+                  setOrigDimensions({ width: img.width, height: img.height, sizeKb: 0 });
+                  setTargetWidth(img.width);
+                  setTargetHeight(img.height);
+                  setRawImageSrc(preview);
+                  setShowResizer(true);
+                };
+                img.crossOrigin = "anonymous";
+                img.src = preview;
+              }}
+              className="px-2.5 py-1.5 rounded-lg bg-white text-indigo-700 hover:bg-slate-50 text-[9.5px] font-black uppercase shadow-xs transition-all flex items-center gap-1.5 active:scale-95"
+            >
+              <Pencil size={11} /> Resize Gambar
+            </button>
+            <button
+              type="button"
+              onClick={() => { onChange(''); setPreview(''); }}
+              className="p-1.5 rounded-lg bg-white text-rose-500 hover:bg-rose-50 transition-all shadow-xs active:scale-95"
+              title="Hapus Gambar"
+            >
+              <Trash2 size={12} />
+            </button>
+          </div>
         </div>
       )}
-      <input ref={fileRef} type="file" accept={accept} onChange={handleUpload} className="hidden" />
+
+      <input ref={fileRef} type="file" accept={accept} onChange={onFileSelect} className="hidden" />
       <button
         type="button"
         onClick={() => fileRef.current?.click()}
         disabled={uploading}
-        className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border border-dashed border-slate-300 text-slate-500 hover:border-sky-400 hover:text-sky-600 hover:bg-sky-50/50 transition-all text-[10px] font-bold uppercase disabled:opacity-50"
+        className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border border-dashed border-slate-300 text-slate-600 hover:border-indigo-400 hover:text-indigo-600 hover:bg-indigo-50/40 transition-all text-[10.5px] font-bold uppercase tracking-wider disabled:opacity-50"
       >
-        {uploading ? <><Loader2 size={13} className="animate-spin" /> Mengunggah...</> : <><Upload size={13} /> {label}</>}
+        {uploading ? <><Loader2 size={14} className="animate-spin text-indigo-600" /> Mengunggah...</> : <><Upload size={14} /> {label} & Resize</>}
       </button>
+
+      {/* Interactive Resizer & Live Canvas Preview Modal */}
+      {showResizer && (
+        <div className="fixed inset-0 z-[250] flex items-center justify-center p-3 sm:p-4 bg-slate-950/70 backdrop-blur-sm animate-fade-in" onClick={() => setShowResizer(false)}>
+          <div
+            className="relative bg-white rounded-[28px] shadow-2xl max-w-lg w-full max-h-[92vh] overflow-y-auto p-5 sm:p-6 border border-slate-100 flex flex-col gap-4 animate-scale-up text-slate-800"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex items-center justify-between border-b border-slate-150 pb-3">
+              <div>
+                <h4 className="text-xs sm:text-sm font-black uppercase text-slate-900 tracking-wide flex items-center gap-2">
+                  <Pencil size={14} className="text-indigo-600" /> Live Image Resizer & Compressor
+                </h4>
+                <span className="text-[10px] font-bold text-slate-400">
+                  Dimensi Asli: {origDimensions.width} × {origDimensions.height} px {origDimensions.sizeKb > 0 ? `(~${origDimensions.sizeKb} KB)` : ''}
+                </span>
+              </div>
+              <button onClick={() => setShowResizer(false)} className="p-1.5 rounded-xl hover:bg-slate-100 text-slate-400 transition-colors">
+                <X size={16} />
+              </button>
+            </div>
+
+            {/* Live Interactive Canvas Preview Container */}
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center justify-between">
+                <span className="text-[9px] font-black uppercase text-slate-500 tracking-wider">Live Preview Render:</span>
+                <span className="text-[9.5px] font-mono font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-200/50">
+                  {targetWidth} × {targetHeight} px · Est: ~{estimatedSizeKb} KB ({quality}%)
+                </span>
+              </div>
+
+              <div className="relative w-full h-48 sm:h-56 rounded-2xl bg-slate-900/5 border border-slate-200 overflow-hidden flex items-center justify-center p-2 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:12px_12px]">
+                <canvas
+                  ref={canvasRef}
+                  className="max-w-full max-h-full object-contain rounded-lg shadow-sm border border-slate-200 bg-white"
+                />
+              </div>
+            </div>
+
+            {/* Fit / Scale Mode */}
+            <div className="flex items-center justify-between gap-2 bg-slate-50 p-2 rounded-2xl border border-slate-150">
+              <span className="text-[9.5px] font-black uppercase text-slate-500 pl-1">Mode Skala:</span>
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={() => setFitMode('contain')}
+                  className={`px-2.5 py-1 rounded-xl text-[9.5px] font-bold transition-all ${
+                    fitMode === 'contain' ? 'bg-indigo-600 text-white shadow-xs' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
+                  }`}
+                >
+                  Proporsional
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFitMode('cover')}
+                  className={`px-2.5 py-1 rounded-xl text-[9.5px] font-bold transition-all ${
+                    fitMode === 'cover' ? 'bg-indigo-600 text-white shadow-xs' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
+                  }`}
+                >
+                  Crop Tengah
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFitMode('stretch')}
+                  className={`px-2.5 py-1 rounded-xl text-[9.5px] font-bold transition-all ${
+                    fitMode === 'stretch' ? 'bg-indigo-600 text-white shadow-xs' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'
+                  }`}
+                >
+                  Stretch
+                </button>
+              </div>
+            </div>
+
+            {/* Quick Presets */}
+            <div className="flex flex-col gap-1.5">
+              <span className="text-[9px] font-black uppercase text-slate-400 tracking-wider">Preset Cepat:</span>
+              <div className="grid grid-cols-4 gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => applyPreset(1200, 675, 'cover')}
+                  className="py-1.5 px-2 rounded-xl bg-slate-50 hover:bg-indigo-50 border border-slate-200 text-slate-700 hover:text-indigo-600 text-[9.5px] font-bold transition-all text-center"
+                >
+                  Banner (16:9)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => applyPreset(800, 800, 'contain')}
+                  className="py-1.5 px-2 rounded-xl bg-slate-50 hover:bg-indigo-50 border border-slate-200 text-slate-700 hover:text-indigo-600 text-[9.5px] font-bold transition-all text-center"
+                >
+                  Kotak (1:1)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => applyPreset(400, 400, 'contain')}
+                  className="py-1.5 px-2 rounded-xl bg-slate-50 hover:bg-indigo-50 border border-slate-200 text-slate-700 hover:text-indigo-600 text-[9.5px] font-bold transition-all text-center"
+                >
+                  Logo Mitra
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMaintainAspect(true);
+                    setTargetWidth(origDimensions.width);
+                    setTargetHeight(origDimensions.height);
+                    setFitMode('contain');
+                  }}
+                  className="py-1.5 px-2 rounded-xl bg-slate-50 hover:bg-indigo-50 border border-slate-200 text-slate-700 hover:text-indigo-600 text-[9.5px] font-bold transition-all text-center"
+                >
+                  Asli
+                </button>
+              </div>
+            </div>
+
+            {/* Custom Pixel Dimensions Input */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex flex-col gap-1">
+                <label className="text-[9.5px] font-bold uppercase text-slate-500">Lebar Pixel (Width)</label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    min="20"
+                    max="4000"
+                    value={targetWidth}
+                    onChange={(e) => handleWidthChange(e.target.value)}
+                    className="w-full text-xs font-bold text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400/40"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-400">px</span>
+                </div>
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-[9.5px] font-bold uppercase text-slate-500">Tinggi Pixel (Height)</label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    min="20"
+                    max="4000"
+                    value={targetHeight}
+                    onChange={(e) => handleHeightChange(e.target.value)}
+                    className="w-full text-xs font-bold text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400/40"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-400">px</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Aspect Ratio Lock & Quality Compression Slider */}
+            <div className="flex flex-col gap-2.5 bg-slate-50/90 p-3.5 rounded-2xl border border-slate-200/80">
+              <label className="flex items-center gap-2 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={maintainAspect}
+                  onChange={(e) => setMaintainAspect(e.target.checked)}
+                  className="w-4 h-4 text-indigo-600 rounded cursor-pointer accent-indigo-600"
+                />
+                <span className="text-[10.5px] font-bold text-slate-700">Kunci Rasio Gambar (Lock Aspect Ratio)</span>
+              </label>
+
+              <div className="flex flex-col gap-1 pt-1 border-t border-slate-200/60">
+                <div className="flex items-center justify-between text-[9.5px] font-bold text-slate-600 uppercase">
+                  <span>Kualitas Kompresi JPEG</span>
+                  <span className="text-indigo-700 font-black">{quality}%</span>
+                </div>
+                <input
+                  type="range"
+                  min="20"
+                  max="100"
+                  value={quality}
+                  onChange={(e) => setQuality(parseInt(e.target.value))}
+                  className="w-full accent-indigo-600 cursor-pointer h-2 bg-slate-200 rounded-lg"
+                />
+              </div>
+            </div>
+
+            {/* Modal Actions */}
+            <div className="flex items-center gap-2 pt-2 border-t border-slate-150">
+              <button
+                type="button"
+                onClick={() => setShowResizer(false)}
+                className="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 font-bold text-xs transition-all active:scale-95"
+              >
+                Batal
+              </button>
+              <button
+                type="button"
+                onClick={processAndUpload}
+                disabled={processing}
+                className="flex-1 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs uppercase tracking-wider transition-all disabled:opacity-50 shadow-md flex items-center justify-center gap-2 active:scale-95"
+              >
+                {processing ? <><Loader2 size={14} className="animate-spin" /> Memproses...</> : <><Check size={14} /> Terapkan & Simpan</>}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
+
 
 /* ═══ Search Input ═══ */
 const SearchInput = ({ value, onChange, placeholder = "Cari..." }) => (
@@ -175,7 +519,7 @@ const GenericCrudTable = ({ data, columns, onEdit, onDelete, loading }) => (
             <td className="py-2.5 px-3 text-right">
               <div className="flex items-center justify-end gap-1.5">
                 <button onClick={() => onEdit(row)} className="p-1.5 rounded-lg border border-slate-200 text-slate-500 hover:bg-sky-50 hover:text-sky-700 hover:border-sky-200 transition-all" title="Edit"><Pencil size={13} /></button>
-                <button onClick={() => onDelete(row.id)} className="p-1.5 rounded-lg border border-slate-200 text-slate-500 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200 transition-all" title="Hapus"><Trash2 size={13} /></button>
+                <button onClick={() => onDelete(row.id, row)} className="p-1.5 rounded-lg border border-slate-200 text-slate-500 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200 transition-all" title="Hapus"><Trash2 size={13} /></button>
               </div>
             </td>
           </tr>
@@ -187,7 +531,7 @@ const GenericCrudTable = ({ data, columns, onEdit, onDelete, loading }) => (
 
 /* ═══ Main Component ═══ */
 export const HomepageManager = ({ order, setOrder, onSave }) => {
-  const { currentUser } = useContext(AppContext);
+  const { currentUser, showToast } = useContext(AppContext);
   const token = currentUser?.token;
   const headers = { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' };
 
@@ -208,6 +552,7 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
   const [loading, setLoading] = useState({});
   const [modal, setModal] = useState({ open: false, module: null, item: null });
   const [searchQuery, setSearchQuery] = useState('');
+  const [confirmDelete, setConfirmDelete] = useState({ open: false, module: null, id: null, title: '' });
 
   const fetchData = useCallback(async (module) => {
     if (!module || module === 'layout') return;
@@ -237,8 +582,15 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
 
   useEffect(() => { fetchData(subTab); setSearchQuery(''); }, [subTab, fetchData]);
 
-  const deleteItem = async (module, id) => {
-    if (!window.confirm('Yakin ingin menghapus item ini?')) return;
+  const requestDeleteItem = (module, id, title = '') => {
+    setConfirmDelete({ open: true, module, id, title });
+  };
+
+  const executeDeleteItem = async () => {
+    const { module, id } = confirmDelete;
+    if (!module || !id) return;
+    setConfirmDelete({ open: false, module: null, id: null, title: '' });
+
     try {
       if (module === 'team_gallery') {
         const currentList = data.team_gallery || [];
@@ -250,10 +602,11 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
           body: JSON.stringify({ items: newList })
         });
         if (res.ok) {
+          showToast?.('Item berhasil dihapus', 'success');
           fetchData(module);
         } else {
-          const err = await res.json();
-          alert(err.detail || 'Gagal menghapus item');
+          const err = await res.json().catch(() => ({}));
+          showToast?.(err.detail || 'Gagal menghapus item', 'error');
         }
         return;
       }
@@ -265,9 +618,19 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
       else if (module === 'brand_pkm') url = `${API}/api/v1/admin/brand-pkm/${id}`;
       else if (module === 'video_tutorial') url = `${API}/api/v1/admin/video-tutorials/${id}`;
       else return;
-      await fetch(url, { method: 'DELETE', headers });
-      fetchData(module);
-    } catch (e) { console.error(`Delete error:`, e); }
+      
+      const res = await fetch(url, { method: 'DELETE', headers });
+      if (res.ok) {
+        showToast?.('Item berhasil dihapus', 'success');
+        fetchData(module);
+      } else {
+        const err = await res.json().catch(() => ({}));
+        showToast?.(err.detail || 'Gagal menghapus item', 'error');
+      }
+    } catch (e) {
+      console.error(`Delete error:`, e);
+      showToast?.('Terjadi kesalahan koneksi saat menghapus', 'error');
+    }
   };
 
   const saveItem = async (module, item) => {
@@ -297,7 +660,7 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
           fetchData(module);
         } else {
           const err = await res.json();
-          alert(err.detail || 'Gagal menyimpan item');
+          showToast?.(err.detail || 'Gagal menyimpan item', 'error');
         }
         return;
       }
@@ -313,9 +676,15 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
       else if (module === 'video_tutorial') { url = isEdit ? `${API}/api/v1/admin/video-tutorials/${item.id}` : `${API}/api/v1/admin/video-tutorials`; method = isEdit ? 'PUT' : 'POST'; }
       else return;
 
-      await fetch(url, { method, headers, body: JSON.stringify(item) });
-      fetchData(module);
-      setModal({ open: false, module: null, item: null });
+      const res = await fetch(url, { method, headers, body: JSON.stringify(item) });
+      if (res.ok) {
+        showToast?.('Konten berhasil disimpan', 'success');
+        fetchData(module);
+        setModal({ open: false, module: null, item: null });
+      } else {
+        const err = await res.json().catch(() => ({}));
+        showToast?.(err.detail || 'Gagal menyimpan konten', 'error');
+      }
     } catch (e) { console.error(`Save error:`, e); }
   };
 
@@ -541,7 +910,7 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
                 columns={columnsFor(subTab)}
                 loading={isLoading}
                 onEdit={(row) => setModal({ open: true, module: subTab, item: row })}
-                onDelete={(id) => deleteItem(subTab, id)}
+                onDelete={(id, row) => requestDeleteItem(subTab, id, row?.title || row?.name || '')}
               />
             </div>
           </div>
@@ -558,6 +927,47 @@ export const HomepageManager = ({ order, setOrder, onSave }) => {
         {modal.module === 'video_tutorial' && <VideoTutorialForm item={modal.item} onSave={(f) => saveItem('video_tutorial', f)} onClose={() => setModal({ open: false })} />}
         {modal.module === 'team_gallery' && <TeamGalleryForm item={modal.item} onSave={(f) => saveItem('team_gallery', f)} onClose={() => setModal({ open: false, module: null, item: null })} />}
       </Modal>
+
+      {/* ── Custom Styled Confirmation Modal (Anti-Slop / Taste-Skill) ── */}
+      {confirmDelete.open && (
+        <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-fade-in" onClick={() => setConfirmDelete({ open: false, module: null, id: null, title: '' })}>
+          <div
+            className="relative bg-white rounded-3xl shadow-2xl max-w-sm w-full p-6 border border-slate-100 flex flex-col gap-4 animate-scale-up text-slate-800"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-600 flex items-center justify-center mx-auto border border-rose-200/50 shadow-inner">
+              <Trash2 size={22} />
+            </div>
+
+            <div className="text-center">
+              <h3 className="text-sm font-black text-slate-900 uppercase tracking-wide">
+                Hapus Item Ini?
+              </h3>
+              <p className="text-xs font-semibold text-slate-500 mt-1 leading-relaxed">
+                {confirmDelete.title ? `"${confirmDelete.title}"` : 'Item terpilih'} akan dihapus secara permanen dari server. Tindakan ini tidak dapat dibatalkan.
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2.5 pt-1">
+              <button
+                type="button"
+                onClick={() => setConfirmDelete({ open: false, module: null, id: null, title: '' })}
+                className="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 font-bold text-xs transition-all active:scale-95"
+              >
+                Batal
+              </button>
+              <button
+                type="button"
+                onClick={executeDeleteItem}
+                className="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-xs uppercase tracking-wider transition-all shadow-md active:scale-95"
+              >
+                Hapus Sekarang
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
@@ -636,27 +1046,107 @@ const InstagramForm = ({ item, onSave, onClose }) => {
 };
 
 const ArticleForm = ({ item, onSave, onClose }) => {
-  const [f, setF] = useState(item || { title: '', slug: '', cover_image: '', content: '', excerpt: '', category: 'Edukasi BISINDO', author: 'MedSign AI', status: 'published' });
+  const [f, setF] = useState(item || { title: '', slug: '', cover_image: '', content: '', excerpt: '', category: 'Edukasi BISINDO', author: 'MedSign AI', status: 'published', ref_url: '' });
   const set = (k, v) => setF(p => ({ ...p, [k]: v }));
+  
+  // Auto slugify function: mengubah judul artikel menjadi URL path yang ramah SEO (contoh: "Halo Dunia" -> "halo-dunia")
   const autoSlug = (title) => title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  
+  const wordCount = (f.content || '').trim() ? (f.content || '').trim().split(/\s+/).length : 0;
+  const charCount = (f.content || '').length;
+
   return (
-    <div className="flex flex-col gap-3">
-      <Field label="Judul" required><input className={inputCls} value={f.title} onChange={e => { set('title', e.target.value); if (!item) set('slug', autoSlug(e.target.value)); }} /></Field>
-      <Field label="Slug" required><input className={inputCls + ' font-mono'} value={f.slug} onChange={e => set('slug', e.target.value)} /></Field>
+    <div className="flex flex-col gap-3.5">
+      <Field label="Judul Artikel" required>
+        <input
+          className={inputCls}
+          value={f.title}
+          onChange={e => {
+            set('title', e.target.value);
+            if (!item) set('slug', autoSlug(e.target.value));
+          }}
+          placeholder="Contoh: Mengenal Bahasa Isyarat Medis BISINDO"
+        />
+      </Field>
+
+      <Field label="Slug URL (Path URL artikel)" required>
+        <div className="flex flex-col gap-1">
+          <input
+            className={inputCls + ' font-mono text-indigo-700 bg-indigo-50/30'}
+            value={f.slug}
+            onChange={e => set('slug', autoSlug(e.target.value))}
+            placeholder="mengenal-bahasa-isyarat-medis"
+          />
+          <span className="text-[8.5px] text-slate-400 font-semibold leading-tight">
+            ℹ️ Slug adalah teks unik pembentuk tautan URL artikel di browser (misal: /artikel/<b>{f.slug || 'judul-artikel'}</b>). Otomatis dibuat dari judul.
+          </span>
+        </div>
+      </Field>
+
       <div className="grid grid-cols-2 gap-3">
-        <Field label="Kategori"><input className={inputCls} value={f.category || ''} onChange={e => set('category', e.target.value)} placeholder="Edukasi BISINDO" /></Field>
-        <Field label="Penulis"><input className={inputCls} value={f.author || ''} onChange={e => set('author', e.target.value)} placeholder="MedSign AI" /></Field>
+        <Field label="Kategori">
+          <input className={inputCls} value={f.category || ''} onChange={e => set('category', e.target.value)} placeholder="Edukasi BISINDO" />
+        </Field>
+        <Field label="Penulis">
+          <input className={inputCls} value={f.author || ''} onChange={e => set('author', e.target.value)} placeholder="MedSign AI" />
+        </Field>
       </div>
-      <Field label="Cover Image URL"><input className={inputCls} value={f.cover_image || ''} onChange={e => set('cover_image', e.target.value)} placeholder="https://..." /></Field>
-      <ImageUpload value={f.cover_image || ''} onChange={(url) => set('cover_image', url)} label="Upload Cover Artikel" />
-      <Field label="Excerpt"><textarea className={inputCls + ' min-h-[50px] resize-none'} value={f.excerpt || ''} onChange={e => set('excerpt', e.target.value)} placeholder="Ringkasan artikel" /></Field>
-      <Field label="Konten" required><textarea className={inputCls + ' min-h-[120px] resize-y'} value={f.content} onChange={e => set('content', e.target.value)} /></Field>
-      <Field label="Status"><select className={selectCls} value={f.status} onChange={e => set('status', e.target.value)}>
-        <option value="published">Published</option><option value="draft">Draft</option>
-      </select></Field>
-      <div className="flex justify-end gap-2 pt-2">
-        <button onClick={onClose} className="px-4 py-2 rounded-xl text-[10px] font-bold uppercase text-slate-500 hover:bg-slate-100 transition-all">Batal</button>
-        <button onClick={() => onSave(f)} disabled={!f.title || !f.content} className="px-5 py-2 rounded-xl bg-[#053D67] text-white text-[10px] font-black uppercase hover:opacity-90 transition-all disabled:opacity-30 flex items-center gap-1.5"><Check size={13} /> Simpan</button>
+
+      <div className="flex flex-col gap-1">
+        <Field label="Cover Image (URL atau Upload & Resize)">
+          <input className={inputCls} value={f.cover_image || ''} onChange={e => set('cover_image', e.target.value)} placeholder="https://..." />
+        </Field>
+        <ImageUpload value={f.cover_image || ''} onChange={(url) => set('cover_image', url)} label="Upload Cover Artikel" />
+      </div>
+
+      <Field label="Ringkasan (Excerpt)">
+        <textarea
+          className={inputCls + ' min-h-[50px] resize-none'}
+          value={f.excerpt || ''}
+          onChange={e => set('excerpt', e.target.value)}
+          placeholder="Ringkasan singkat yang muncul di kartu pratinjau artikel (1-2 kalimat)..."
+        />
+      </Field>
+
+      <Field label="Isi Konten Artikel" required>
+        <div className="flex flex-col gap-1">
+          <textarea
+            className={inputCls + ' min-h-[140px] resize-y leading-relaxed'}
+            value={f.content}
+            onChange={e => set('content', e.target.value)}
+            placeholder="Tuliskan isi artikel lengkap di sini (tanpa batas kata)..."
+          />
+          <div className="flex items-center justify-between text-[9px] font-bold text-slate-400 px-1">
+            <span>Panjang konten: {wordCount} kata ({charCount} karakter)</span>
+            <span className="text-emerald-600">Bebas panjang konten</span>
+          </div>
+        </div>
+      </Field>
+
+      <div className="grid grid-cols-2 gap-3">
+        <Field label="Tautan Referensi / Jurnal (Opsional)">
+          <input className={inputCls} value={f.ref_url || ''} onChange={e => set('ref_url', e.target.value)} placeholder="https://..." />
+        </Field>
+        <Field label="Status Publikasi">
+          <select className={selectCls} value={f.status} onChange={e => set('status', e.target.value)}>
+            <option value="published">Published (Tayang)</option>
+            <option value="draft">Draft (Disimpan)</option>
+          </select>
+        </Field>
+      </div>
+
+      <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
+        <button type="button" onClick={onClose} className="px-4 py-2 rounded-xl text-[10px] font-bold uppercase text-slate-500 hover:bg-slate-100 transition-all">
+          Batal
+        </button>
+        <button
+          type="button"
+          onClick={() => onSave(f)}
+          disabled={!f.title || !f.content}
+          className="px-5 py-2 rounded-xl bg-[#053D67] text-white text-[10px] font-black uppercase hover:opacity-90 transition-all disabled:opacity-30 flex items-center gap-1.5 shadow-xs"
+        >
+          <Check size={13} /> Simpan Artikel
+        </button>
       </div>
     </div>
   );

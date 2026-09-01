@@ -22,7 +22,11 @@ from app.db import (
     db_create_session_log,
     db_get_session_logs,
     write_audit_log,
-    db_save_session_summary
+    db_save_session_summary,
+    db_delete_session,
+    db_delete_session_log,
+    db_update_session_log,
+    db_update_session_soap
 )
 from app.routes.auth import get_current_user
 
@@ -550,3 +554,109 @@ def add_medications_endpoint(record_id: str, items: List[MedicationItem], curren
         
     write_audit_log(current_user["user_id"], "doctor", f"MEDICATION_PRESCRIBED (Record: {record_id})", rec["patient_id"], facility_id=rec["facility_id"])
     return {"message": "Resep obat berhasil ditambahkan ke rekam medis"}
+
+
+# ── SESSION & LOG CRUD ENDPOINTS ──
+
+class SessionDetailResponse(BaseModel):
+    id: str
+    patient_id: str
+    doctor_id: Optional[str] = None
+    model_version: str
+    status: str
+    started_at: str
+    ended_at: Optional[str] = None
+    summary: Optional[str] = None
+
+class SessionLogUpdateRequest(BaseModel):
+    text: str = Field(..., description="Teks pesan hasil koreksi")
+
+class SessionSoapUpdateRequest(BaseModel):
+    summary: str = Field(..., description="Teks SOAP hasil koreksi")
+
+@router.get("/sessions/{session_id}", response_model=SessionDetailResponse)
+def get_session_detail(session_id: str, current_user: dict = Depends(get_current_user)):
+    session_row = db_get_session_by_id(session_id)
+    if not session_row:
+        raise HTTPException(status_code=404, detail="Sesi tidak ditemukan")
+    
+    role = current_user["role"]
+    user_id = current_user["user_id"]
+    if role == "patient" and session_row["patient_id"] != user_id:
+        raise HTTPException(status_code=403, detail="Akses ditolak")
+    elif role == "doctor" and session_row["doctor_id"] != user_id:
+        if current_user.get("role") != "super_admin":
+            raise HTTPException(status_code=403, detail="Akses ditolak")
+
+    return SessionDetailResponse(
+        id=session_row["id"],
+        patient_id=session_row["patient_id"],
+        doctor_id=session_row.get("doctor_id"),
+        model_version=session_row.get("model_version", "medsign_mvp_v1"),
+        status=session_row.get("status", "ongoing"),
+        started_at=session_row.get("started_at", ""),
+        ended_at=session_row.get("ended_at"),
+        summary=session_row.get("summary")
+    )
+
+@router.delete("/sessions/{session_id}")
+def delete_session_endpoint(session_id: str, current_user: dict = Depends(get_current_user)):
+    if current_user["role"] not in ["doctor", "super_admin"]:
+        raise HTTPException(status_code=403, detail="Hanya dokter atau admin yang dapat menghapus sesi")
+
+    session_row = db_get_session_by_id(session_id)
+    if not session_row:
+        raise HTTPException(status_code=404, detail="Sesi tidak ditemukan")
+
+    if current_user["role"] != "super_admin" and session_row["doctor_id"] != current_user["user_id"]:
+        raise HTTPException(status_code=403, detail="Akses ditolak: Hanya dokter pemilik yang dapat menghapus sesi")
+
+    success = db_delete_session(session_id)
+    if not success:
+        raise HTTPException(status_code=500, detail="Gagal menghapus riwayat sesi")
+
+    write_audit_log(current_user["user_id"], current_user["role"], f"DELETE /api/v1/sessions/{session_id}", session_row["patient_id"])
+    return {"message": "Riwayat sesi berhasil dihapus"}
+
+@router.put("/sessions/{session_id}/soap")
+def update_session_soap_endpoint(session_id: str, req: SessionSoapUpdateRequest, current_user: dict = Depends(get_current_user)):
+    if current_user["role"] not in ["doctor", "super_admin"]:
+        raise HTTPException(status_code=403, detail="Hanya dokter yang dapat memperbarui SOAP sesi")
+
+    session_row = db_get_session_by_id(session_id)
+    if not session_row:
+        raise HTTPException(status_code=404, detail="Sesi tidak ditemukan")
+
+    if current_user["role"] != "super_admin" and session_row["doctor_id"] != current_user["user_id"]:
+        raise HTTPException(status_code=403, detail="Akses ditolak: Anda tidak memiliki wewenang atas sesi ini")
+
+    success = db_update_session_soap(session_id, req.summary)
+    if not success:
+        raise HTTPException(status_code=500, detail="Gagal memperbarui catatan medis SOAP")
+
+    write_audit_log(current_user["user_id"], "doctor", f"PUT /api/v1/sessions/{session_id}/soap", session_row["patient_id"])
+    return {"message": "Catatan medis SOAP berhasil diperbarui", "summary": req.summary}
+
+@router.put("/sessions/logs/{log_id}")
+def update_session_log_endpoint(log_id: str, req: SessionLogUpdateRequest, current_user: dict = Depends(get_current_user)):
+    if current_user["role"] not in ["doctor", "super_admin"]:
+        raise HTTPException(status_code=403, detail="Hanya dokter atau admin yang dapat mengoreksi bubble pesan")
+
+    success = db_update_session_log(log_id, req.text)
+    if not success:
+        raise HTTPException(status_code=500, detail="Gagal memperbarui log pesan")
+
+    write_audit_log(current_user["user_id"], current_user["role"], f"PUT /api/v1/sessions/logs/{log_id}")
+    return {"message": "Pesan percakapan berhasil diperbarui", "text": req.text}
+
+@router.delete("/sessions/logs/{log_id}")
+def delete_session_log_endpoint(log_id: str, current_user: dict = Depends(get_current_user)):
+    if current_user["role"] not in ["doctor", "super_admin"]:
+        raise HTTPException(status_code=403, detail="Hanya dokter atau admin yang dapat menghapus bubble pesan")
+
+    success = db_delete_session_log(log_id)
+    if not success:
+        raise HTTPException(status_code=500, detail="Gagal menghapus log pesan")
+
+    write_audit_log(current_user["user_id"], current_user["role"], f"DELETE /api/v1/sessions/logs/{log_id}")
+    return {"message": "Pesan percakapan berhasil dihapus"}

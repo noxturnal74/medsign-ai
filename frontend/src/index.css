@@ -43,49 +43,88 @@
     body { overflow-x: hidden; }
   }
 
-  /* ── DARK MODE (class-based, persist di localStorage) ── */
+  /* ── DARK MODE (class-based, token-driven, no !important) ── */
   html.dark {
     color-scheme: dark;
+    /* Surface tokens */
+    --dm-bg-base:        #080e1a;
+    --dm-bg-elevated:    #0f1929;
+    --dm-bg-card:        #111d30;
+    --dm-bg-hover:       #162039;
+    --dm-border-strong:  rgba(148,163,184,0.16);
+    --dm-border-subtle:  rgba(148,163,184,0.10);
+    /* Text tokens */
+    --dm-text-primary:   #e2e8f0;
+    --dm-text-secondary: #94a3b8;
+    --dm-text-muted:     #64748b;
   }
+
   html.dark body {
-    background:
-      linear-gradient(135deg, rgba(9, 14, 26, 0.96), rgba(11, 18, 32, 0.97) 44%, rgba(16, 13, 22, 0.95)),
-      linear-gradient(90deg, rgba(10, 22, 34, 0.6), rgba(8, 24, 20, 0.5), rgba(24, 12, 20, 0.5));
-    color: #e2e8f0;
+    background: var(--dm-bg-base);
+    color: var(--dm-text-primary);
   }
+
   html.dark .app-shell {
     background:
-      linear-gradient(115deg, rgba(10, 17, 30, 0.98), rgba(9, 21, 19, 0.96) 50%, rgba(20, 14, 24, 0.96) 100%),
-      linear-gradient(180deg, rgba(15, 23, 42, 0.7), rgba(10, 15, 26, 0.65));
+      linear-gradient(115deg, #0a111e 0%, #091513 50%, #140e18 100%);
   }
+
+  /* Glass panels — surface only, biarkan color overlay anak tetap jalan */
   html.dark .glass-panel {
-    background: rgba(15, 23, 42, 0.72);
-    border-color: rgba(148, 163, 184, 0.12);
+    background: rgba(15, 23, 42, 0.68);
+    border-color: var(--dm-border-strong);
+    box-shadow:
+      0 18px 45px rgba(0,0,0,0.35),
+      inset 0 1px 0 rgba(255,255,255,0.07),
+      inset 0 -1px 0 rgba(0,0,0,0.15);
   }
+
+  html.dark .glass-panel:hover {
+    background: rgba(15, 23, 42, 0.78);
+  }
+
   html.dark .surface-panel {
-    background: rgba(15, 23, 42, 0.6);
-    border-color: rgba(148, 163, 184, 0.1);
+    background: rgba(15, 23, 42, 0.55);
+    border-color: var(--dm-border-subtle);
   }
-  /* Override utilitas umum Tailwind di mode gelap */
-  html.dark .bg-white { background-color: #111a2c !important; }
-  html.dark .bg-slate-50 { background-color: #0d1524 !important; }
-  html.dark .bg-slate-100 { background-color: #1b2740 !important; }
-  html.dark .bg-slate-200 { background-color: #27354f !important; }
-  html.dark .hover\:bg-slate-50:hover { background-color: #1b2740 !important; }
-  html.dark .hover\:bg-slate-100:hover { background-color: #222f49 !important; }
-  html.dark .text-slate-950 { color: #f1f5f9 !important; }
-  html.dark .text-slate-900 { color: #e2e8f0 !important; }
-  html.dark .text-slate-850 { color: #dbe3ee !important; }
-  html.dark .text-slate-800 { color: #cbd5e1 !important; }
-  html.dark .text-slate-700 { color: #b6c2d4 !important; }
-  html.dark .text-slate-650 { color: #94a3b8 !important; }
-  html.dark .text-slate-600 { color: #8ea0b5 !important; }
-  html.dark .text-slate-500 { color: #94a3b8 !important; }
-  html.dark .text-slate-450 { color: #a1a1aa !important; }
-  html.dark .text-slate-400 { color: #cbd5e1 !important; }
-  html.dark .border-slate-200 { border-color: rgba(148, 163, 184, 0.16) !important; }
-  html.dark .border-slate-150 { border-color: rgba(148, 163, 184, 0.14) !important; }
-  html.dark .border-slate-100 { border-color: rgba(148, 163, 184, 0.1) !important; }
+
+  html.dark .glass-button {
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.12);
+    color: #e2e8f0;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
+  }
+
+  html.dark .glass-button:hover {
+    background: rgba(255,255,255,0.12);
+  }
+
+  /* ── Elemen UI spesifik pakai CSS variables, bukan override global ── */
+
+  /* Solid backgrounds hanya untuk elemen yang benar-benar solid */
+  html.dark input,
+  html.dark textarea,
+  html.dark select {
+    background-color: var(--dm-bg-elevated);
+    border-color: var(--dm-border-strong);
+    color: var(--dm-text-primary);
+  }
+
+  html.dark input::placeholder,
+  html.dark textarea::placeholder {
+    color: var(--dm-text-muted);
+  }
+
+  /* Navbar & panels solid */
+  html.dark [data-surface="solid"] {
+    background-color: var(--dm-bg-card);
+    border-color: var(--dm-border-strong);
+  }
+
+  /* Scrollbar */
+  html.dark ::-webkit-scrollbar-track { background: var(--dm-bg-base); }
+  html.dark ::-webkit-scrollbar-thumb { background: rgba(148,163,184,0.2); border-radius: 9999px; }
+  html.dark ::-webkit-scrollbar-thumb:hover { background: rgba(148,163,184,0.35); }
 
   body {
     margin: 0;
@@ -605,3 +644,14 @@ html.lenis, html.lenis body {
     grid-template-columns: 1fr auto 1fr !important;
   }
 }
+
+/* mobile-noise-reduction */
+  @media (max-width: 640px) {
+    .glass-panel {
+      border-radius: 18px !important;
+      padding: 12px !important;
+    }
+    input, textarea, select, button {
+      font-size: 13px !important;
+    }
+  }

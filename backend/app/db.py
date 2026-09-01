@@ -27,7 +27,7 @@ DB_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "medsign.db")
 ENCRYPTION_KEY = os.getenv("MEDSIGN_ENCRYPTION_KEY", "medsign_secure_nik_key_2026")
 
 SUPABASE_URL = os.getenv("SUPABASE_URL", "")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY", "")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY") or os.getenv("SUPABASE_SECRET_KEY") or os.getenv("SUPABASE_PUBLISHABLE_KEY") or ""
 
 def test_supabase_connection(url: str, key: str) -> bool:
     if not url or not key:
@@ -335,7 +335,7 @@ def db_get_session_by_id(session_id: str) -> Optional[Dict[str, Any]]:
     else:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT id, patient_id, doctor_id, model_version, status, started_at, ended_at FROM sessions WHERE id = ?", (session_id,))
+        cursor.execute("SELECT id, patient_id, doctor_id, model_version, status, started_at, ended_at, summary FROM sessions WHERE id = ?", (session_id,))
         row = cursor.fetchone()
         conn.close()
         return dict(row) if row else None
@@ -1519,6 +1519,73 @@ def db_save_session_summary(session_id: str, summary: str) -> bool:
         return True
 
 
+# ── SESSION CRUD: DELETE SESSION, DELETE LOG, UPDATE LOG, UPDATE SOAP ──
+
+def db_delete_session(session_id: str) -> bool:
+    if USE_SUPABASE:
+        try:
+            # Hapus logs dulu (cascade manual kalau RLS tidak auto-cascade)
+            httpx.delete(f"{SUPABASE_URL}/rest/v1/session_logs?session_id=eq.{session_id}", headers=get_supabase_headers())
+            r = httpx.delete(f"{SUPABASE_URL}/rest/v1/sessions?id=eq.{session_id}", headers=get_supabase_headers())
+            return r.status_code in (200, 204)
+        except Exception as e:
+            print("Supabase error:", e)
+            return False
+    else:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM session_logs WHERE session_id = ?", (session_id,))
+        cursor.execute("DELETE FROM sessions WHERE id = ?", (session_id,))
+        conn.commit()
+        conn.close()
+        return True
+
+
+def db_delete_session_log(log_id: str) -> bool:
+    if USE_SUPABASE:
+        try:
+            r = httpx.delete(f"{SUPABASE_URL}/rest/v1/session_logs?id=eq.{log_id}", headers=get_supabase_headers())
+            return r.status_code in (200, 204)
+        except Exception as e:
+            print("Supabase error:", e)
+            return False
+    else:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM session_logs WHERE id = ?", (log_id,))
+        conn.commit()
+        conn.close()
+        return True
+
+
+def db_update_session_log(log_id: str, text: str) -> bool:
+    if USE_SUPABASE:
+        try:
+            r = httpx.patch(
+                f"{SUPABASE_URL}/rest/v1/session_logs?id=eq.{log_id}",
+                headers=get_supabase_headers(),
+                json={"text": text}
+            )
+            return r.status_code in (200, 204)
+        except Exception as e:
+            print("Supabase error:", e)
+            return False
+    else:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("UPDATE session_logs SET text = ? WHERE id = ?", (text, log_id))
+        conn.commit()
+        conn.close()
+        return True
+
+
+def db_update_session_soap(session_id: str, summary: str) -> bool:
+    """Alias eksplisit untuk update SOAP/summary sesi yang sudah selesai."""
+    return db_save_session_summary(session_id, summary)
+
+
+# ── END SESSION CRUD ──
+
 
 # ?? ARTICLES CRUD FOR LOCAL DB (COMPREHENSIVE) ??
 
@@ -1539,7 +1606,7 @@ def db_get_all_articles() -> List[Dict[str, Any]]:
     conn.close()
     return [dict(r) for r in rows]
 
-def db_create_article(article_id: str, title: str, slug: str, cover_image: str, content: str, excerpt: str, category: str, author: str, status: str = "published") -> bool:
+def db_create_article(article_id: str, title: str, slug: str, cover_image: str, content: str, excerpt: str, category: str, author: str, status: str = "published", ref_url: str = None) -> bool:
     try:
         now = datetime.utcnow().isoformat()
         pub_at = now if status == "published" else None
@@ -1555,6 +1622,7 @@ def db_create_article(article_id: str, title: str, slug: str, cover_image: str, 
                 "category": category,
                 "author": author,
                 "status": status,
+                "ref_url": ref_url,
                 "published_at": pub_at,
                 "created_at": now,
                 "updated_at": now
@@ -1563,12 +1631,10 @@ def db_create_article(article_id: str, title: str, slug: str, cover_image: str, 
             return r.status_code == 201
         
         conn = get_db_connection()
-        pub_at = now if status == "published" else None
-        conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO articles (id, title, slug, cover_image, content, excerpt, category, author, status, published_at, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            (article_id, title, slug, cover_image, content, excerpt, category, author, status, pub_at, now, now)
+            "INSERT INTO articles (id, title, slug, cover_image, content, excerpt, category, author, status, published_at, created_at, updated_at, ref_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (article_id, title, slug, cover_image, content, excerpt, category, author, status, pub_at, now, now, ref_url)
         )
         conn.commit()
         conn.close()
@@ -1577,7 +1643,7 @@ def db_create_article(article_id: str, title: str, slug: str, cover_image: str, 
         print("db_create_article error:", e)
         return False
 
-def db_update_article(article_id: str, title: str, slug: str, cover_image: str, content: str, excerpt: str, category: str, author: str, status: str) -> bool:
+def db_update_article(article_id: str, title: str, slug: str, cover_image: str, content: str, excerpt: str, category: str, author: str, status: str, ref_url: str = None) -> bool:
     try:
         now = datetime.utcnow().isoformat()
         if USE_SUPABASE:
@@ -1616,8 +1682,8 @@ def db_update_article(article_id: str, title: str, slug: str, cover_image: str, 
             pub_at = now
 
         cursor.execute(
-            "UPDATE articles SET title = ?, slug = ?, cover_image = ?, content = ?, excerpt = ?, category = ?, author = ?, status = ?, published_at = ?, updated_at = ? WHERE id = ?",
-            (title, slug, cover_image, content, excerpt, category, author, status, pub_at, now, article_id)
+            "UPDATE articles SET title = ?, slug = ?, cover_image = ?, content = ?, excerpt = ?, category = ?, author = ?, status = ?, published_at = ?, updated_at = ?, ref_url = ? WHERE id = ?",
+            (title, slug, cover_image, content, excerpt, category, author, status, pub_at, now, ref_url, article_id)
         )
         conn.commit()
         conn.close()

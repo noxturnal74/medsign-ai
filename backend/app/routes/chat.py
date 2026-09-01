@@ -208,3 +208,66 @@ def get_doctor_chats(doctor_id: str, current_user: dict = Depends(get_current_us
             continue
     chats.sort(key=lambda x: x.get("updated_at", ""), reverse=True)
     return chats
+
+
+class ChatTitleUpdate(BaseModel):
+    title: str
+
+@router.put("/chat/{chat_id}/title")
+def update_chat_title(chat_id: str, req: ChatTitleUpdate, current_user: dict = Depends(get_current_user)):
+    sb = _get_supabase()
+    if sb:
+        try:
+            sb.table("chats").update({"last_message": req.title}).eq("id", chat_id).execute()
+        except Exception:
+            pass
+    # update in file fallback
+    meta_path = CHAT_DIR / f"{chat_id}_meta.json"
+    if meta_path.exists():
+        try:
+            meta = json.loads(meta_path.read_text(encoding="utf-8"))
+            meta["last_message"] = req.title
+            meta_path.write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
+        except Exception:
+            pass
+    # also update sessions table in SQLite if matching session_id
+    from app.db import get_db_connection
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("UPDATE sessions SET summary = ? WHERE id = ?", (req.title, chat_id))
+        conn.commit()
+        conn.close()
+    except Exception:
+        pass
+    return {"message": "Judul percakapan berhasil diperbarui", "title": req.title}
+
+@router.delete("/chat/{chat_id}")
+def delete_chat(chat_id: str, current_user: dict = Depends(get_current_user)):
+    sb = _get_supabase()
+    if sb:
+        try:
+            sb.table("messages").delete().eq("chat_id", chat_id).execute()
+            sb.table("chats").delete().eq("id", chat_id).execute()
+        except Exception:
+            pass
+    # delete local files
+    f_msg = _chat_file(chat_id)
+    if f_msg.exists():
+        try:
+            f_msg.unlink()
+        except Exception:
+            pass
+    f_meta = CHAT_DIR / f"{chat_id}_meta.json"
+    if f_meta.exists():
+        try:
+            f_meta.unlink()
+        except Exception:
+            pass
+    # also delete from sessions & session_logs if exists
+    from app.db import db_delete_session
+    try:
+        db_delete_session(chat_id)
+    except Exception:
+        pass
+    return {"message": "Riwayat chat berhasil dihapus"}

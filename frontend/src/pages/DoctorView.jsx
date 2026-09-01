@@ -24,7 +24,11 @@ import {
   UserCog,
   Loader2,
   KeyRound,
-  Users
+  Users,
+  Edit2,
+  Trash2,
+  Check,
+  Download
 } from 'lucide-react';
 
 export const DoctorView = ({ setView, isSplit = false }) => {
@@ -48,10 +52,12 @@ export const DoctorView = ({ setView, isSplit = false }) => {
   } = useContext(AppContext);
 
   const [showTtsModal, setShowTtsModal] = useState(false);
+  const [showEndSessionConfirm, setShowEndSessionConfirm] = useState(false);
   
   // Doctor states
   const [assignedPatients, setAssignedPatients] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [patientSortBy, setPatientSortBy] = useState("name"); // "name" | "rm" | "dob"
   const [doctorTab, setDoctorTab] = useState("consultation"); // "consultation" | "history"
 
   // Profile / Preferences / Settings panel
@@ -159,6 +165,14 @@ export const DoctorView = ({ setView, isSplit = false }) => {
   const [selectedPastSession, setSelectedPastSession] = useState(null);
   const [selectedPastSessionLogs, setSelectedPastSessionLogs] = useState([]);
   const [soapSummary, setSoapSummary] = useState("");
+  
+  // CRUD editing states for past session
+  const [editingSoap, setEditingSoap] = useState(false);
+  const [tempSoapText, setTempSoapText] = useState("");
+  const [editingLogId, setEditingLogId] = useState(null);
+  const [tempLogText, setTempLogText] = useState("");
+  const [savingSoapEdit, setSavingSoapEdit] = useState(false);
+  const [deletingSessionId, setDeletingSessionId] = useState(null);
   
   // Master features states
   const [activeMedicalRecord, setActiveMedicalRecord] = useState(null);
@@ -415,7 +429,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
   };
 
   const handleEndSession = async (confirm = true) => {
-    if (confirm && !window.confirm("Apakah Anda yakin ingin mengakhiri sesi konsultasi ini?")) return;
+    if (confirm) { setShowEndSessionConfirm(true); return; }
     try {
       const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
       const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/sessions/${activeSessionId}/end`, {
@@ -432,7 +446,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
         setPatientSessions([]);
         
         if (pat) {
-          await handleOpenPatientHistory(pat);
+          await fetchPatientSessions(pat.id);
           setDoctorTab("history");
         } else {
           fetchAssignedPatients();
@@ -465,6 +479,129 @@ export const DoctorView = ({ setView, isSplit = false }) => {
     } catch (err) {
       showToast("Koneksi gagal", "error");
     }
+  };
+
+  const handleDeleteSession = async (sessionId) => {
+    if (!window.confirm("Apakah Anda yakin ingin menghapus seluruh riwayat sesi ini beserta log percakapannya? Tindakan ini tidak dapat dibatalkan.")) return;
+    try {
+      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/sessions/${sessionId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${currentUser?.token}` }
+      });
+      if (response.ok) {
+        showToast("Riwayat sesi berhasil dihapus", "success");
+        if (selectedPastSession?.id === sessionId) {
+          setSelectedPastSession(null);
+          setSelectedPastSessionLogs([]);
+        }
+        if (activePatient?.id) {
+          fetchPatientSessions(activePatient.id);
+        } else if (viewingHistoryPatient?.id) {
+          fetchPatientSessions(viewingHistoryPatient.id);
+        }
+      } else {
+        const err = await response.json().catch(() => ({}));
+        showToast(err.detail || "Gagal menghapus sesi", "error");
+      }
+    } catch (err) {
+      showToast("Koneksi gagal", "error");
+    }
+  };
+
+  const handleUpdateSoap = async () => {
+    if (!selectedPastSession) return;
+    setSavingSoapEdit(true);
+    try {
+      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/sessions/${selectedPastSession.id}/soap`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${currentUser?.token}`
+        },
+        body: JSON.stringify({ summary: tempSoapText })
+      });
+      if (response.ok) {
+        showToast("Catatan medis SOAP berhasil diperbarui", "success");
+        setSelectedPastSession(prev => ({ ...prev, summary: tempSoapText }));
+        setPatientSessions(prev => prev.map(s => s.id === selectedPastSession.id ? { ...s, summary: tempSoapText } : s));
+        setEditingSoap(false);
+      } else {
+        const err = await response.json().catch(() => ({}));
+        showToast(err.detail || "Gagal memperbarui SOAP", "error");
+      }
+    } catch (err) {
+      showToast("Koneksi gagal", "error");
+    } finally {
+      setSavingSoapEdit(false);
+    }
+  };
+
+  const handleDeleteLog = async (logId) => {
+    if (!window.confirm("Hapus bubble pesan ini dari riwayat log?")) return;
+    try {
+      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/sessions/logs/${logId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${currentUser?.token}` }
+      });
+      if (response.ok) {
+        showToast("Pesan berhasil dihapus", "success");
+        setSelectedPastSessionLogs(prev => prev.filter(l => l.id !== logId));
+      } else {
+        const err = await response.json().catch(() => ({}));
+        showToast(err.detail || "Gagal menghapus pesan", "error");
+      }
+    } catch (err) {
+      showToast("Koneksi gagal", "error");
+    }
+  };
+
+  const handleUpdateLog = async (logId) => {
+    if (!tempLogText.trim()) return;
+    try {
+      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/sessions/logs/${logId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${currentUser?.token}`
+        },
+        body: JSON.stringify({ text: tempLogText })
+      });
+      if (response.ok) {
+        showToast("Pesan berhasil diperbarui", "success");
+        setSelectedPastSessionLogs(prev => prev.map(l => l.id === logId ? { ...l, text: tempLogText } : l));
+        setEditingLogId(null);
+        setTempLogText("");
+      } else {
+        const err = await response.json().catch(() => ({}));
+        showToast(err.detail || "Gagal memperbarui pesan", "error");
+      }
+    } catch (err) {
+      showToast("Koneksi gagal", "error");
+    }
+  };
+
+  const handleExportEvidence = (session, logs) => {
+    const text = `=== MEDSIGN EVIDENCE REPORT ===\n` +
+      `Sesi ID: ${session.id}\n` +
+      `Waktu Mulai: ${session.started_at}\n` +
+      `Model Versi: ${session.model_version}\n` +
+      `Status: ${session.status}\n\n` +
+      `--- CATATAN MEDIS (SOAP) ---\n` +
+      `${session.summary || "Tidak ada catatan SOAP"}\n\n` +
+      `--- TRANSKRIP PERCAKAPAN LENGKAP ---\n` +
+      logs.map(l => `[${l.timestamp || l.created_at}] ${l.role.toUpperCase()}: ${l.text}`).join('\n');
+
+    const element = document.createElement('a');
+    const file = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    element.href = URL.createObjectURL(file);
+    element.download = `MedSign-Evidence-${session.id.slice(0, 8)}-${new Date().toISOString().slice(0, 10)}.txt`;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
   };
 
   const handleViewPastSessionLogs = async (session) => {
@@ -994,17 +1131,54 @@ const handleOpenPatientHistory = async (pat) => {
             <span className="text-[10px] font-black uppercase text-indigo-700 tracking-wider">
               Daftar Pasien Terdaftar
             </span>
-            <span className="text-[10px] font-semibold text-slate-400">{assignedPatients.length} pasien</span>
+            <span className="text-[10px] font-semibold text-slate-400">
+              {assignedPatients.filter(p => {
+                const q = searchQuery.toLowerCase();
+                return !q || p.name?.toLowerCase().includes(q) || p.nik?.toLowerCase().includes(q) || p.no_rm?.toLowerCase().includes(q);
+              }).length} / {assignedPatients.length} pasien
+            </span>
+          </div>
+
+          {/* Search + Sort Bar */}
+          <div className="flex flex-col sm:flex-row gap-2">
+            <div className="relative flex-1">
+              <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                placeholder="Cari nama, NIK, atau No. RM..."
+                className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-300 focus:border-indigo-300 transition-all"
+              />
+            </div>
+            <select
+              value={patientSortBy}
+              onChange={e => setPatientSortBy(e.target.value)}
+              className="px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-300 transition-all cursor-pointer"
+            >
+              <option value="name">Urutkan: Nama</option>
+              <option value="rm">Urutkan: No. RM</option>
+              <option value="dob">Urutkan: Tgl Lahir</option>
+            </select>
           </div>
 
           {/* Patient Card Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {assignedPatients.length === 0 ? (
-              <div className="col-span-full py-12 text-center text-xs font-semibold text-slate-400">
-                Tidak ada pasien terdaftar di relasi Anda.
-              </div>
-            ) : (
-              assignedPatients.map(pat => (
+            {(() => {
+              const q = searchQuery.toLowerCase();
+              const filtered = assignedPatients.filter(p =>
+                !q || p.name?.toLowerCase().includes(q) || p.nik?.toLowerCase().includes(q) || p.no_rm?.toLowerCase().includes(q)
+              ).sort((a, b) => {
+                if (patientSortBy === 'rm') return (a.no_rm || '').localeCompare(b.no_rm || '');
+                if (patientSortBy === 'dob') return (a.date_of_birth || '').localeCompare(b.date_of_birth || '');
+                return (a.name || '').localeCompare(b.name || '');
+              });
+              if (filtered.length === 0) return (
+                <div className="col-span-full py-12 text-center text-xs font-semibold text-slate-400">
+                  {searchQuery ? `Tidak ada pasien dengan kata kunci "${searchQuery}".` : 'Tidak ada pasien terdaftar di relasi Anda.'}
+                </div>
+              );
+              return filtered.map(pat => (
                 <div 
                   key={pat.id} 
                   className="glass-panel rounded-2xl p-5 border border-slate-150 hover:-translate-y-0.5 hover:shadow-md transition-all flex flex-col justify-between gap-4"
@@ -1038,7 +1212,7 @@ const handleOpenPatientHistory = async (pat) => {
                   </div>
                 </div>
               ))
-            )}
+            })()}
           </div>
 
           {/* ── PANEL HISTORI CHAT PASIEN (dari kartu pasien) ── */}
@@ -1298,55 +1472,176 @@ const handleOpenPatientHistory = async (pat) => {
                 </div>
               ) : (
                 <div className="glass-panel rounded-[32px] p-6 border border-white/60 bg-white shadow-sm flex flex-col gap-4 animate-slide-up min-h-[400px]">
-                  {/* Detail Header */}
+                  {/* Detail Header & Action Buttons */}
                   <div className="flex items-center justify-between border-b border-slate-150 pb-3">
                     <div>
-                      <h3 className="text-xs font-black text-slate-950 uppercase tracking-wide">Detail Sesi Konsultasi</h3>
-                      <span className="text-[9px] text-slate-455 font-bold uppercase">{fmtSessionDate(selectedPastSession.started_at)}</span>
+                      <h3 className="text-xs font-black text-slate-950 uppercase tracking-wide flex items-center gap-2">
+                        <span>Detail Sesi Konsultasi</span>
+                        <span className="text-[8.5px] px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 font-bold border border-indigo-200/40">Evidence Log</span>
+                      </h3>
+                      <span className="text-[9px] text-slate-455 font-bold uppercase">{fmtSessionDate(selectedPastSession.started_at)} · ID: {selectedPastSession.id.slice(0, 8)}</span>
                     </div>
-                    <button 
-                      onClick={() => setSelectedPastSession(null)} 
-                      className="p-1.5 rounded-xl hover:bg-slate-100 text-slate-400"
-                      title="Tutup Detail"
-                    >
-                      <X size={15} />
-                    </button>
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        onClick={() => handleExportEvidence(selectedPastSession, selectedPastSessionLogs)}
+                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold transition-all shadow-sm"
+                        title="Unduh Bukti Medis (TXT)"
+                      >
+                        <Download size={12} /> Unduh Evidence
+                      </button>
+                      <button
+                        onClick={() => handleDeleteSession(selectedPastSession.id)}
+                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200/40 text-[10px] font-bold transition-all shadow-sm"
+                        title="Hapus Seluruh Riwayat Sesi"
+                      >
+                        <Trash2 size={12} /> Hapus Sesi
+                      </button>
+                      <button 
+                        onClick={() => { setSelectedPastSession(null); setEditingSoap(false); setEditingLogId(null); }} 
+                        className="p-1.5 rounded-xl hover:bg-slate-100 text-slate-400"
+                        title="Tutup Detail"
+                      >
+                        <X size={15} />
+                      </button>
+                    </div>
                   </div>
 
-                  {/* SOAP Note view */}
+                  {/* SOAP Note view & Update */}
                   <div className="bg-slate-50 border border-slate-150/70 p-4 rounded-2xl flex flex-col gap-2">
-                    <span className="text-[9px] font-black text-slate-400 uppercase flex items-center gap-1">
-                      <FileText size={12} className="text-indigo-600" /> Catatan Medis SOAP
-                    </span>
-                    <p className="text-[10px] font-semibold text-slate-750 leading-relaxed whitespace-pre-line">
-                      {selectedPastSession.summary || "Tidak ada catatan medis SOAP disimpan untuk sesi ini."}
-                    </p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[9px] font-black text-slate-500 uppercase flex items-center gap-1">
+                        <FileText size={12} className="text-indigo-600" /> Log Catatan Medis (SOAP)
+                      </span>
+                      {!editingSoap ? (
+                        <button
+                          onClick={() => { setEditingSoap(true); setTempSoapText(selectedPastSession.summary || ""); }}
+                          className="inline-flex items-center gap-1 text-[9px] font-black uppercase text-indigo-600 hover:text-indigo-800 transition-colors"
+                        >
+                          <Edit2 size={11} /> Edit SOAP
+                        </button>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={handleUpdateSoap}
+                            disabled={savingSoapEdit}
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-indigo-600 text-white text-[9px] font-black uppercase hover:bg-indigo-700 disabled:opacity-50"
+                          >
+                            {savingSoapEdit ? <Loader2 size={10} className="animate-spin" /> : <Check size={10} />} Simpan
+                          </button>
+                          <button
+                            onClick={() => setEditingSoap(false)}
+                            className="text-[9px] font-bold text-slate-400 hover:text-slate-600"
+                          >
+                            Batal
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
+                    {editingSoap ? (
+                      <textarea
+                        value={tempSoapText}
+                        onChange={(e) => setTempSoapText(e.target.value)}
+                        rows={4}
+                        placeholder="Edit catatan SOAP..."
+                        className="w-full text-[11px] font-semibold text-slate-800 bg-white border border-indigo-200 rounded-xl p-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-400/40"
+                      />
+                    ) : (
+                      <p className="text-[10px] font-semibold text-slate-750 leading-relaxed whitespace-pre-line bg-white/70 p-2.5 rounded-xl border border-slate-100">
+                        {selectedPastSession.summary || "Tidak ada catatan medis SOAP disimpan untuk sesi ini."}
+                      </p>
+                    )}
                   </div>
 
-                  {/* Chat log view */}
+                  {/* Chat log view with Edit & Delete per bubble */}
                   <div className="flex-1 flex flex-col gap-2 min-h-0">
-                    <span className="text-[9px] font-black text-slate-400 uppercase flex items-center gap-1 border-t border-slate-150/70 pt-3">
-                      <MessageSquare size={12} className="text-sky-600" /> Transkrip Percakapan Sesi
-                    </span>
+                    <div className="flex items-center justify-between border-t border-slate-150/70 pt-3">
+                      <span className="text-[9px] font-black text-slate-500 uppercase flex items-center gap-1">
+                        <MessageSquare size={12} className="text-sky-600" /> Log Transkrip Percakapan Sesi ({selectedPastSessionLogs.length} Pesan)
+                      </span>
+                      <span className="text-[8px] font-bold text-slate-400">Klik icon edit/hapus di tiap pesan untuk koreksi data</span>
+                    </div>
 
                     <div className="flex flex-col gap-2.5 max-h-[300px] overflow-y-auto pr-1">
                       {selectedPastSessionLogs.length === 0 ? (
                         <span className="text-[9px] text-slate-400 text-center py-4">Sesi ini tidak memiliki log percakapan.</span>
                       ) : (
-                        selectedPastSessionLogs.map(log => (
-                          <div
-                            key={log.id}
-                            className={`p-2.5 rounded-2xl text-[10px] font-semibold max-w-[85%] border ${
-                              log.role === 'doctor'
-                                ? 'bg-sky-500/10 text-sky-900 border-sky-200/20 align-self-end ml-auto'
-                                : 'bg-emerald-500/10 text-emerald-900 border-emerald-250/20 align-self-start mr-auto'
-                            }`}
-                          >
-                            <span className="font-extrabold uppercase text-[7.5px] block opacity-60 mb-0.5">{log.role === 'doctor' ? 'DOKTER' : 'PASIEN'}</span>
-                            {log.text}
-                            {log.confidence && <span className="block text-[7.5px] text-slate-400 text-right mt-0.5">Akurasi: {log.confidence}%</span>}
-                          </div>
-                        ))
+                        [...selectedPastSessionLogs].sort((a, b) => new Date(a.created_at || a.timestamp || 0) - new Date(b.created_at || b.timestamp || 0)).map(log => {
+                          const isDoc = log.role === 'doctor';
+                          const isEditingThis = editingLogId === log.id;
+
+                          return (
+                            <div
+                              key={log.id}
+                              className={`group relative p-2.5 rounded-2xl text-[10px] font-semibold max-w-[88%] border transition-all ${
+                                isDoc
+                                  ? 'bg-sky-500/10 text-sky-900 border-sky-200/30 self-end ml-auto'
+                                  : 'bg-emerald-500/10 text-emerald-900 border-emerald-200/30 self-start mr-auto'
+                              }`}
+                            >
+                              <div className="flex items-center justify-between gap-3 mb-1">
+                                <span className="font-extrabold uppercase text-[7.5px] opacity-60">{isDoc ? 'DOKTER' : 'PASIEN'}</span>
+                                
+                                {/* Bubble Actions */}
+                                <div className="flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+                                  {log.timestamp && <span className="text-[7px] text-slate-400">{log.timestamp.slice(11, 16) || log.timestamp}</span>}
+                                  {!isEditingThis ? (
+                                    <>
+                                      <button
+                                        onClick={() => { setEditingLogId(log.id); setTempLogText(log.text); }}
+                                        className="p-1 rounded-md hover:bg-white/80 text-slate-500 hover:text-indigo-600 transition-all"
+                                        title="Koreksi teks pesan"
+                                      >
+                                        <Edit2 size={10} />
+                                      </button>
+                                      <button
+                                        onClick={() => handleDeleteLog(log.id)}
+                                        className="p-1 rounded-md hover:bg-white/80 text-slate-500 hover:text-rose-600 transition-all"
+                                        title="Hapus bubble pesan"
+                                      >
+                                        <Trash2 size={10} />
+                                      </button>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <button
+                                        onClick={() => handleUpdateLog(log.id)}
+                                        className="p-1 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition-all"
+                                        title="Simpan koreksi"
+                                      >
+                                        <Check size={10} />
+                                      </button>
+                                      <button
+                                        onClick={() => { setEditingLogId(null); setTempLogText(""); }}
+                                        className="p-1 rounded-md bg-slate-200 text-slate-600 hover:bg-slate-300 transition-all"
+                                        title="Batal"
+                                      >
+                                        <X size={10} />
+                                      </button>
+                                    </>
+                                  )}
+                                </div>
+                              </div>
+
+                              {isEditingThis ? (
+                                <input
+                                  type="text"
+                                  value={tempLogText}
+                                  onChange={(e) => setTempLogText(e.target.value)}
+                                  onKeyDown={(e) => { if (e.key === 'Enter') handleUpdateLog(log.id); }}
+                                  className="w-full text-xs font-semibold bg-white border border-indigo-300 rounded-lg px-2 py-1 focus:outline-none text-slate-800 mt-1"
+                                  autoFocus
+                                />
+                              ) : (
+                                <p className="leading-relaxed whitespace-pre-wrap break-words">{log.text}</p>
+                              )}
+
+                              {log.confidence && log.confidence < 1.0 && (
+                                <span className="block text-[7.5px] text-slate-400 text-right mt-1">Akurasi: {Math.round(log.confidence * 100)}%</span>
+                              )}
+                            </div>
+                          );
+                        })
                       )}
                     </div>
                   </div>
@@ -1363,6 +1658,30 @@ const handleOpenPatientHistory = async (pat) => {
       {/* TTS voice modal */}
       {showTtsModal && (
         <TtsDashboardModal onClose={() => setShowTtsModal(false)} />
+      )}
+
+      {/* Konfirmasi Akhiri Sesi */}
+      {showEndSessionConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-3xl shadow-2xl border border-slate-100 max-w-sm w-full p-6">
+            <h3 className="font-black text-base text-slate-800 mb-1">Akhiri Sesi Konsultasi?</h3>
+            <p className="text-sm text-slate-500 mb-6">Sesi akan ditutup dan tidak dapat dilanjutkan. Riwayat percakapan tetap tersimpan.</p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowEndSessionConfirm(false)}
+                className="flex-1 py-2.5 rounded-2xl border border-slate-200 text-slate-600 font-bold text-sm hover:bg-slate-50 transition-all"
+              >
+                Batal
+              </button>
+              <button
+                onClick={() => { setShowEndSessionConfirm(false); handleEndSession(false); }}
+                className="flex-1 py-2.5 rounded-2xl bg-rose-500 hover:bg-rose-600 text-white font-black text-sm transition-all shadow-sm"
+              >
+                Ya, Akhiri
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Modal log histori — dipakai VIEW B & VIEW C */}

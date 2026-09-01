@@ -7,8 +7,8 @@ export const SessionLog = () => {
   const scrollRef = useRef(null);
   const [saving, setSaving] = useState(false);
 
-  // Chronological order: oldest messages at the top, newest at the bottom
-  const orderedLogs = [...sessionLog].reverse();
+  // sessionLog sudah oldest-first (append ke belakang), tidak perlu di-reverse
+  const orderedLogs = sessionLog;
 
   // Scroll to bottom on new message
   useEffect(() => {
