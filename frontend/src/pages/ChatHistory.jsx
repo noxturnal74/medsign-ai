@@ -317,7 +317,7 @@ export const ChatHistory = ({ setView }) => {
   const filteredMessages = searchQuery ? messages.filter(m => (m.content || '').toLowerCase().includes(searchQuery.toLowerCase())) : messages;
 
   return (
-    <div className="mx-auto w-full max-w-6xl flex flex-col gap-3.5 py-2 md:py-4 px-3 sm:px-4 md:px-6 animate-slide-up select-none">
+    <div className="mx-auto w-full max-w-6xl flex flex-col gap-3.5 py-2 md:py-4 px-3 sm:px-4 md:px-6 animate-slide-up">
       {/* Clean Minimal Header */}
       <div className="glass-panel rounded-2xl md:rounded-3xl p-3 md:p-4 flex items-center justify-between border border-white/60 shadow-sm bg-white/70 backdrop-blur-md">
         <div className="flex items-center gap-2.5 min-w-0">
