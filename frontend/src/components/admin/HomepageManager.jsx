@@ -40,21 +40,21 @@ const activeColor = (c) => ({
   rose: 'bg-rose-600',
 }[c] || 'bg-slate-600');
 
-/* ═══ Small reusable modal ═══ */
+/* ═══ Small reusable modal - bottom sheet style ═══ */
 const Modal = ({ open, onClose, title, children }) => {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-[200] p-4" onClick={onClose}>
       <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" />
       <div
-        className="relative bg-white rounded-3xl shadow-2xl max-w-lg w-full max-h-[90vh] flex flex-col animate-slide-up"
+        className="relative bg-white rounded-3xl shadow-2xl max-w-lg w-full max-h-[95vh] animate-slide-up-from-bottom"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between mb-4 flex-shrink-0">
+        <div className="flex items-center justify-between mb-4 flex-shrink-0 sticky top-0 bg-white/95 backdrop-blur-sm z-10 py-2 rounded-t-3xl">
           <h3 className="text-sm font-black text-slate-900 uppercase">{title}</h3>
           <button onClick={onClose} className="p-1.5 rounded-xl hover:bg-slate-100 text-slate-400"><X size={16} /></button>
         </div>
-        <div className="overflow-y-auto max-h-[calc(90vh-100px)] p-6 pb-8 pr-2">
+        <div className="overflow-y-auto max-h-[calc(95vh-80px)] p-6 pb-8 pr-2">
           {children}
         </div>
       </div>
