@@ -47,14 +47,16 @@ const Modal = ({ open, onClose, title, children }) => {
     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4" onClick={onClose}>
       <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" />
       <div
-        className="relative bg-white rounded-3xl shadow-2xl max-w-lg w-full max-h-[85vh] overflow-y-auto p-6 animate-slide-up"
+        className="relative bg-white rounded-3xl shadow-2xl max-w-lg w-full max-h-[90vh] flex flex-col animate-slide-up"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-4 flex-shrink-0">
           <h3 className="text-sm font-black text-slate-900 uppercase">{title}</h3>
           <button onClick={onClose} className="p-1.5 rounded-xl hover:bg-slate-100 text-slate-400"><X size={16} /></button>
         </div>
-        {children}
+        <div className="overflow-y-auto max-h-[calc(90vh-100px)] p-6 pb-8 pr-2">
+          {children}
+        </div>
       </div>
     </div>
   );
