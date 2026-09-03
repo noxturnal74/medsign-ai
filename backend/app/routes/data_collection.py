@@ -58,15 +58,25 @@ def save_sample(request: SaveSampleRequest, _: dict = Depends(require_ml_user)):
             raise HTTPException(status_code=400, detail=f"Frame {idx} harus memiliki tepat 63 koordinat")
 
     # 2. Tentukan target path
-    # backend/data/landmarks/<label>/<signer_id>
+    # backend/data/landmarks/<label>/<signer_id> (clinical)
+    # backend/data/landmark_abjad_angka/<label>/<signer_id> (alphabet/number)
     backend_dir = Path(__file__).resolve().parents[2]
-    landmarks_dir = backend_dir / "data" / "landmarks"
+    
+    # Check if label is alphabet/number (single char A-Z or 1-9)
+    is_alphabet = len(request.label) == 1 and (request.label.isalpha() or request.label.isdigit())
+    if is_alphabet:
+        landmarks_dir = backend_dir / "data" / "landmark_abjad_angka"
+        # Normalize label to lowercase for folder name
+        label_normalized = request.label.lower()
+    else:
+        landmarks_dir = backend_dir / "data" / "landmarks"
+        label_normalized = request.label
 
-    label_dir = landmarks_dir / request.label / request.signer_id
+    label_dir = landmarks_dir / label_normalized / request.signer_id
     label_dir.mkdir(parents=True, exist_ok=True)
 
-    take_id = f"{request.session_id}_{request.label}_{request.take_index:03d}"
-    filename = f"{request.label}_{request.signer_id}_{take_id}.npy"
+    take_id = f"{request.session_id}_{label_normalized}_{request.take_index:03d}"
+    filename = f"{label_normalized}_{request.signer_id}_{take_id}.npy"
     file_path = label_dir / filename
 
     try:
@@ -82,6 +92,10 @@ def save_sample(request: SaveSampleRequest, _: dict = Depends(require_ml_user)):
         # Make metadata folder if not exists
         csv_path.parent.mkdir(parents=True, exist_ok=True)
 
+        # Determine folder prefix for filepath
+        folder_prefix = "landmark_abjad_angka" if is_alphabet else "landmarks"
+        filepath_in_csv = f"{folder_prefix}/{label_normalized}/{request.signer_id}/{filename}"
+
         file_exists = csv_path.exists()
         with csv_path.open("a", newline="", encoding="utf-8") as csvfile:
             writer = csv.writer(csvfile)
@@ -89,8 +103,8 @@ def save_sample(request: SaveSampleRequest, _: dict = Depends(require_ml_user)):
                 writer.writerow(["timestamp", "filepath", "label", "signer", "frames"])
             writer.writerow([
                 datetime.now().isoformat(),
-                f"landmarks/{request.label}/{request.signer_id}/{filename}",
-                request.label,
+                filepath_in_csv,
+                label_normalized,
                 request.signer_id,
                 30
             ])
@@ -274,14 +288,14 @@ def get_dataset_motion(label: str):
 @router.get("/dataset/balance")
 def get_dataset_balance(model_type: str = "clinical"):
     backend_dir = Path(__file__).resolve().parents[2]
-    landmarks_dir = backend_dir / "data" / "landmarks"
-
+    
     if model_type == "alphabet":
+        landmarks_dir = backend_dir / "data" / "landmark_abjad_angka"
         alphabet_classes = [chr(i) for i in range(ord('A'), ord('Z') + 1)] + [str(i) for i in range(1, 10)]
         label_items = [
             {
                 "id": idx,
-                "slug": char,
+                "slug": char.lower() if char.isalpha() else char,  # store as lowercase for consistency
                 "display": char,
                 "category": "Abjad" if char.isalpha() else "Angka",
                 "emergency": False
@@ -289,6 +303,7 @@ def get_dataset_balance(model_type: str = "clinical"):
             for idx, char in enumerate(alphabet_classes)
         ]
     else:
+        landmarks_dir = backend_dir / "data" / "landmarks"
         from app.ml.labels import load_label_items
         label_items = load_label_items()
 
@@ -495,12 +510,14 @@ def train_dataset(request: TrainRequest, _: dict = Depends(require_ml_user)):
         python_exe = str(venv_python) if venv_python.exists() else sys.executable
 
         if request.model_type == "alphabet":
-            training_script = backend_dir / "training" / "train_alphabet_model.py"
+            training_script = backend_dir / "training" / "train_alphabet_dynamic.py"
             cmd = [
                 python_exe,
                 str(training_script),
                 "--epochs", str(request.epochs),
-                "--model-name", "bisindo_alphabet_v1_temp"
+                "--model-name", "bisindo_alphabet_v1_temp",
+                "--architecture", request.architecture,
+                "--landmarks-dir", str(backend_dir / "data" / "landmark_abjad_angka"),
             ]
         else:
             training_script = backend_dir / "training" / "train_clinical_model.py"

@@ -88,7 +88,7 @@ import { Backdrop, CircularProgress, Alert, AlertTitle, Skeleton } from "@mui/ma
 
 const ALPHABET_LIST = [
 
-  ...Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i)),
+  ...Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i).toLowerCase()),
 
   ...Array.from({ length: 9 }, (_, i) => String(1 + i))
 
@@ -97,6 +97,8 @@ const ALPHABET_LIST = [
   id: index + 1,
 
   word: char,
+
+  display: char.toUpperCase(),
 
   category: char >= '0' && char <= '9' ? "Angka" : "Abjad",
 
