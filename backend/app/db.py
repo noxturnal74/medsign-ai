@@ -1265,7 +1265,7 @@ def init_db():
             cursor.execute("""
                 INSERT INTO articles (id, title, slug, cover_image, content, excerpt, category, author, status, published_at, created_at, updated_at, ref_url)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'published', ?, ?, ?, ?)
-            """, (item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7], now, now, now, item[8]))
+            """, (item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7], now, now, now, item[8] if len(item) > 8 else None))
 
     cursor.execute("SELECT COUNT(*) FROM instagram_posts")
     if cursor.fetchone()[0] == 0:
@@ -1314,7 +1314,7 @@ def init_db():
             cursor.execute("""
                 INSERT INTO articles (id, title, slug, cover_image, content, excerpt, category, author, status, published_at, created_at, updated_at, ref_url)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'published', ?, ?, ?, ?)
-            """, (item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7], now, now, now, item[8]))
+            """, (item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7], now, now, now, item[8] if len(item) > 8 else None))
 
     cursor.execute("SELECT COUNT(*) FROM reviews")
     if cursor.fetchone()[0] == 0:
