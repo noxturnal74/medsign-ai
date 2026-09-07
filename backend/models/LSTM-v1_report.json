@@ -1,0 +1,23 @@
+[
+  {
+    "class_name": "sakit",
+    "precision": 1.0,
+    "recall": 0.8,
+    "f1_score": 0.8889,
+    "support": 20
+  },
+  {
+    "class_name": "dokter",
+    "precision": 0.9118,
+    "recall": 1.0,
+    "f1_score": 0.9538,
+    "support": 31
+  },
+  {
+    "class_name": "obat",
+    "precision": 0.9444,
+    "recall": 0.9714,
+    "f1_score": 0.9577,
+    "support": 35
+  }
+]

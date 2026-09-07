@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Laporan Audit & Validasi Eksperimen ML MedSign</title>
+<style>
+  @page {
+    size: A4;
+    margin: 18mm 15mm 18mm 15mm;
+  }
+  body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+    color: #0f172a;
+    line-height: 1.45;
+    font-size: 10pt;
+    background: #fff;
+    margin: 0;
+    padding: 0;
+  }
+  .header {
+    border-bottom: 2.5px solid #0284c7;
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .header-left h1 {
+    margin: 0;
+    font-size: 16pt;
+    font-weight: 900;
+    color: #0c4a6e;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+  }
+  .header-left p {
+    margin: 4px 0 0 0;
+    font-size: 8.5pt;
+    color: #64748b;
+    font-weight: 600;
+  }
+  .badge-pass {
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #86efac;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 800;
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  h2 {
+    font-size: 11pt;
+    font-weight: 800;
+    color: #0369a1;
+    border-left: 3.5px solid #0284c7;
+    padding-left: 8px;
+    margin: 18px 0 8px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.2px;
+  }
+  h3 {
+    font-size: 9.5pt;
+    font-weight: 800;
+    color: #334155;
+    margin: 12px 0 6px 0;
+    text-transform: uppercase;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 14px;
+    font-size: 8.5pt;
+  }
+  th {
+    background: #f1f5f9;
+    color: #334155;
+    font-weight: 700;
+    text-align: left;
+    padding: 6px 8px;
+    border: 1px solid #cbd5e1;
+    text-transform: uppercase;
+    font-size: 7.5pt;
+  }
+  td {
+    padding: 5px 8px;
+    border: 1px solid #e2e8f0;
+  }
+  tr:nth-child(even) {
+    background: #f8fafc;
+  }
+  .text-right { text-align: right; }
+  .text-center { text-align: center; }
+  .font-bold { font-weight: 700; }
+  .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+  .text-emerald { color: #047857; font-weight: 700; }
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 8px;
+  }
+  .card-title {
+    font-size: 7.5pt;
+    text-transform: uppercase;
+    color: #64748b;
+    font-weight: 700;
+  }
+  .card-value {
+    font-size: 13pt;
+    font-weight: 800;
+    color: #0284c7;
+    margin-top: 2px;
+  }
+  .box-note {
+    background: #f0f9ff;
+    border-left: 3px solid #0284c7;
+    padding: 8px 12px;
+    font-size: 8.5pt;
+    color: #0369a1;
+    margin-bottom: 12px;
+    border-radius: 0 6px 6px 0;
+  }
+  .page-break {
+    page-break-before: always;
+  }
+</style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <h1>Laporan Audit & Validasi Eksperimen ML MedSign</h1>
+      <p>Audit Independen Bukti Empiris, Integritas Data, dan Konsistensi Metrik 8 Eksperimen</p>
+    </div>
+    <div>
+      <span class="badge-pass">STATUS: VERIFIED (PASS)</span>
+    </div>
+  </div>
+
+  <div class="box-note">
+    <strong>Ringkasan Audit:</strong> Seluruh 8 eksperimen ML telah diaudit secara statis dan empiris terhadap dataset asli, split holdout, arsitektur model, artefak checkpoint (.keras & .tflite), log terminal, serta laporan klasifikasi. Tidak ditemukan data leakage atau kontaminasi data sintetis pada validation/test set.
+  </div>
+
+  <!-- TARGET & ARSITEKTUR PIPELINE -->
+  <h2>1. Verifikasi Pemisahan Model & Arsitektur</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Entitas Validasi</th>
+        <th>Model 1 (Clinical Words)</th>
+        <th>Model 2 (Alphabet & Numbers)</th>
+        <th>Status Audit</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Jumlah Kelas Output</strong></td>
+        <td>200 Kelas Klinis Terlatih</td>
+        <td>36 Kelas (10 Angka + 26 Huruf)</td>
+        <td class="text-emerald">TERPISAH KETAT (PASS)</td>
+      </tr>
+      <tr>
+        <td><strong>Lokasi Dataset</strong></td>
+        <td class="font-mono">backend/data/landmarks/</td>
+        <td class="font-mono">backend/data/landmark_abjad_angka/</td>
+        <td class="text-emerald">INDEPENDEN (PASS)</td>
+      </tr>
+      <tr>
+        <td><strong>Single 236-Class Classifier</strong></td>
+        <td>TIDAK ADA</td>
+        <td>TIDAK ADA</td>
+        <td class="text-emerald">MEMATUHI SYARAT (PASS)</td>
+      </tr>
+      <tr>
+        <td><strong>Preprocessing Contract</strong></td>
+        <td>Frame: 30, Feature: 63, Normalized</td>
+        <td>Frame: 30, Feature: 63, Normalized</td>
+        <td class="text-emerald">KONSISTEN (PASS)</td>
+      </tr>
+      <tr>
+        <td><strong>Isolasi Test Set</strong></td>
+        <td>Holdout murni (Tanpa Augmentasi)</td>
+        <td>Holdout murni (Tanpa Augmentasi)</td>
+        <td class="text-emerald">ZERO LEAKAGE (PASS)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- AUDIT METRIK CLINICAL -->
+  <h2>2. Hasil Audit Empiris — Model 1: Clinical Words (200 Kelas)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Arsitektur</th>
+        <th>Augmentasi</th>
+        <th class="text-right">Train Acc</th>
+        <th class="text-right">Val Acc</th>
+        <th class="text-right">Test Acc</th>
+        <th class="text-right">Macro Prec</th>
+        <th class="text-right">Macro Rec</th>
+        <th class="text-right">Macro F1</th>
+        <th class="text-right">Waktu</th>
+        <th class="text-center">Status Artefak</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="font-bold">E1</td>
+        <td>LSTM</td>
+        <td>NO</td>
+        <td class="text-right">68.19%</td>
+        <td class="text-right">79.47%</td>
+        <td class="text-right font-bold">80.53%</td>
+        <td class="text-right">80.69%</td>
+        <td class="text-right">80.20%</td>
+        <td class="text-right font-bold text-emerald">78.38%</td>
+        <td class="text-right">21.57s</td>
+        <td class="text-center text-emerald">VERIFIED (100% MATCH)</td>
+      </tr>
+      <tr>
+        <td class="font-bold">E2</td>
+        <td>LSTM</td>
+        <td>YES</td>
+        <td class="text-right">90.22%</td>
+        <td class="text-right">90.49%</td>
+        <td class="text-right font-bold">91.38%</td>
+        <td class="text-right">92.03%</td>
+        <td class="text-right">91.01%</td>
+        <td class="text-right font-bold text-emerald">90.70%</td>
+        <td class="text-right">68.5s</td>
+        <td class="text-center text-emerald">VERIFIED (100% MATCH)</td>
+      </tr>
+      <tr>
+        <td class="font-bold">E3</td>
+        <td>GRU</td>
+        <td>NO</td>
+        <td class="text-right">66.03%</td>
+        <td class="text-right">78.96%</td>
+        <td class="text-right font-bold">80.93%</td>
+        <td class="text-right">82.35%</td>
+        <td class="text-right">80.61%</td>
+        <td class="text-right font-bold text-emerald">79.00%</td>
+        <td class="text-right">23.82s</td>
+        <td class="text-center text-emerald">VERIFIED (100% MATCH)</td>
+      </tr>
+      <tr>
+        <td class="font-bold">E4</td>
+        <td>GRU</td>
+        <td>YES</td>
+        <td class="text-right">89.99%</td>
+        <td class="text-right">89.86%</td>
+        <td class="text-right font-bold">90.06%</td>
+        <td class="text-right">91.22%</td>
+        <td class="text-right">89.70%</td>
+        <td class="text-right font-bold text-emerald">89.19%</td>
+        <td class="text-right">69.64s</td>
+        <td class="text-center text-emerald">VERIFIED (100% MATCH)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- AUDIT METRIK ALPHANUMERIC -->
+  <h2>3. Hasil Audit Empiris — Model 2: Alphabet & Numbers (36 Kelas)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Arsitektur</th>
+        <th>Augmentasi</th>
+        <th class="text-right">Train Acc</th>
+        <th class="text-right">Val Acc</th>
+        <th class="text-right">Test Acc</th>
+        <th class="text-right">Macro Prec</th>
+        <th class="text-right">Macro Rec</th>
+        <th class="text-right">Macro F1</th>
+        <th class="text-right">Waktu</th>
+        <th class="text-center">Status Artefak</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="font-bold">E5</td>
+        <td>LSTM</td>
+        <td>NO</td>
+        <td class="text-right">65.38%</td>
+        <td class="text-right">69.80%</td>
+        <td class="text-right font-bold">70.24%</td>
+        <td class="text-right">67.51%</td>
+        <td class="text-right">70.24%</td>
+        <td class="text-right font-bold text-emerald">66.44%</td>
+        <td class="text-right">10.15s</td>
+        <td class="text-center text-emerald">VERIFIED (100% MATCH)</td>
+      </tr>
+      <tr>
+        <td class="font-bold">E6</td>
+        <td>LSTM</td>
+        <td>YES</td>
+        <td class="text-right">80.40%</td>
+        <td class="text-right">81.68%</td>
+        <td class="text-right font-bold">82.14%</td>
+        <td class="text-right">84.00%</td>
+        <td class="text-right">82.14%</td>
+        <td class="text-right font-bold text-emerald">81.11%</td>
+        <td class="text-right">24.04s</td>
+        <td class="text-center text-emerald">VERIFIED (100% MATCH)</td>
+      </tr>
+      <tr>
+        <td class="font-bold">E7</td>
+        <td>GRU</td>
+        <td>NO</td>
+        <td class="text-right">69.35%</td>
+        <td class="text-right">73.27%</td>
+        <td class="text-right font-bold">74.60%</td>
+        <td class="text-right">76.68%</td>
+        <td class="text-right">74.60%</td>
+        <td class="text-right font-bold text-emerald">72.36%</td>
+        <td class="text-right">13.28s</td>
+        <td class="text-center text-emerald">VERIFIED (100% MATCH)</td>
+      </tr>
+      <tr>
+        <td class="font-bold">E8</td>
+        <td>GRU</td>
+        <td>YES</td>
+        <td class="text-right">86.72%</td>
+        <td class="text-right">87.62%</td>
+        <td class="text-right font-bold">84.92%</td>
+        <td class="text-right">85.05%</td>
+        <td class="text-right">84.92%</td>
+        <td class="text-right font-bold text-emerald">83.70%</td>
+        <td class="text-right">24.82s</td>
+        <td class="text-center text-emerald">VERIFIED (100% MATCH)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- PAGE BREAK -->
+  <div class="page-break"></div>
+
+  <!-- AUDIT DAMPAK AUGMENTASI & OVERFITTING -->
+  <h2>4. Analisis Peningkatan Augmentasi & Pencegahan Overfitting</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Model & Arsitektur</th>
+        <th class="text-right">Delta Test Accuracy</th>
+        <th class="text-right">Delta Macro F1</th>
+        <th>Evaluasi Overfitting (Generalization Gap)</th>
+        <th>Status Validasi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Clinical: LSTM (E1 vs E2)</strong></td>
+        <td class="text-right font-bold text-emerald">+10.85%</td>
+        <td class="text-right font-bold text-emerald">+12.32%</td>
+        <td>Train Acc 90.22% vs Val Acc 90.49% (Gap: -0.27%, Tidak Overfit)</td>
+        <td class="text-emerald">VALID</td>
+      </tr>
+      <tr>
+        <td><strong>Clinical: GRU (E3 vs E4)</strong></td>
+        <td class="text-right font-bold text-emerald">+9.13%</td>
+        <td class="text-right font-bold text-emerald">+10.19%</td>
+        <td>Train Acc 89.99% vs Val Acc 89.86% (Gap: +0.13%, Sangat Seimbang)</td>
+        <td class="text-emerald">VALID</td>
+      </tr>
+      <tr>
+        <td><strong>Alphanumeric: LSTM (E5 vs E6)</strong></td>
+        <td class="text-right font-bold text-emerald">+11.90%</td>
+        <td class="text-right font-bold text-emerald">+14.67%</td>
+        <td>Train Acc 80.40% vs Val Acc 81.68% (Gap: -1.28%, Stabil)</td>
+        <td class="text-emerald">VALID</td>
+      </tr>
+      <tr>
+        <td><strong>Alphanumeric: GRU (E7 vs E8)</strong></td>
+        <td class="text-right font-bold text-emerald">+10.32%</td>
+        <td class="text-right font-bold text-emerald">+11.34%</td>
+        <td>Train Acc 86.72% vs Val Acc 87.62% (Gap: -0.90%, Generalisasi Tinggi)</td>
+        <td class="text-emerald">VALID</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- PER-CLASS PERFORMANCE ANALYSIS -->
+  <h2>5. Audit Performa Per Kelas (Top 10 Terbaik vs Terburuk)</h2>
+  
+  <div style="display: flex; gap: 14px;">
+    <!-- Clinical Classes -->
+    <div style="flex: 1;">
+      <h3>Clinical Words (E2 LSTM Aug)</h3>
+      <table>
+        <thead>
+          <tr><th>Kategori</th><th>Daftar Kelas</th><th>Rata-rata F1</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong class="text-emerald">Top 10 Best</strong></td>
+            <td>dokter, periksa, sembuh, resep, pagi, siang, malam, makan, minum, batuk</td>
+            <td class="font-bold text-emerald">100.0%</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#b91c1c;">Top 10 Worst</strong></td>
+            <td>tumbuh, identitas, wali, sepertinya, leher, kaki, sesak, napas, pusing, sedang</td>
+            <td class="font-bold" style="color:#b91c1c;">26.4%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Alphanumeric Classes -->
+    <div style="flex: 1;">
+      <h3>Alphabet & Numbers (E8 GRU Aug)</h3>
+      <table>
+        <thead>
+          <tr><th>Kategori</th><th>Daftar Kelas</th><th>Rata-rata F1</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong class="text-emerald">Top 10 Best</strong></td>
+            <td>0, 2, 3, a, c, e, f, i, j, o</td>
+            <td class="font-bold text-emerald">100.0%</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#b91c1c;">Top 10 Worst</strong></td>
+            <td>6, t, p, 9, h, 5, d, 7, 8, 4</td>
+            <td class="font-bold" style="color:#b91c1c;">50.7%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="box-note" style="background:#fffbeb; border-color:#f59e0b; color:#b45309;">
+    <strong>Catatan Audit atas Klaim Penyebab (Section 15):</strong> Kemiripan gestur antara <em>sesak</em> vs <em>napas</em> dan <em>t</em> vs <em>p</em> dikonfirmasi secara matematis melalui matriks konfusi (tingkat misklasifikasi tinggi antar pasangan tersebut), dan diklasifikasikan sebagai <strong>HYPOTHESIS / QUALITATIVE INTERPRETATION</strong> yang didukung data empiris confusion matrix.
+  </div>
+
+  <!-- DATA INTEGRITY & AUDIT VERDICT -->
+  <h2>6. Verifikasi Integritas Data & Auto-Rollback</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Aspek Audit Integritas</th>
+        <th>Bukti / Hasil Audit</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Kondisi Direktori Dataset Asli</strong></td>
+        <td>Direktori asli utuh (Clinical: 202 folder, Alphanumeric: 36 folder)</td>
+        <td class="text-emerald">VERIFIED (UNCHANGED)</td>
+      </tr>
+      <tr>
+        <td><strong>Pembersihan Sampel Augmentasi</strong></td>
+        <td>Mekanisme in-memory staging + try/finally auto-rollback terverifikasi</td>
+        <td class="text-emerald">VERIFIED (CLEAN)</td>
+      </tr>
+      <tr>
+        <td><strong>Ketersediaan Checkpoint</strong></td>
+        <td>8 berkas .keras dan 8 berkas .tflite lengkap di experiments/</td>
+        <td class="text-emerald">VERIFIED (100% PRESENT)</td>
+      </tr>
+      <tr>
+        <td><strong>Reproducibility</strong></td>
+        <td>Seed deterministik (random=42, numpy=42, tf=42, split=42/43)</td>
+        <td class="text-emerald">REPRODUCIBLE (PASS)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- FINAL VERDICT BOX -->
+  <div style="border: 2px solid #0284c7; background: #f0f9ff; border-radius: 8px; padding: 12px; margin-top: 15px;">
+    <div style="font-size: 11pt; font-weight: 900; color: #0c4a6e; text-transform: uppercase;">
+      KESIMPULAN AUDIT FINAL: PASS (MEMENUHI SELURUH ACCEPTANCE CRITERIA)
+    </div>
+    <div style="font-size: 8.5pt; color: #334155; margin-top: 4px;">
+      Hasil benchmarking 8 eksperimen model ML MedSign (Clinical Words 200 kelas dan Alphabet/Numbers 36 kelas) terbukti <strong>otentik, valid secara metodologi (zero data leakage, holdout test untouched), memiliki checkpoint tersimpan yang dapat digunakan untuk inferensi, dan didukung artefak metrik lengkap</strong>.
+    </div>
+  </div>
+
+</body>
+</html>
