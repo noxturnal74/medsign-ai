@@ -1111,7 +1111,10 @@ def init_db():
         "3273031010940007": "gitapermata123",
         "3578011111950008": "hadikusuma123",
         "3578022202960009": "indahcahyani123",
-        "3578031303970010": "jokosusilo123"
+        "3578031303970010": "jokosusilo123",
+        "3171050501980011": "sariwulandari123",
+        "3171061509970012": "rizkyramadhan123",
+        "3171072510960013": "nadiaputri123"
     }
     
 
@@ -1235,7 +1238,7 @@ def init_db():
                     continue
             if not patient_id:
                 patient_id = str(uuid.uuid4())
-                hashed = hash_password(passwords[nik])
+                hashed = hash_password(passwords.get(nik, "pasien123"))
                 cursor.execute("""
                     INSERT INTO patients (id, no_rm, nik_encrypted, password_hash, name, date_of_birth, created_at, facility_id, gender, verification_status, is_active, must_change_password)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'APPROVED', 1, 0)
