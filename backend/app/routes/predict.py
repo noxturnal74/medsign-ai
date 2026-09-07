@@ -59,13 +59,15 @@ def predict_gesture(request: PredictRequest, service: SLTAdapterService = Depend
     # 4. Inferensi melalui SLTAdapterService
     result = service.predict_bisindo(raw_frames)
     
+    pred = result.get("prediction")
+    clean_pred = pred.replace("_", " ") if pred else None
     return PredictionResult(
-        prediction=result.get("prediction"),
-        label=result.get("label"),
+        prediction=clean_pred,
+        label=clean_pred,
         raw_prediction=result.get("raw_prediction"),
         confidence=result["confidence"],
         top3=[
-            TopAlternative(word=alt["word"], confidence=alt["confidence"])
+            TopAlternative(word=alt["word"].replace("_", " "), confidence=alt["confidence"])
             for alt in result["top3"]
         ],
         status=result.get("status", "not_detected"),

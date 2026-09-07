@@ -598,7 +598,7 @@ export const PatientView = ({ setView, isSplit = false }) => {
                           key={idx}
                           className="animate-slide-up rounded-lg border border-sky-300/30 bg-sky-400/20 px-2.5 py-1 text-xs font-bold uppercase text-sky-100 shadow-sm"
                         >
-                          {t(word) || word}
+                          {(t(word) || word).replace(/[_-]/g, " ")}
                         </span>
                       ))
                     )}

@@ -951,7 +951,7 @@ const handleOpenPatientHistory = async (pat) => {
                 Kalimat Isyarat Pasien
               </span>
               <div className="bg-[#0f172a] text-[#38bdf8] p-5 rounded-2xl min-h-[100px] flex items-center justify-center text-center font-black text-sm md:text-base border border-slate-800 leading-relaxed">
-                {generatedSentence || (sentence && sentence.length > 0 ? sentence.join(' ') : "Menunggu isyarat pasien dari kamera di mode Pasien...")}
+                {generatedSentence || (sentence && sentence.length > 0 ? sentence.join(' ').replace(/[_-]/g, ' ') : "Menunggu isyarat pasien dari kamera di mode Pasien...")}
               </div>
               
               {/* Dropdown voice selector */}
@@ -1352,7 +1352,7 @@ const handleOpenPatientHistory = async (pat) => {
                   Kalimat Isyarat Pasien
                 </span>
                 <div className="bg-[#0f172a] text-[#38bdf8] p-5 rounded-2xl min-h-[100px] flex items-center justify-center text-center font-black text-sm md:text-base border border-slate-800 leading-relaxed">
-                  {generatedSentence || (sentence && sentence.length > 0 ? sentence.join(' ') : "Menunggu isyarat pasien dari kamera di mode Pasien...")}
+                  {generatedSentence || (sentence && sentence.length > 0 ? sentence.join(' ').replace(/[_-]/g, ' ') : "Menunggu isyarat pasien dari kamera di mode Pasien...")}
                 </div>
                 
                 {/* Dropdown voice selector */}

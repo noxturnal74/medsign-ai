@@ -6,6 +6,6 @@ export const vocabulary = Object.entries(medicalDictionary).map(([word, info]) =
   display: info.formal || word.replace(/_/g, ' ').replace(/-/g, ' '),
   category: info.category,
   emergency: !!info.emergency,
-  tts: info.tts || word,
-  formal: info.formal || word
+  tts: (info.tts || word).replace(/[_-]/g, " "),
+  formal: (info.formal || word).replace(/[_-]/g, " ")
 }));

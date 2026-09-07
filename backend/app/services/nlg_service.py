@@ -540,7 +540,7 @@ class NLGService:
         subjective = f"Keluhan utama terdeteksi: {', '.join(gejala).upper() if gejala else '-'}\n" + "\n".join([f"- {m}" for m in patient_messages])
         objective = f"Anjuran/Resep: {', '.join(resep) if resep else '-'}\n" + "\n".join([f"- {m}" for m in doctor_messages if m not in resep])
         
-        patient_text_all = "".join(patient_messages).lower()
+        patient_text_all = " ".join(patient_messages).lower()
         if "dada" in patient_text_all or "sesak" in patient_text_all:
             assessment = "Keluhan sesak atau nyeri dada (Suspek gangguan kardiovaskular/pernapasan)."
             plan = "Rujuk untuk pemeriksaan EKG/fisik jantung segera."

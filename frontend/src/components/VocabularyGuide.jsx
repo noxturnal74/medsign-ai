@@ -63,10 +63,11 @@ export const VocabularyGuide = () => {
   }, [vocabulary, searchQuery, activeCategory]);
 
   const handleWordClick = (item) => {
-    appendWord(item.word);
+    const cleanWord = (item.display || item.word).replace(/[_-]/g, " ");
+    appendWord(cleanWord);
     addLogEntry({
       role: 'patient',
-      text: item.word.toUpperCase(),
+      text: cleanWord.toUpperCase(),
       confidence: 1.0
     });
   };

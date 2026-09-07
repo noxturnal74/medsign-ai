@@ -389,8 +389,10 @@ export const AppProvider = ({ children }) => {
         return dict[k];
       }
     }
-    return key;
-  }, [language]);
+    const vocabItem = vocabList?.find(v => v.word?.toLowerCase() === cleanKey);
+    if (vocabItem?.display) return vocabItem.display;
+    return key.replace(/[_-]/g, ' ');
+  }, [language, vocabList]);
 
   const refreshVocabulary = useCallback(async () => {
     try {
@@ -507,11 +509,10 @@ export const AppProvider = ({ children }) => {
     if (!ttsEnabled || !window.speechSynthesis) return;
     window.speechSynthesis.cancel(); 
     
-    setSpeakingText(text);
-    setSpeakingProgress(0);
-
     // Replace underscores and hyphens with spaces for natural SpeechSynthesis speech
-    const cleanText = text.replace(/[_-]/g, ' ');
+    const cleanText = String(text || '').replace(/[_-]/g, ' ');
+    setSpeakingText(cleanText);
+    setSpeakingProgress(0);
     const utterance = new SpeechSynthesisUtterance(cleanText);
     
     if (selectedVoiceName && availableVoices.length > 0) {
@@ -563,9 +564,11 @@ export const AppProvider = ({ children }) => {
   }, [ttsEnabled, selectedVoiceName, availableVoices]);
 
   const appendWord = useCallback((word) => {
+    if (!word) return;
+    const cleanWord = String(word).replace(/[_-]/g, ' ').trim();
     setSentence((prev) => {
       if (prev.length >= 10) return prev;
-      return [...prev, word];
+      return [...prev, cleanWord];
     });
   }, []);
 
@@ -604,10 +607,12 @@ export const AppProvider = ({ children }) => {
 
   const addLogEntry = useCallback(async (entry, activeSessionId = null) => {
     const timestampStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const cleanText = typeof entry?.text === 'string' ? entry.text.replace(/[_-]/g, ' ') : entry?.text;
     const newEntry = {
       id: Math.random().toString(36).substr(2, 9),
       timestamp: timestampStr,
       ...entry,
+      text: cleanText,
     };
     
     setSessionLog((prev) => [...prev, newEntry]);

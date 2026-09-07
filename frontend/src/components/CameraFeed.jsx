@@ -143,7 +143,7 @@ export const CameraFeed = () => {
 
       if (result.prediction && result.mode !== "spelling" && result.mode !== "demo_spelling" && result.mode !== "model_unavailable" && result.mode !== "spelling_unavailable") {
 
-        const word = result.prediction;
+        const word = result.prediction.replace(/[_-]/g, ' ');
 
         if (word !== lastAppendedWordRef.current) {
 
@@ -540,7 +540,7 @@ export const CameraFeed = () => {
                 </div>
                 <div className="text-center py-1">
                   <span className="text-2xl font-black uppercase text-sky-300">
-                    {lastDetected.prediction || lastDetected.raw_prediction || "Menunggu isyarat..."}
+                    {String(lastDetected.prediction || lastDetected.raw_prediction || "Menunggu isyarat...").replace(/[_-]/g, ' ')}
                   </span>
                 </div>
               </div>

@@ -36,13 +36,17 @@ export const useWebSocket = (url, onPrediction, isHandDetected, landmarks) => {
     const alt1 = pool[Math.floor(Math.random() * pool.length)];
     const alt2 = pool[Math.floor(Math.random() * pool.length)];
     
+    const pickWord = (pick.display || pick.word).replace(/[_-]/g, " ");
+    const alt1Word = (alt1.display || alt1.word).replace(/[_-]/g, " ");
+    const alt2Word = (alt2.display || alt2.word).replace(/[_-]/g, " ");
+
     const result = {
-      prediction: pick.word,
+      prediction: pickWord,
       confidence: confidence,
       top3: [
-        { word: pick.word, confidence: confidence },
-        { word: alt1.word, confidence: parseFloat((confidence * 0.8).toFixed(2)) },
-        { word: alt2.word, confidence: parseFloat((confidence * 0.6).toFixed(2)) }
+        { word: pickWord, confidence: confidence },
+        { word: alt1Word, confidence: parseFloat((confidence * 0.8).toFixed(2)) },
+        { word: alt2Word, confidence: parseFloat((confidence * 0.6).toFixed(2)) }
       ],
       mode: 'demo',
       processing_time_ms: Math.floor(25 + Math.random() * 40)

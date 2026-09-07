@@ -179,7 +179,7 @@ export const SessionLog = () => {
                   </div>
                 </div>
 
-                <p className="text-xs font-semibold leading-relaxed text-slate-700 m-0 break-words">{entry.text}</p>
+                <p className="text-xs font-semibold leading-relaxed text-slate-700 m-0 break-words">{typeof entry.text === "string" ? entry.text.replace(/_/g, " ") : entry.text}</p>
               </div>
             );
           })

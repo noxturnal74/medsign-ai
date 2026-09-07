@@ -1340,267 +1340,267 @@
     "id": 201,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "berat_tengkuk",
+    "tts": "berat tengkuk",
     "formal": "Berat (tengkuk terasa berat)"
   },
   "di_mana": {
     "id": 202,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "di_mana",
+    "tts": "di mana",
     "formal": "Di mana"
   },
   "berapa_lama": {
     "id": 203,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "berapa_lama",
+    "tts": "berapa lama",
     "formal": "Berapa lama"
   },
   "sejak_kapan": {
     "id": 204,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "sejak_kapan",
+    "tts": "sejak kapan",
     "formal": "Sejak kapan"
   },
   "bagian_mana": {
     "id": 205,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "bagian_mana",
+    "tts": "bagian mana",
     "formal": "Bagian mana"
   },
   "seberapa_sering": {
     "id": 206,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "seberapa_sering",
+    "tts": "seberapa sering",
     "formal": "Seberapa sering"
   },
   "terima_kasih": {
     "id": 207,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "terima_kasih",
+    "tts": "terima kasih",
     "formal": "Terima kasih"
   },
   "tidak_mengerti": {
     "id": 208,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "tidak_mengerti",
+    "tts": "tidak mengerti",
     "formal": "Tidak mengerti"
   },
   "rumah_sakit": {
     "id": 209,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "rumah_sakit",
+    "tts": "rumah sakit",
     "formal": "Rumah sakit"
   },
   "rawat_inap": {
     "id": 210,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "rawat_inap",
+    "tts": "rawat inap",
     "formal": "Rawat inap"
   },
   "mati_rasa": {
     "id": 211,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "mati_rasa",
+    "tts": "mati rasa",
     "formal": "Mati rasa"
   },
   "sakit_kepala": {
     "id": 212,
     "category": "Komunikasi Dasar",
     "emergency": true,
-    "tts": "sakit_kepala",
+    "tts": "sakit kepala",
     "formal": "Sakit kepala"
   },
   "minum_obat": {
     "id": 213,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "minum_obat",
+    "tts": "minum obat",
     "formal": "Minum obat"
   },
   "sebelum_makan": {
     "id": 214,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "sebelum_makan",
+    "tts": "sebelum makan",
     "formal": "Sebelum makan"
   },
   "sesudah_makan": {
     "id": 215,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "sesudah_makan",
+    "tts": "sesudah makan",
     "formal": "Sesudah makan"
   },
   "efek_samping": {
     "id": 216,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "efek_samping",
+    "tts": "efek samping",
     "formal": "Efek Samping"
   },
   "tekanan_darah": {
     "id": 217,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "tekanan_darah",
+    "tts": "tekanan darah",
     "formal": "Tekanan darah"
   },
   "berat_badan": {
     "id": 218,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "berat_badan",
+    "tts": "berat badan",
     "formal": "Berat badan"
   },
   "tinggi_badan": {
     "id": 219,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "tinggi_badan",
+    "tts": "tinggi badan",
     "formal": "Tinggi badan"
   },
   "suhu_tubuh": {
     "id": 220,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "suhu_tubuh",
+    "tts": "suhu tubuh",
     "formal": "Suhu tubuh"
   },
   "denyut_nadi": {
     "id": 221,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "denyut_nadi",
+    "tts": "denyut nadi",
     "formal": "Denyut nadi"
   },
   "napas_cepat": {
     "id": 222,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "napas_cepat",
+    "tts": "napas cepat",
     "formal": "Napas cepat"
   },
   "napas_lambat": {
     "id": 223,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "napas_lambat",
+    "tts": "napas lambat",
     "formal": "Napas lambat"
   },
   "foto_rontgen": {
     "id": 224,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "foto_rontgen",
+    "tts": "foto rontgen",
     "formal": "Foto rontgen"
   },
   "ct_scan": {
     "id": 225,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "ct_scan",
+    "tts": "ct scan",
     "formal": "CT SCAN"
   },
   "tidak_stabil": {
     "id": 226,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "tidak_stabil",
+    "tts": "tidak stabil",
     "formal": "Tidak stabil"
   },
   "tidak_sadar": {
     "id": 227,
     "category": "Komunikasi Dasar",
     "emergency": true,
-    "tts": "tidak_sadar",
+    "tts": "tidak sadar",
     "formal": "Tidak sadar"
   },
   "tidak_nyaman": {
     "id": 228,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "tidak_nyaman",
+    "tts": "tidak nyaman",
     "formal": "Tidak nyaman"
   },
   "nomor_antrean": {
     "id": 229,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "nomor_antrean",
+    "tts": "nomor antrean",
     "formal": "Nomor antrean"
   },
   "ruang_tunggu": {
     "id": 230,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "ruang_tunggu",
+    "tts": "ruang tunggu",
     "formal": "Ruang tunggu"
   },
   "ruang_periksa": {
     "id": 231,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "ruang_periksa",
+    "tts": "ruang periksa",
     "formal": "Ruang periksa"
   },
   "kamar_pasien": {
     "id": 232,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "kamar_pasien",
+    "tts": "kamar pasien",
     "formal": "Kamar pasien"
   },
   "instalasi_gawat_darurat": {
     "id": 233,
     "category": "Komunikasi Dasar",
     "emergency": true,
-    "tts": "instalasi_gawat_darurat",
+    "tts": "instalasi gawat darurat",
     "formal": "Instalasi gawat darurat"
   },
   "dokter_spesialis": {
     "id": 234,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "dokter_spesialis",
+    "tts": "dokter spesialis",
     "formal": "Dokter spesialis"
   },
   "janji_temu": {
     "id": 235,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "janji_temu",
+    "tts": "janji temu",
     "formal": "Janji temu"
   },
   "kartu_pasien": {
     "id": 236,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "kartu_pasien",
+    "tts": "kartu pasien",
     "formal": "Kartu pasien"
   },
   "tanda_tangan": {
     "id": 237,
     "category": "Komunikasi Dasar",
     "emergency": false,
-    "tts": "tanda_tangan",
+    "tts": "tanda tangan",
     "formal": "Tanda tangan"
   },
   "halo_test": {
     "id": 238,
     "category": "Kategori Umum & Kata Interaksi",
     "emergency": false,
-    "tts": "halo_test",
-    "formal": "Halo_test"
+    "tts": "halo test",
+    "formal": "Halo test"
   },
   "agar": {
     "id": 239,

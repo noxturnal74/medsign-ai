@@ -162,12 +162,17 @@ async def websocket_stream(websocket: WebSocket):
                 # Log spelling prediction for debugging
                 print(f"[WS_STREAM] [SPELLING] Prediksi: '{result['prediction']}' | Confidence: {result['confidence']:.4f} | Mode: {result['mode']} | Waktu: {result['processing_time_ms']}ms")
 
+                pred = result.get("prediction")
+                clean_pred = pred.replace("_", " ") if pred else None
                 response = {
-                    "prediction": result.get("prediction"),
-                    "label": result.get("label"),
+                    "prediction": clean_pred,
+                    "label": clean_pred,
                     "raw_prediction": result.get("raw_prediction"),
                     "confidence": result["confidence"],
-                    "top3": result["top3"],
+                    "top3": [
+                        {"word": alt["word"].replace("_", " "), "confidence": alt["confidence"]}
+                        for alt in result.get("top3", [])
+                    ],
                     "status": result.get("status", "not_detected"),
                     "detected": bool(result.get("detected", False)),
                     "mode": result["mode"],
@@ -212,12 +217,17 @@ async def websocket_stream(websocket: WebSocket):
                 # Log prediction to console for easy real-time debugging
                 print(f"[WS_STREAM] [CLINICAL] Prediksi: '{result['prediction']}' | Confidence: {result['confidence']:.4f} | Mode: {result['mode']} | Waktu: {result['processing_time_ms']}ms")
 
+                pred = result.get("prediction")
+                clean_pred = pred.replace("_", " ") if pred else None
                 response = {
-                    "prediction": result.get("prediction"),
-                    "label": result.get("label"),
+                    "prediction": clean_pred,
+                    "label": clean_pred,
                     "raw_prediction": result.get("raw_prediction"),
                     "confidence": result["confidence"],
-                    "top3": result["top3"],
+                    "top3": [
+                        {"word": alt["word"].replace("_", " "), "confidence": alt["confidence"]}
+                        for alt in result.get("top3", [])
+                    ],
                     "status": result.get("status", "not_detected"),
                     "detected": bool(result.get("detected", False)),
                     "mode": result["mode"],
