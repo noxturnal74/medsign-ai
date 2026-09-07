@@ -136,71 +136,109 @@ export function ScrollyHero({ setView }) {
 
 
 
-  // ── Draw frame ──────────────────────────────────────────────────
-
+  // ── Draw frame (with instant nearest-frame fallback) ───────────
   const drawFrame = useCallback((idx) => {
-
     const canvas = canvasRef.current;
+    if (!canvas) return;
 
-    const img    = imagesRef.current[Math.min(Math.max(Math.round(idx), 0), TOTAL_FRAMES - 1)];
+    const targetIdx = Math.min(Math.max(Math.round(idx), 0), TOTAL_FRAMES - 1);
+    let img = imagesRef.current?.[targetIdx];
 
-    if (!canvas || !img?.complete || img.naturalWidth === 0) return;
+    // Fallback to nearest loaded frame if target frame isn't loaded yet
+    if (!img?.complete || img.naturalWidth === 0) {
+      for (let offset = 1; offset < TOTAL_FRAMES; offset++) {
+        const left = targetIdx - offset;
+        const right = targetIdx + offset;
+        if (left >= 0 && imagesRef.current?.[left]?.complete && imagesRef.current[left].naturalWidth > 0) {
+          img = imagesRef.current[left];
+          break;
+        }
+        if (right < TOTAL_FRAMES && imagesRef.current?.[right]?.complete && imagesRef.current[right].naturalWidth > 0) {
+          img = imagesRef.current[right];
+          break;
+        }
+      }
+    }
+
+    if (!img?.complete || img.naturalWidth === 0) return;
 
     const ctx = canvas.getContext('2d');
-
     const { width, height } = canvas;
-
-    // cover: fill entire canvas, crop overflow (no bars)
-
     const scale = Math.max(width / img.naturalWidth, height / img.naturalHeight);
-
     const dw = img.naturalWidth  * scale;
-
     const dh = img.naturalHeight * scale;
-
     ctx.clearRect(0, 0, width, height);
-
     ctx.drawImage(img, (width - dw) / 2, (height - dh) / 2, dw, dh);
-
   }, []);
 
-
-
-  // ── Preload frames ──────────────────────────────────────────────
-
+  // ── Preload frames progressively without blocking UI ───────────
   useEffect(() => {
-
     let mounted = true;
-
     let done = 0;
-
-    const imgs = Array.from({ length: TOTAL_FRAMES }, (_, i) => {
-
-      const img = new Image();
-
-      img.src = frameUrl(i);
-
-      img.onload = img.onerror = () => {
-
-        done++;
-
-        if (!mounted) return;
-
-        setLoadProgress(Math.round((done / TOTAL_FRAMES) * 100));
-
-        if (done === TOTAL_FRAMES) setLoaded(true);
-
-      };
-
-      return img;
-
-    });
-
+    const imgs = new Array(TOTAL_FRAMES);
     imagesRef.current = imgs;
 
-    return () => { mounted = false; };
+    // Step 1: Immediately load frame 0 to display hero right away
+    const firstImg = new Image();
+    firstImg.src = frameUrl(0);
+    firstImg.onload = () => {
+      if (!mounted) return;
+      imgs[0] = firstImg;
+      done++;
+      setLoadProgress(Math.round((done / TOTAL_FRAMES) * 100));
+      drawFrame(0);
+      setLoaded(true); // Hero is immediately ready and visible!
+    };
+    firstImg.onerror = () => {
+      if (!mounted) return;
+      setLoaded(true);
+    };
+    imgs[0] = firstImg;
 
-  }, []);
+    // Safety fallback: ensure UI is displayed within 600ms regardless of network speed
+    const fallbackTimer = setTimeout(() => {
+      if (mounted) setLoaded(true);
+    }, 600);
+
+    // Step 2: Load keyframes first (every 2nd frame) for instant smooth scrubbing
+    const keyIndices = [];
+    for (let i = 2; i < TOTAL_FRAMES; i += 2) {
+      keyIndices.push(i);
+    }
+    // Step 3: Then load odd in-between frames
+    const remainingIndices = [];
+    for (let i = 1; i < TOTAL_FRAMES; i += 2) {
+      remainingIndices.push(i);
+    }
+
+    const loadQueue = [...keyIndices, ...remainingIndices];
+    let currentIndex = 0;
+    const CONCURRENCY = 6; // Optimal concurrent image downloads without choking connection pool
+
+    const loadNext = () => {
+      if (!mounted || currentIndex >= loadQueue.length) return;
+      const idx = loadQueue[currentIndex++];
+      const img = new Image();
+      img.src = frameUrl(idx);
+      img.onload = img.onerror = () => {
+        done++;
+        if (mounted) {
+          setLoadProgress(Math.round((done / TOTAL_FRAMES) * 100));
+        }
+        loadNext();
+      };
+      imgs[idx] = img;
+    };
+
+    for (let c = 0; c < CONCURRENCY; c++) {
+      loadNext();
+    }
+
+    return () => {
+      mounted = false;
+      clearTimeout(fallbackTimer);
+    };
+  }, [drawFrame]);
 
 
 
