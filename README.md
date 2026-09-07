@@ -246,7 +246,7 @@ SUPABASE_KEY=
 On startup, a `credentials.txt` file is written to the root folder with all generated passwords. Passwords are hashed in the database using PBKDF2-SHA256.
 - **Super Admin:** Username `administrator` / Password `TahutekumEnak123!@#`
 - **Admin RSI:** Username `adminrsi` / Password `rsipalingtop`
-- **Doctor RSI:** Email `bitapargazen@gmail.com` / Password `bitaganteng123`
+- **Doctor RSI:** Email `dr.bita@medsign.local` / Password `DokterRSI2026!`
 - **Patient RSI:** NIK `390572816403` / Password `glennperkasa123`
 
 ### Identity Verification (KTP & NIK Workflow)

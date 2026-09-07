@@ -93,7 +93,7 @@ def get_number_pose(num):
 def main():
     print("=== MEDSIGN AI - ALPHABET & NUMBERS DATASET BUILDER ===")
     
-    classes = [chr(i) for i in range(ord('A'), ord('Z') + 1)] + [str(i) for i in range(1, 10)]
+    classes = [chr(i) for i in range(ord('A'), ord('Z') + 1)] + [str(i) for i in range(10)]
     label_map = {c: i for i, c in enumerate(classes)}
 
     X_list = []
@@ -145,7 +145,7 @@ def main():
 
     # 2. Synthesize coordinates for numbers 1-9 (indexes 26 to 34)
     print("Generating synthetic coordinates for numbers 1-9...")
-    for num in range(1, 10):
+    for num in range(10):
         label = str(num)
         base_pts = get_number_pose(num)
         

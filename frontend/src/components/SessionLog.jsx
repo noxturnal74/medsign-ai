@@ -17,14 +17,44 @@ export const SessionLog = () => {
     }
   }, [sessionLog]);
 
+  const fallbackCopy = (text) => {
+    try {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      const ok = document.execCommand('copy');
+      document.body.removeChild(textarea);
+      if (ok) {
+        showToast('Log percakapan disalin ke papan klip.', 'success');
+      } else {
+        showToast('Gagal menyalin ke papan klip.', 'error');
+      }
+    } catch {
+      showToast('Gagal menyalin ke papan klip.', 'error');
+    }
+  };
+
   const handleCopy = () => {
     if (sessionLog.length === 0) return;
     const text = orderedLogs
       .map((entry) => `[${entry.timestamp}] ${entry.role === 'doctor' ? 'DOKTER' : 'PASIEN'}: ${entry.text}`)
       .join('\n');
 
-    navigator.clipboard.writeText(text);
-    showToast('Log percakapan disalin ke papan klip.', 'success');
+    try {
+      if (navigator?.clipboard?.writeText) {
+        navigator.clipboard.writeText(text)
+          .then(() => showToast('Log percakapan disalin ke papan klip.', 'success'))
+          .catch(() => fallbackCopy(text));
+        return;
+      }
+    } catch (e) {
+      // ignore
+    }
+    fallbackCopy(text);
   };
 
   const handleExport = () => {

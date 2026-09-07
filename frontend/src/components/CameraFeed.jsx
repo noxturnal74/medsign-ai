@@ -516,7 +516,7 @@ export const CameraFeed = () => {
 
             {/* Doctor latest message overlay (Top floating card) */}
             {(() => {
-              const lastDoctorMessage = sessionLog.find(entry => entry.role === 'doctor');
+              const lastDoctorMessage = [...sessionLog].reverse().find(entry => entry.role === 'doctor');
               if (!lastDoctorMessage) return null;
               return (
                 <div className="absolute top-24 left-4 right-4 z-50 glass-panel border-emerald-400/50 bg-emerald-950/85 p-3.5 rounded-2xl flex items-start gap-3 shadow-xl backdrop-blur-md animate-slide-up text-white max-w-lg mx-auto">

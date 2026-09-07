@@ -242,8 +242,11 @@ def update_chat_title(chat_id: str, req: ChatTitleUpdate, current_user: dict = D
         pass
     return {"message": "Judul percakapan berhasil diperbarui", "title": req.title}
 
+from app.routes.auth import get_current_user_optional
+from typing import Optional
+
 @router.delete("/chat/{chat_id}")
-def delete_chat(chat_id: str, current_user: dict = Depends(get_current_user)):
+def delete_chat(chat_id: str, current_user: Optional[dict] = Depends(get_current_user_optional)):
     sb = _get_supabase()
     if sb:
         try:

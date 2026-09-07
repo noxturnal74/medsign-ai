@@ -260,20 +260,20 @@ export const About = ({ setView }) => {
             </div>
 
             <div className="grid gap-4 sm:grid-cols-1 max-w-xs">
-              <div className="surface-panel rounded-3xl p-4 flex flex-col items-center text-center gap-3 border border-white/40 shadow-sm hover:scale-[1.02] transition-all bg-white/50">
-                <div className="w-full rounded-2xl bg-white border border-slate-100 p-2 flex items-center justify-center">
+              <div className="surface-panel rounded-3xl p-5 flex flex-col items-center text-center gap-3 border border-white/40 shadow-sm hover:scale-[1.02] transition-all bg-white/50">
+                <div className="w-full h-44 rounded-2xl bg-white border border-slate-100 p-2 flex items-center justify-center overflow-hidden shadow-inner">
                   <img
                     src="/assets/kestrilia.png"
                     alt="Dr. Kestrilia Rega Prillianti., S.Si., M.Si"
                     onClick={() => setZoomedImg({ name: "Dr. Kestrilia Rega Prillianti., S.Si., M.Si", role: "Dosen Pembimbing", img: "/assets/kestrilia.png" })}
-                    className="w-28 h-28 rounded-2xl object-cover shadow-inner cursor-pointer hover:scale-105 transition-all duration-300"
+                    className="h-full w-auto max-w-full object-contain cursor-pointer hover:scale-105 transition-all duration-300 drop-shadow-sm"
                     style={{ backgroundColor: '#ffffff' }}
                     title="Klik untuk memperbesar foto"
                   />
                 </div>
                 <div>
-                  <span className="block text-xs font-black text-slate-900">Dr. Kestrilia Rega Prillianti., S.Si., M.Si</span>
-                  <span className="text-[10px] font-semibold text-slate-500">Dosen Pembimbing</span>
+                  <span className="block text-xs font-black text-slate-900 leading-snug">Dr. Kestrilia Rega Prillianti., S.Si., M.Si</span>
+                  <span className="text-[10px] font-semibold text-slate-500 mt-0.5 block">Dosen Pembimbing</span>
                 </div>
               </div>
             </div>
@@ -305,7 +305,7 @@ export const About = ({ setView }) => {
               <img
                 src={zoomedImg.img}
                 alt={zoomedImg.name}
-                className="max-h-[320px] w-auto max-w-full rounded-xl object-cover shadow-lg"
+                className="max-h-[70vh] w-auto max-w-full rounded-xl object-contain shadow-lg"
                 style={{ backgroundColor: '#ffffff' }}
               />
             </div>

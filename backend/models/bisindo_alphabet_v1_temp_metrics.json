@@ -1,0 +1,19 @@
+{
+  "generated_at": "2026-09-06T23:28:33",
+  "model_name": "bisindo_alphabet_v1_temp",
+  "architecture": "gru",
+  "labels_version": "dynamic_alphabet_v1",
+  "frame_count": 30,
+  "feature_count": 63,
+  "num_classes": 36,
+  "num_samples": 5487,
+  "split_strategy": "stratified_by_label",
+  "train_samples": 3511,
+  "val_samples": 878,
+  "test_samples": 1098,
+  "test_loss": 0.2630985975265503,
+  "test_accuracy": 0.9289617538452148,
+  "h5_model": "D:\\PKM\\medsign-ai\\backend\\models\\bisindo_alphabet_v1_temp.h5",
+  "tflite_model": "D:\\PKM\\medsign-ai\\backend\\models\\bisindo_alphabet_v1_temp.tflite",
+  "tflite_size_kb": 156.68
+}

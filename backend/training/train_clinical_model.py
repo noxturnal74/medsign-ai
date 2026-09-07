@@ -22,6 +22,10 @@ from app.ml.labels import get_model_contract, load_label_config, load_labels
 from app.ml.preprocess import FEATURE_COUNT, FRAME_COUNT, normalize_sequence
 from validate_dataset import audit_dataset, render_markdown
 
+import os
+os.environ["HDF5_USE_FILE_LOCKING"] = "FALSE"
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
+
 try:
     import tensorflow as tf
     from tensorflow.keras import Sequential
@@ -305,12 +309,13 @@ def main() -> int:
     y_cat = to_categorical(y, num_classes=len(labels))
 
     model = build_model(args.architecture, len(labels), args.learning_rate)
+    keras_path = args.models_dir / f"{args.model_name}.keras"
     h5_path = args.models_dir / f"{args.model_name}.h5"
     tflite_path = args.models_dir / f"{args.model_name}.tflite"
 
     callbacks = [
         EarlyStopping(monitor="val_accuracy", patience=20, restore_best_weights=True),
-        ModelCheckpoint(h5_path, monitor="val_accuracy", save_best_only=True),
+        ModelCheckpoint(keras_path, monitor="val_accuracy", save_best_only=True),
         ReduceLROnPlateau(monitor="val_loss", factor=0.5, patience=8, min_lr=1e-6),
     ]
 
@@ -325,7 +330,11 @@ def main() -> int:
         verbose=1,
     )
 
-    best_model = tf.keras.models.load_model(h5_path)
+    best_model = tf.keras.models.load_model(keras_path)
+    try:
+        best_model.save(h5_path)
+    except Exception as exc:
+        print(f"[WARN] Fallback save H5 dilewati: {exc}")
     test_loss, test_accuracy = best_model.evaluate(X[test_idx], y_cat[test_idx], verbose=0)
     probs = best_model.predict(X[test_idx], verbose=0)
     y_pred = np.argmax(probs, axis=1)

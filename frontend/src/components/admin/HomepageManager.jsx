@@ -17,7 +17,6 @@ const ALL_MODULES = [
   { id: 'articles',       label: 'Artikel',                icon: <Newspaper size={14} />, color: 'emerald', hint: 'Daftar artikel blog' },
   { id: 'brand_pkm',      label: 'Brand & Program PKM',    icon: <Globe size={14} />,     color: 'violet', hint: 'Brand & program akademik' },
   { id: 'video_tutorial', label: 'Video Tutorial',         icon: <Video size={14} />,     color: 'rose',   hint: 'Video panduan & status demo' },
-  { id: 'team_gallery',   label: 'Tentang Kami',           icon: <Users size={14} />,     color: 'sky',    hint: 'Galeri dokumentasi tim' },
 ];
 
 const tabColor = (c) => ({
@@ -1024,9 +1023,28 @@ const ReviewForm = ({ item, onSave, onClose }) => {
   );
 };
 
+const resolveIgThumbnail = (url) => {
+  if (!url) return '';
+  const clean = url.split('?')[0].replace(/\/$/, '');
+  const match = clean.match(/instagram\.com\/(?:p|reel|tv)\/([A-Za-z0-9_-]+)/);
+  if (match) {
+    return `https://www.instagram.com/p/${match[1]}/media/?size=l`;
+  }
+  return url;
+};
+
 const InstagramForm = ({ item, onSave, onClose }) => {
   const [f, setF] = useState(item || { post_url: '', thumbnail_image: '', caption_short: '', display_order: 0, is_active: 1 });
-  const set = (k, v) => setF(p => ({ ...p, [k]: v }));
+  const set = (k, v) => {
+    setF(p => {
+      const next = { ...p, [k]: v };
+      if (k === 'post_url' && (!p.thumbnail_image || p.thumbnail_image.includes('instagram.com'))) {
+        const autoThumb = resolveIgThumbnail(v);
+        if (autoThumb) next.thumbnail_image = autoThumb;
+      }
+      return next;
+    });
+  };
   return (
     <div className="flex flex-col gap-3">
       <Field label="URL Post Instagram" required><input className={inputCls} value={f.post_url} onChange={e => set('post_url', e.target.value)} placeholder="https://www.instagram.com/p/..." /></Field>

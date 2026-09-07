@@ -177,26 +177,36 @@ export const ChatHistory = ({ setView }) => {
     if (e) e.stopPropagation();
     if (!window.confirm('Hapus riwayat sesi / percakapan ini secara permanen?')) return;
     try {
-      const res = await fetch(`${apiBaseUrl.replace(/\/$/, '')}/api/v1/chat/${cid}`, {
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      
+      // Hapus dari endpoint chat dan sessions database
+      await fetch(`${apiBaseUrl.replace(/\/$/, '')}/api/v1/chat/${cid}`, {
         method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      if (res.ok) {
-        showToast('Sesi chat berhasil dihapus', 'success');
-        const remaining = chatList.filter(c => c.id !== cid);
-        setChatList(remaining);
-        if (selectedChatId === cid) {
-          if (remaining.length > 0) {
-            setSelectedChatId(remaining[0].id);
-          } else {
-            setSelectedChatId('');
-            setMessages([]);
-            setSelectedSoap('');
-            setMobileShowDetail(false);
-          }
+        headers
+      }).catch(() => {});
+      
+      await fetch(`${apiBaseUrl.replace(/\/$/, '')}/api/v1/sessions/${cid}`, {
+        method: 'DELETE',
+        headers
+      }).catch(() => {});
+
+      showToast('Sesi chat berhasil dihapus', 'success');
+      const remaining = chatList.filter(c => c.id !== cid);
+      setChatList(remaining);
+      
+      if (localStorage.getItem('medsign_chat_id') === cid) {
+        localStorage.removeItem('medsign_chat_id');
+      }
+
+      if (selectedChatId === cid) {
+        if (remaining.length > 0) {
+          setSelectedChatId(remaining[0].id);
+        } else {
+          setSelectedChatId('');
+          setMessages([]);
+          setSelectedSoap('');
+          setMobileShowDetail(false);
         }
-      } else {
-        showToast('Gagal menghapus sesi', 'error');
       }
     } catch {
       showToast('Koneksi gagal', 'error');

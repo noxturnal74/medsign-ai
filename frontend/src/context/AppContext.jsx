@@ -610,7 +610,7 @@ export const AppProvider = ({ children }) => {
       ...entry,
     };
     
-    setSessionLog((prev) => [newEntry, ...prev]);
+    setSessionLog((prev) => [...prev, newEntry]);
 
     if (currentUser && activeSessionId) {
       // Save to database for logged in user session
@@ -640,9 +640,20 @@ export const AppProvider = ({ children }) => {
     }
   }, [speak, currentUser]);
 
-  const clearLog = useCallback(() => {
+  const clearLog = useCallback(async () => {
     setSessionLog([]);
-  }, []);
+    if (activeSessionId) {
+      try {
+        const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+        await fetch(`${apiBaseUrl.replace(/\/$/, '')}/api/v1/sessions/${activeSessionId}/logs`, {
+          method: 'DELETE',
+          headers: currentUser?.token ? { 'Authorization': `Bearer ${currentUser.token}` } : {}
+        });
+      } catch (e) {
+        console.error("Gagal menghapus log sesi dari database:", e);
+      }
+    }
+  }, [activeSessionId, currentUser]);
 
   const appendWordRecommendation = useCallback((word) => {
     setSentence(prev => {

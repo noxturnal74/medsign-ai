@@ -98,9 +98,9 @@ export const useWebSocket = (url, onPrediction, isHandDetected, landmarks) => {
               letterHistoryRef.current.shift();
             }
             
-            // Histeresis: Huruf harus konsisten terdeteksi 3 frame berturut-turut (~1.5 detik)
-            const allEqual = letterHistoryRef.current.length === 3 && 
-                             letterHistoryRef.current.every(val => val === letter);
+            // Histeresis responsif: 2 frame konsisten (~1.0 detik) untuk mengetik huruf
+            const allEqual = letterHistoryRef.current.length >= 2 && 
+                             letterHistoryRef.current.slice(-2).every(val => val === letter);
                              
             if (allEqual && letter !== lastTypedLetterRef.current) {
               appendLetter(letter);
@@ -202,13 +202,18 @@ export const useWebSocket = (url, onPrediction, isHandDetected, landmarks) => {
       if (isConnected && wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
         try {
           if (spellingMode) {
-            // MODE EJA: Kirim 1 frame koordinat landmarks teranyar
             if (!landmarksRef.current || landmarksRef.current.length === 0) return;
             const flatLandmarks = landmarksRef.current.flatMap(l => [l.x, l.y, l.z]);
             
+            let paddedFrames = [...frameBufferRef.current];
+            while (paddedFrames.length < 30) {
+              paddedFrames.unshift(paddedFrames.length > 0 ? paddedFrames[0] : flatLandmarks);
+            }
+            
             wsRef.current.send(JSON.stringify({
               mode: 'spelling',
-              landmarks: flatLandmarks
+              landmarks: flatLandmarks,
+              frames: paddedFrames
             }));
           } else {
             // MODE KOSAKATA KLINIS: Kirim 30-frame sequence

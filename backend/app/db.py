@@ -24,7 +24,7 @@ if _env_path.exists():
         print("Manual env load failed:", e)
 
 DB_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "medsign.db")
-ENCRYPTION_KEY = os.getenv("MEDSIGN_ENCRYPTION_KEY", "medsign_secure_nik_key_2026")
+ENCRYPTION_KEY = os.getenv("MEDSIGN_ENCRYPTION_KEY", "medsign_dev_key_default")
 
 SUPABASE_URL = os.getenv("SUPABASE_URL", "")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY") or os.getenv("SUPABASE_SECRET_KEY") or os.getenv("SUPABASE_PUBLISHABLE_KEY") or ""
@@ -1006,7 +1006,8 @@ def init_db():
     passwords = {
         "administrator": "TahutekumEnak123!@#",
         "adminrsi": "rsipalingtop",
-        "bitapargazen@gmail.com": "bitaganteng123",
+        "dr.bita@medsign.local": os.getenv("DEMO_DOCTOR_PASSWORD", "DokterRSI2026!"),
+        "bitapargazen@gmail.com": os.getenv("DEMO_DOCTOR_PASSWORD", "DokterRSI2026!"),
         "390572816403": "glennperkasa123"
     }
     
@@ -1076,7 +1077,7 @@ def init_db():
 
     # 4. Seed Doctors
     docs_to_seed = [
-        ("bitapargazen@gmail.com", "Dr. Bita Pargazen", "Umum", "fac_rsi", "bitapargazen@gmail.com"),
+        ("dr.bita@medsign.local", "Dr. Bita Pargazen", "Umum", "fac_rsi", "dr.bita@medsign.local"),
         ("dr_budi@rsi.com", "Dr. Budi Santoso", "Spesialis THT", "fac_rsi", "dr_budi@rsi.com"),
         ("dr_siti@sentosa.com", "Dr. Siti Aminah", "Umum", "fac_sentosa", "dr_siti@sentosa.com"),
         ("dr_agus@sentosa.com", "Dr. Agus Wijaya", "Spesialis Anak", "fac_sentosa", "dr_agus@sentosa.com"),
@@ -1121,8 +1122,8 @@ def init_db():
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
             """, (str(uuid.uuid4()), "RM" + nik, encrypted_nik, hashed, name, dob, datetime.utcnow().isoformat(), fac_id, status, 1 if status == "APPROVED" else 0))
 
-    # 5b. Seed 3 pasien khusus ter-link ke Dr. Bita Pargazen (bitapargazen@gmail.com)
-    cursor.execute("SELECT id FROM doctors WHERE email = 'bitapargazen@gmail.com'")
+    # 5b. Seed 3 pasien khusus ter-link ke Dr. Bita Pargazen (dr.bita@medsign.local)
+    cursor.execute("SELECT id FROM doctors WHERE email IN ('dr.bita@medsign.local', 'bitapargazen@gmail.com')")
     bita_row = cursor.fetchone()
     if bita_row:
         bita_doctor_id = bita_row["id"]
@@ -1262,8 +1263,8 @@ FACILITY ADMINS:
 
 DOCTORS:
 - Facility: Rumah Sakit Islam Jakarta (RSI)
-  Email: bitapargazen@gmail.com
-  Password: bitaganteng123
+  Email: dr.bita@medsign.local
+  Password: DokterRSI2026!
 - Facility: Rumah Sakit Islam Jakarta (RSI)
   Email: dr_budi@rsi.com
   Password: {dr_budi_pwd}
@@ -1535,6 +1536,7 @@ def db_delete_session(session_id: str) -> bool:
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute("DELETE FROM session_logs WHERE session_id = ?", (session_id,))
+        cursor.execute("UPDATE medical_records SET session_id = NULL WHERE session_id = ?", (session_id,))
         cursor.execute("DELETE FROM sessions WHERE id = ?", (session_id,))
         conn.commit()
         conn.close()

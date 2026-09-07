@@ -63,7 +63,7 @@ def train_alphabet_model(epochs=80, model_name="bisindo_alphabet_v1"):
     y = data['y'] # Shape: (samples,)
 
     # Daftar Kelas Abjad A-Z & Angka 1-9
-    classes = [chr(i) for i in range(ord('A'), ord('Z') + 1)] + [str(i) for i in range(1, 10)]
+    classes = [chr(i) for i in range(ord('A'), ord('Z') + 1)] + [str(i) for i in range(10)]
     n_classes = len(classes)
     
     print(f"Jumlah sampel koordinat berhasil dimuat: {X.shape[0]}")

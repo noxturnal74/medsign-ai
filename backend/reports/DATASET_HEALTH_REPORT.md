@@ -1,21 +1,21 @@
 # DATASET_HEALTH_REPORT
 
-Generated at: 2026-08-28T21:06:13
+Generated at: 2026-09-07T09:30:25
 
 ## Contract
 
 - Version: `medsign-clinical-full-v1`
 - Frame count: `30`
 - Feature count: `63`
-- Labels: `242`
+- Labels: `249`
 
 ## Summary
 
 - Filter label: `all`
 - Filter signer: `all`
 - Max empty frame ratio: `10.00%`
-- Valid samples: **22039**
-- Invalid samples: **1**
+- Valid samples: **22689**
+- Invalid samples: **2**
 
 ## Samples Per Label
 
@@ -41,7 +41,6 @@ Generated at: 2026-08-28T21:06:13
 | `dada` | 163 | 4 | 0.00% | ok |
 | `dahak` | 190 | 4 | 0.00% | ok |
 | `pilek` | 150 | 3 | 0.00% | ok |
-| `flu` | 0 | 0 | - | missing |
 | `tenggorokan` | 100 | 1 | 0.00% | ok |
 | `paru-paru` | 155 | 4 | 0.00% | ok |
 | `asma` | 31 | 3 | 0.00% | ok |
@@ -201,7 +200,7 @@ Generated at: 2026-08-28T21:06:13
 | `dokter_spesialis` | 75 | 2 | 0.00% | ok |
 | `jadwal` | 75 | 2 | 0.00% | ok |
 | `janji_temu` | 75 | 2 | 0.00% | ok |
-| `rujukan` | 0 | 0 | - | missing |
+| `rujukan` | 75 | 2 | 0.00% | ok |
 | `administrasi` | 75 | 2 | 0.00% | ok |
 | `pembayaran` | 75 | 2 | 0.00% | ok |
 | `bpjs` | 75 | 2 | 0.00% | ok |
@@ -210,8 +209,8 @@ Generated at: 2026-08-28T21:06:13
 | `kartu_pasien` | 75 | 2 | 0.00% | ok |
 | `pendamping` | 75 | 2 | 0.00% | ok |
 | `wali` | 0 | 0 | - | missing |
-| `tanda_tangan` | 0 | 0 | - | missing |
-| `selesai` | 0 | 0 | - | missing |
+| `tanda_tangan` | 75 | 2 | 0.00% | ok |
+| `selesai` | 50 | 1 | 0.00% | ok |
 | `halo_test` | 0 | 0 | - | missing |
 | `a` | 0 | 0 | - | missing |
 | `b` | 0 | 0 | - | missing |
@@ -263,6 +262,14 @@ Generated at: 2026-08-28T21:06:13
 | `mereka` | 25 | 1 | 0.00% | low_sample |
 | `saya` | 75 | 2 | 0.00% | ok |
 | `sore` | 50 | 1 | 0.00% | ok |
+| `aku` | 75 | 2 | 0.00% | ok |
+| `sepertinya` | 0 | 0 | - | missing |
+| `sampai` | 50 | 1 | 0.00% | ok |
+| `sehingga` | 75 | 2 | 0.00% | ok |
+| `sering` | 25 | 1 | 0.00% | low_sample |
+| `tetapi` | 75 | 2 | 0.00% | ok |
+| `tidak` | 75 | 2 | 0.00% | ok |
+| `yang` | 75 | 2 | 0.00% | ok |
 
 ## Signer Distribution
 
@@ -364,9 +371,6 @@ Generated at: 2026-08-28T21:06:13
 - `albert_cheng`: 75
 - `glenn`: 50
 - `loren`: 25
-
-### flu
-- Belum ada data.
 
 ### tenggorokan
 - `albert_cheng`: 100
@@ -1065,7 +1069,8 @@ Generated at: 2026-08-28T21:06:13
 - `loren`: 25
 
 ### rujukan
-- Belum ada data.
+- `glenn`: 50
+- `loren`: 25
 
 ### administrasi
 - `glenn`: 50
@@ -1098,10 +1103,11 @@ Generated at: 2026-08-28T21:06:13
 - Belum ada data.
 
 ### tanda_tangan
-- Belum ada data.
+- `glenn`: 50
+- `loren`: 25
 
 ### selesai
-- Belum ada data.
+- `glenn`: 50
 
 ### halo_test
 - Belum ada data.
@@ -1267,8 +1273,38 @@ Generated at: 2026-08-28T21:06:13
 ### sore
 - `glenn`: 50
 
+### aku
+- `glenn`: 50
+- `loren`: 25
+
+### sepertinya
+- Belum ada data.
+
+### sampai
+- `glenn`: 50
+
+### sehingga
+- `glenn`: 50
+- `loren`: 25
+
+### sering
+- `loren`: 25
+
+### tetapi
+- `glenn`: 50
+- `loren`: 25
+
+### tidak
+- `glenn`: 50
+- `loren`: 25
+
+### yang
+- `glenn`: 50
+- `loren`: 25
+
 ## Invalid Samples
 
 | File | Reason | Quarantine |
 |---|---|---|
+| `D:\PKM\medsign-ai\backend\data\landmarks\sakit\albert_william\sakit_albert_william_session123_sakit_001.npy` | empty_frame_ratio 100.00% melebihi batas 10.00% | `-` |
 | `D:\PKM\medsign-ai\backend\data\landmarks\sakit\albert_william\sakit_albert_william_test_sess_valid_sakit_999.npy` | empty_frame_ratio 100.00% melebihi batas 10.00% | `-` |

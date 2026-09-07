@@ -265,9 +265,9 @@ export const Layout = ({ children, currentView, setView }) => {
       
 
       {!['patient','doctor','super_admin','split','data-collection','motion'].includes(currentView) && (
-        <footer className="mx-auto mb-6 mt-8 w-full max-w-7xl rounded-[32px] border border-slate-200/50 bg-white/50 p-6 md:p-10 backdrop-blur-xl text-slate-800">
-
-        <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 text-xs font-semibold leading-relaxed">
+        <footer className="w-full mt-16 border-t border-slate-200/70 bg-white/70 backdrop-blur-xl text-slate-800">
+          <div className="mx-auto w-full max-w-7xl px-6 py-10 md:px-10 md:py-12">
+            <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 text-xs font-semibold leading-relaxed">
 
 
 
@@ -458,7 +458,7 @@ export const Layout = ({ children, currentView, setView }) => {
           <span className="uppercase tracking-widest">PKM-KC 2026 · Universitas Ma Chung</span>
 
         </div>
-
+          </div>
       </footer>
       )}
 

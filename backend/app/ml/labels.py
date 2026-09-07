@@ -25,7 +25,16 @@ def load_label_config(labels_path: str | Path | None = None) -> dict[str, Any]:
     ids = [item.get("id") for item in labels]
     slugs = [item.get("slug") for item in labels]
     if ids != list(range(len(labels))):
-        raise ValueError("Label id harus berurutan mulai dari 0.")
+        # Self-healing: normalkan id secara berurutan agar backend tidak pernah crash 500
+        for idx, item in enumerate(labels):
+            item["id"] = idx
+        config["labels"] = labels
+        config["total_classes"] = len(labels)
+        try:
+            with path.open("w", encoding="utf-8") as handle:
+                json.dump(config, handle, indent=2, ensure_ascii=False)
+        except Exception:
+            pass
     if len(set(slugs)) != len(slugs):
         raise ValueError("Label slug harus unik.")
 

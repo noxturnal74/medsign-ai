@@ -53,6 +53,11 @@ RATE_LIMIT_MAX_REQUESTS = 180  # Max 180 requests per minute per IP
 @app.middleware("http")
 async def rate_limiting_middleware(request: Request, call_next):
     client_ip = request.client.host if request.client else "unknown"
+    
+    # Jangan batasi request internal localhost development (mencegah 429 pada background polling)
+    if client_ip in ("127.0.0.1", "localhost", "::1", "testclient"):
+        return await call_next(request)
+
     now = time.time()
     
     if client_ip not in client_request_history:
@@ -140,13 +145,10 @@ async def websocket_stream(websocket: WebSocket):
             mode = payload.get("mode", "clinical")
 
             if mode == "spelling":
-                # Get the single frame landmarks
                 landmarks = payload.get("landmarks", [])
-                if not landmarks:
-                    # Fallback: take last frame from frames if sent
-                    frames = payload.get("frames", [])
-                    if frames and len(frames) > 0:
-                        landmarks = frames[-1]
+                frames = payload.get("frames", [])
+                if not landmarks and frames:
+                    landmarks = frames[-1]
 
                 if not landmarks or len(landmarks) != 63:
                     await websocket.send_text(json.dumps({
@@ -154,8 +156,8 @@ async def websocket_stream(websocket: WebSocket):
                     }))
                     continue
 
-                # Run static alphabet prediction
-                result = slt_service.predict_spelling(landmarks)
+                # Run alphabet prediction with support for frames and single landmark
+                result = slt_service.predict_spelling(landmarks, frames=frames)
 
                 # Log spelling prediction for debugging
                 print(f"[WS_STREAM] [SPELLING] Prediksi: '{result['prediction']}' | Confidence: {result['confidence']:.4f} | Mode: {result['mode']} | Waktu: {result['processing_time_ms']}ms")

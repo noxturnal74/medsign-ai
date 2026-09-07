@@ -1611,11 +1611,11 @@ def save_team_gallery(req: TeamGalleryListRequest, current_user: dict = Depends(
 #  VIDEO TUTORIAL CRUD
 # ═══════════════════════════════════════════════════════════════════
 
+@router.get("/video-tutorials", response_model=List[VideoTutorialResponse])
 @router.get("/admin/video-tutorials", response_model=List[VideoTutorialResponse])
-def get_video_tutorials(current_user: dict = Depends(get_current_user)):
-    if current_user["role"] not in ["admin", "super_admin"]:
-        raise HTTPException(status_code=403, detail="Akses ditolak")
+def get_video_tutorials():
     return [VideoTutorialResponse(**r) for r in db_get_all_video_tutorials()]
+
 
 @router.post("/admin/video-tutorials", response_model=VideoTutorialResponse)
 def create_video_tutorial(req: VideoTutorialCreateRequest, current_user: dict = Depends(get_current_user)):

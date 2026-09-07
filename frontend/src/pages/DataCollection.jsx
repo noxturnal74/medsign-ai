@@ -90,7 +90,7 @@ const ALPHABET_LIST = [
 
   ...Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i).toLowerCase()),
 
-  ...Array.from({ length: 9 }, (_, i) => String(1 + i))
+  ...Array.from({ length: 10 }, (_, i) => String(i))
 
 ].map((char, index) => ({
 
@@ -1308,7 +1308,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
       const apiBaseUrl = apiUrl;
       const response = await fetch(
         `${apiBaseUrl.endsWith("/") ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/augment/delete`,
-        { method: "POST" }
+        { method: "POST", headers: currentUser?.token ? { Authorization: Bearer  } : {} }
       );
       const data = await response.json();
       if (response.ok) {
@@ -1879,6 +1879,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
           method: "POST",
 
+          headers: currentUser?.token ? { Authorization: Bearer  } : {},
           body: formData
 
         }
@@ -2353,27 +2354,40 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
 
 
-  const handleDeleteWord = async (wordSlug) => {
-    if (!window.confirm(`Hapus kata "${wordSlug}"?`)) return;
+  const [wordToDelete, setWordToDelete] = useState(null);
+  const [isDeletingWord, setIsDeletingWord] = useState(false);
+
+  const handleDeleteWord = (wordSlug) => {
+    setWordToDelete(wordSlug);
+  };
+
+  const handleConfirmDeleteWord = async () => {
+    if (!wordToDelete) return;
+    setIsDeletingWord(true);
     try {
       const apiBaseUrl = apiUrl;
       const response = await fetch(
-        `${apiBaseUrl.endsWith("/") ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/vocabulary/${wordSlug}`,
+        `${apiBaseUrl.endsWith("/") ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/vocabulary/${wordToDelete}`,
         {
           method: "DELETE",
-          headers: { Authorization: `Bearer ${currentUser?.token}` },
+          headers: currentUser?.token ? { Authorization: `Bearer ${currentUser.token}` } : {},
         }
       );
       if (response.ok) {
         await refreshVocabulary();
-        setSelectedWords(prev => prev.filter(w => w !== wordSlug));
+        setSelectedWords(prev => prev.filter(w => w !== wordToDelete));
         setEditModal(null);
+        const deletedSlug = wordToDelete;
+        setWordToDelete(null);
+        alert(`Kata "${deletedSlug}" berhasil dihapus dari sistem.`);
       } else {
-        const errData = await response.json();
+        const errData = await response.json().catch(() => ({}));
         alert(errData.detail || "Gagal menghapus kata");
       }
     } catch (err) {
       alert("Koneksi gagal");
+    } finally {
+      setIsDeletingWord(false);
     }
   };
 
@@ -4361,15 +4375,45 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
                     {item.isOffline && (
 
-                      <div className="flex items-center gap-1 rounded-lg bg-amber-500/10 border border-amber-500/20 px-2 py-1 text-[9px] font-bold text-amber-700">
+                      <div className="flex items-center justify-between gap-2 rounded-xl bg-amber-500/10 border border-amber-500/20 px-2.5 py-1.5 text-[9.5px] font-bold text-amber-800">
 
-                        <AlertTriangle size={10} />
+                        <div className="flex items-center gap-1.5">
 
-                        {item.offlineTakesInSession
+                          <AlertTriangle size={11} className="text-amber-600 shrink-0" />
 
-                          ? `${item.offlineTakesInSession} take belum tersinkron ke backend (tersimpan lokal)`
+                          <span>
 
-                          : "Sebagian/semua take tersimpan lokal, belum tersinkron ke backend"}
+                            {item.offlineTakesInSession
+
+                              ? `${item.offlineTakesInSession} take belum tersinkron ke backend (tersimpan lokal)`
+
+                              : "Sebagian/semua take tersimpan lokal, belum tersinkron ke backend"}
+
+                          </span>
+
+                        </div>
+
+                        <button
+
+                          onClick={(e) => {
+
+                            e.stopPropagation();
+
+                            syncOfflineTakes();
+
+                          }}
+
+                          disabled={isSyncing}
+
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-black text-[9px] uppercase tracking-wider shadow-sm transition-all active:scale-95 disabled:opacity-50 shrink-0 cursor-pointer"
+
+                        >
+
+                          <RefreshCw size={9} className={isSyncing ? "animate-spin" : ""} />
+
+                          {isSyncing ? "Sync..." : "Sinkronkan"}
+
+                        </button>
 
                       </div>
 
@@ -4611,7 +4655,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
                   <option value="clinical">Kosakata Klinis</option>
 
-                  <option value="alphabet">Abjad & Angka 1-9</option>
+                  <option value="alphabet">Abjad & Angka 0-9</option>
 
                 </select>
 
@@ -6798,7 +6842,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
                 <option value="clinical">Kosakata Klinis</option>
 
-                <option value="alphabet">Abjad & Angka 1-9</option>
+                <option value="alphabet">Abjad & Angka 0-9</option>
 
               </select>
 
@@ -8987,7 +9031,20 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
   };
 
 
-  const renderTrainingModel = () => {
+  const TrainingModelView = ({
+    apiUrl,
+    currentUser,
+    balanceData,
+    modelStatus,
+    handleAutoFixModel,
+    isFixingModel,
+    uploadModelType,
+    setUploadModelType,
+    selectedModelFile,
+    setSelectedModelFile,
+    handleUploadModel,
+    isUploadingModel,
+  }) => {
 
     const { vocabulary } = useContext(AppContext);
 
@@ -9003,37 +9060,196 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
 
 
-    // Auto-select recommended words on mount or when balanceData changes
-
+    // Auto-sync selected words when modelType changes or balanceData loads
     useEffect(() => {
-
-      if (balanceData && selectedWords.length === 0) {
-
-        const recommended = balanceData.balance
-
-          .filter(b => b.total > 0)
-
-          .map(b => b.label);
-
-        setSelectedWords(recommended);
-
+      setTrainingCategory("Semua");
+      setTrainingSearch("");
+      if (modelType === "alphabet") {
+        setSelectedWords(ALPHABET_LIST.map(item => item.word));
+      } else if (modelType === "clinical") {
+        if (balanceData && balanceData.balance) {
+          const recommended = balanceData.balance
+            .filter(b => b.total > 0)
+            .map(b => b.label);
+          setSelectedWords(recommended);
+        } else {
+          setSelectedWords([]);
+        }
       }
-
-    }, [balanceData]);
+    }, [modelType, balanceData]);
 
     const [isTraining, setIsTraining] = useState(false);
-
     const [logs, setLogs] = useState("");
-
     const [progress, setProgress] = useState(0);
-
     const [status, setStatus] = useState(""); // 'idle' | 'running' | 'success' | 'failed'
-
     const [finalizeStatus, setFinalizeStatus] = useState(""); // 'idle' | 'success' | 'error'
-
     const [finalizeMsg, setFinalizeMsg] = useState("");
-
     const logContainerRef = useRef(null);
+    const logsCountRef = useRef(0);
+
+    // History Terminal Sessions state
+    const [historySessions, setHistorySessions] = useState([]);
+    const [selectedHistoryId, setSelectedHistoryId] = useState("live");
+    const [viewedHistoryLogs, setViewedHistoryLogs] = useState("");
+    const [loadingHistory, setLoadingHistory] = useState(false);
+    const [historyMeta, setHistoryMeta] = useState(null);
+
+    const fetchHistorySessions = useCallback(async () => {
+      try {
+        const apiBaseUrl = apiUrl;
+        const res = await fetch(`${apiBaseUrl.replace(/\/$/, "")}/api/v1/dataset/train/history`);
+        if (res.ok) {
+          const data = await res.json();
+          setHistorySessions(data || []);
+        }
+      } catch (err) {
+        console.error("Gagal mengambil riwayat sesi training:", err);
+      }
+    }, [apiUrl]);
+
+    useEffect(() => {
+      fetchHistorySessions();
+    }, [fetchHistorySessions]);
+
+    const handleSelectHistorySession = async (sid) => {
+      setSelectedHistoryId(sid);
+      if (sid === "live") {
+        setViewedHistoryLogs("");
+        setHistoryMeta(null);
+        return;
+      }
+      setLoadingHistory(true);
+      try {
+        const apiBaseUrl = apiUrl;
+        const res = await fetch(`${apiBaseUrl.replace(/\/$/, "")}/api/v1/dataset/train/history/${sid}`);
+        if (res.ok) {
+          const data = await res.json();
+          setViewedHistoryLogs(data.logs || "");
+          setHistoryMeta(data.meta || null);
+        }
+      } catch (err) {
+        console.error("Gagal memuat log riwayat sesi:", err);
+      } finally {
+        setLoadingHistory(false);
+      }
+    };
+
+    const handleDownloadLog = () => {
+      const content = selectedHistoryId === "live" ? logs : viewedHistoryLogs;
+      if (!content) return;
+      const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `training_${selectedHistoryId === "live" ? "live_session" : selectedHistoryId}.log`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    };
+
+    const handleDeleteHistorySession = async (sid) => {
+      if (!window.confirm(`Hapus berkas log riwayat sesi ini dari server?`)) return;
+      try {
+        const apiBaseUrl = apiUrl;
+        const res = await fetch(`${apiBaseUrl.replace(/\/$/, "")}/api/v1/dataset/train/history/${sid}`, {
+          method: "DELETE"
+        });
+        if (res.ok) {
+          fetchHistorySessions();
+          if (selectedHistoryId === sid) {
+            setSelectedHistoryId("live");
+            setViewedHistoryLogs("");
+            setHistoryMeta(null);
+          }
+        }
+      } catch (err) {
+        console.error("Gagal menghapus sesi log riwayat:", err);
+      }
+    };
+
+    // Sinkronisasi status training dari backend saat tab/halaman dimuat
+    useEffect(() => {
+      let isMounted = true;
+      const syncInitialStatus = async () => {
+        try {
+          const apiBaseUrl = apiUrl;
+          const res = await fetch(`${apiBaseUrl.replace(/\/$/, "")}/api/v1/dataset/train/status?offset=0`);
+          if (res.status === 404) return;
+          if (res.ok && isMounted) {
+            const data = await res.json();
+            if (!isMounted) return;
+            if (data.total_logs > 0 || data.is_running) {
+              const fullLogs = data.logs.join("\n") + (data.logs.length > 0 ? "\n" : "");
+              logsCountRef.current = data.total_logs || fullLogs.trim().split("\n").length;
+              setLogs(fullLogs);
+              setProgress(data.progress || 0);
+              setStatus(data.status || "idle");
+              setIsTraining(Boolean(data.is_running));
+            }
+          }
+        } catch (err) {
+          console.error("Gagal sinkron status sesi training:", err);
+        }
+      };
+      syncInitialStatus();
+      return () => { isMounted = false; };
+    }, [apiUrl]);
+
+    // Background poller agar log tetap berjalan saat user berpindah tab atau refresh
+    useEffect(() => {
+      let isMounted = true;
+      if (!isTraining && status !== "running") return;
+
+      const poller = setInterval(async () => {
+        try {
+          const apiBaseUrl = apiUrl;
+          const res = await fetch(`${apiBaseUrl.replace(/\/$/, "")}/api/v1/dataset/train/status?offset=${logsCountRef.current}`);
+          if (res.status === 404) {
+            clearInterval(poller);
+            return;
+          }
+          if (res.ok && isMounted) {
+            const data = await res.json();
+            if (!isMounted) return;
+            if (data.logs && data.logs.length > 0) {
+              setLogs(prev => {
+                const next = prev + data.logs.join("\n") + "\n";
+                logsCountRef.current = next.trim().split("\n").length;
+                return next;
+              });
+            }
+            if (typeof data.progress === "number") setProgress(data.progress);
+            if (data.status) setStatus(data.status);
+            if (!data.is_running) {
+              setIsTraining(false);
+            }
+          }
+        } catch (e) {
+          // ignore background polling error
+        }
+      }, 1500);
+
+      return () => {
+        isMounted = false;
+        clearInterval(poller);
+      };
+    }, [isTraining, status, apiUrl]);
+
+    const handleStopTraining = async () => {
+      try {
+        const apiBaseUrl = apiUrl;
+        const res = await fetch(`${apiBaseUrl.replace(/\/$/, "")}/api/v1/dataset/train/stop`, {
+          method: "POST"
+        });
+        if (res.ok) {
+          setIsTraining(false);
+          setStatus("failed");
+        }
+      } catch (e) {
+        console.error("Gagal menghentikan training:", e);
+      }
+    };
 
 
 
@@ -9140,7 +9356,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
       }
 
-      if (balanceData && balanceData.balance) {
+      if (modelType === "clinical" && balanceData && balanceData.balance) {
         list = list.filter((v) => {
           const balanceItem = balanceData.balance.find(b => b.label === v.word);
           if (!balanceItem) return trainingStatusFilters.includes("Belum");
@@ -9151,7 +9367,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
           let statusText = "Belum";
           if (total >= 20 && signers >= 3) {
             statusText = "Cukup";
-          } else if (total >= 5 && signers >= 1) {
+          } else if (total >= 1 && signers >= 1) {
             statusText = "Kurang";
           }
           
@@ -9347,15 +9563,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
         }
 
       } catch (err) {
-
-        setLogs((prev) => prev + `Koneksi terputus: ${err.message}\n`);
-
-        setStatus("failed");
-
-      } finally {
-
-        setIsTraining(false);
-
+        console.warn("SSE stream interrupted, background polling will continue:", err.message);
       }
 
     };
@@ -9406,15 +9614,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
                 setModelType(e.target.value);
 
-                if (e.target.value === "alphabet") {
-
-                  setEpochs(85);
-
-                } else {
-
-                  setEpochs(120);
-
-                }
+                setEpochs(120);
 
               }}
 
@@ -9426,7 +9626,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
               <option value="clinical">Model Kosakata Klinis (LSTM/GRU Dinamis)</option>
 
-              <option value="alphabet">Model Ejaan Abjad A-Z & Angka 1-9 (MLP Statis)</option>
+              <option value="alphabet">Model Abjad A-Z & Angka 0-9 (LSTM/GRU Dinamis)</option>
 
             </select>
 
@@ -9434,34 +9634,30 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
 
 
-          {modelType === "clinical" && (
+          <div className="flex flex-col gap-1.5">
 
-            <div className="flex flex-col gap-1.5">
+            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
 
-              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+              Model Architecture
 
-                Model Architecture
+            </label>
 
-              </label>
+            <select
+              value={architecture}
+              onChange={(e) => setArchitecture(e.target.value)}
+              disabled={isTraining}
+              className="glass-input rounded-xl px-3 py-2 text-xs font-semibold appearance-none bg-white/40 cursor-pointer"
+            >
+              <option value="gru">GRU (Recommended - Faster & Light)</option>
+              <option value="lstm">LSTM (Standard Recurrent Model)</option>
+              <option value="simplernn">SimpleRNN (Classic Recurrent Baseline)</option>
+              <option value="bigru">Bidirectional GRU (Advanced Temporal)</option>
+              <option value="bilstm">Bidirectional LSTM (Advanced Temporal)</option>
+              <option value="cnn1d">1D CNN (Fast Convolutional)</option>
+              <option value="dnn">Deep Neural Network (DNN / MLP Static)</option>
+            </select>
 
-              <select
-                value={architecture}
-                onChange={(e) => setArchitecture(e.target.value)}
-                disabled={isTraining}
-                className="glass-input rounded-xl px-3 py-2 text-xs font-semibold appearance-none bg-white/40 cursor-pointer"
-              >
-                <option value="gru">GRU (Recommended - Faster & Light)</option>
-                <option value="lstm">LSTM (Standard Recurrent Model)</option>
-                <option value="simplernn">SimpleRNN (Classic Recurrent Baseline)</option>
-                <option value="bigru">Bidirectional GRU (Advanced Temporal)</option>
-                <option value="bilstm">Bidirectional LSTM (Advanced Temporal)</option>
-                <option value="cnn1d">1D CNN (Fast Convolutional)</option>
-                <option value="dnn">Deep Neural Network (DNN / MLP Static)</option>
-              </select>
-
-            </div>
-
-          )}
+          </div>
 
 
 
@@ -9481,7 +9677,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
               value={epochs}
 
-              onChange={(e) => setEpochs(parseInt(e.target.value) || (modelType === "alphabet" ? 85 : 120))}
+              onChange={(e) => setEpochs(parseInt(e.target.value) || 120)}
 
               disabled={isTraining}
 
@@ -9493,57 +9689,51 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
 
 
-          {modelType === "clinical" && (
+          <div className="flex flex-col gap-1.5">
 
-            <div className="flex flex-col gap-1.5">
+            <div className="flex justify-between text-[10px] font-bold text-slate-500 uppercase tracking-wider">
 
-              <div className="flex justify-between text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+              <span>Split Rasio Data Uji (Test Size)</span>
 
-                <span>Split Rasio Data Uji (Test Size)</span>
-
-                <span className="text-sky-700 font-black">{testSize}%</span>
-
-              </div>
-
-              <div className="flex items-center gap-3">
-
-                <input
-
-                  type="range"
-
-                  min="10"
-
-                  max="50"
-
-                  step="5"
-
-                  value={testSize}
-
-                  onChange={(e) => setTestSize(parseInt(e.target.value))}
-
-                  disabled={isTraining}
-
-                  className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-sky-600"
-
-                />
-
-                <span className="text-[10px] font-bold text-slate-500 w-16 text-right shrink-0">
-
-                  {100 - testSize}% Train
-
-                </span>
-
-              </div>
+              <span className="text-sky-700 font-black">{testSize}%</span>
 
             </div>
 
-          )}
+            <div className="flex items-center gap-3">
+
+              <input
+
+                type="range"
+
+                min="10"
+
+                max="50"
+
+                step="5"
+
+                value={testSize}
+
+                onChange={(e) => setTestSize(parseInt(e.target.value))}
+
+                disabled={isTraining}
+
+                className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-sky-600"
+
+              />
+
+              <span className="text-[10px] font-bold text-slate-500 w-16 text-right shrink-0">
+
+                {100 - testSize}% Train
+
+              </span>
+
+            </div>
+
+          </div>
 
 
 
-          {modelType === "clinical" && (
-
-            <div className="flex flex-col gap-1.5 flex-1 min-h-0">
+          <div className="flex flex-col gap-1.5 flex-1 min-h-0">
 
             <div className="flex items-center justify-between">
 
@@ -9595,9 +9785,9 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
 
 
-            {/* Filter Status Data */}
+            {/* Filter Status Data (Hanya untuk model klinis) */}
             {modelType === "clinical" && (
-              <div className="flex items-center gap-3.5 text-[9.5px] font-extrabold text-slate-500 select-none pb-1.5 pt-0.5 border-b border-white/20 mb-1.5">
+            <div className="flex items-center gap-3.5 text-[9.5px] font-extrabold text-slate-500 select-none pb-1.5 pt-0.5 border-b border-white/20 mb-1.5">
                 <span>STATUS DATA:</span>
                 {["Cukup", "Kurang", "Belum"].map(status => {
                   const checked = trainingStatusFilters.includes(status);
@@ -9687,21 +9877,20 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
                   onClick={() => {
 
-                    const allSlugs = trainingFilteredWords.map((w) => w.word);
+                    const displayedSlugs = trainingFilteredWords.map((w) => w.word);
 
-                    setSelectedWords(
-
-                      Array.from(new Set([...selectedWords, ...allSlugs])),
-
-                    );
+                    // Memilih persis semua kata yang sedang ditampilkan sesuai filter aktif (misal hanya status Cukup)
+                    setSelectedWords(displayedSlugs);
 
                   }}
 
-                  className="hover:text-slate-800 disabled:opacity-40"
+                  className="hover:text-sky-700 font-black disabled:opacity-40"
+
+                  title="Pilih semua kata yang saat ini sedang ditampilkan sesuai filter status & kategori"
 
                 >
 
-                  Pilih Semua
+                  Pilih Semua Yang Tampil ({trainingFilteredWords.length})
 
                 </button>
 
@@ -9715,8 +9904,13 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
                   onClick={() => {
 
-                    if (balanceData) {
+                    if (modelType === "alphabet") {
 
+                      setSelectedWords(ALPHABET_LIST.map((b) => b.word));
+
+                    } else if (balanceData && balanceData.balance) {
+
+                      // Pilih murni kata yang berstatus Cukup (sampel >= 20 dan signer >= 3)
                       const recommended = balanceData.balance
 
                         .filter((b) => b.status === "Cukup")
@@ -9725,15 +9919,20 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
                       setSelectedWords(recommended);
 
+                      // Aktifkan checklist filter Cukup agar sinkron
+                      setTrainingStatusFilters(["Cukup"]);
+
                     }
 
                   }}
 
                   className="text-emerald-700 font-extrabold hover:text-emerald-800 disabled:opacity-40"
 
+                  title="Pilih hanya kosakata dengan kualitas rekaman Cukup (optimal)"
+
                 >
 
-                  Pilih Rekomendasi
+                  Pilih Rekomendasi ({balanceData?.balance?.filter(b => b.status === "Cukup").length || 0} Kata Cukup)
 
                 </button>
 
@@ -9839,29 +10038,29 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
           </div>
 
-          )}
 
 
-
-          <button
-
-            onClick={handleStartTraining}
-
-            disabled={isTraining}
-
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-sky-500 to-sky-600 hover:from-sky-600 hover:to-sky-700 text-white font-black text-xs py-3 px-6 shadow-lg shadow-sky-500/20 active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-
-          >
-
-            <RefreshCw size={13} className={isTraining ? "animate-spin" : ""} />
-
-            {isTraining
-
-              ? "Training Sedang Berjalan..."
-
-              : "Mulai Training Model"}
-
-          </button>
+          <div className="flex gap-2 w-full">
+            <button
+              onClick={handleStartTraining}
+              disabled={isTraining}
+              className="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-sky-500 to-sky-600 hover:from-sky-600 hover:to-sky-700 text-white font-black text-xs py-3 px-5 shadow-lg shadow-sky-500/20 active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              <RefreshCw size={13} className={isTraining ? "animate-spin" : ""} />
+              {isTraining ? "Training Sedang Berjalan..." : "Mulai Training Model"}
+            </button>
+            {isTraining && (
+              <button
+                type="button"
+                onClick={handleStopTraining}
+                className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-black text-xs py-3 px-4 shadow-md active:scale-[0.98] transition-all"
+                title="Hentikan proses pelatihan di latar belakang"
+              >
+                <X size={13} />
+                Batal
+              </button>
+            )}
+          </div>
 
           {/* Laporan Training Download Group */}
           <div className="mt-4 p-4 bg-slate-50 border border-slate-200/60 rounded-2xl flex flex-col gap-2 animate-slide-up">
@@ -10037,11 +10236,21 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
           <div className="flex items-center justify-between border-b border-white/60 pb-3">
 
-            <span className="text-sm font-black text-slate-950">
-
-              Log Terminal Output
-
-            </span>
+            <div className="flex items-center gap-2.5">
+              <span className="text-sm font-black text-slate-950">
+                Log Terminal Output
+              </span>
+              {logs && !isTraining && (
+                <button
+                  type="button"
+                  onClick={() => { setLogs(""); setStatus("idle"); setProgress(0); }}
+                  className="text-[9px] font-bold text-slate-400 hover:text-rose-600 px-2 py-0.5 rounded-md hover:bg-rose-50 transition-all uppercase tracking-wider"
+                  title="Bersihkan log dari layar"
+                >
+                  Bersihkan
+                </button>
+              )}
+            </div>
 
             {status === "running" && (
 
@@ -10171,18 +10380,81 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
 
 
+          {/* Toolbar Riwayat Sesi Terminal */}
+          <div className="flex flex-wrap items-center justify-between gap-2.5 p-3 rounded-2xl bg-white/70 border border-slate-200/80 shadow-xs">
+            <div className="flex items-center gap-2 min-w-0 flex-1">
+              <History size={15} className="text-sky-600 shrink-0" />
+              <span className="text-[10px] font-black text-slate-550 uppercase tracking-wider shrink-0">
+                Riwayat Sesi:
+              </span>
+              <select
+                value={selectedHistoryId}
+                onChange={(e) => handleSelectHistorySession(e.target.value)}
+                className="text-xs font-bold text-slate-800 bg-white border border-slate-200 rounded-xl px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-sky-400/30 cursor-pointer max-w-full sm:max-w-[320px] truncate shadow-inner"
+              >
+                <option value="live">
+                  ● Sesi Terkini / Live {isTraining ? "— Sedang Berjalan..." : status === "success" ? "— Selesai" : ""}
+                </option>
+                {historySessions.map((h) => (
+                  <option key={h.session_id} value={h.session_id}>
+                    {h.status === "success" ? "✓" : "✗"} {h.formatted_time} - {h.model_type?.toUpperCase()} ({h.architecture?.toUpperCase()}) {h.accuracy ? `· Acc: ${h.accuracy}` : ""}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={handleDownloadLog}
+                disabled={selectedHistoryId === "live" ? !logs : !viewedHistoryLogs}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-[9.5px] font-black uppercase tracking-wider text-slate-700 bg-white hover:bg-slate-100 border border-slate-200/80 rounded-xl shadow-xs transition-all active:scale-95 disabled:opacity-40"
+                title="Unduh seluruh log terminal sesi ini (.txt)"
+              >
+                <Download size={12} /> Unduh Log
+              </button>
+              {selectedHistoryId !== "live" && (
+                <button
+                  type="button"
+                  onClick={() => handleDeleteHistorySession(selectedHistoryId)}
+                  className="inline-flex items-center gap-1 px-2.5 py-1.5 text-[9.5px] font-bold uppercase text-rose-600 hover:bg-rose-50 border border-rose-200 rounded-xl shadow-xs transition-all active:scale-95"
+                  title="Hapus berkas log sesi ini dari server"
+                >
+                  <Trash2 size={12} /> Hapus
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Detail Banner jika sedang melihat riwayat sesi masa lalu */}
+          {selectedHistoryId !== "live" && historyMeta && (
+            <div className="bg-sky-50/80 border border-sky-200/70 rounded-2xl p-3 flex items-center justify-between gap-4 text-xs animate-slide-up select-none">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] font-semibold text-slate-700">
+                <span>Model: <strong className="uppercase text-sky-800 font-bold">{historyMeta.model_type} ({historyMeta.architecture})</strong></span>
+                <span>Waktu: <strong className="text-slate-800">{historyMeta.started_at ? new Date(historyMeta.started_at).toLocaleString() : "-"}</strong></span>
+                <span>Status: <strong className={historyMeta.status === "success" ? "text-emerald-700 font-bold" : "text-rose-700 font-bold"}>{historyMeta.status === "success" ? "BERHASIL" : "GAGAL"}</strong></span>
+                {historyMeta.accuracy && <span>Akurasi: <strong className="text-emerald-700 font-black">{historyMeta.accuracy}</strong></span>}
+                <span>Total Baris: <strong className="font-mono">{historyMeta.total_lines} baris</strong></span>
+              </div>
+              <button
+                type="button"
+                onClick={() => handleSelectHistorySession("live")}
+                className="text-[9.5px] font-black uppercase text-sky-700 hover:underline shrink-0"
+              >
+                Kembali ke Live
+              </button>
+            </div>
+          )}
+
           <div
-
             ref={logContainerRef}
-
             className="bg-slate-950 text-emerald-400 font-mono text-[10px] p-4 rounded-xl flex-1 max-h-[580px] overflow-y-auto whitespace-pre-wrap leading-relaxed select-all shadow-inner border border-slate-900/50"
-
           >
-
-            {logs ||
-
-              'Belum ada log output. Tekan "Mulai Training Model" untuk melatih model neural network Anda.'}
-
+            {selectedHistoryId === "live"
+              ? (logs || 'Belum ada log output. Tekan "Mulai Training Model" untuk melatih model neural network Anda.')
+              : loadingHistory
+                ? 'Memuat berkas riwayat log sesi...'
+                : (viewedHistoryLogs || 'Berkas log sesi ini kosong.')}
           </div>
 
         </div>
@@ -10507,7 +10779,20 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
       >
 
-        {renderTrainingModel()}
+        <TrainingModelView
+          apiUrl={apiUrl}
+          currentUser={currentUser}
+          balanceData={balanceData}
+          modelStatus={modelStatus}
+          handleAutoFixModel={handleAutoFixModel}
+          isFixingModel={isFixingModel}
+          uploadModelType={uploadModelType}
+          setUploadModelType={setUploadModelType}
+          selectedModelFile={selectedModelFile}
+          setSelectedModelFile={setSelectedModelFile}
+          handleUploadModel={handleUploadModel}
+          isUploadingModel={isUploadingModel}
+        />
 
       </div>
 
@@ -10791,9 +11076,54 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
         </div>
       )}
 
+      {/* Modal UI Konfirmasi Hapus Kata */}
+      {wordToDelete && (
+        <div className="fixed inset-0 z-[400] flex items-center justify-center p-4" onClick={() => !isDeletingWord && setWordToDelete(null)}>
+          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" />
+          <div className="relative bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 animate-scale-up border border-rose-100 flex flex-col gap-4 text-slate-800" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-600 flex items-center justify-center shrink-0 border border-rose-200/50">
+                <Trash2 size={24} />
+              </div>
+              <div>
+                <h3 className="text-sm font-black text-slate-900 uppercase tracking-wide">Konfirmasi Hapus Kosakata</h3>
+                <span className="text-[11px] font-semibold text-slate-400">Tindakan ini permanen dan tidak dapat dibatalkan</span>
+              </div>
+            </div>
+
+            <div className="bg-rose-50/70 border border-rose-200/60 rounded-2xl p-3.5 text-xs text-rose-950 flex flex-col gap-1.5">
+              <p>
+                Apakah Anda yakin ingin menghapus kata <strong className="uppercase text-rose-700 font-black tracking-wider">"{wordToDelete}"</strong>?
+              </p>
+              <p className="text-[10px] text-rose-700/80 leading-relaxed">
+                Seluruh metadata kata dan folder landmark rekaman terkait di server akan dihapus permanen.
+              </p>
+            </div>
+
+            <div className="flex justify-end gap-2.5 pt-2">
+              <button
+                type="button"
+                disabled={isDeletingWord}
+                onClick={() => setWordToDelete(null)}
+                className="px-4 py-2.5 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100 transition-all uppercase"
+              >
+                Batal
+              </button>
+              <button
+                type="button"
+                disabled={isDeletingWord}
+                onClick={handleConfirmDeleteWord}
+                className="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black uppercase tracking-wider transition-all shadow-md active:scale-95 disabled:opacity-50 flex items-center gap-1.5"
+              >
+                {isDeletingWord ? "Menghapus..." : "Ya, Hapus Sekarang"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
 
   );
 
 };
-

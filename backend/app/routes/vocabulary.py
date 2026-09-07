@@ -150,7 +150,22 @@ def delete_vocabulary(word_slug: str):
     if len(new_labels) == len(labels):
         raise HTTPException(status_code=404, detail=f"Kata '{word_slug}' tidak ditemukan")
 
+    # Reindex seluruh ID agar selalu berurutan mulai dari 0
+    for idx, item in enumerate(new_labels):
+        item["id"] = idx
+
     config["labels"] = new_labels
+    config["total_classes"] = len(new_labels)
     _write_labels(config, labels_path)
+
+    # Hapus folder landmark kata jika ada
+    backend_dir = Path(__file__).resolve().parents[2]
+    landmark_folder = backend_dir / "data" / "landmarks" / word_slug
+    if landmark_folder.exists() and landmark_folder.is_dir():
+        import shutil
+        try:
+            shutil.rmtree(landmark_folder)
+        except Exception as e:
+            print(f"Warning: gagal menghapus folder {landmark_folder}: {e}")
 
     return {"status": "success", "message": f"Kata '{word_slug}' berhasil dihapus"}

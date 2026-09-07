@@ -30,6 +30,11 @@ export class ErrorBoundary extends React.Component {
   }
 
   handleGlobalError = (event) => {
+    const msg = String(event?.message || event?.error?.message || '');
+    if (msg.includes('Should have a queue') || msg.includes('ResizeObserver')) {
+      console.warn('ErrorBoundary mengabaikan transient error:', msg);
+      return;
+    }
     if (event.error && !this.state.hasError) {
       console.error("ErrorBoundary caught global error:", event.error);
       this.setState({
@@ -41,6 +46,22 @@ export class ErrorBoundary extends React.Component {
   };
 
   handlePromiseRejection = (event) => {
+    const reason = event.reason;
+    const msg = String(reason?.message || reason || '');
+    const stack = String(reason?.stack || '');
+
+    // Abaikan error non-fatal: permission clipboard, un-focused document, dan ekstensi browser
+    if (
+      msg.includes('writeText') ||
+      msg.includes('Clipboard') ||
+      msg.includes('NotAllowedError') ||
+      stack.includes('chrome-extension://') ||
+      stack.includes('copyTrackerBridge')
+    ) {
+      console.warn('ErrorBoundary mengabaikan error non-fatal clipboard/ekstensi browser:', reason);
+      return;
+    }
+
     if (!this.state.hasError) {
       console.error("ErrorBoundary caught unhandled rejection:", event.reason);
       const reason = event.reason;

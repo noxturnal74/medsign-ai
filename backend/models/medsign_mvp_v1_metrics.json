@@ -1,6 +1,6 @@
 {
   "generated_at": "2026-09-07T01:45:02",
-  "model_name": "medsign_mvp_v1_temp",
+  "model_name": "medsign_mvp_v1",
   "architecture": "gru",
   "labels_version": "medsign-clinical-full-v1",
   "frame_count": 30,

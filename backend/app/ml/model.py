@@ -37,7 +37,8 @@ class ModelLoader:
 
             cls._instance.alphabet_interpreter = None
             cls._instance.alphabet_loaded = False
-            cls._instance.alphabet_classes = [chr(i) for i in range(ord('A'), ord('Z') + 1)] + [str(i) for i in range(1, 10)]
+            cls._instance.alphabet_model_path = None
+            cls._instance.alphabet_classes = [chr(i) for i in range(ord('A'), ord('Z') + 1)] + [str(i) for i in range(10)]
         return cls._instance
 
     def refresh_labels(self) -> None:
@@ -55,6 +56,7 @@ class ModelLoader:
             return {
                 'mode': 'production' if self.loaded else 'model_unavailable',
                 'model_loaded': self.loaded,
+                'alphabet_loaded': self.alphabet_loaded,
                 'label_count': len(self.classes),
                 'threshold': self.threshold,
                 'frame_count': FRAME_COUNT,
@@ -62,6 +64,7 @@ class ModelLoader:
                 'input_shape': [FRAME_COUNT, FEATURE_COUNT],
                 'output_class': len(self.model_classes) if self.loaded else len(self.classes),
                 'model_path': str(self.model_path) if self.model_path else None,
+                'alphabet_model_path': str(self.alphabet_model_path) if self.alphabet_model_path else None,
             }
 
     def load(self, model_path: str | Path) -> bool:
@@ -179,6 +182,7 @@ class ModelLoader:
     def load_alphabet(self, model_path: str | Path) -> bool:
         with self.lock:
             path = self._resolve_model_path(model_path)
+            self.alphabet_model_path = path
             if not path.exists():
                 print(f'[ML_MODEL] Model abjad tidak ditemukan: {path}')
                 self.alphabet_loaded = False
@@ -220,13 +224,39 @@ class ModelLoader:
                     'processing_time_ms': int((time.perf_counter() - start_time) * 1000),
                 }
 
-            self.alphabet_interpreter.set_tensor(self.alphabet_input_details[0]['index'], flat_landmarks.astype(np.float32))
+            expected_shape = self.alphabet_input_details[0]['shape']
+            arr = np.asarray(flat_landmarks, dtype=np.float32)
+
+            # Adaptif sesuaikan dimensi input dengan model yang aktif
+            if len(expected_shape) == 3:
+                target_len = int(expected_shape[1])
+                target_features = int(expected_shape[2])
+                if arr.ndim == 1:
+                    arr = np.tile(arr.reshape(1, 1, target_features), (1, target_len, 1))
+                elif arr.ndim == 2:
+                    if arr.shape[0] == target_len:
+                        arr = arr.reshape(1, target_len, target_features)
+                    else:
+                        arr = np.tile(arr[-1:].reshape(1, 1, target_features), (1, target_len, 1))
+                elif arr.ndim == 3:
+                    if arr.shape[1] != target_len:
+                        arr = np.tile(arr[:, -1:, :], (1, target_len, 1))
+            elif len(expected_shape) == 2:
+                target_features = int(expected_shape[1])
+                if arr.ndim == 1:
+                    arr = arr.reshape(1, target_features)
+                elif arr.ndim == 2:
+                    arr = arr[-1:].reshape(1, target_features)
+                elif arr.ndim == 3:
+                    arr = arr[0, -1, :].reshape(1, target_features)
+
+            self.alphabet_interpreter.set_tensor(self.alphabet_input_details[0]['index'], arr.astype(np.float32))
             self.alphabet_interpreter.invoke()
             output_data = self.alphabet_interpreter.get_tensor(self.alphabet_output_details[0]['index'])[0]
             top_indices = np.argsort(output_data)[::-1][:3]
             confidence = float(output_data[int(top_indices[0])])
             raw_label = self.alphabet_classes[int(top_indices[0])]
-            detected = confidence >= 0.50
+            detected = confidence >= 0.40
             top3 = [
                 {'word': self.alphabet_classes[int(index)], 'confidence': float(output_data[int(index)])}
                 for index in top_indices

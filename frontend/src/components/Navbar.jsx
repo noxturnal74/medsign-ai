@@ -396,22 +396,33 @@ export const Navbar = ({ currentView, setView }) => {
           {/* ── Right controls ── */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0, justifySelf: 'end' }}>
 
-            {/* Bell Notification Dropdown */}
-            <div style={{ position: 'relative' }} ref={notifRef}>
+            {currentUser && (
+              <span style={{
+                fontSize: 10, fontWeight: 700, color: '#64748b',
+                background: 'rgba(15,23,42,0.05)',
+                padding: '4px 9px', borderRadius: 8,
+                border: '1px solid rgba(15,23,42,0.08)',
+              }} className="hide-mobile">
+                {currentUser.role?.toUpperCase()}
+              </span>
+            )}
+
+            {/* Dropdown Menu Titik-3 (Utilitas & Akun) */}
+            <div ref={menuRef} style={{ position: 'relative' }}>
               <button
-                onClick={() => setNotifOpen(!notifOpen)}
-                title="Notifikasi & Log System"
+                onClick={() => setMenuOpen(v => !v)}
+                title="Menu preferensi dan alat"
                 style={{
                   display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                  padding: '7px 10px', borderRadius: 10, cursor: 'pointer',
-                  border: '1px solid rgba(15,23,42,0.08)',
-                  background: notifOpen ? 'rgba(15,23,42,0.08)' : 'rgba(15,23,42,0.03)',
-                  color: '#334155',
+                  padding: '7px 8px', borderRadius: 10, cursor: 'pointer',
+                  border: `1px solid ${menuOpen ? 'rgba(14,165,233,0.35)' : 'rgba(15,23,42,0.1)'}`,
+                  background: menuOpen ? 'rgba(14,165,233,0.08)' : 'rgba(15,23,42,0.04)',
+                  color: menuOpen ? '#0284c7' : '#64748b',
                   transition: 'all 0.2s',
                   position: 'relative'
                 }}
               >
-                <Bell size={15} />
+                <MoreVertical size={15} />
                 {notifications.some(n => !n.read) && (
                   <span style={{
                     position: 'absolute', top: -2, right: -2,
@@ -421,18 +432,127 @@ export const Navbar = ({ currentView, setView }) => {
                 )}
               </button>
 
-              {notifOpen && (
-                <div style={{
-                  position: 'absolute', right: 0, marginTop: 8,
-                  width: 280, backgroundColor: '#ffffff',
-                  borderRadius: 16, border: '1px solid rgba(15,23,42,0.08)',
-                  boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
-                  zIndex: 99999, padding: '12px 14px',
-                  display: 'flex', flexDirection: 'column', gap: 8
-                }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(15,23,42,0.06)', paddingBottom: 6 }}>
+              {menuOpen && (
+                <div
+                  style={{
+                    position: 'absolute', top: 'calc(100% + 8px)', right: 0, zIndex: 200,
+                    width: 270, background: '#fff', borderRadius: 18,
+                    border: '1px solid rgba(15,23,42,0.08)',
+                    boxShadow: '0 18px 50px rgba(15,23,42,0.18)',
+                    overflow: 'hidden', padding: 6,
+                  }}
+                >
+                  {currentUser && (
+                    <div style={{ padding: '8px 10px 10px', borderBottom: '1px solid rgba(15,23,42,0.06)' }}>
+                      <span style={{ display: 'block', fontSize: 11, fontWeight: 800, color: '#0f172a', wordBreak: 'break-all' }}>
+                        {currentUser.emailOrNik || currentUser.role}
+                      </span>
+                      <span style={{ display: 'inline-block', marginTop: 5, fontSize: 8, fontWeight: 800, letterSpacing: '0.08em', color: '#0369a1', background: 'rgba(14,165,233,0.1)', padding: '3px 7px', borderRadius: 99, textTransform: 'uppercase' }}>
+                        {currentUser.role}
+                      </span>
+                    </div>
+                  )}
+
+                  {currentUser && ['admin', 'doctor', 'super_admin'].includes(currentUser.role) && (
+                    <button
+                      onClick={openMyProfile}
+                      style={menuItemStyle}
+                      onMouseEnter={e => e.currentTarget.style.background = 'rgba(15,23,42,0.05)'}
+                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                    >
+                      <UserCog size={14} /> Profil Saya
+                    </button>
+                  )}
+
+                  {/* Notifikasi & Log Dropdown Trigger */}
+                  <button
+                    onClick={() => { setMenuOpen(false); setNotifOpen(true); }}
+                    style={{ ...menuItemStyle, justifyContent: 'space-between' }}
+                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(15,23,42,0.05)'}
+                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                  >
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                      <Bell size={14} /> Log Notifikasi
+                    </span>
+                    {notifications.some(n => !n.read) && (
+                      <span style={{
+                        fontSize: 9, fontWeight: 800, color: '#fff',
+                        backgroundColor: '#ef4444', padding: '1px 6px', borderRadius: 99
+                      }}>
+                        {notifications.filter(n => !n.read).length}
+                      </span>
+                    )}
+                  </button>
+
+                  {/* Suara / TTS */}
+                  <button
+                    onClick={() => setTtsEnabled(!ttsEnabled)}
+                    style={{ ...menuItemStyle, justifyContent: 'space-between' }}
+                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(15,23,42,0.05)'}
+                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                  >
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                      {ttsEnabled ? <Volume2 size={14} color="#059669" /> : <VolumeX size={14} color="#dc2626" />}
+                      Suara (TTS)
+                    </span>
+                    <span style={{
+                      fontSize: 9, fontWeight: 800,
+                      color: ttsEnabled ? '#059669' : '#dc2626',
+                      background: ttsEnabled ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)',
+                      padding: '2px 7px', borderRadius: 99
+                    }}>
+                      {ttsEnabled ? 'Aktif' : 'Mati'}
+                    </span>
+                  </button>
+
+                  {/* Tampilan Ponsel / Mode */}
+                  <button
+                    onClick={() => { setMenuOpen(false); setShowFeatureModal(true); }}
+                    style={menuItemStyle}
+                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(15,23,42,0.05)'}
+                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                  >
+                    <ExternalLink size={14} /> Pengaturan Tampilan
+                  </button>
+
+                  {/* Dark Mode */}
+                  <div style={{ ...menuItemStyle, cursor: 'default', justifyContent: 'space-between' }}>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                      {darkMode ? <Moon size={14} /> : <Sun size={14} />} Mode Gelap
+                    </span>
+                    <button
+                      onClick={() => setDarkMode(v => !v)}
+                      aria-label="Toggle dark mode"
+                      style={{
+                        width: 36, height: 20, borderRadius: 99, border: 'none', cursor: 'pointer',
+                        background: darkMode ? '#0284c7' : '#cbd5e1',
+                        position: 'relative', transition: 'background 0.2s', flexShrink: 0,
+                      }}
+                    >
+                      <span style={{
+                        position: 'absolute', top: 2, left: darkMode ? 18 : 2,
+                        width: 16, height: 16, borderRadius: 99, background: '#fff',
+                        boxShadow: '0 1px 3px rgba(0,0,0,0.25)', transition: 'left 0.2s',
+                      }} />
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Modal / Overlay Notifikasi jika dibuka dari dropdown */}
+            {notifOpen && (
+              <div ref={notifRef} style={{
+                position: 'absolute', top: 60, right: 16,
+                width: 300, backgroundColor: '#ffffff',
+                borderRadius: 16, border: '1px solid rgba(15,23,42,0.08)',
+                boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
+                zIndex: 99999, padding: '12px 14px',
+                display: 'flex', flexDirection: 'column', gap: 8
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(15,23,42,0.06)', paddingBottom: 6 }}>
                   <span style={{ fontSize: 11, fontWeight: 900, textTransform: 'uppercase', color: '#0f172a' }}>Log System</span>
-                  <div style={{ display: 'flex', gap: 8 }}>
+                  <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                     {notifications.some(n => !n.read) && (
                       <button
                         onClick={markAllAsRead}
@@ -449,75 +569,31 @@ export const Navbar = ({ currentView, setView }) => {
                         Hapus Semua
                       </button>
                     )}
+                    <button
+                      onClick={() => setNotifOpen(false)}
+                      style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: '#94a3b8', padding: 2 }}
+                    >
+                      <X size={14} />
+                    </button>
                   </div>
                 </div>
-                  
-                  <div style={{ maxHeight: 200, overflowY: 'auto', display: 'block' }}>
-                    {notifications.length === 0 ? (
-                      <div style={{ textAlign: 'center', color: '#94a3b8', fontSize: 10, padding: '16px 0' }}>Tidak ada notifikasi log.</div>
-                    ) : (
-                      notifications.map(n => (
-                        <SwipeableNotifItem
-                          key={n.id}
-                          notification={n}
-                          onRead={markAsRead}
-                          onDelete={clearNotification}
-                        />
-                      ))
-                    )}
-                  </div>
+                
+                <div style={{ maxHeight: 240, overflowY: 'auto', display: 'block' }}>
+                  {notifications.length === 0 ? (
+                    <div style={{ textAlign: 'center', color: '#94a3b8', fontSize: 10, padding: '16px 0' }}>Tidak ada notifikasi log.</div>
+                  ) : (
+                    notifications.map(n => (
+                      <SwipeableNotifItem
+                        key={n.id}
+                        notification={n}
+                        onRead={markAsRead}
+                        onDelete={clearNotification}
+                      />
+                    ))
+                  )}
                 </div>
-              )}
-            </div>
-
-            {/* TTS toggle */}
-            <button
-              onClick={() => setTtsEnabled(!ttsEnabled)}
-              title={ttsEnabled ? 'Matikan suara' : 'Aktifkan suara'}
-              style={{
-                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                padding: '7px 10px', borderRadius: 10, cursor: 'pointer',
-                border: `1px solid ${ttsEnabled ? 'rgba(16,185,129,0.25)' : 'rgba(239,68,68,0.25)'}`,
-                background: ttsEnabled ? 'rgba(16,185,129,0.07)' : 'rgba(239,68,68,0.06)',
-                color: ttsEnabled ? '#059669' : '#dc2626',
-                transition: 'all 0.2s',
-              }}
-            >
-              {ttsEnabled ? <Volume2 size={15} /> : <VolumeX size={15} />}
-            </button>
-
-            {/* Dark Mode Toggle */}
-            <button
-              onClick={() => setDarkMode(!darkMode)}
-              title={darkMode ? 'Aktifkan mode terang' : 'Aktifkan mode gelap'}
-              style={{
-                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                padding: '7px 10px', borderRadius: 10, cursor: 'pointer',
-                border: '1px solid rgba(15,23,42,0.1)',
-                background: 'rgba(15,23,42,0.04)',
-                color: darkMode ? '#f59e0b' : '#64748b',
-                transition: 'all 0.2s',
-              }}
-            >
-              {darkMode ? <Sun size={15} /> : <Moon size={15} />}
-            </button>
-
-            {/* Layout modal */}
-            <button
-              onClick={() => setShowFeatureModal(true)}
-              title="Pilih tampilan"
-              className="hide-mobile"
-              style={{
-                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                padding: '7px 10px', borderRadius: 10, cursor: 'pointer',
-                border: '1px solid rgba(15,23,42,0.1)',
-                background: 'rgba(15,23,42,0.04)',
-                color: '#64748b',
-                transition: 'all 0.2s',
-              }}
-            >
-              <ExternalLink size={14} />
-            </button>
+              </div>
+            )}
 
             {/* Auth CTA */}
             {!currentUser ? (
@@ -539,113 +615,20 @@ export const Navbar = ({ currentView, setView }) => {
                 <span className="hide-mobile">Masuk</span>
               </button>
             ) : (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{
-                  fontSize: 10, fontWeight: 700, color: '#64748b',
-                  background: 'rgba(15,23,42,0.05)',
-                  padding: '4px 9px', borderRadius: 8,
-                  border: '1px solid rgba(15,23,42,0.08)',
-                }} className="hide-mobile">
-                  {currentUser.role?.toUpperCase()}
-                </span>
-
-                {/* Titik-3: Profil / Setting / Preferensi / Dark mode */}
-                {['admin', 'doctor', 'super_admin'].includes(currentUser.role) && (
-                  <div ref={menuRef} style={{ position: 'relative' }}>
-                    <button
-                      onClick={() => setMenuOpen(v => !v)}
-                      title="Menu akun"
-                      style={{
-                        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                        padding: '7px 8px', borderRadius: 10, cursor: 'pointer',
-                        border: `1px solid ${menuOpen ? 'rgba(14,165,233,0.35)' : 'rgba(15,23,42,0.1)'}`,
-                        background: menuOpen ? 'rgba(14,165,233,0.08)' : 'rgba(15,23,42,0.04)',
-                        color: menuOpen ? '#0284c7' : '#64748b',
-                        transition: 'all 0.2s',
-                      }}
-                    >
-                      <MoreVertical size={15} />
-                    </button>
-
-                    {menuOpen && (
-                      <div
-                        style={{
-                          position: 'absolute', top: 'calc(100% + 8px)', right: 0, zIndex: 200,
-                          width: 240, background: '#fff', borderRadius: 18,
-                          border: '1px solid rgba(15,23,42,0.08)',
-                          boxShadow: '0 18px 50px rgba(15,23,42,0.18)',
-                          overflow: 'hidden', padding: 6,
-                        }}
-                      >
-                        <div style={{ padding: '8px 10px 10px', borderBottom: '1px solid rgba(15,23,42,0.06)' }}>
-                          <span style={{ display: 'block', fontSize: 11, fontWeight: 800, color: '#0f172a', wordBreak: 'break-all' }}>
-                            {currentUser.emailOrNik || currentUser.role}
-                          </span>
-                          <span style={{ display: 'inline-block', marginTop: 5, fontSize: 8, fontWeight: 800, letterSpacing: '0.08em', color: '#0369a1', background: 'rgba(14,165,233,0.1)', padding: '3px 7px', borderRadius: 99, textTransform: 'uppercase' }}>
-                            {currentUser.role}
-                          </span>
-                        </div>
-
-                        <button
-                          onClick={openMyProfile}
-                          style={menuItemStyle}
-                          onMouseEnter={e => e.currentTarget.style.background = 'rgba(15,23,42,0.05)'}
-                          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                        >
-                          <UserCog size={14} /> Profil Saya
-                        </button>
-
-                        <button
-                          onClick={() => { setMenuOpen(false); setShowFeatureModal(true); }}
-                          style={menuItemStyle}
-                          onMouseEnter={e => e.currentTarget.style.background = 'rgba(15,23,42,0.05)'}
-                          onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                        >
-                          <ExternalLink size={14} /> Pengaturan Tampilan
-                        </button>
-
-                        <div
-                          style={{ ...menuItemStyle, cursor: 'default', justifyContent: 'space-between' }}
-                        >
-                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-                            {darkMode ? <Moon size={14} /> : <Sun size={14} />} Mode Gelap
-                          </span>
-                          <button
-                            onClick={() => setDarkMode(v => !v)}
-                            aria-label="Toggle dark mode"
-                            style={{
-                              width: 36, height: 20, borderRadius: 99, border: 'none', cursor: 'pointer',
-                              background: darkMode ? '#0284c7' : '#cbd5e1',
-                              position: 'relative', transition: 'background 0.2s', flexShrink: 0,
-                            }}
-                          >
-                            <span style={{
-                              position: 'absolute', top: 2, left: darkMode ? 18 : 2,
-                              width: 16, height: 16, borderRadius: 99, background: '#fff',
-                              boxShadow: '0 1px 3px rgba(0,0,0,0.25)', transition: 'left 0.2s',
-                            }} />
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                <button
-                  onClick={() => { logout(); setView('home'); }}
-                  style={{
-                    display: 'inline-flex', alignItems: 'center', gap: 5,
-                    padding: '7px 12px', borderRadius: 10,
-                    border: '1px solid rgba(239,68,68,0.2)',
-                    background: 'rgba(239,68,68,0.05)',
-                    color: '#dc2626', fontWeight: 700, fontSize: 11,
-                    cursor: 'pointer', transition: 'all 0.2s',
-                  }}
-                >
-                  <X size={13} />
-                  <span className="hide-mobile">Keluar</span>
-                </button>
-              </div>
+              <button
+                onClick={() => { logout(); setView('home'); }}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 5,
+                  padding: '7px 12px', borderRadius: 10,
+                  border: '1px solid rgba(239,68,68,0.2)',
+                  background: 'rgba(239,68,68,0.05)',
+                  color: '#dc2626', fontWeight: 700, fontSize: 11,
+                  cursor: 'pointer', transition: 'all 0.2s',
+                }}
+              >
+                <X size={13} />
+                <span className="hide-mobile">Keluar</span>
+              </button>
             )}
 
             {/* Mobile hamburger */}

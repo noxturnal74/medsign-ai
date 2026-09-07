@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-28T21:06:13",
+  "generated_at": "2026-09-07T09:30:25",
   "contract": {
     "version": "medsign-clinical-full-v1",
     "frame_count": 30,
@@ -26,7 +26,6 @@
       "dada",
       "dahak",
       "pilek",
-      "flu",
       "tenggorokan",
       "paru-paru",
       "asma",
@@ -247,7 +246,15 @@
       "merasa",
       "mereka",
       "saya",
-      "sore"
+      "sore",
+      "aku",
+      "sepertinya",
+      "sampai",
+      "sehingga",
+      "sering",
+      "tetapi",
+      "tidak",
+      "yang"
     ]
   },
   "filters": {
@@ -255,8 +262,8 @@
     "signer_id": null,
     "max_empty_frame_ratio": 0.1
   },
-  "total_valid_samples": 22039,
-  "total_invalid_samples": 1,
+  "total_valid_samples": 22689,
+  "total_invalid_samples": 2,
   "counts": {
     "sakit": 95,
     "dokter": 155,
@@ -278,7 +285,6 @@
     "dada": 163,
     "dahak": 190,
     "pilek": 150,
-    "flu": 0,
     "tenggorokan": 100,
     "paru-paru": 155,
     "asma": 31,
@@ -438,7 +444,7 @@
     "dokter_spesialis": 75,
     "jadwal": 75,
     "janji_temu": 75,
-    "rujukan": 0,
+    "rujukan": 75,
     "administrasi": 75,
     "pembayaran": 75,
     "bpjs": 75,
@@ -447,8 +453,8 @@
     "kartu_pasien": 75,
     "pendamping": 75,
     "wali": 0,
-    "tanda_tangan": 0,
-    "selesai": 0,
+    "tanda_tangan": 75,
+    "selesai": 50,
     "halo_test": 0,
     "a": 0,
     "b": 0,
@@ -499,7 +505,15 @@
     "merasa": 75,
     "mereka": 25,
     "saya": 75,
-    "sore": 50
+    "sore": 50,
+    "aku": 75,
+    "sepertinya": 0,
+    "sampai": 50,
+    "sehingga": 75,
+    "sering": 25,
+    "tetapi": 75,
+    "tidak": 75,
+    "yang": 75
   },
   "signer_counts": {
     "sakit": {
@@ -601,7 +615,6 @@
       "glenn": 50,
       "loren": 25
     },
-    "flu": {},
     "tenggorokan": {
       "albert_cheng": 100
     },
@@ -1276,7 +1289,10 @@
       "glenn": 50,
       "loren": 25
     },
-    "rujukan": {},
+    "rujukan": {
+      "glenn": 50,
+      "loren": 25
+    },
     "administrasi": {
       "glenn": 50,
       "loren": 25
@@ -1305,8 +1321,13 @@
       "loren": 25
     },
     "wali": {},
-    "tanda_tangan": {},
-    "selesai": {},
+    "tanda_tangan": {
+      "glenn": 50,
+      "loren": 25
+    },
+    "selesai": {
+      "glenn": 50
+    },
     "halo_test": {},
     "a": {},
     "b": {},
@@ -1398,6 +1419,33 @@
     },
     "sore": {
       "glenn": 50
+    },
+    "aku": {
+      "glenn": 50,
+      "loren": 25
+    },
+    "sepertinya": {},
+    "sampai": {
+      "glenn": 50
+    },
+    "sehingga": {
+      "glenn": 50,
+      "loren": 25
+    },
+    "sering": {
+      "loren": 25
+    },
+    "tetapi": {
+      "glenn": 50,
+      "loren": 25
+    },
+    "tidak": {
+      "glenn": 50,
+      "loren": 25
+    },
+    "yang": {
+      "glenn": 50,
+      "loren": 25
     }
   },
   "missing_ratio_avg": {
@@ -1421,7 +1469,6 @@
     "dada": 0.0,
     "dahak": 0.0,
     "pilek": 0.0,
-    "flu": null,
     "tenggorokan": 0.0,
     "paru-paru": 0.0,
     "asma": 0.0,
@@ -1581,7 +1628,7 @@
     "dokter_spesialis": 0.0,
     "jadwal": 0.0,
     "janji_temu": 0.0,
-    "rujukan": null,
+    "rujukan": 0.0,
     "administrasi": 0.0,
     "pembayaran": 0.0,
     "bpjs": 0.0,
@@ -1590,8 +1637,8 @@
     "kartu_pasien": 0.0,
     "pendamping": 0.0,
     "wali": null,
-    "tanda_tangan": null,
-    "selesai": null,
+    "tanda_tangan": 0.0,
+    "selesai": 0.0,
     "halo_test": null,
     "a": null,
     "b": null,
@@ -1642,9 +1689,21 @@
     "merasa": 0.0,
     "mereka": 0.0,
     "saya": 0.0,
-    "sore": 0.0
+    "sore": 0.0,
+    "aku": 0.0,
+    "sepertinya": null,
+    "sampai": 0.0,
+    "sehingga": 0.0,
+    "sering": 0.0,
+    "tetapi": 0.0,
+    "tidak": 0.0,
+    "yang": 0.0
   },
   "invalid": [
+    {
+      "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit\\albert_william\\sakit_albert_william_session123_sakit_001.npy",
+      "reason": "empty_frame_ratio 100.00% melebihi batas 10.00%"
+    },
     {
       "file": "D:\\PKM\\medsign-ai\\backend\\data\\landmarks\\sakit\\albert_william\\sakit_albert_william_test_sess_valid_sakit_999.npy",
       "reason": "empty_frame_ratio 100.00% melebihi batas 10.00%"
