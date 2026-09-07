@@ -1,0 +1,13 @@
+backend/
+docs/
+manual_screenshots/
+*.pdf
+*.docx
+*.zip
+*.log
+*.npy
+*.npz
+*.tflite
+*.h5
+*.keras
+frontend/public/docs/*.pdf
