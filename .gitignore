@@ -83,3 +83,5 @@ credentials.txt
 backend/credentials.txt
 
 backend/setup_supabase_tables.py
+.vercel
+.env*
