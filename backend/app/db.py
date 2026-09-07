@@ -126,9 +126,14 @@ def get_supabase_headers():
 # ── DATABASE WRAPPER API ──
 
 def db_get_doctor_by_email(email: str) -> Optional[Dict[str, Any]]:
+    if not email:
+        return None
+    clean_email = email.strip().lower()
+    if clean_email == "bitapargazen@gmail.com":
+        clean_email = "dr.bita@medsign.local"
     if USE_SUPABASE:
         try:
-            url = f"{SUPABASE_URL}/rest/v1/doctors?email=eq.{email}"
+            url = f"{SUPABASE_URL}/rest/v1/doctors?email=ilike.{clean_email}"
             r = httpx.get(url, headers=get_supabase_headers())
             if r.status_code == 200 and r.json():
                 return r.json()[0]
@@ -138,15 +143,18 @@ def db_get_doctor_by_email(email: str) -> Optional[Dict[str, Any]]:
     else:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM doctors WHERE email = ?", (email,))
+        cursor.execute("SELECT * FROM doctors WHERE LOWER(email) = ?", (clean_email,))
         row = cursor.fetchone()
         conn.close()
         return dict(row) if row else None
 
 def db_get_admin_by_email(email: str) -> Optional[Dict[str, Any]]:
+    if not email:
+        return None
+    clean_id = email.strip().lower()
     if USE_SUPABASE:
         try:
-            url = f"{SUPABASE_URL}/rest/v1/admins?email=eq.{email}"
+            url = f"{SUPABASE_URL}/rest/v1/admins?or=(email.ilike.{clean_id},username.ilike.{clean_id})"
             r = httpx.get(url, headers=get_supabase_headers())
             if r.status_code == 200 and r.json():
                 return r.json()[0]
@@ -156,7 +164,7 @@ def db_get_admin_by_email(email: str) -> Optional[Dict[str, Any]]:
     else:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM admins WHERE email = ? OR username = ?", (email, email))
+        cursor.execute("SELECT * FROM admins WHERE LOWER(email) = ? OR LOWER(username) = ?", (clean_id, clean_id))
         row = cursor.fetchone()
         conn.close()
         return dict(row) if row else None
@@ -1006,35 +1014,28 @@ def init_db():
     passwords = {
         "administrator": "TahutekumEnak123!@#",
         "adminrsi": "rsipalingtop",
+        "admin_sentosa": "sentosatop123",
+        "admin_medika": "medikatop123",
         "dr.bita@medsign.local": os.getenv("DEMO_DOCTOR_PASSWORD", "DokterRSI2026!"),
         "bitapargazen@gmail.com": os.getenv("DEMO_DOCTOR_PASSWORD", "DokterRSI2026!"),
-        "390572816403": "glennperkasa123"
+        "dr_budi@rsi.com": "DokterRSI2026!",
+        "dr_siti@sentosa.com": "DokterSentosa2026!",
+        "dr_agus@sentosa.com": "DokterSentosa2026!",
+        "dr_dewi@medika.com": "DokterMedika2026!",
+        "dr_eko@medika.com": "DokterMedika2026!",
+        "390572816403": "glennperkasa123",
+        "3171011212850001": "andisaputra123",
+        "3171022304900002": "budiwijaya123",
+        "3171031405920003": "citralestari123",
+        "3171044506880004": "dianpratama123",
+        "3273011208910005": "ekarahmawati123",
+        "3273022509930006": "fajarnugroho123",
+        "3273031010940007": "gitapermata123",
+        "3578011111950008": "hadikusuma123",
+        "3578022202960009": "indahcahyani123",
+        "3578031303970010": "jokosusilo123"
     }
     
-    cred_path = "credentials.txt"
-    if os.path.exists(cred_path):
-        try:
-            with open(cred_path, "r", encoding="utf-8") as f:
-                lines = f.readlines()
-            for line in lines:
-                if ":" in line:
-                    parts = line.split(":")
-                    if len(parts) >= 2:
-                        key = parts[0].strip().replace("- Email", "").replace("- Username", "").replace("- Patient ID/NIK", "").replace("- Facility", "").strip()
-                        val = parts[1].strip()
-                        if "(" in val:
-                            val = val.split("(")[0].strip()
-                        cleaned_key = key.split()[-1] if key.split() else ""
-                        if cleaned_key:
-                            passwords[cleaned_key] = val
-        except Exception as e:
-            pass
-
-    # Ensure generated passwords exist
-    keys = ["admin_sentosa", "admin_medika", "dr_budi@rsi.com", "dr_siti@sentosa.com", "dr_agus@sentosa.com", "dr_dewi@medika.com", "dr_eko@medika.com", "3171011212850001", "3171022304900002", "3171031405920003", "3171044506880004", "3273011208910005", "3273022509930006", "3273031010940007", "3578011111950008", "3578022202960009", "3578031303970010", "3171050501980011", "3171061509970012", "3171072510960013"]
-    for k in keys:
-        if k not in passwords:
-            passwords[k] = secrets.token_urlsafe(8)
 
     # 1. Seed facilities
     facilities_data = [
@@ -1053,12 +1054,15 @@ def init_db():
 
     # 2. Seed Super Admin
     cursor.execute("SELECT id FROM admins WHERE email = 'administrator' OR username = 'administrator'")
-    if not cursor.fetchone():
-        hashed = hash_password(passwords["administrator"])
+    admin_row = cursor.fetchone()
+    hashed_admin = hash_password(passwords["administrator"])
+    if not admin_row:
         cursor.execute("""
             INSERT INTO admins (id, name, email, username, password_hash, created_at, status)
             VALUES (?, 'Super Administrator', 'administrator', 'administrator', ?, ?, 'active')
-        """, (str(uuid.uuid4()), hashed, datetime.utcnow().isoformat()))
+        """, (str(uuid.uuid4()), hashed_admin, datetime.utcnow().isoformat()))
+    else:
+        cursor.execute("UPDATE admins SET password_hash = ? WHERE id = ?", (hashed_admin, admin_row["id"]))
 
     # 3. Seed Admins
     admins_to_seed = [
@@ -1068,12 +1072,15 @@ def init_db():
     ]
     for username, name, email, fac_id, pwd_key in admins_to_seed:
         cursor.execute("SELECT id FROM admins WHERE username = ? OR email = ?", (username, email))
-        if not cursor.fetchone():
-            hashed = hash_password(passwords[pwd_key])
+        adm = cursor.fetchone()
+        hashed = hash_password(passwords[pwd_key])
+        if not adm:
             cursor.execute("""
                 INSERT INTO admins (id, name, email, username, password_hash, facility_id, created_at, status)
                 VALUES (?, ?, ?, ?, ?, ?, ?, 'active')
             """, (str(uuid.uuid4()), name, email, username, hashed, fac_id, datetime.utcnow().isoformat()))
+        else:
+            cursor.execute("UPDATE admins SET password_hash = ? WHERE id = ?", (hashed, adm["id"]))
 
     # 4. Seed Doctors
     docs_to_seed = [
@@ -1085,13 +1092,16 @@ def init_db():
         ("dr_eko@medika.com", "Dr. Eko Prasetyo", "Spesialis Syaraf", "fac_medika", "dr_eko@medika.com")
     ]
     for email, name, spec, fac_id, pwd_key in docs_to_seed:
-        cursor.execute("SELECT id FROM doctors WHERE email = ?", (email,))
-        if not cursor.fetchone():
-            hashed = hash_password(passwords[pwd_key])
+        cursor.execute("SELECT id FROM doctors WHERE LOWER(email) = LOWER(?)", (email,))
+        doc = cursor.fetchone()
+        hashed = hash_password(passwords[pwd_key])
+        if not doc:
             cursor.execute("""
                 INSERT INTO doctors (id, name, email, password_hash, specialization, facility_id, created_at, is_active, status, specialty)
                 VALUES (?, ?, ?, ?, ?, ?, ?, 1, 'active', ?)
             """, (str(uuid.uuid4()), name, email, hashed, spec, fac_id, datetime.utcnow().isoformat(), spec))
+        else:
+            cursor.execute("UPDATE doctors SET password_hash = ?, is_active = 1 WHERE id = ?", (hashed, doc["id"]))
 
     # 5. Seed Patients
     patients_to_seed = [
@@ -1108,19 +1118,21 @@ def init_db():
         ("3578031303970010", "Joko Susilo", "1997-03-13", "fac_medika", "3578031303970010", "PENDING")
     ]
     for nik, name, dob, fac_id, pwd_key, status in patients_to_seed:
-        exists = False
+        target_row = None
         cursor.execute("SELECT id, nik_encrypted FROM patients")
         for row in cursor.fetchall():
             if decrypt_nik(row["nik_encrypted"]) == nik:
-                exists = True
+                target_row = row
                 break
-        if not exists:
-            hashed = hash_password(passwords[pwd_key])
+        hashed = hash_password(passwords[pwd_key])
+        if not target_row:
             encrypted_nik = encrypt_nik(nik)
             cursor.execute("""
                 INSERT INTO patients (id, no_rm, nik_encrypted, password_hash, name, date_of_birth, created_at, facility_id, verification_status, is_active, must_change_password)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
             """, (str(uuid.uuid4()), "RM" + nik, encrypted_nik, hashed, name, dob, datetime.utcnow().isoformat(), fac_id, status, 1 if status == "APPROVED" else 0))
+        else:
+            cursor.execute("UPDATE patients SET password_hash = ? WHERE id = ?", (hashed, target_row["id"]))
 
     # 5b. Seed 3 pasien khusus ter-link ke Dr. Bita Pargazen (dr.bita@medsign.local)
     cursor.execute("SELECT id FROM doctors WHERE email IN ('dr.bita@medsign.local', 'bitapargazen@gmail.com')")
@@ -1241,8 +1253,7 @@ def init_db():
     conn.close()
 
     try:
-        with open("credentials.txt", "w", encoding="utf-8") as f:
-            f.write("""========================================
+        cred_content = """========================================
 MEDSIGN DEMO CREDENTIALS
 ========================================
 
@@ -1333,7 +1344,14 @@ PATIENTS:
                 p_hadi_pwd=passwords.get("3578011111950008", "hadi"),
                 p_indah_pwd=passwords.get("3578022202960009", "indah"),
                 p_joko_pwd=passwords.get("3578031303970010", "joko")
-            ))
+            )
+        repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+        for pth in ["credentials.txt", os.path.join(repo_root, "credentials.txt"), os.path.join(repo_root, "backend", "credentials.txt")]:
+            try:
+                with open(pth, "w", encoding="utf-8") as f:
+                    f.write(cred_content)
+            except Exception:
+                pass
     except Exception as e:
         pass
 

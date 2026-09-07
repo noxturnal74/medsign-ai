@@ -303,9 +303,10 @@ export const AppProvider = ({ children }) => {
       const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
       const endpoint = role === 'admin' ? '/auth/admin/login' : role === 'doctor' ? '/auth/doctor/login' : '/auth/patient/login';
       
+      const cleanInput = (emailOrNik || '').trim();
       const body = role === 'patient' 
-        ? { nik: emailOrNik, password } 
-        : { email: emailOrNik, password };
+        ? { nik: cleanInput, password } 
+        : { email: cleanInput.toLowerCase(), password };
         
       const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1${endpoint}`, {
         method: 'POST',

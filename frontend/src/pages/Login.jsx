@@ -1,6 +1,6 @@
 ﻿import React, { useState, useContext, useEffect } from 'react';
 import { AppContext } from '../context/AppContextObject';
-import { User, Stethoscope, Shield, Eye, EyeOff } from 'lucide-react';
+import { User, Stethoscope, Shield, Eye, EyeOff, Sparkles } from 'lucide-react';
 import { AccessibilityPopup } from '../components/AccessibilityPopup';
 
 export const Login = ({ setView, onLoginSuccess }) => {
@@ -256,6 +256,68 @@ export const Login = ({ setView, onLoginSuccess }) => {
             Admin
           </button>
         </div>
+
+        {/* Quick Demo Credentials Helper */}
+        {role === 'doctor' && (
+          <div className="rounded-2xl border border-sky-100 bg-sky-50/70 p-3 flex flex-col gap-1.5 transition-all">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-black text-sky-900 uppercase tracking-wider flex items-center gap-1.5">
+                <Sparkles size={12} className="text-sky-600" /> Kredensial Demo Dokter
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  setEmailOrNik('dr.bita@medsign.local');
+                  setPassword('DokterRSI2026!');
+                }}
+                className="text-[10px] font-black text-sky-700 hover:text-sky-900 underline transition-all active:scale-95"
+              >
+                Isi Otomatis
+              </button>
+            </div>
+            <div className="text-[10.5px] text-slate-600 flex flex-wrap gap-x-3 gap-y-0.5 font-mono">
+              <span>Email: <strong className="text-slate-800 font-semibold">dr.bita@medsign.local</strong></span>
+              <span>Sandi: <strong className="text-slate-800 font-semibold">DokterRSI2026!</strong></span>
+            </div>
+          </div>
+        )}
+
+        {role === 'admin' && (
+          <div className="rounded-2xl border border-sky-100 bg-sky-50/70 p-3 flex flex-col gap-1.5 transition-all">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-black text-sky-900 uppercase tracking-wider flex items-center gap-1.5">
+                <Sparkles size={12} className="text-sky-600" /> Kredensial Demo Admin
+              </span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmailOrNik('adminrsi');
+                    setPassword('rsipalingtop');
+                  }}
+                  className="text-[10px] font-black text-sky-700 hover:text-sky-900 underline transition-all active:scale-95"
+                >
+                  Admin RSI
+                </button>
+                <span className="text-slate-300">|</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmailOrNik('administrator');
+                    setPassword('TahutekumEnak123!@#');
+                  }}
+                  className="text-[10px] font-black text-sky-700 hover:text-sky-900 underline transition-all active:scale-95"
+                >
+                  Super Admin
+                </button>
+              </div>
+            </div>
+            <div className="text-[10.5px] text-slate-600 flex flex-wrap gap-x-3 gap-y-0.5 font-mono">
+              <span>Admin: <strong className="text-slate-800 font-semibold">adminrsi</strong> / <strong className="text-slate-800 font-semibold">rsipalingtop</strong></span>
+              <span>Super: <strong className="text-slate-800 font-semibold">administrator</strong></span>
+            </div>
+          </div>
+        )}
 
         {/* Input Form */}
         <form onSubmit={handleLogin} className="flex flex-col gap-4">

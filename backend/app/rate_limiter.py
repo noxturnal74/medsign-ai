@@ -11,13 +11,14 @@ def check_lockout(username_or_nik: str, is_patient: bool) -> float:
     Checks if the user account is currently locked out.
     Returns remaining lockout time in seconds, or 0.0 if not locked.
     """
-    if username_or_nik not in failed_attempts:
+    key = (username_or_nik or "").strip().lower()
+    if key not in failed_attempts:
         return 0.0
         
     now = time.time()
     # Filter failed attempts within the 15-minute window
-    failures = [t for t in failed_attempts[username_or_nik] if now - t < LOCKOUT_WINDOW]
-    failed_attempts[username_or_nik] = failures
+    failures = [t for t in failed_attempts[key] if now - t < LOCKOUT_WINDOW]
+    failed_attempts[key] = failures
     
     limit = 3 if is_patient else 5
     if len(failures) >= limit:
@@ -30,11 +31,13 @@ def check_lockout(username_or_nik: str, is_patient: bool) -> float:
 
 def record_failure(username_or_nik: str):
     """Records a login failure for the account."""
-    if username_or_nik not in failed_attempts:
-        failed_attempts[username_or_nik] = []
-    failed_attempts[username_or_nik].append(time.time())
+    key = (username_or_nik or "").strip().lower()
+    if key not in failed_attempts:
+        failed_attempts[key] = []
+    failed_attempts[key].append(time.time())
 
 def record_success(username_or_nik: str):
     """Clears the login failure records for the account upon successful login."""
-    if username_or_nik in failed_attempts:
-        del failed_attempts[username_or_nik]
+    key = (username_or_nik or "").strip().lower()
+    if key in failed_attempts:
+        del failed_attempts[key]

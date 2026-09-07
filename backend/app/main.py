@@ -28,6 +28,13 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# Inisialisasi basis data lokal dan sinkronisasi kredensial demo
+from app.db import init_db
+try:
+    init_db()
+except Exception as _e:
+    print("[DB] init_db startup warning:", _e)
+
 # Configure CORS — eksplisit, jangan wildcard bersama credentials
 import os as _os
 _ALLOWED_ORIGINS = [o.strip() for o in _os.getenv(
