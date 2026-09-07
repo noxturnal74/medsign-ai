@@ -1,3 +1,4 @@
+import { getApiBaseUrl } from '../utils/apiUrl';
 import React, {
 
   useState,
@@ -18,6 +19,7 @@ import { AppContext } from "../context/AppContextObject";
 
 import { AdminAnalytics } from "../components/admin/AdminAnalytics";
 import { ReportDownloader } from "../components/admin/ReportDownloader";
+import ModelTrainingManager from "../components/admin/ModelTrainingManager";
 
 import { useWebcam } from "../hooks/useWebcam";
 
@@ -314,11 +316,7 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
     () =>
 
-      localStorage.getItem("medsign_api_url") ||
-
-      import.meta.env.VITE_API_BASE_URL ||
-
-      "http://localhost:8000",
+      getApiBaseUrl(),
 
   );
 
@@ -9571,8 +9569,8 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
 
 
     return (
-
-      <div className="grid gap-6 lg:grid-cols-[1fr_1.5fr] animate-slide-up">
+      <div className="flex flex-col gap-6">
+        <div className="grid gap-6 lg:grid-cols-[1fr_1.5fr] animate-slide-up">
 
         {/* Left pane: training configuration & model management */}
 
@@ -10460,6 +10458,18 @@ export const DataCollection = ({ setView, initialTab, embedded = false }) => {
         </div>
 
       </div>
+
+      {/* ═══ Automatic Training Result, Testing/Evaluation, Confusion Matrix & Model Comparison ═══ */}
+      <div className="mt-4">
+        <ModelTrainingManager
+          apiUrl={apiUrl}
+          token={currentUser?.token}
+          showToast={showToast}
+          onModelActivated={fetchModelStatus}
+        />
+      </div>
+
+    </div>
 
     );
 

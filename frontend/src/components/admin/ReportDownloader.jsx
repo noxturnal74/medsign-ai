@@ -1,3 +1,4 @@
+import { getApiBaseUrl } from '../../utils/apiUrl';
 import React, { useState } from 'react';
 import { FileText, FileSpreadsheet, FileType2, Braces, Loader2, Download } from 'lucide-react';
 
@@ -6,7 +7,7 @@ import { FileText, FileSpreadsheet, FileType2, Braces, Loader2, Download } from 
 export const ReportDownloader = ({ token, showToast, compact = false }) => {
   const [busy, setBusy] = useState(null);
 
-  const API = (localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
+  const API = getApiBaseUrl();
 
   const formats = [
     { key: 'pdf',  label: 'PDF',   icon: FileText,       cls: 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100' },

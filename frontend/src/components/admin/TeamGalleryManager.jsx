@@ -1,7 +1,8 @@
+import { getApiBaseUrl } from '../../utils/apiUrl';
 import React, { useState, useEffect, useRef } from 'react';
 import { Camera, Plus, Pencil, Trash2, Save, Loader2, X, Check, RotateCcw, Upload, Image as ImageIcon, Sparkles, ArrowUp, ArrowDown } from 'lucide-react';
 
-const API = (localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
+const API = getApiBaseUrl();
 
 const inputCls = 'w-full rounded-2xl border border-slate-200 px-3.5 py-2.5 text-xs font-semibold text-slate-800 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-sky-500/30 focus:border-sky-500 transition-all placeholder:text-slate-300';
 

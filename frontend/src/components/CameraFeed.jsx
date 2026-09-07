@@ -1,3 +1,4 @@
+import { getStreamingUrl } from '../utils/apiUrl';
 import React, { useCallback, useContext, useEffect } from 'react';
 
 import { AppContext } from '../context/AppContextObject';
@@ -11,50 +12,6 @@ import { useWebSocket } from '../hooks/useWebSocket';
 import { AlertTriangle, Camera, CameraOff, RefreshCw, Sparkles, Stethoscope, Maximize2, CheckCircle2 } from 'lucide-react';
 
 
-
-const getStreamingUrl = () => {
-
-  const apiBaseUrl = localStorage.getItem('medsign_api_url')?.trim() || import.meta.env.VITE_API_BASE_URL?.trim();
-
-
-
-  if (!apiBaseUrl) {
-
-    return null;
-
-  }
-
-
-
-  if (apiBaseUrl.startsWith('ws://') || apiBaseUrl.startsWith('wss://')) {
-
-    return `${(apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl)}/api/v1/stream`;
-
-  }
-
-
-
-  try {
-
-    const url = new URL(apiBaseUrl);
-
-    url.protocol = url.protocol === 'https:' ? 'wss:' : 'ws:';
-
-    url.pathname = '/api/v1/stream';
-
-    url.search = '';
-
-    url.hash = '';
-
-    return url.toString();
-
-  } catch {
-
-    return null;
-
-  }
-
-};
 
 
 

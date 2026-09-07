@@ -1,3 +1,4 @@
+import { getApiBaseUrl } from '../../utils/apiUrl';
 import React, { useState, useEffect, useCallback, useContext, useRef } from 'react';
 import {
   LayoutGrid, Save, ArrowUp, ArrowDown, Power, EyeOff,
@@ -6,7 +7,7 @@ import {
 } from 'lucide-react';
 import { AppContext } from '../../context/AppContextObject';
 
-const API = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+const API = getApiBaseUrl();
 
 const DEFAULT_ORDER = ['mitra', 'reviews', 'instagram', 'articles', 'brand_pkm', 'video_tutorial'];
 
@@ -211,7 +212,7 @@ const ImageUpload = ({ value, onChange, accept = "image/*", label = "Upload Gamb
       const formData = new FormData();
       formData.append('file', file);
       formData.append('folder', 'uploads');
-      const apiBase = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBase = getApiBaseUrl();
       const savedUser = localStorage.getItem('medsign_user');
       const token = savedUser ? JSON.parse(savedUser).token : null;
       const res = await fetch(`${apiBase}/api/v1/upload`, {

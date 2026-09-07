@@ -1,3 +1,4 @@
+import { getApiBaseUrl } from '../utils/apiUrl';
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { AppContext } from '../context/AppContextObject';
 import {
@@ -7,7 +8,7 @@ import {
   MoreVertical, UserCog, Moon, Sun, Loader2, Camera, KeyRound, Check,
 } from 'lucide-react';
 
-const API_BASE = () => (localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
+const API_BASE = () => getApiBaseUrl();
 
 const menuItemStyle = {
   display: 'flex', alignItems: 'center', gap: 8, width: '100%',
@@ -214,7 +215,7 @@ export const Navbar = ({ currentView, setView }) => {
   useEffect(() => {
     const fetchLayout = async () => {
       try {
-        const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+        const apiBaseUrl = getApiBaseUrl();
         const cleanUrl = apiBaseUrl.replace(/\/$/, '');
         const res = await fetch(`${cleanUrl}/api/v1/homepage/layout`);
         if (res.ok) {

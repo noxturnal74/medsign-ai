@@ -1,3 +1,4 @@
+import { getApiBaseUrl } from '../utils/apiUrl';
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { AppContext } from '../context/AppContextObject';
 import {
@@ -20,7 +21,7 @@ import {
 
 export const ChatHistory = ({ setView }) => {
   const { currentUser } = useContext(AppContext);
-  const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+  const apiBaseUrl = getApiBaseUrl();
   const token = currentUser?.token || localStorage.getItem('medsign_token') || '';
 
   const urlParams = new URLSearchParams(window.location.search);

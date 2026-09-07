@@ -1,3 +1,4 @@
+import { getApiBaseUrl } from '../utils/apiUrl';
 import React, { useContext, useState, useRef } from 'react';
 
 import { AppContext } from '../context/AppContextObject';
@@ -171,7 +172,7 @@ export const DoctorPanel = ({ activeSessionId }) => {
       rec.onresult = async (event) => {
         const text = event.results[0][0].transcript;
         try {
-          const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+          const apiBaseUrl = getApiBaseUrl();
           const response = await fetch(
             `${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/nlg/simplify-speech`,
             {

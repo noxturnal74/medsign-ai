@@ -1,3 +1,4 @@
+import { getApiBaseUrl } from '../utils/apiUrl';
 import React, { useEffect, useState } from 'react';
 import { Star, Search, Quote } from 'lucide-react';
 
@@ -8,7 +9,7 @@ export const ReviewsPage = ({ setView }) => {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+        const apiBaseUrl = getApiBaseUrl();
         const cleanUrl = apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl;
         const res = await fetch(`${cleanUrl}/api/v1/reviews`);
         if (res.ok) setReviews(await res.json());

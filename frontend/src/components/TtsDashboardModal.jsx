@@ -1,3 +1,4 @@
+import { getApiBaseUrl } from '../utils/apiUrl';
 ﻿import React, { useState, useEffect, useRef, useContext } from 'react';
 import { AppContext } from '../context/AppContextObject';
 import { 
@@ -42,7 +43,7 @@ export const TtsDashboardModal = ({ isOpen, onClose }) => {
   // Fetch providers and voices from backend API
   const fetchProviders = async () => {
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/tts/providers`);
       if (response.ok) {
         const data = await response.json();
@@ -98,7 +99,7 @@ export const TtsDashboardModal = ({ isOpen, onClose }) => {
     }
 
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/tts/voices?provider=${activeProvider}`);
       if (response.ok) {
         const data = await response.json();
@@ -173,7 +174,7 @@ export const TtsDashboardModal = ({ isOpen, onClose }) => {
     }
 
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/tts/synthesize`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

@@ -1,3 +1,4 @@
+import { getApiBaseUrl } from '../utils/apiUrl';
 import React, { useContext, useRef, useEffect, useState } from 'react';
 import { AppContext } from '../context/AppContextObject';
 import { Clipboard, Download, FileText, Stethoscope, Trash2, UserRound, Save, Loader2 } from 'lucide-react';
@@ -79,7 +80,7 @@ export const SessionLog = () => {
     }
     setSaving(true);
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const token = currentUser?.token || localStorage.getItem('medsign_token') || '';
       const chatId = localStorage.getItem('medsign_chat_id') || activeSessionIdFromContext || `local_${Date.now()}`;
       // Simpan semua log sebagai chat messages (langsung ke simpan, SOAP opsional terpisah)

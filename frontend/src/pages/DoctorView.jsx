@@ -1,3 +1,4 @@
+import { getApiBaseUrl } from '../utils/apiUrl';
 import React, { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../context/AppContextObject';
 import { DoctorPanel } from '../components/DoctorPanel';
@@ -72,7 +73,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
   const fetchDoctorProfile = async () => {
     setProfileLoading(true);
     try {
-      const apiBase = (localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
+      const apiBase = getApiBaseUrl();
       const res = await fetch(`${apiBase}/api/v1/doctor/me`, {
         headers: { 'Authorization': `Bearer ${currentUser?.token}` }
       });
@@ -118,7 +119,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
     }
     setProfileSaving(true);
     try {
-      const apiBase = (localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
+      const apiBase = getApiBaseUrl();
       const body = { ...profileForm };
       if (newPassword) body.password = newPassword;
       const res = await fetch(`${apiBase}/api/v1/doctor/me`, {
@@ -189,7 +190,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
 
   const fetchAssignedPatients = async () => {
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const url = currentUser?.role === 'admin'
         ? `${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/admin/patients`
         : `${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/doctor/patients`;
@@ -208,7 +209,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
   const handleSearchPatients = async (e) => {
     e.preventDefault();
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/doctor/patients/search?q=${searchQuery}`, {
         headers: { 'Authorization': `Bearer ${currentUser?.token}` }
       });
@@ -222,7 +223,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
 
   const fetchPatientSessions = async (patientId) => {
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/patients/${patientId}/sessions`, {
         headers: { 'Authorization': `Bearer ${currentUser?.token}` }
       });
@@ -242,7 +243,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
 
   const handleSelectPatient = async (patient) => {
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/sessions`, {
         method: 'POST',
         headers: {
@@ -277,7 +278,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
       return;
     }
     try {
-      const apiBaseUrl = (localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
+      const apiBaseUrl = getApiBaseUrl();
       const response = await fetch(`${apiBaseUrl}/api/v1/patient/${patId}/break-glass`, {
         method: "POST",
         headers: {
@@ -304,7 +305,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
       return;
     }
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const response = await fetch(`${apiBaseUrl}/api/v1/sessions/${activeSessionId}/medical-record`, {
         method: "POST",
         headers: {
@@ -339,7 +340,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
   const handleSignRecord = async () => {
     if (!activeMedicalRecord) return;
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const response = await fetch(`${apiBaseUrl}/api/v1/medical-records/${activeMedicalRecord.id}/sign`, {
         method: "POST",
         headers: {
@@ -363,7 +364,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
     const correctionText = prompt("Masukkan Catatan Medis (Koreksi) baru Anda:");
     if (!correctionText || !correctionText.trim()) return;
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const response = await fetch(`${apiBaseUrl}/api/v1/medical-records/${activeMedicalRecord.id}/correction`, {
         method: "POST",
         headers: {
@@ -399,7 +400,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
       return;
     }
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const response = await fetch(`${apiBaseUrl}/api/v1/medical-records/${activeMedicalRecord.id}/medications`, {
         method: "POST",
         headers: {
@@ -431,7 +432,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
   const handleEndSession = async (confirm = true) => {
     if (confirm) { setShowEndSessionConfirm(true); return; }
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/sessions/${activeSessionId}/end`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${currentUser?.token}` }
@@ -459,7 +460,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
 
   const handleSaveSummary = async (summaryText) => {
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/sessions/${activeSessionId}/summary`, {
         method: 'POST',
         headers: {
@@ -484,7 +485,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
   const handleDeleteSession = async (sessionId) => {
     if (!window.confirm("Apakah Anda yakin ingin menghapus seluruh riwayat sesi ini beserta log percakapannya? Tindakan ini tidak dapat dibatalkan.")) return;
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/sessions/${sessionId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${currentUser?.token}` }
@@ -513,7 +514,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
     if (!selectedPastSession) return;
     setSavingSoapEdit(true);
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/sessions/${selectedPastSession.id}/soap`, {
         method: 'PUT',
         headers: {
@@ -541,7 +542,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
   const handleDeleteLog = async (logId) => {
     if (!window.confirm("Hapus bubble pesan ini dari riwayat log?")) return;
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/sessions/logs/${logId}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${currentUser?.token}` }
@@ -561,7 +562,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
   const handleUpdateLog = async (logId) => {
     if (!tempLogText.trim()) return;
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/sessions/logs/${logId}`, {
         method: 'PUT',
         headers: {
@@ -606,7 +607,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
 
   const handleViewPastSessionLogs = async (session) => {
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/sessions/${session.id}/logs`, {
         headers: { 'Authorization': `Bearer ${currentUser?.token}` }
       });
@@ -626,7 +627,7 @@ export const DoctorView = ({ setView, isSplit = false }) => {
 const handleOpenPatientHistory = async (pat) => {
     // WhatsApp-style: satu thread per pasien. Coba ambil chat yg sudah ada, kalau belum ada buat baru.
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const headers = { Authorization: `Bearer ${currentUser?.token}` };
       // coba ambil daftar chat pasien
       let chatId = null;
@@ -673,7 +674,7 @@ const handleOpenPatientHistory = async (pat) => {
   const _loadChatMessages_UNUSED = async (chatId) => {
     setHistoryLoading(true);
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const response = await fetch(
         `${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/chat/history/${chatId}`,
         {
@@ -1098,7 +1099,7 @@ const handleOpenPatientHistory = async (pat) => {
                   return;
                 }
                 try {
-                  const apiBase = (localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
+                  const apiBase = getApiBaseUrl();
                   const res = await fetch(`${apiBase}/api/v1/doctor/patients/find-by-nik?nik=${encodeURIComponent(searchBgNik.trim())}`, {
                     headers: { 'Authorization': `Bearer ${currentUser?.token}` }
                   });

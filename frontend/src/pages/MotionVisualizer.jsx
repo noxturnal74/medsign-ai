@@ -1,3 +1,4 @@
+import { getApiBaseUrl } from '../utils/apiUrl';
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { AppContext } from '../context/AppContextObject';
 import { ArrowLeft, Play, Pause, Download, Video, Award, Clock, Activity, Sliders, CheckCircle2 } from 'lucide-react';

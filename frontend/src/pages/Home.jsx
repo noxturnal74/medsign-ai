@@ -1,3 +1,4 @@
+import { getApiBaseUrl } from '../utils/apiUrl';
 const getYouTubeEmbedUrl = (url) => {
   if (!url) return '';
   if (url.includes('youtube.com/embed/')) return url;
@@ -21,6 +22,10 @@ import {
   ExternalLink,
   FileText,
   Star,
+  Instagram,
+  Film,
+  Play,
+  Image as ImageIcon,
 } from 'lucide-react';
 
 const MARKETING_SITE_URL =
@@ -30,6 +35,37 @@ const YOUTUBE_TUTORIAL_URL =
   import.meta.env.VITE_YOUTUBE_TUTORIAL_URL || 'https://www.youtube.com/@medsignai';
 
 const DEFAULT_SECTION_ORDER = ['mitra', 'reviews', 'instagram', 'articles', 'brand_pkm', 'video_tutorial'];
+
+const INITIAL_INSTAGRAM_POSTS = [
+  {
+    id: "instagram-001",
+    platform: "instagram",
+    type: "reel",
+    url: "https://www.instagram.com/reel/DcnJD2SSJHB/?igsi=MW51c3ppOHp6d2RscQ==",
+    thumbnail: "/assets/ig-post-1.jpg",
+    title: "Reel MedSign AI: Edukasi & Inovasi Komunikasi Klinis Bahasa Isyarat BISINDO.",
+    caption: "Reel MedSign AI: Edukasi & Inovasi Komunikasi Klinis Bahasa Isyarat BISINDO."
+  },
+  {
+    id: "instagram-002",
+    platform: "instagram",
+    type: "post",
+    url: "https://www.instagram.com/p/DcnLcB1klA_/?igsi=eXhvZXFoNXRzOGNs",
+    thumbnail: "/assets/ig-post-2.jpg",
+    title: "Dokumentasi & kegiatan terkini tim MedSign AI PKM-KC.",
+    caption: "Dokumentasi & kegiatan terkini tim MedSign AI PKM-KC."
+  },
+  {
+    id: "instagram-003",
+    platform: "instagram",
+    type: "post",
+    url: "https://www.instagram.com/p/DcnIZMKkgyy/?igsi=MXZkZzV0Mno5NjkxYw==",
+    thumbnail: "/assets/ig-post-3.jpg",
+    title: "Mengenal ekosistem inklusif penerjemah BISINDO medis untuk tenaga kesehatan.",
+    caption: "Mengenal ekosistem inklusif penerjemah BISINDO medis untuk tenaga kesehatan."
+  }
+];
+
 
 const institutionLogos = [
   { name: 'Kemdikbudristek',        src: '/assets/logo-kemdikbudristek.png' },
@@ -88,47 +124,105 @@ const resolveIgMedia = (url) => {
   return url;
 };
 
-const InstagramPostCard = ({ post }) => {
+const InstagramPreviewCard = ({ post }) => {
   const [imgErr, setImgErr] = React.useState(false);
-  const imgSrc = post.thumbnail_image || resolveIgMedia(post.post_url);
+
+  const postUrl = post.url || post.post_url || '';
+  const isReel = (post.type === 'reel') || (postUrl.includes('/reel/') || postUrl.includes('/reels/'));
+  const contentType = isReel ? 'Reel' : 'Post';
+  const caption = post.caption || post.caption_short || post.title || '';
+  
+  const rawThumbnail = post.thumbnail || post.thumbnail_image || '';
+  const imgSrc = rawThumbnail || resolveIgMedia(postUrl);
+
+  const displayUrl = postUrl ? postUrl.replace(/^https?:\/\/(www\.)?/, '').replace(/\?.*$/, '') : 'instagram.com';
 
   return (
-    <a
-      href={post.post_url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="rounded-[24px] overflow-hidden border border-slate-200/80 bg-white shadow-sm hover:shadow-xl hover:-translate-y-1 active:scale-[0.98] transition-all duration-300 flex flex-col group"
-    >
-      <div className="relative aspect-square w-full bg-slate-900 overflow-hidden">
-        {imgSrc && !imgErr ? (
-          <img
-            src={imgSrc}
-            alt={post.caption_short || 'Instagram post'}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            onError={() => setImgErr(true)}
-          />
-        ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900 p-4 text-center">
-            <span className="text-white text-xs font-black uppercase tracking-wider line-clamp-3 leading-snug">
-              {post.caption_short || 'MedSign AI Feed'}
-            </span>
-          </div>
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
-          <span className="text-[9px] font-black text-white uppercase tracking-wider bg-black/40 px-2 py-0.5 rounded-lg backdrop-blur-sm">
-            Buka di Instagram ↗
+    <article className="rounded-3xl overflow-hidden border border-slate-200/90 bg-white shadow-sm hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group">
+      {/* Visual Preview Container */}
+      <div className="relative aspect-[4/5] w-full bg-slate-950 overflow-hidden flex items-center justify-center select-none">
+        {/* Top Badges */}
+        <div className="absolute top-3 inset-x-3 z-10 flex items-center justify-between pointer-events-none">
+          {/* Platform Badge */}
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-wider border border-white/10 shadow-sm">
+            <Instagram size={12} className="text-pink-400" />
+            <span>Instagram</span>
+          </span>
+
+          {/* Content Type Badge */}
+          <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider backdrop-blur-md shadow-sm border ${
+            isReel 
+              ? 'bg-rose-500/90 text-white border-rose-400/30' 
+              : 'bg-sky-500/90 text-white border-sky-400/30'
+          }`}>
+            {isReel ? <Film size={11} /> : <ImageIcon size={11} />}
+            <span>{contentType}</span>
           </span>
         </div>
+
+        {/* Thumbnail Image / Fallback */}
+        {imgSrc && !imgErr ? (
+          <>
+            <img
+              src={imgSrc}
+              alt={caption || `Instagram ${contentType}`}
+              referrerPolicy="no-referrer"
+              crossOrigin="anonymous"
+              onError={() => setImgErr(true)}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
+          </>
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center bg-slate-900 p-6 text-center text-slate-300">
+            <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center mb-3 text-pink-400">
+              <Instagram size={24} />
+            </div>
+            <span className="text-xs font-black uppercase tracking-wider text-slate-200">Instagram {contentType}</span>
+            <span className="text-[10px] font-semibold text-slate-400 mt-1">[ Instagram thumbnail unavailable ]</span>
+          </div>
+        )}
+
+        {/* Bottom preview overlay badge */}
+        {isReel && imgSrc && !imgErr && (
+          <div className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-md text-white text-[10px] font-bold border border-white/10 pointer-events-none">
+            <Play size={10} className="fill-white" />
+            <span>Watch Reel</span>
+          </div>
+        )}
       </div>
-      <div className="p-3.5 flex-1 flex flex-col justify-between gap-2">
-        <p className="text-[11px] font-semibold leading-relaxed text-slate-700 line-clamp-2">
-          {post.caption_short}
-        </p>
-        <span className="text-[9.5px] font-black text-sky-600 group-hover:text-sky-700 uppercase tracking-wider flex items-center gap-1">
-          Lihat Postingan <ArrowRight size={10} />
-        </span>
+
+      {/* Card Body */}
+      <div className="p-5 flex-1 flex flex-col justify-between gap-3.5 bg-white">
+        <div>
+          <div className="flex items-center justify-between gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+            <span className="text-pink-600 font-black">Instagram {contentType}</span>
+            <span className="truncate max-w-[140px] font-mono text-[9px] text-slate-400" title={postUrl}>{displayUrl}</span>
+          </div>
+          {caption ? (
+            <p className="text-xs font-semibold text-slate-700 line-clamp-2 leading-relaxed">
+              {caption}
+            </p>
+          ) : (
+            <p className="text-xs font-semibold text-slate-400 italic">
+              Lihat konten dan video selengkapnya langsung di Instagram.
+            </p>
+          )}
+        </div>
+
+        {/* Action Button: View on Instagram */}
+        <a
+          href={postUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-2xl bg-slate-900 hover:bg-gradient-to-r hover:from-pink-600 hover:to-rose-600 text-white text-xs font-black uppercase tracking-wider transition-all shadow-sm active:scale-95 group/btn"
+        >
+          <span>View on Instagram</span>
+          <ExternalLink size={13} className="group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
+        </a>
       </div>
-    </a>
+    </article>
   );
 };
 
@@ -138,39 +232,63 @@ const ArticleCard = ({ art }) => {
   const hasCover = art.cover_image || art.image || art.thumbnail;
   const coverSrc = art.cover_image || art.image || art.thumbnail;
 
+  const linkUrl = art.ref_url || (() => {
+    const content = art.content || "";
+    const mdMatch = content.match(/\[.*?\]\((https?:\/\/.*?)\)/);
+    if (mdMatch) return mdMatch[1];
+    const urlMatch = content.match(/(https?:\/\/[^\s\)]+)/);
+    if (urlMatch) return urlMatch[1];
+    return MARKETING_SITE_URL;
+  })();
+
   return (
-    <div className="rounded-[24px] overflow-hidden bg-white border border-slate-200 flex flex-col shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
-      {hasCover && !imgErr ? (
-        <img
-          src={coverSrc}
-          alt={art.title}
-          className="aspect-video w-full object-cover"
-          onError={() => setImgErr(true)}
-        />
-      ) : (
-        <ImgPlaceholder aspectClass="aspect-video" className="rounded-t-[24px]" />
-      )}
-      <div className="p-5 flex flex-col gap-3 flex-1 justify-between">
-        <div className="flex flex-col gap-2">
+    <div className="rounded-[24px] overflow-hidden bg-white border border-slate-200/90 flex flex-col justify-between shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+      <div>
+        <div className="aspect-video w-full bg-slate-900 overflow-hidden relative">
+          {hasCover && !imgErr ? (
+            <img
+              src={coverSrc}
+              alt={art.title}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              onError={() => setImgErr(true)}
+            />
+          ) : (
+            <ImgPlaceholder aspectClass="aspect-video" className="rounded-t-[24px]" />
+          )}
+          {art.category && (
+            <div className="absolute top-3 left-3">
+              <span className="text-[9.5px] font-black uppercase tracking-wider text-white bg-slate-900/80 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10 shadow-sm">
+                {art.category}
+              </span>
+            </div>
+          )}
+        </div>
+        <div className="p-5 flex flex-col gap-2.5">
           <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">
             {art.created_at
               ? new Date(art.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
               : '2026'}
           </span>
-          <h3 className="text-sm font-black text-slate-900 leading-snug line-clamp-2">{art.title}</h3>
-          <p className="text-[11px] font-medium leading-relaxed text-slate-500 line-clamp-3">{art.content}</p>
+          <h3 className="text-sm font-black text-slate-900 leading-snug line-clamp-2 group-hover:text-sky-600 transition-colors">
+            {art.title}
+          </h3>
+          <p className="text-[11px] font-medium leading-relaxed text-slate-500 line-clamp-3">
+            {art.content}
+          </p>
         </div>
-        <div className="flex items-center justify-between border-t border-slate-100 pt-3 mt-1">
-          <span className="text-[10px] font-bold text-slate-400">Oleh {art.author || 'Admin'}</span>
-          <a
-            href={MARKETING_SITE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[10px] font-black text-sky-600 hover:text-sky-700 uppercase flex items-center gap-1"
-          >
-            Selengkapnya <ArrowRight size={10} />
-          </a>
-        </div>
+      </div>
+
+      <div className="p-5 pt-0 flex items-center justify-between border-t border-slate-100 mt-2">
+        <span className="text-[10px] font-bold text-slate-400 truncate max-w-[140px]">Oleh {art.author || 'Admin'}</span>
+        <a
+          href={linkUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[10px] font-black text-sky-600 hover:text-sky-700 uppercase flex items-center gap-1 group/btn"
+        >
+          <span>Selengkapnya</span>
+          <ArrowRight size={10} className="group-hover/btn:translate-x-0.5 transition-transform" />
+        </a>
       </div>
     </div>
   );
@@ -196,7 +314,7 @@ export const Home = ({ setView }) => {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const base = (localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
+        const base = getApiBaseUrl();
         const safe = (p) => fetch(`${base}${p}`).then(r => r.ok ? r.json() : []).catch(() => []);
         const [rev, art, ig, mit, lay, vids] = await Promise.all([
           safe('/api/v1/reviews'),
@@ -336,23 +454,40 @@ export const Home = ({ setView }) => {
                 </section>
               );
             case "instagram":
-              return instagramPosts.length > 0 && (
+              const displayIgPosts = (instagramPosts && instagramPosts.length > 0)
+                ? instagramPosts.slice(0, 3)
+                : INITIAL_INSTAGRAM_POSTS;
+
+              return (
                 <section key="instagram" className="px-4 py-12 md:px-10 lg:px-16" data-reveal>
                   <div className="mx-auto max-w-7xl">
-                    <div className="flex items-center justify-between mb-8">
-                      <h2 className="text-2xl font-black text-slate-900">Konten Terbaru Instagram</h2>
+                    <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+                      <div>
+                        <div className="flex items-center gap-2 text-pink-600 mb-1">
+                          <Instagram size={18} />
+                          <span className="text-xs font-black uppercase tracking-widest">Instagram</span>
+                        </div>
+                        <h2 className="text-2xl md:text-3xl font-black text-slate-900 leading-tight">Instagram</h2>
+                        <p className="text-xs font-semibold text-slate-500 mt-1">
+                          Explore MedSign content and updates on Instagram.
+                        </p>
+                      </div>
                       <a
                         href="https://www.instagram.com/medsign.pkmkc/"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-[11px] font-black text-pink-600 uppercase tracking-wider flex items-center gap-1.5 px-4 py-2 rounded-full border border-pink-200 bg-pink-50 hover:bg-pink-100 transition-colors"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl border border-pink-200 bg-pink-50 hover:bg-pink-100 text-pink-700 text-xs font-black uppercase tracking-wider transition-all self-start sm:self-auto shadow-xs active:scale-95"
                       >
-                        More <ExternalLink size={11} />
+                        <Instagram size={14} />
+                        <span>Follow @medsign.pkmkc</span>
+                        <ExternalLink size={12} />
                       </a>
                     </div>
-                    <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-                      {instagramPosts.slice(0, 3).map((post) => (
-                        <InstagramPostCard key={post.id} post={post} />
+
+                    {/* Responsive Grid: Desktop 3 col, Tablet 2 col, Mobile 1 col */}
+                    <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                      {displayIgPosts.map((post) => (
+                        <InstagramPreviewCard key={post.id} post={post} />
                       ))}
                     </div>
                   </div>

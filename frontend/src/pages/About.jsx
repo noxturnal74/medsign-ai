@@ -1,3 +1,4 @@
+import { getApiBaseUrl } from '../utils/apiUrl';
 import React, { useContext } from 'react';
 import { AppContext } from '../context/AppContextObject';
 import { ArrowLeft, BookOpen, Camera, CheckCircle, HeartPulse, ShieldCheck, UserCheck, Users } from 'lucide-react';
@@ -17,7 +18,7 @@ export const About = ({ setView }) => {
   React.useEffect(() => {
     const fetchGallery = async () => {
       try {
-        const apiBase = (localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
+        const apiBase = getApiBaseUrl();
         const res = await fetch(`${apiBase}/api/v1/about/team-gallery`);
         if (res.ok) {
           const data = await res.json();

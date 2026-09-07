@@ -1,3 +1,4 @@
+import { getApiBaseUrl } from '../utils/apiUrl';
 import React, { useState, useEffect, useContext } from 'react';
 import { AppContext } from '../context/AppContextObject';
 import { DataCollection } from './DataCollection';
@@ -12,6 +13,7 @@ import { GrantsManager } from '../components/admin/GrantsManager';
 import { HomepageManager } from '../components/admin/HomepageManager';
 import { TeamGalleryManager } from '../components/admin/TeamGalleryManager';
 import { ReportDownloader } from '../components/admin/ReportDownloader';
+import ModelTrainingManager from '../components/admin/ModelTrainingManager';
 
 export const SuperAdminView = ({ setView }) => {
   const { currentUser, showToast, logout, login } = useContext(AppContext);
@@ -25,6 +27,7 @@ export const SuperAdminView = ({ setView }) => {
   const [backups, setBackups] = useState([]);
   const [systemModels, setSystemModels] = useState([]);
   const [loadingModels, setLoadingModels] = useState(false);
+  const [modelSubTab, setModelSubTab] = useState('training'); // 'training' | 'files'
   const [homeLayoutOrder, setHomeLayoutOrder] = useState("");
 
   const totalUsers = overview ? ((overview.total_admins || 0) + (overview.active_doctors || 0) + (overview.total_patients || 0)) : 1;
@@ -98,7 +101,7 @@ export const SuperAdminView = ({ setView }) => {
   const [incStatus, setIncStatus] = useState("open");
   const [incDetails, setIncDetails] = useState("");
 
-  const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+  const apiBaseUrl = getApiBaseUrl();
 
   const fetchSettings = async () => {
     try {
@@ -1072,8 +1075,41 @@ export const SuperAdminView = ({ setView }) => {
                 </button>
               </div>
 
-              {/* Grid: Active Model status dengan Tombol Edit Pilihan Model / Upload File */}
-              {(() => {
+              {/* Sub-Tab Selector for Models */}
+              <div className="flex items-center gap-2 p-1.5 bg-slate-100 rounded-2xl w-fit border border-slate-200/80">
+                <button
+                  onClick={() => setModelSubTab("training")}
+                  className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-black transition-all ${
+                    modelSubTab === "training"
+                      ? "bg-white text-sky-900 shadow-sm border border-slate-200/60"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  <BrainCircuit size={14} /> Training & Evaluasi Model (LSTM / GRU)
+                </button>
+                <button
+                  onClick={() => setModelSubTab("files")}
+                  className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-black transition-all ${
+                    modelSubTab === "files"
+                      ? "bg-white text-sky-900 shadow-sm border border-slate-200/60"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  <Settings size={14} /> Berkas & Upload Model (.tflite)
+                </button>
+              </div>
+
+              {modelSubTab === "training" ? (
+                <ModelTrainingManager
+                  apiUrl={apiBaseUrl}
+                  token={currentUser?.token}
+                  showToast={showToast}
+                  onModelActivated={fetchSystemModels}
+                />
+              ) : (
+                <>
+                  {/* Grid: Active Model status dengan Tombol Edit Pilihan Model / Upload File */}
+                  {(() => {
                 const activeClinical = systemModels.find(m => m.type === 'clinical' && m.is_active) || systemModels.find(m => m.name === 'medsign_mvp_v1.tflite') || { name: 'medsign_mvp_v1.tflite', output_class: 175 };
                 const activeAlphabet = systemModels.find(m => m.type === 'alphabet' && m.is_active) || systemModels.find(m => m.name === 'bisindo_alphabet_v1.tflite') || { name: 'bisindo_alphabet_v1.tflite' };
 
@@ -1437,9 +1473,11 @@ export const SuperAdminView = ({ setView }) => {
                   </div>
                 )}
               </div>
-            </div>
+            </>
           )}
-          {activeTab === "grants" && (
+        </div>
+      )}
+      {activeTab === "grants" && (
             <GrantsManager
               apiBaseUrl={apiBaseUrl}
               token={currentUser?.token}

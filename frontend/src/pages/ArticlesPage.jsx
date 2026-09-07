@@ -1,3 +1,4 @@
+import { getApiBaseUrl } from '../utils/apiUrl';
 import React, { useEffect, useState } from 'react';
 import { FileText, ArrowRight, Search, Image as ImageIcon } from 'lucide-react';
 
@@ -8,7 +9,7 @@ export const ArticlesPage = ({ setView }) => {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+        const apiBaseUrl = getApiBaseUrl();
         const cleanUrl = apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl;
         const res = await fetch(`${cleanUrl}/api/v1/articles`);
         if (res.ok) {
@@ -58,15 +59,15 @@ export const ArticlesPage = ({ setView }) => {
             filteredArticles.map((art) => {
               const coverSrc = art.cover_image || art.image || art.thumbnail;
               return (
-                <div key={art.id} className="glass-panel rounded-[28px] border border-white/60 shadow-lg flex flex-col justify-between overflow-hidden hover:-translate-y-0.5 transition-all">
+                <div key={art.id} className="glass-panel rounded-[28px] border border-white/60 shadow-lg flex flex-col justify-between overflow-hidden hover:-translate-y-1 hover:shadow-xl transition-all duration-300 group">
                   
                   {/* Article Cover Image / Placeholder */}
-                  <div className="aspect-video w-full bg-slate-100 flex items-center justify-center overflow-hidden border-b border-slate-100">
+                  <div className="aspect-video w-full bg-slate-900 flex items-center justify-center overflow-hidden relative border-b border-slate-100">
                     {coverSrc ? (
                       <img
                         src={coverSrc}
                         alt={art.title}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         onError={(e) => {
                           e.currentTarget.onerror = null;
                           e.currentTarget.style.display = 'none';
@@ -81,22 +82,29 @@ export const ArticlesPage = ({ setView }) => {
                     >
                       <ImageIcon size={28} className="opacity-60" />
                     </div>
+                    {art.category && (
+                      <div className="absolute top-3 left-3">
+                        <span className="text-[9.5px] font-black uppercase tracking-wider text-white bg-slate-900/80 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10 shadow-sm">
+                          {art.category}
+                        </span>
+                      </div>
+                    )}
                   </div>
 
-                  <div className="p-5 flex flex-col gap-3 flex-grow">
-                    <span className="text-[9px] font-bold text-slate-400 uppercase">
+                  <div className="p-5 flex flex-col gap-2.5 flex-grow">
+                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">
                       {art.created_at
                         ? new Date(art.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
                         : '2026'}
                     </span>
-                    <h3 className="text-sm font-black text-slate-950 leading-snug line-clamp-2">{art.title}</h3>
+                    <h3 className="text-sm font-black text-slate-950 leading-snug line-clamp-2 group-hover:text-sky-600 transition-colors">{art.title}</h3>
                     <p className="text-[11px] font-medium leading-relaxed text-slate-500 line-clamp-3">{art.content}</p>
                   </div>
 
                   <div className="p-5 border-t border-slate-100/50 flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-slate-400">Oleh {art.author || 'Admin'}</span>
+                    <span className="text-[10px] font-bold text-slate-400 truncate max-w-[140px]">Oleh {art.author || 'Admin'}</span>
                     <a 
-                      href={(() => {
+                      href={art.ref_url || (() => {
                         const content = art.content || "";
                         const mdMatch = content.match(/\[.*?\]\((https?:\/\/.*?)\)/);
                         if (mdMatch) return mdMatch[1];
@@ -106,9 +114,10 @@ export const ArticlesPage = ({ setView }) => {
                       })()} 
                       target="_blank" 
                       rel="noopener noreferrer" 
-                      className="text-[10px] font-black text-sky-600 hover:text-sky-700 uppercase flex items-center gap-1"
+                      className="text-[10px] font-black text-sky-600 hover:text-sky-700 uppercase flex items-center gap-1 group/btn"
                     >
-                      Selengkapnya <ArrowRight size={10} />
+                      <span>Selengkapnya</span>
+                      <ArrowRight size={10} className="group-hover/btn:translate-x-0.5 transition-transform" />
                     </a>
                   </div>
                 </div>

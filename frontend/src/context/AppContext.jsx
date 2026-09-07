@@ -1,3 +1,4 @@
+import { getApiBaseUrl } from '../utils/apiUrl';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { vocabulary } from '../data/vocabulary';
 import { translations } from '../data/translations';
@@ -120,7 +121,7 @@ export const AppProvider = ({ children }) => {
       return;
     }
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const base = apiBaseUrl.replace(/\/$/, '');
       const res = await fetch(`${base}/api/v1/user/grants`, {
         headers: { 'Authorization': `Bearer ${currentUser.token}` }
@@ -158,7 +159,7 @@ export const AppProvider = ({ children }) => {
     
     const checkActiveSession = async () => {
       try {
-        const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+        const apiBaseUrl = getApiBaseUrl();
         const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/patient/me/sessions`, {
           headers: { 'Authorization': `Bearer ${currentUser.token}` }
         });
@@ -187,7 +188,7 @@ export const AppProvider = ({ children }) => {
     
     const pollLogs = async () => {
       try {
-        const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+        const apiBaseUrl = getApiBaseUrl();
         const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/sessions/${activeSessionId}/logs`, {
           headers: { 'Authorization': `Bearer ${currentUser.token}` }
         });
@@ -300,7 +301,7 @@ export const AppProvider = ({ children }) => {
   // --- CALLBACKS & HELPERS ---
   const login = async (emailOrNik, password, role) => {
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const endpoint = role === 'admin' ? '/auth/admin/login' : role === 'doctor' ? '/auth/doctor/login' : '/auth/patient/login';
       
       const cleanInput = (emailOrNik || '').trim();
@@ -397,7 +398,7 @@ export const AppProvider = ({ children }) => {
 
   const refreshVocabulary = useCallback(async () => {
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const response = await fetch(`${(apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl)}/api/v1/vocabulary`);
       if (response.ok) {
         const data = await response.json();
@@ -621,7 +622,7 @@ export const AppProvider = ({ children }) => {
     if (currentUser && activeSessionId) {
       // Save to database for logged in user session
       try {
-        const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+        const apiBaseUrl = getApiBaseUrl();
         await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/session/log`, {
           method: 'POST',
           headers: {
@@ -650,7 +651,7 @@ export const AppProvider = ({ children }) => {
     setSessionLog([]);
     if (activeSessionId) {
       try {
-        const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+        const apiBaseUrl = getApiBaseUrl();
         await fetch(`${apiBaseUrl.replace(/\/$/, '')}/api/v1/sessions/${activeSessionId}/logs`, {
           method: 'DELETE',
           headers: currentUser?.token ? { 'Authorization': `Bearer ${currentUser.token}` } : {}
@@ -726,7 +727,7 @@ export const AppProvider = ({ children }) => {
     const lastWord = sentence[sentence.length - 1];
     const fetchRecommendations = async () => {
       try {
-        const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+        const apiBaseUrl = getApiBaseUrl();
         const response = await fetch(
           `${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/nlg/recommend?word=${encodeURIComponent(lastWord)}`
         );
@@ -761,7 +762,7 @@ export const AppProvider = ({ children }) => {
     sentenceTimerRef.current = setTimeout(async () => {
       setIsGenerating(true);
       try {
-        const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+        const apiBaseUrl = getApiBaseUrl();
         const base = apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl;
         const rawText = sentence.join(' ');
 

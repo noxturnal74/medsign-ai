@@ -1,3 +1,4 @@
+import { getApiBaseUrl } from '../utils/apiUrl';
 import React, { useContext, useState, useEffect } from 'react';
 
 import { AppContext } from '../context/AppContextObject';
@@ -112,7 +113,7 @@ export const PatientView = ({ setView, isSplit = false }) => {
     const checkAccessibilityPreference = async () => {
       if (!currentUser || currentUser.role !== 'patient') return;
       try {
-        const apiBase = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+        const apiBase = getApiBaseUrl();
         const res = await fetch(`${apiBase}/api/v1/patient/accessibility-preference`, {
           headers: { 'Authorization': `Bearer ${currentUser.token}` }
         });
@@ -149,7 +150,7 @@ export const PatientView = ({ setView, isSplit = false }) => {
     localStorage.setItem("medsign_accessibility_intro_seen", "SEEN");
     if (!currentUser || currentUser.role !== 'patient') return;
     try {
-      const apiBase = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBase = getApiBaseUrl();
       await fetch(`${apiBase}/api/v1/patient/accessibility-preference`, {
         method: "POST",
         headers: {
@@ -168,7 +169,7 @@ export const PatientView = ({ setView, isSplit = false }) => {
 
   const handleExportData = async () => {
     try {
-      const apiBase = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBase = getApiBaseUrl();
       const res = await fetch(`${apiBase}/api/v1/patient/me/export`, {
         method: "POST",
         headers: { 'Authorization': `Bearer ${currentUser?.token}` }
@@ -213,7 +214,7 @@ export const PatientView = ({ setView, isSplit = false }) => {
 
   const fetchProfileAndConsents = async () => {
     if (!currentUser || currentUser.role !== 'patient') return;
-    const apiBase = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+    const apiBase = getApiBaseUrl();
     try {
       const profRes = await fetch(`${apiBase}/api/v1/patients/${currentUser.user_id}`, {
         headers: { 'Authorization': `Bearer ${currentUser.token}` }
@@ -257,7 +258,7 @@ export const PatientView = ({ setView, isSplit = false }) => {
 
   const handleAcceptConsent = async (consentType, purpose) => {
     setSubmittingConsent(true);
-    const apiBase = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+    const apiBase = getApiBaseUrl();
     try {
       const res = await fetch(`${apiBase}/api/v1/patient/consent`, {
         method: "POST",
@@ -287,7 +288,7 @@ export const PatientView = ({ setView, isSplit = false }) => {
 
   const handleKtpSubmit = async (e) => {
     e.preventDefault();
-    const apiBase = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+    const apiBase = getApiBaseUrl();
     try {
       const res = await fetch(`${apiBase}/api/v1/patient/verify/ktp`, {
         method: "POST",
@@ -318,7 +319,7 @@ export const PatientView = ({ setView, isSplit = false }) => {
   };
 
   const handleFaceVerifySubmit = async () => {
-    const apiBase = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+    const apiBase = getApiBaseUrl();
     try {
       const res = await fetch(`${apiBase}/api/v1/patient/verify/face`, {
         method: "POST",
@@ -346,7 +347,7 @@ export const PatientView = ({ setView, isSplit = false }) => {
 
   const fetchModels = async () => {
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/models`);
       if (response.ok) {
         const data = await response.json();
@@ -364,7 +365,7 @@ export const PatientView = ({ setView, isSplit = false }) => {
   const fetchPatientSessions = async () => {
     if (!currentUser || currentUser.role !== 'patient') return;
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/patient/me/sessions`, {
         headers: { 'Authorization': `Bearer ${currentUser?.token}` }
       });
@@ -378,7 +379,7 @@ export const PatientView = ({ setView, isSplit = false }) => {
 
   const fetchPastSessionLogs = async (session) => {
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/sessions/${session.id}/logs`, {
         headers: { 'Authorization': `Bearer ${currentUser?.token}` }
       });
@@ -403,7 +404,7 @@ export const PatientView = ({ setView, isSplit = false }) => {
 
   const handleModelChange = async (modelName) => {
     try {
-      const apiBaseUrl = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+      const apiBaseUrl = getApiBaseUrl();
       const response = await fetch(`${apiBaseUrl.endsWith('/') ? apiBaseUrl.slice(0, -1) : apiBaseUrl}/api/v1/dataset/models/select`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${currentUser?.token}` },

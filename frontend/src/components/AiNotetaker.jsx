@@ -1,3 +1,4 @@
+import { getApiBaseUrl } from '../utils/apiUrl';
 import React, { useContext, useState, useRef } from 'react';
 import { AppContext } from '../context/AppContextObject';
 import { FileText, Loader2, RefreshCw, Copy, CheckCheck, ChevronDown, ChevronUp, Save } from 'lucide-react';
@@ -20,7 +21,7 @@ export const AiNotetaker = ({ onSaveSummary, savedSummary }) => {
   const [lastCount, setLastCount] = useState(0);
 
   const apiBase = () => {
-    const raw = localStorage.getItem('medsign_api_url') || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+    const raw = getApiBaseUrl();
     return raw.endsWith('/') ? raw.slice(0, -1) : raw;
   };
 
