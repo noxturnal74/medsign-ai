@@ -16,7 +16,7 @@ const TOTAL_FRAMES = 300;
 
 const frameUrl = (i) =>
 
-  `/Homepage/ezgif-frame-${String(i + 1).padStart(3, '0')}.png`;
+  `/Homepage/ezgif-frame-${String(i + 1).padStart(3, '0')}.webp`;
 
 
 

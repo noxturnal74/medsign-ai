@@ -1,13 +1,17 @@
 backend/
 docs/
 manual_screenshots/
+experiments/
+reports/
 *.pdf
 *.docx
 *.zip
+*.tar.gz
 *.log
 *.npy
 *.npz
 *.tflite
 *.h5
 *.keras
+*.py
 frontend/public/docs/*.pdf
