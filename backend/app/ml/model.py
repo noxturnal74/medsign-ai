@@ -215,6 +215,20 @@ class ModelLoader:
                     self.alphabet_mtime = path.stat().st_mtime
                 except Exception:
                     self.alphabet_mtime = None
+
+                import json
+                sidecar_path = path.parent / f"{path.stem}_labels.json"
+                if not sidecar_path.exists():
+                    sidecar_path = path.parent / f"{path.stem}_temp_labels.json"
+                if sidecar_path.exists():
+                    try:
+                        with sidecar_path.open("r", encoding="utf-8") as f:
+                            classes = json.load(f)
+                        self.alphabet_classes = [str(x).upper() for x in classes]
+                        print(f'[ML_MODEL] Berhasil memuat {len(self.alphabet_classes)} kelas abjad dari sidecar: {sidecar_path}')
+                    except Exception as e:
+                        print(f'[ML_MODEL] Gagal membaca sidecar abjad: {e}')
+
                 print(f'[ML_MODEL] Model abjad TFLite berhasil dimuat: {path}')
                 return True
             except Exception as exc:
@@ -267,11 +281,18 @@ class ModelLoader:
             self.alphabet_interpreter.invoke()
             output_data = self.alphabet_interpreter.get_tensor(self.alphabet_output_details[0]['index'])[0]
             top_indices = np.argsort(output_data)[::-1][:3]
-            confidence = float(output_data[int(top_indices[0])])
-            raw_label = self.alphabet_classes[int(top_indices[0])]
-            detected = confidence >= 0.40
+            top_idx_0 = int(top_indices[0])
+            confidence = float(output_data[top_idx_0])
+            def _get_alpha_label(idx):
+                i = int(idx)
+                if 0 <= i < len(self.alphabet_classes):
+                    return self.alphabet_classes[i]
+                return f"char_{i}"
+
+            raw_label = _get_alpha_label(top_idx_0)
+            detected = confidence >= 0.25
             top3 = [
-                {'word': self.alphabet_classes[int(index)], 'confidence': float(output_data[int(index)])}
+                {'word': _get_alpha_label(index), 'confidence': float(output_data[int(index)])}
                 for index in top_indices
             ]
 

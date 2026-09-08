@@ -15,7 +15,7 @@ import { TtsDashboardModal } from '../components/TtsDashboardModal';
 
 
 
-import { ArrowLeft, Delete, Trash2, Volume2, Stethoscope, RefreshCw, GitCompare, User, History, X, FileText, MessageSquare, Shield, Download } from 'lucide-react';
+import { ArrowLeft, Delete, Trash2, Volume2, Stethoscope, RefreshCw, GitCompare, User, History, X, FileText, MessageSquare, Shield, Download, Send } from 'lucide-react';
 
 
 
@@ -538,6 +538,28 @@ export const PatientView = ({ setView, isSplit = false }) => {
                   </div>
 
                   <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center">
+                    <button
+                      onClick={() => {
+                        const trimmed = (spelledText || '').trim();
+                        if (!trimmed) return;
+                        appendWord(trimmed);
+                        speak(trimmed);
+                        addLogEntry(
+                          { role: 'patient', text: trimmed, confidence: 1.0, source: 'spelling' },
+                          activeSessionId
+                        );
+                        clearSpelledText();
+                      }}
+                      disabled={spelledText.length === 0}
+                      className={`flex items-center justify-center gap-1.5 rounded-xl border py-2.5 text-xs font-bold transition-all ${
+                        spelledText.length > 0
+                          ? 'border-emerald-300/60 bg-emerald-500/15 text-emerald-700 hover:bg-emerald-500/25 shadow-xs'
+                          : 'cursor-not-allowed border-white/50 bg-white/40 text-slate-400'
+                      }`}
+                    >
+                      <Send size={13} />
+                      Kirim ke Log
+                    </button>
                     <button
                       onClick={() => speak(spelledText)}
                       disabled={spelledText.length === 0}

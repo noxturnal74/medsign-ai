@@ -87,7 +87,7 @@ export const useWebSocket = (url, onPrediction, isHandDetected, landmarks) => {
           
           // PILAH RESPON BERDASARKAN MODE AKTIF
           if (data.mode === 'spelling') {
-            const letter = data.prediction;
+            const letter = data.prediction || (data.confidence >= 0.25 ? data.raw_prediction : null);
             if (onPrediction) {
               onPrediction(data);
             }
