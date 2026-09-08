@@ -99,11 +99,16 @@ class ModelLoader:
                     if sidecar_labels_path.exists():
                         try:
                             with sidecar_labels_path.open('r', encoding='utf-8') as f:
-                                self.model_classes = json.load(f)
-                            print(f'[ML_MODEL] Berhasil memuat {len(self.model_classes)} kelas model dari sidecar: {sidecar_labels_path}')
+                                sidecar_classes = json.load(f)
+                            if len(sidecar_classes) == model_output_size:
+                                self.model_classes = sidecar_classes
+                                print(f'[ML_MODEL] Berhasil memuat {len(self.model_classes)} kelas model dari sidecar: {sidecar_labels_path}')
+                            else:
+                                print(f'[ML_MODEL] Warning: Sidecar ({len(sidecar_classes)}) != output ({model_output_size}). Menggunakan labels.json.')
+                                self.model_classes = self.classes[:model_output_size]
                         except Exception as e:
                             print(f'[ML_MODEL] Gagal membaca sidecar labels: {e}')
-                            self.model_classes = self.classes
+                            self.model_classes = self.classes[:model_output_size]
                     elif model_output_size == 12:
                         self.model_classes = ['sakit', 'nyeri', 'sesak', 'batuk', 'demam', 'pusing', 'mual', 'muntah', 'ya', 'tidak', 'tolong', 'selesai']
                     elif model_output_size == 30:
@@ -159,11 +164,19 @@ class ModelLoader:
             output_data = self.interpreter.get_tensor(self.output_details[0]['index'])[0]
 
             top_indices = np.argsort(output_data)[::-1][:3]
-            raw_label = self.model_classes[int(top_indices[0])]
+            def _get_label(idx):
+                i = int(idx)
+                if 0 <= i < len(self.model_classes):
+                    return self.model_classes[i]
+                if 0 <= i < len(self.classes):
+                    return self.classes[i]
+                return f"gesture_{i}"
+
+            raw_label = _get_label(top_indices[0])
             confidence = float(output_data[int(top_indices[0])])
             detected = confidence >= self.threshold
             top3 = [
-                {'word': self.model_classes[int(index)], 'confidence': float(output_data[int(index)])}
+                {'word': _get_label(index), 'confidence': float(output_data[int(index)])}
                 for index in top_indices
             ]
 

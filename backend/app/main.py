@@ -220,7 +220,15 @@ async def websocket_stream(websocket: WebSocket):
                     continue
 
                 # Run prediction through SLTAdapterService
-                result = slt_service.predict_bisindo(frames)
+                try:
+                    result = slt_service.predict_bisindo(frames)
+                except Exception as e_pred:
+                    print(f"[WS_STREAM] [CLINICAL ERROR] {e_pred}")
+                    result = {
+                        "prediction": None, "label": None, "raw_prediction": None,
+                        "confidence": 0.0, "top3": [], "status": "not_detected",
+                        "detected": False, "mode": "production", "processing_time_ms": 0
+                    }
 
                 # Log prediction to console for easy real-time debugging
                 print(f"[WS_STREAM] [CLINICAL] Prediksi: '{result['prediction']}' | Confidence: {result['confidence']:.4f} | Mode: {result['mode']} | Waktu: {result['processing_time_ms']}ms")
