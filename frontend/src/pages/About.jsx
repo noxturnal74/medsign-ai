@@ -4,10 +4,10 @@ import { AppContext } from '../context/AppContextObject';
 import { ArrowLeft, BookOpen, Camera, CheckCircle, HeartPulse, ShieldCheck, UserCheck, Users } from 'lucide-react';
 
 const teamMembers = [
-  { name: "Albert William Saputra", role: "Fullstack Developer & Integration", img: "/assets/albert_2.jpg" },
-  { name: "Albert Cheng", role: "Integration & Dataset Collector", img: "/assets/albert_cheng_3.jpg" },
-  { name: "Glenn Emmanuel Abraham", role: "UI/UX & Dataset Collector", img: "/assets/glenn_2.jpg" },
-  { name: "Lorensa Amelia", role: "Marketing & Dataset Collector", img: "/assets/loren_2.jpg" }
+  { name: "Albert William Saputra", role: "Fullstack Developer & Integration", img: "/assets/albert_william.jpg" },
+  { name: "Albert Cheng", role: "Integration & Dataset Collector", img: "/assets/albert_cheng.jpg" },
+  { name: "Glenn Emmanuel Abraham", role: "UI/UX & Dataset Collector", img: "/assets/glenn_abraham.jpg" },
+  { name: "Lorensa Amelia", role: "Marketing & Dataset Collector", img: "/assets/lorensa_amelia.jpg" }
 ];
 
 export const About = ({ setView }) => {

@@ -291,7 +291,22 @@ def db_get_doctor_patients(doctor_id: str) -> List[Dict[str, Any]]:
 def db_create_patient(patient_id: str, no_rm: str, nik_encrypted: str, password_hash: str, name: str, date_of_birth: str, created_by: str, facility_id: str = None, gender: str = None, address: str = None, phone: str = None, email: str = None, emergency_contact: str = None, verification_status: str = 'PENDING', face_verification_status: str = 'PENDING', ktp_verification_status: str = 'PENDING', is_active: int = 0) -> bool:
     created_at = datetime.utcnow().isoformat()
     if USE_SUPABASE:
-        return False
+        try:
+            url = f"{SUPABASE_URL}/rest/v1/patients"
+            body = {
+                "id": patient_id, "no_rm": no_rm, "nik_encrypted": nik_encrypted,
+                "password_hash": password_hash, "name": name, "date_of_birth": date_of_birth,
+                "created_by": created_by, "created_at": created_at, "must_change_password": True,
+                "facility_id": facility_id, "gender": gender, "address": address,
+                "phone": phone, "email": email, "emergency_contact": emergency_contact,
+                "verification_status": verification_status, "face_verification_status": face_verification_status,
+                "ktp_verification_status": ktp_verification_status, "is_active": is_active
+            }
+            r = httpx.post(url, headers=get_supabase_headers(), json=body)
+            return r.status_code in (200, 201)
+        except Exception as e:
+            print("Supabase error db_create_patient:", e)
+            return False
     else:
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -350,7 +365,51 @@ def db_get_session_by_id(session_id: str) -> Optional[Dict[str, Any]]:
 
 def db_create_session(session_id: str, patient_id: str, doctor_id: str, model_version: str, started_at: str) -> bool:
     if USE_SUPABASE:
-        return False
+        facility_id = "fac_default"
+        try:
+            doctor = db_get_doctor_by_id(doctor_id) or {}
+            facility_id = doctor.get("facility_id") or "fac_default"
+            url = f"{SUPABASE_URL}/rest/v1/sessions"
+            body = {
+                "id": session_id,
+                "patient_id": patient_id,
+                "doctor_id": doctor_id,
+                "model_version": model_version,
+                "status": "ongoing",
+                "started_at": started_at,
+                "facility_id": facility_id
+            }
+            r = httpx.post(url, headers=get_supabase_headers(), json=body)
+            if r.status_code in (200, 201):
+                try:
+                    conn = get_db_connection()
+                    cursor = conn.cursor()
+                    cursor.execute(
+                        "INSERT OR REPLACE INTO sessions (id, patient_id, doctor_id, model_version, status, started_at, facility_id) VALUES (?, ?, ?, ?, 'ongoing', ?, ?)",
+                        (session_id, patient_id, doctor_id, model_version, started_at, facility_id)
+                    )
+                    conn.commit()
+                    conn.close()
+                except Exception:
+                    pass
+                return True
+            print(f"[DB] Supabase create session failed ({r.status_code}): {r.text}")
+        except Exception as e:
+            print("[DB] Supabase error in db_create_session:", e)
+        # Fallback to local SQLite if Supabase failed or offline
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute(
+                "INSERT OR REPLACE INTO sessions (id, patient_id, doctor_id, model_version, status, started_at, facility_id) VALUES (?, ?, ?, ?, 'ongoing', ?, ?)",
+                (session_id, patient_id, doctor_id, model_version, started_at, facility_id)
+            )
+            conn.commit()
+            conn.close()
+            return True
+        except Exception as e:
+            print("[DB] SQLite fallback create session failed:", e)
+            return False
     else:
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -358,7 +417,7 @@ def db_create_session(session_id: str, patient_id: str, doctor_id: str, model_ve
         row = cursor.fetchone()
         facility_id = row[0] if (row and row[0]) else "fac_default"
         cursor.execute(
-            "INSERT INTO sessions (id, patient_id, doctor_id, model_version, status, started_at, facility_id) VALUES (?, ?, ?, ?, 'ongoing', ?, ?)",
+            "INSERT OR REPLACE INTO sessions (id, patient_id, doctor_id, model_version, status, started_at, facility_id) VALUES (?, ?, ?, ?, 'ongoing', ?, ?)",
             (session_id, patient_id, doctor_id, model_version, started_at, facility_id)
         )
         conn.commit()
@@ -462,7 +521,20 @@ def write_audit_log(
 def db_create_doctor(doc_id: str, name: str, email: str, password_hash: str, specialization: str = None, facility_id: str = None, phone: str = None, image: str = None, medical_license: str = None, department: str = None, status: str = 'active', availability: str = 'available', is_active: int = 1) -> bool:
     created_at = datetime.utcnow().isoformat()
     if USE_SUPABASE:
-        return False
+        try:
+            url = f"{SUPABASE_URL}/rest/v1/doctors"
+            body = {
+                "id": doc_id, "name": name, "email": email, "password_hash": password_hash,
+                "specialization": specialization, "created_at": created_at, "facility_id": facility_id,
+                "phone": phone, "image": image, "medical_license": medical_license,
+                "department": department, "status": status, "availability": availability,
+                "is_active": is_active
+            }
+            r = httpx.post(url, headers=get_supabase_headers(), json=body)
+            return r.status_code in (200, 201)
+        except Exception as e:
+            print("Supabase error db_create_doctor:", e)
+            return False
     else:
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -1319,7 +1391,7 @@ def init_db():
     cursor.execute("SELECT COUNT(*) FROM reviews")
     if cursor.fetchone()[0] == 0:
         reviews_data = [
-            ("rev_1", "Dr. Clara", "Dokter Umum RSUD", 5.0, "Sangat membantu saat melayani pasien tuli.", "/assets/loren_2.jpg")
+            ("rev_1", "Dr. Clara", "Dokter Umum RSUD", 5.0, "Sangat membantu saat melayani pasien tuli.", "/assets/lorensa_amelia.jpg")
         ]
         for item in reviews_data:
             cursor.execute("""
@@ -1468,7 +1540,23 @@ def db_get_all_doctors() -> List[Dict[str, Any]]:
 
 def db_update_doctor(doctor_id: str, name: str, email: str, password_hash: str, specialization: str, facility_id: str = None, phone: str = None, image: str = None, medical_license: str = None, department: str = None, status: str = None, availability: str = None, is_active: int = None) -> bool:
     if USE_SUPABASE:
-        return False
+        try:
+            url = f"{SUPABASE_URL}/rest/v1/doctors?id=eq.{doctor_id}"
+            body = {"name": name, "email": email, "specialization": specialization}
+            if password_hash: body["password_hash"] = password_hash
+            if facility_id is not None: body["facility_id"] = facility_id
+            if phone is not None: body["phone"] = phone
+            if image is not None: body["image"] = image
+            if medical_license is not None: body["medical_license"] = medical_license
+            if department is not None: body["department"] = department
+            if status is not None: body["status"] = status
+            if availability is not None: body["availability"] = availability
+            if is_active is not None: body["is_active"] = is_active
+            r = httpx.patch(url, headers=get_supabase_headers(), json=body)
+            return r.status_code in (200, 204)
+        except Exception as e:
+            print("Supabase error db_update_doctor:", e)
+            return False
     else:
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -1531,7 +1619,26 @@ def db_delete_doctor(doctor_id: str) -> bool:
 
 def db_update_patient(patient_id: str, no_rm: str, nik_encrypted: str, password_hash: str, name: str, date_of_birth: str, facility_id: str = None, gender: str = None, address: str = None, phone: str = None, email: str = None, emergency_contact: str = None, verification_status: str = None, face_verification_status: str = None, ktp_verification_status: str = None, is_active: int = None) -> bool:
     if USE_SUPABASE:
-        return False
+        try:
+            url = f"{SUPABASE_URL}/rest/v1/patients?id=eq.{patient_id}"
+            body = {"no_rm": no_rm, "name": name, "date_of_birth": date_of_birth}
+            if nik_encrypted: body["nik_encrypted"] = nik_encrypted
+            if password_hash: body["password_hash"] = password_hash
+            if facility_id is not None: body["facility_id"] = facility_id
+            if gender is not None: body["gender"] = gender
+            if address is not None: body["address"] = address
+            if phone is not None: body["phone"] = phone
+            if email is not None: body["email"] = email
+            if emergency_contact is not None: body["emergency_contact"] = emergency_contact
+            if verification_status is not None: body["verification_status"] = verification_status
+            if face_verification_status is not None: body["face_verification_status"] = face_verification_status
+            if ktp_verification_status is not None: body["ktp_verification_status"] = ktp_verification_status
+            if is_active is not None: body["is_active"] = is_active
+            r = httpx.patch(url, headers=get_supabase_headers(), json=body)
+            return r.status_code in (200, 204)
+        except Exception as e:
+            print("Supabase error db_update_patient:", e)
+            return False
     else:
         conn = get_db_connection()
         cursor = conn.cursor()
